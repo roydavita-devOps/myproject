@@ -1,0 +1,80 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: umkm_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-umkm_builder}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-umkm_builder}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - umkm_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: umkm_backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-umkm_builder}?schema=public
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_ACCESS_EXPIRES_IN: ${JWT_ACCESS_EXPIRES_IN:-15m}
+      JWT_REFRESH_EXPIRES_IN_DAYS: ${JWT_REFRESH_EXPIRES_IN_DAYS:-30}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost}
+      ROOT_DOMAIN: ${ROOT_DOMAIN:-localhost}
+      RUN_MIGRATIONS: ${RUN_MIGRATIONS:-true}
+    expose:
+      - "4000"
+    networks:
+      - umkm_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-/api/v1}
+    container_name: umkm_frontend
+    restart: unless-stopped
+    expose:
+      - "80"
+    networks:
+      - umkm_network
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: umkm_nginx
+    restart: unless-stopped
+    depends_on:
+      - frontend
+      - backend
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    networks:
+      - umkm_network
+
+volumes:
+  postgres_data:
+
+networks:
+  umkm_network:
+    driver: bridge

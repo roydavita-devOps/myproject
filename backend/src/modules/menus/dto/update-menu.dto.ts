@@ -1,0 +1,31 @@
+import { Type } from 'class-transformer';
+import { IsInt, IsNumber, IsOptional, IsString, IsUUID, Min } from 'class-validator';
+
+export class UpdateMenuDto {
+  @IsOptional()
+  @IsUUID()
+  categoryId?: string | null;
+
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  price?: number;
+
+  @IsOptional()
+  @IsString()
+  imageUrl?: string;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  sortOrder?: number;
+}

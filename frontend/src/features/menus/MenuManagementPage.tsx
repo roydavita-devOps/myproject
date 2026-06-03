@@ -1,0 +1,150 @@
+import { FormEvent, useMemo, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Plus, Trash2 } from 'lucide-react';
+import { menusApi } from './menus.api';
+import { websitesApi } from '../websites/websites.api';
+import { Button } from '../../components/ui/Button';
+import { Field, TextArea, TextInput } from '../../components/ui/Field';
+import { IconButton } from '../../components/ui/IconButton';
+import { EmptyState, LoadingState } from '../../components/ui/State';
+
+export function MenuManagementPage() {
+  const queryClient = useQueryClient();
+  const { data: websites = [], isLoading: websitesLoading } = useQuery({ queryKey: ['websites'], queryFn: websitesApi.list });
+  const [websiteId, setWebsiteId] = useState('');
+  const selectedWebsiteId = websiteId || websites[0]?.id || '';
+  const { data: categories = [] } = useQuery({
+    queryKey: ['menu-categories', selectedWebsiteId],
+    queryFn: () => menusApi.listCategories(selectedWebsiteId),
+    enabled: Boolean(selectedWebsiteId),
+  });
+  const { data: menus = [], isLoading: menusLoading } = useQuery({
+    queryKey: ['menus', selectedWebsiteId],
+    queryFn: () => menusApi.listMenus(selectedWebsiteId),
+    enabled: Boolean(selectedWebsiteId),
+  });
+  const [categoryName, setCategoryName] = useState('');
+  const [item, setItem] = useState({ name: '', description: '', price: '', categoryId: '' });
+
+  const categoryMutation = useMutation({
+    mutationFn: () => menusApi.createCategory({ websiteId: selectedWebsiteId, name: categoryName }),
+    onSuccess: () => {
+      setCategoryName('');
+      queryClient.invalidateQueries({ queryKey: ['menu-categories', selectedWebsiteId] });
+    },
+  });
+  const itemMutation = useMutation({
+    mutationFn: () =>
+      menusApi.createMenu({
+        websiteId: selectedWebsiteId,
+        name: item.name,
+        description: item.description,
+        categoryId: item.categoryId || undefined,
+        price: item.price ? Number(item.price) : undefined,
+      }),
+    onSuccess: () => {
+      setItem({ name: '', description: '', price: '', categoryId: '' });
+      queryClient.invalidateQueries({ queryKey: ['menus', selectedWebsiteId] });
+    },
+  });
+  const deleteMutation = useMutation({
+    mutationFn: menusApi.deleteMenu,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['menus', selectedWebsiteId] }),
+  });
+
+  const categoryMap = useMemo(() => new Map(categories.map((category) => [category.id, category.name])), [categories]);
+
+  function submitCategory(event: FormEvent) {
+    event.preventDefault();
+    if (categoryName.trim()) categoryMutation.mutate();
+  }
+
+  function submitItem(event: FormEvent) {
+    event.preventDefault();
+    if (item.name.trim()) itemMutation.mutate();
+  }
+
+  if (websitesLoading) return <LoadingState label="Loading menu workspace" />;
+  if (!selectedWebsiteId) return <EmptyState title="No website found" description="Create or register a website before adding menus." />;
+
+  return (
+    <section className="grid gap-6">
+      <div>
+        <h1 className="text-2xl font-semibold text-slate-950">Menu & Services</h1>
+        <p className="mt-1 text-sm text-slate-500">Manage menu items, service offerings, prices, and ordering.</p>
+      </div>
+      <div className="panel p-5">
+        <Field label="Website">
+          <select className="field-input" value={selectedWebsiteId} onChange={(event) => setWebsiteId(event.target.value)}>
+            {websites.map((website) => <option key={website.id} value={website.id}>{website.businessName}</option>)}
+          </select>
+        </Field>
+      </div>
+      <div className="grid gap-6 xl:grid-cols-[360px_1fr]">
+        <div className="grid gap-4">
+          <form className="panel grid gap-4 p-5" onSubmit={submitCategory}>
+            <h2 className="font-semibold">Categories</h2>
+            <Field label="Category name">
+              <TextInput value={categoryName} onChange={(event) => setCategoryName(event.target.value)} placeholder="Makanan utama" />
+            </Field>
+            <Button type="submit" disabled={categoryMutation.isPending}>
+              <Plus className="size-4" />
+              Add category
+            </Button>
+            <div className="grid gap-2">
+              {categories.map((category) => (
+                <div key={category.id} className="rounded-md bg-slate-50 px-3 py-2 text-sm text-slate-700">{category.name}</div>
+              ))}
+            </div>
+          </form>
+          <form className="panel grid gap-4 p-5" onSubmit={submitItem}>
+            <h2 className="font-semibold">New item</h2>
+            <Field label="Name">
+              <TextInput value={item.name} onChange={(event) => setItem({ ...item, name: event.target.value })} placeholder="Nasi Goreng" />
+            </Field>
+            <Field label="Category">
+              <select className="field-input" value={item.categoryId} onChange={(event) => setItem({ ...item, categoryId: event.target.value })}>
+                <option value="">No category</option>
+                {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
+              </select>
+            </Field>
+            <Field label="Price">
+              <TextInput value={item.price} onChange={(event) => setItem({ ...item, price: event.target.value })} inputMode="decimal" placeholder="18000" />
+            </Field>
+            <Field label="Description">
+              <TextArea value={item.description} onChange={(event) => setItem({ ...item, description: event.target.value })} />
+            </Field>
+            <Button type="submit" disabled={itemMutation.isPending}>
+              <Plus className="size-4" />
+              Add item
+            </Button>
+          </form>
+        </div>
+        <div className="panel overflow-hidden">
+          {menusLoading ? (
+            <LoadingState label="Loading items" />
+          ) : menus.length === 0 ? (
+            <EmptyState title="No menu items" description="Add the first item from the form." />
+          ) : (
+            <div className="divide-y divide-slate-100">
+              {menus.map((menu) => (
+                <div key={menu.id} className="flex items-start justify-between gap-4 p-4">
+                  <div>
+                    <p className="font-medium text-slate-950">{menu.name}</p>
+                    <p className="mt-1 text-sm text-slate-500">{menu.description || categoryMap.get(menu.categoryId ?? '') || 'No description'}</p>
+                    <p className="mt-2 text-sm font-medium text-teal-800">
+                      {menu.price ? `Rp ${Number(menu.price).toLocaleString('id-ID')}` : 'No price'}
+                    </p>
+                  </div>
+                  <IconButton label="Delete menu item" onClick={() => deleteMutation.mutate(menu.id)}>
+                    <Trash2 className="size-4" />
+                  </IconButton>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}

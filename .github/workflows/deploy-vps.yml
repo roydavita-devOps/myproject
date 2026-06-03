@@ -1,0 +1,49 @@
+name: Deploy to VPS
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Git branch to deploy"
+        required: true
+        default: "main"
+  push:
+    branches: [main]
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy production stack
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install SSH key
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "${{ secrets.VPS_SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "${VPS_PORT:-22}" -H "${VPS_HOST}" >> ~/.ssh/known_hosts
+
+      - name: Deploy over SSH
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          APP_DIR: ${{ secrets.VPS_APP_DIR }}
+          DEPLOY_BRANCH: ${{ github.event_name == 'workflow_dispatch' && inputs.branch || 'main' }}
+        run: |
+          SSH_PORT="${VPS_PORT:-22}"
+          ssh -i ~/.ssh/deploy_key -p "${SSH_PORT}" "${VPS_USER}@${VPS_HOST}" \
+            "APP_DIR='${APP_DIR:-/opt/umkm-website-builder}' DEPLOY_BRANCH='${DEPLOY_BRANCH}' bash -s" \
+            < scripts/deploy-vps.sh
