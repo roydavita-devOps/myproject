@@ -1,0 +1,135 @@
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { randomUUID } from 'crypto';
+import { createReadStream } from 'fs';
+import { mkdir, stat, writeFile } from 'fs/promises';
+import { basename, extname, join, resolve } from 'path';
+import { extensionForMimeType, isUploadAssetType, StoredUpload, UploadAssetType, UPLOAD_POLICIES } from './upload-policy';
+import { UploadedFile } from './uploaded-file.type';
+import { MalwareScannerService } from './malware-scanner.service';
+
+@Injectable()
+export class UploadsService {
+  constructor(
+    private readonly config: ConfigService,
+    private readonly scanner: MalwareScannerService,
+  ) {}
+
+  async store(tenantId: string, assetType: UploadAssetType, file?: UploadedFile): Promise<StoredUpload> {
+    if (!file) throw new BadRequestException('File is required');
+
+    const policy = UPLOAD_POLICIES[assetType];
+    this.validateFile(file, policy.maxSize);
+    const scan = this.scanner.scan(file.buffer);
+
+    const extension = extensionForMimeType(file.mimetype);
+    if (!extension) throw new BadRequestException('Unsupported file type');
+
+    const storageRoot = this.storageRoot();
+    const directory = join(storageRoot, tenantId, policy.directory);
+    await mkdir(directory, { recursive: true });
+
+    const fileName = `${Date.now()}-${randomUUID()}.${extension}`;
+    const filePath = join(directory, fileName);
+    await writeFile(filePath, file.buffer, { flag: 'wx' });
+
+    return {
+      tenantId,
+      assetType,
+      originalName: file.originalname,
+      fileName,
+      mimeType: file.mimetype,
+      size: file.size,
+      url: this.publicUrl(tenantId, assetType, fileName),
+      scan,
+    };
+  }
+
+  async readPublicFile(tenantId: string, assetType: string, fileName: string) {
+    if (!isUploadAssetType(assetType)) throw new NotFoundException('Asset not found');
+    this.validatePathSegment(tenantId, 'tenant id');
+    this.validatePathSegment(fileName, 'file name');
+
+    const policy = UPLOAD_POLICIES[assetType];
+    const filePath = resolve(this.storageRoot(), tenantId, policy.directory, fileName);
+    const root = resolve(this.storageRoot(), tenantId, policy.directory);
+    if (!filePath.startsWith(root)) throw new NotFoundException('Asset not found');
+
+    try {
+      const fileStat = await stat(filePath);
+      if (!fileStat.isFile()) throw new NotFoundException('Asset not found');
+    } catch {
+      throw new NotFoundException('Asset not found');
+    }
+
+    return {
+      stream: createReadStream(filePath),
+      contentType: this.mimeTypeForExtension(extname(fileName).toLowerCase()),
+    };
+  }
+
+  private validateFile(file: UploadedFile, maxSize: number) {
+    if (!file.buffer?.length) throw new BadRequestException('File is empty');
+    if (file.size > maxSize) throw new BadRequestException(`File exceeds ${maxSize} bytes`);
+
+    const extension = extensionForMimeType(file.mimetype);
+    if (!extension) throw new BadRequestException('Unsupported file type');
+
+    const originalExtension = extname(file.originalname).toLowerCase().replace('.', '');
+    if (originalExtension && originalExtension !== 'jpeg' && originalExtension !== extension) {
+      throw new BadRequestException('File extension does not match MIME type');
+    }
+
+    if (!this.matchesMagicBytes(file.mimetype, file.buffer)) {
+      throw new BadRequestException('File content does not match MIME type');
+    }
+  }
+
+  private matchesMagicBytes(mimeType: string, buffer: Buffer) {
+    if (mimeType === 'image/jpeg') return buffer.length > 3 && buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff;
+    if (mimeType === 'image/png') {
+      return (
+        buffer.length > 8 &&
+        buffer[0] === 0x89 &&
+        buffer[1] === 0x50 &&
+        buffer[2] === 0x4e &&
+        buffer[3] === 0x47 &&
+        buffer[4] === 0x0d &&
+        buffer[5] === 0x0a &&
+        buffer[6] === 0x1a &&
+        buffer[7] === 0x0a
+      );
+    }
+    if (mimeType === 'image/webp') {
+      return (
+        buffer.length > 12 &&
+        buffer.toString('ascii', 0, 4) === 'RIFF' &&
+        buffer.toString('ascii', 8, 12) === 'WEBP'
+      );
+    }
+    return false;
+  }
+
+  private publicUrl(tenantId: string, assetType: UploadAssetType, fileName: string) {
+    const baseUrl = this.config.get<string>('UPLOAD_PUBLIC_BASE_URL', '');
+    const path = `/api/v1/uploads/${tenantId}/${assetType}/${fileName}`;
+    return baseUrl ? `${baseUrl.replace(/\/$/, '')}${path}` : path;
+  }
+
+  private storageRoot() {
+    return resolve(this.config.get<string>('UPLOAD_STORAGE_PATH', '/app/uploads'));
+  }
+
+  private validatePathSegment(value: string, label: string) {
+    if (value !== basename(value) || value.includes('..') || !/^[a-zA-Z0-9._-]+$/.test(value)) {
+      throw new BadRequestException(`Invalid ${label}`);
+    }
+  }
+
+  private mimeTypeForExtension(extension: string) {
+    if (extension === '.jpg' || extension === '.jpeg') return 'image/jpeg';
+    if (extension === '.png') return 'image/png';
+    if (extension === '.webp') return 'image/webp';
+    return 'application/octet-stream';
+  }
+}

@@ -1,5 +1,8 @@
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { constants } from 'fs';
+import { access, mkdir } from 'fs/promises';
+import { resolve } from 'path';
 import { PrismaService } from '../../prisma/prisma.service';
 
 type HealthState = 'ok' | 'degraded' | 'not_configured' | 'error';
@@ -23,7 +26,7 @@ export class HealthService {
 
   async check(): Promise<HealthResponse> {
     const database = await this.database();
-    const storage = this.storage();
+    const storage = await this.storage();
     const cache = this.cache();
 
     return this.response(database.status === 'ok' ? 'ok' : 'degraded', {
@@ -59,11 +62,23 @@ export class HealthService {
     }
   }
 
-  storage(): HealthResponse {
+  async storage(): Promise<HealthResponse> {
     const driver = this.config.get<string>('STORAGE_DRIVER', 'none');
     if (driver === 'none') return this.response('not_configured', { driver });
+    if (driver !== 'local') return this.response('not_configured', { driver });
 
-    return this.response('ok', { driver });
+    const path = resolve(this.config.get<string>('UPLOAD_STORAGE_PATH', '/app/uploads'));
+    try {
+      await mkdir(path, { recursive: true });
+      await access(path, constants.R_OK | constants.W_OK);
+      return this.response('ok', { driver, path });
+    } catch (error) {
+      return this.response('error', {
+        driver,
+        path,
+        message: error instanceof Error ? error.message : 'Storage check failed',
+      });
+    }
   }
 
   cache(): HealthResponse {

@@ -26,10 +26,10 @@ describe('HealthService', () => {
     await expect(service.database()).resolves.toMatchObject({ status: 'error' });
   });
 
-  it('reports storage and cache as not configured by default', () => {
+  it('reports storage and cache as not configured by default', async () => {
     const service = new HealthService({} as never, config);
 
-    expect(service.storage().status).toBe('not_configured');
+    await expect(service.storage()).resolves.toMatchObject({ status: 'not_configured' });
     expect(service.cache().status).toBe('not_configured');
   });
 });

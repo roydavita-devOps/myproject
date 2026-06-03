@@ -41,6 +41,11 @@ services:
       RUN_MIGRATIONS: ${RUN_MIGRATIONS:-true}
       STORAGE_DRIVER: ${STORAGE_DRIVER:-none}
       CACHE_DRIVER: ${CACHE_DRIVER:-none}
+      UPLOAD_STORAGE_PATH: ${UPLOAD_STORAGE_PATH:-/app/uploads}
+      UPLOAD_PUBLIC_BASE_URL: ${UPLOAD_PUBLIC_BASE_URL:-}
+      MALWARE_SCAN_ENABLED: ${MALWARE_SCAN_ENABLED:-false}
+    volumes:
+      - uploads_data:/app/uploads
     expose:
       - "4000"
     networks:
@@ -78,6 +83,7 @@ services:
 
 volumes:
   postgres_data:
+  uploads_data:
 
 networks:
   umkm_network:

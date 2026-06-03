@@ -9,6 +9,6 @@ import { TenantResolverMiddleware } from './middleware/tenant-resolver.middlewar
 @Module({
   imports: [JwtModule.register({})],
   providers: [JwtAuthGuard, RolesGuard, TenantGuard, TenantResolverMiddleware],
-  exports: [JwtAuthGuard, RolesGuard, TenantGuard, TenantResolverMiddleware],
+  exports: [JwtModule, JwtAuthGuard, RolesGuard, TenantGuard, TenantResolverMiddleware],
 })
 export class CommonModule {}

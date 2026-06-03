@@ -7,6 +7,7 @@ import { MenusModule } from './modules/menus/menus.module';
 import { TenantsModule } from './modules/tenants/tenants.module';
 import { WebsitesModule } from './modules/websites/websites.module';
 import { HealthModule } from './modules/health/health.module';
+import { UploadsModule } from './modules/uploads/uploads.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { TenantResolverMiddleware } from './common/middleware/tenant-resolver.middleware';
 import { validateEnv } from './config/env.validation';
@@ -22,6 +23,7 @@ import { validateEnv } from './config/env.validation';
     TenantsModule,
     WebsitesModule,
     MenusModule,
+    UploadsModule,
   ],
 })
 export class AppModule implements NestModule {
