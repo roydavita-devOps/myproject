@@ -5,6 +5,17 @@ export type UpdateWebsitePayload = Partial<
   Pick<Website, 'businessName' | 'tagline' | 'description' | 'address' | 'phone' | 'whatsapp' | 'email' | 'mapsUrl'>
 >;
 
+export type UpdateThemeAssetsPayload = {
+  logoUrl?: string;
+  heroImageUrl?: string;
+};
+
+export type AddGalleryItemPayload = {
+  imageUrl: string;
+  category?: string;
+  altText?: string;
+};
+
 export const websitesApi = {
   async list() {
     const { data } = await http.get<Website[]>('/websites');
@@ -16,6 +27,14 @@ export const websitesApi = {
   },
   async update(id: string, payload: UpdateWebsitePayload) {
     const { data } = await http.put<Website>(`/websites/${id}`, payload);
+    return data;
+  },
+  async updateThemeAssets(id: string, payload: UpdateThemeAssetsPayload) {
+    const { data } = await http.patch<Website>(`/websites/${id}/theme-assets`, payload);
+    return data;
+  },
+  async addGalleryItem(id: string, payload: AddGalleryItemPayload) {
+    const { data } = await http.post<Website>(`/websites/${id}/gallery`, payload);
     return data;
   },
   async publish(id: string) {

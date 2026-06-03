@@ -1,7 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma, WebsiteStatus } from '@prisma/client';
+import { ContentStatus, Prisma, WebsiteStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { AddGalleryItemDto } from './dto/add-gallery-item.dto';
 import { CreateWebsiteDto } from './dto/create-website.dto';
+import { UpdateThemeAssetsDto } from './dto/update-theme-assets.dto';
 import { UpdateWebsiteDto } from './dto/update-website.dto';
 
 @Injectable()
@@ -11,7 +13,13 @@ export class WebsitesService {
   findAll(tenantId: string) {
     return this.prisma.website.findMany({
       where: { tenantId, status: { not: WebsiteStatus.ARCHIVED } },
-      include: { template: true, theme: true },
+      include: {
+        tenant: { select: { slug: true } },
+        template: true,
+        theme: true,
+        menus: { where: { status: ContentStatus.ACTIVE }, orderBy: { sortOrder: 'asc' } },
+        galleries: { where: { status: ContentStatus.ACTIVE }, orderBy: { sortOrder: 'asc' } },
+      },
       orderBy: { createdAt: 'desc' },
     });
   }
@@ -30,7 +38,15 @@ export class WebsitesService {
   async findOne(tenantId: string, id: string) {
     const website = await this.prisma.website.findFirst({
       where: { id, tenantId, status: { not: WebsiteStatus.ARCHIVED } },
-      include: { template: true, theme: true, categories: true, menus: true, galleries: true, reviews: true },
+      include: {
+        tenant: { select: { slug: true } },
+        template: true,
+        theme: true,
+        categories: { orderBy: { sortOrder: 'asc' } },
+        menus: { where: { status: ContentStatus.ACTIVE }, orderBy: { sortOrder: 'asc' } },
+        galleries: { where: { status: ContentStatus.ACTIVE }, orderBy: { sortOrder: 'asc' } },
+        reviews: true,
+      },
     });
     if (!website) throw new NotFoundException('Website not found');
     return website;
@@ -53,6 +69,53 @@ export class WebsitesService {
         openingHours: dto.openingHours as Prisma.InputJsonValue,
       },
     });
+  }
+
+  async updateThemeAssets(tenantId: string, id: string, dto: UpdateThemeAssetsDto) {
+    const website = await this.findOne(tenantId, id);
+    const data = {
+      ...(dto.logoUrl !== undefined ? { logoUrl: dto.logoUrl } : {}),
+      ...(dto.heroImageUrl !== undefined ? { heroImageUrl: dto.heroImageUrl } : {}),
+    };
+
+    if (website.themeId) {
+      await this.prisma.theme.updateMany({
+        where: { id: website.themeId, tenantId },
+        data,
+      });
+    } else {
+      const theme = await this.prisma.theme.create({
+        data: {
+          tenantId,
+          name: 'Default Theme',
+          primaryColor: '#0f766e',
+          secondaryColor: '#f59e0b',
+          accentColor: '#2563eb',
+          typography: { heading: 'Inter', body: 'Inter' },
+          ...data,
+        },
+      });
+      await this.prisma.website.update({ where: { id }, data: { themeId: theme.id } });
+    }
+
+    return this.findOne(tenantId, id);
+  }
+
+  async addGalleryItem(tenantId: string, id: string, dto: AddGalleryItemDto) {
+    await this.findOne(tenantId, id);
+    const count = await this.prisma.gallery.count({ where: { tenantId, websiteId: id } });
+    await this.prisma.gallery.create({
+      data: {
+        tenantId,
+        websiteId: id,
+        imageUrl: dto.imageUrl,
+        category: dto.category,
+        altText: dto.altText,
+        sortOrder: count + 1,
+      },
+    });
+
+    return this.findOne(tenantId, id);
   }
 
   async publish(tenantId: string, id: string) {
@@ -87,6 +150,7 @@ export class WebsitesService {
     const website = await this.prisma.website.findFirst({
       where: { tenantId, status: WebsiteStatus.PUBLISHED },
       include: {
+        tenant: { select: { slug: true } },
         template: true,
         theme: true,
         categories: { orderBy: { sortOrder: 'asc' } },

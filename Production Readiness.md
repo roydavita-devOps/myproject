@@ -313,6 +313,461 @@ UX Validation Report
 
 STOP.
 
+# Stage 5.6 - UX Remediation & Pilot Readiness
+
+SYSTEM MODE
+
+Act as:
+
+- Senior Product Designer
+- Staff Frontend Engineer
+- Staff Backend Engineer
+- UX Researcher
+- SaaS Founder
+
+You are working on an existing multi-tenant SaaS platform:
+
+UMKM Website Builder
+
+Stage 5.5 UX Validation has been completed.
+
+You MUST resolve all Critical and High severity UX findings before Pilot User Testing.
+
+DO NOT create new business features.
+
+DO NOT create payment systems.
+
+DO NOT create monetization features.
+
+Focus only on making the product usable by non-technical UMKM owners.
+
+---
+
+# Objective
+
+Transform the platform from:
+
+"Developer Demo Ready"
+
+to
+
+"Pilot Customer Ready"
+
+---
+
+# UX Findings To Fix
+
+Critical:
+
+1. Logo Upload UI missing
+2. Hero Image Upload UI missing
+3. Gallery Upload UI missing
+
+High:
+
+4. Onboarding Checklist missing
+5. Public URL Share Panel missing
+6. Domain button is non-functional
+
+---
+
+# Task 1 - Branding Upload Experience
+
+Implement:
+
+- Logo Upload
+- Hero Image Upload
+- Gallery Upload
+
+Requirements:
+
+- Drag & Drop
+- Mobile Friendly
+- Image Preview
+- Upload Progress
+- Validation Errors
+
+Support:
+
+- JPG
+- PNG
+- WEBP
+
+Validation:
+
+- MIME Type
+- File Size
+- Upload Failure
+
+Generate:
+
+- UI Design
+- Frontend Components
+- Backend Integration
+- Error Handling
+
+---
+
+# Task 2 - First-Time Onboarding Checklist
+
+Implement onboarding progress.
+
+Checklist:
+
+□ Business Information Completed
+
+□ Logo Uploaded
+
+□ WhatsApp Number Added
+
+□ Menu/Services Added
+
+□ Website Published
+
+Display:
+
+- Completion %
+- Remaining Tasks
+- CTA Buttons
+
+Requirements:
+
+- Dynamic Progress
+- Mobile Friendly
+- Tenant Specific
+
+Generate:
+
+- Database Changes
+- Backend Logic
+- Frontend Components
+
+---
+
+# Task 3 - Publish & Share Experience
+
+After Publish:
+
+Display:
+
+- Website URL
+- Copy Link Button
+- Open Website Button
+- Share To WhatsApp Button
+
+Generate:
+
+- UX Flow
+- Components
+- API Changes
+
+Requirements:
+
+One-click sharing.
+
+---
+
+# Task 4 - Domain Management
+
+Review current Domain button.
+
+If Domain feature is incomplete:
+
+- Hide button
+
+OR
+
+- Display "Coming Soon"
+
+Requirements:
+
+Never expose broken functionality.
+
+Generate:
+
+- UX Decision
+- Code Changes
+
+---
+
+# Task 5 - Dashboard Improvements
+
+Improve:
+
+- Menu Count
+- Gallery Count
+- Publish Status
+- Website Readiness Score
+
+Generate:
+
+- Dashboard Widgets
+- Progress Indicators
+
+---
+
+# Task 6 - Mobile Optimization
+
+Review:
+
+390x844 viewport
+
+Implement:
+
+- Better Header
+- Better Navigation
+- Better Publish Flow
+- Better Forms
+
+Generate:
+
+- Responsive Improvements
+- Updated Components
+
+---
+
+# Acceptance Criteria
+
+A non-technical business owner must be able to:
+
+1. Register
+2. Upload Logo
+3. Fill Business Information
+4. Add Menu/Services
+5. Publish Website
+6. Share Website Link
+
+Without developer assistance.
+
+---
+
+# Deliverables
+
+1. UX Remediation Report
+2. Updated Architecture
+3. Required Database Changes
+4. Backend Changes
+5. Frontend Changes
+6. Screens To Modify
+7. Acceptance Test Cases
+
+Generate implementation plan first.
+
+Then implement.
+
+Output:
+
+STAGE 5.6 COMPLETION REPORT
+
+STOP.
+
+Wait for approval before Stage 5.7.
+
+# Stage 5.7 - Pilot User Validation
+
+SYSTEM MODE
+
+Act as:
+
+- UX Researcher
+- Product Manager
+- SaaS Founder
+- Customer Success Manager
+
+Stage 5.6 has been completed.
+
+Assume:
+
+- Upload UI exists
+- Onboarding exists
+- Publish & Share exists
+- Dashboard improvements exist
+
+The objective is to validate the product with real pilot users.
+
+DO NOT generate new features.
+
+DO NOT generate payment systems.
+
+DO NOT generate monetization.
+
+Focus only on user validation.
+
+---
+
+# Objective
+
+Validate whether non-technical UMKM owners can successfully use the platform without support.
+
+---
+
+# Pilot User Group
+
+Create pilot scenarios for:
+
+1. WARTEG MONCER
+2. Laundry Suka Suka
+3. Klinik Sehat Bersama
+4. Bengkel Maju Jaya
+5. Cafe Nusantara
+
+---
+
+# Task 1 - Pilot User Journey
+
+Simulate:
+
+User registers.
+
+User creates tenant.
+
+User uploads logo.
+
+User edits website.
+
+User adds menu/services.
+
+User publishes website.
+
+User shares website.
+
+Generate:
+
+- Journey Map
+- Expected Outcome
+- Success Criteria
+
+---
+
+# Task 2 - Success Metrics
+
+Define KPIs:
+
+Activation Rate
+
+Website Publish Rate
+
+Upload Success Rate
+
+Task Completion Rate
+
+Time To First Publish
+
+Generate:
+
+Target Values.
+
+Example:
+
+Activation Rate >= 80%
+
+Website Publish Rate >= 70%
+
+---
+
+# Task 3 - Friction Analysis
+
+Identify:
+
+- Confusing Screens
+- Missing Guidance
+- Excessive Clicks
+- Hidden Actions
+
+Generate:
+
+Severity:
+
+- Critical
+- High
+- Medium
+- Low
+
+---
+
+# Task 4 - Customer Feedback Program
+
+Generate:
+
+Pilot Feedback Form
+
+Questions:
+
+- Ease of Use
+- Navigation
+- Publish Experience
+- Upload Experience
+- Overall Satisfaction
+
+Use:
+
+1-5 Rating Scale
+
+---
+
+# Task 5 - Product Readiness Score
+
+Generate:
+
+Scores:
+
+- UX
+- Reliability
+- Usability
+- Learnability
+
+Overall Score:
+
+0-100
+
+---
+
+# Task 6 - Pilot Go/No-Go Decision
+
+Decision Options:
+
+A. Ready For Stage 6 QA
+
+B. Needs Another UX Iteration
+
+C. Not Ready For Pilot Users
+
+Explain reasoning.
+
+---
+
+# Acceptance Criteria
+
+Stage 5.7 passes if:
+
+- Activation Rate >= 80%
+- Publish Rate >= 70%
+- No Critical UX Issues
+- No High Severity Blocking Issues
+
+---
+
+# Deliverables
+
+1. Pilot Validation Report
+2. KPI Results
+3. Friction Analysis
+4. Feedback Summary
+5. Product Readiness Score
+6. Go/No-Go Recommendation
+
+Output:
+
+STAGE 5.7 FINAL REPORT
+
+STOP.
+
+If PASS:
+Recommend moving to Stage 6 QA Sign-Off.
+
+If FAIL:
+Generate Stage 5.8 UX Hardening Plan.
+
 # STAGE 6 - QA Sign-Off
 
 After approval:

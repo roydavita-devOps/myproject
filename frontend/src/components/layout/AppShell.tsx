@@ -3,7 +3,6 @@ import { Link, NavLink, useNavigate } from 'react-router';
 import {
   BarChart3,
   Building2,
-  Globe2,
   LayoutDashboard,
   LogOut,
   MenuSquare,
@@ -27,7 +26,6 @@ const tenantNav: NavItem[] = [
   { href: '/app/websites', label: 'Website', icon: <MonitorSmartphone className="size-4" /> },
   { href: '/app/menu', label: 'Menu', icon: <MenuSquare className="size-4" /> },
   { href: '/app/analytics', label: 'Analytics', icon: <BarChart3 className="size-4" /> },
-  { href: '/app/domains', label: 'Domains', icon: <Globe2 className="size-4" />, roles: ['TENANT_ADMIN'] },
   { href: '/app/settings', label: 'Settings', icon: <Settings className="size-4" /> },
 ];
 
@@ -75,14 +73,14 @@ export function AppShell({ children, mode }: { children: ReactNode; mode: 'tenan
         </nav>
       </aside>
       <div className="lg:pl-64">
-        <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-slate-200 bg-white/95 px-4 backdrop-blur lg:px-8">
-          <div>
-            <p className="text-sm font-medium text-slate-900">{user?.email}</p>
+        <header className="sticky top-0 z-10 flex h-16 items-center justify-between gap-3 border-b border-slate-200 bg-white/95 px-4 backdrop-blur lg:px-8">
+          <div className="min-w-0">
+            <p className="truncate text-sm font-medium text-slate-900">{user?.email}</p>
             <p className="text-xs text-slate-500">{user?.role}</p>
           </div>
-          <Button variant="ghost" onClick={handleLogout}>
+          <Button variant="ghost" onClick={handleLogout} className="shrink-0 px-3 sm:px-4">
             <LogOut className="size-4" />
-            Logout
+            <span className="hidden sm:inline">Logout</span>
           </Button>
         </header>
         <main className="px-4 py-6 lg:px-8">{children}</main>

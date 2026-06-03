@@ -42,9 +42,9 @@ export function WebsiteListPage() {
                     Preview
                   </Button>
                 </Link>
-                <Button variant="ghost">
+                <Button variant="ghost" disabled title="Custom domain coming soon">
                   <Globe2 className="size-4" />
-                  Domain
+                  Coming soon
                 </Button>
               </div>
             </article>

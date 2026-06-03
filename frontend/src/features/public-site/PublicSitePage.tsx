@@ -1,11 +1,12 @@
 import { CSSProperties, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router';
-import { MapPin, MessageCircle, Phone, Star } from 'lucide-react';
+import { Images, MapPin, MessageCircle, Phone, Star } from 'lucide-react';
 import { publicSiteApi } from './publicSite.api';
 import { Website } from '../../types/api';
 import { Button } from '../../components/ui/Button';
 import { ErrorState, LoadingState } from '../../components/ui/State';
+import { resolveAssetUrl } from '../../lib/api/assets';
 
 export function PublicSitePage() {
   const { slug = '' } = useParams();
@@ -39,6 +40,7 @@ export function PublicSiteRenderer({ website }: { website: Website }) {
       <HeroSection website={website} />
       <AboutSection website={website} />
       <MenuSection website={website} />
+      <GallerySection website={website} />
       <ReviewsSection website={website} />
       <LocationSection website={website} />
       <ContactSection website={website} />
@@ -50,10 +52,14 @@ function PublicHeader({ website }: { website: Website }) {
   return (
     <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <a href="#home" className="tenant-heading font-semibold">{website.businessName}</a>
+        <a href="#home" className="flex min-w-0 items-center gap-3">
+          {website.theme?.logoUrl && <img src={resolveAssetUrl(website.theme.logoUrl) ?? ''} alt={`${website.businessName} logo`} className="size-9 rounded-md object-cover" />}
+          <span className="tenant-heading truncate font-semibold">{website.businessName}</span>
+        </a>
         <nav className="hidden gap-5 text-sm text-slate-600 md:flex">
           <a href="#about">About</a>
           <a href="#menu">Menu</a>
+          <a href="#gallery">Gallery</a>
           <a href="#reviews">Reviews</a>
           <a href="#contact">Contact</a>
         </nav>
@@ -71,7 +77,7 @@ function PublicHeader({ website }: { website: Website }) {
 }
 
 function HeroSection({ website }: { website: Website }) {
-  const heroImage = website.theme?.heroImageUrl ?? 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1600&q=80';
+  const heroImage = resolveAssetUrl(website.theme?.heroImageUrl) ?? 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1600&q=80';
   return (
     <section id="home" className="relative min-h-[82vh] overflow-hidden">
       <img className="absolute inset-0 size-full object-cover" src={heroImage} alt="" />
@@ -145,6 +151,27 @@ function MenuSection({ website }: { website: Website }) {
             </article>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+function GallerySection({ website }: { website: Website }) {
+  const galleries = website.galleries ?? [];
+  if (galleries.length === 0) return null;
+
+  return (
+    <section id="gallery" className="mx-auto max-w-6xl px-4 py-16">
+      <div className="flex items-center gap-3">
+        <Images className="size-6 text-teal-700" />
+        <h2 className="tenant-heading text-3xl font-semibold">Gallery</h2>
+      </div>
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {galleries.map((item) => (
+          <figure key={item.id} className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
+            <img className="aspect-[4/3] w-full object-cover" src={resolveAssetUrl(item.imageUrl) ?? ''} alt={item.altText ?? website.businessName} />
+          </figure>
+        ))}
       </div>
     </section>
   );

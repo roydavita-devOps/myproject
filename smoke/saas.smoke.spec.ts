@@ -4,7 +4,7 @@ const password = 'Password12345';
 const pngBytes = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00]);
 
 test.describe('SaaS smoke test', () => {
-  test('covers login, logout, refresh token, create tenant, publish website, and upload logo', async ({ page, baseURL }) => {
+  test('covers login, logout, refresh token, create tenant, publish website, upload logo, and share panel', async ({ page, baseURL }) => {
     const api = await request.newContext({ baseURL });
     const stamp = Date.now();
     const slug = `smoke-${stamp}`;
@@ -82,7 +82,7 @@ test.describe('SaaS smoke test', () => {
       expect(publicBody.businessName).toBe(`Smoke Tenant ${stamp}`);
     });
 
-    await test.step('upload logo through API', async () => {
+    await test.step('upload logo and gallery through API', async () => {
       const upload = await api.post('/api/v1/uploads/logo', {
         headers: { Authorization: `Bearer ${accessToken}` },
         multipart: {
@@ -98,12 +98,64 @@ test.describe('SaaS smoke test', () => {
       expect(body.assetType).toBe('logo');
       expect(body.url).toContain('/api/v1/uploads/');
 
+      const attachLogo = await api.patch(`/api/v1/websites/${websiteId}/theme-assets`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        data: { logoUrl: body.url },
+      });
+      expect(attachLogo.ok()).toBeTruthy();
+      const websiteWithLogo = await attachLogo.json();
+      expect(websiteWithLogo.theme.logoUrl).toBe(body.url);
+
       const publicFile = await api.get(body.url);
       expect(publicFile.ok()).toBeTruthy();
       expect(publicFile.headers()['content-type']).toContain('image/png');
+
+      const galleryUpload = await api.post('/api/v1/uploads/gallery', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        multipart: {
+          file: {
+            name: 'gallery.png',
+            mimeType: 'image/png',
+            buffer: pngBytes,
+          },
+        },
+      });
+      expect(galleryUpload.ok()).toBeTruthy();
+      const galleryBody = await galleryUpload.json();
+      const attachGallery = await api.post(`/api/v1/websites/${websiteId}/gallery`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        data: { imageUrl: galleryBody.url, altText: 'Smoke gallery' },
+      });
+      expect(attachGallery.ok()).toBeTruthy();
+      const websiteWithGallery = await attachGallery.json();
+      expect(websiteWithGallery.galleries.length).toBeGreaterThan(0);
+    });
+
+    await test.step('verify pilot-ready dashboard and share UI', async () => {
+      await page.goto('/app/dashboard');
+      await expect(page.getByText('Website readiness')).toBeVisible();
+      await expect(page.getByText('Logo uploaded')).toBeVisible();
+      await expect(page.getByText('Gallery')).toBeVisible();
+
+      await page.goto(`/app/websites/${websiteId}`);
+      await expect(page.getByText('Branding assets')).toBeVisible();
+      await expect(page.getByText('Publish & share')).toBeVisible();
+      await expect(page.getByText(`/site/${slug}`)).toBeVisible();
+      await expect(page.getByRole('link', { name: /share whatsapp/i })).toHaveAttribute('href', /wa\.me/);
+    });
+
+    await test.step('verify mobile owner flow at 390x844', async () => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.goto('/app/dashboard');
+      await expect(page.getByText('Website readiness')).toBeVisible();
+      await page.goto(`/app/websites/${websiteId}`);
+      await expect(page.getByRole('button', { name: /preview/i })).toBeVisible();
+      await expect(page.getByText('Branding assets')).toBeVisible();
+      await expect(page.getByText('Publish & share')).toBeVisible();
     });
 
     await test.step('logout through UI', async () => {
+      await page.setViewportSize({ width: 1280, height: 720 });
       await page.getByRole('button', { name: /logout/i }).click();
       await expect(page).toHaveURL(/\/auth\/login/);
     });

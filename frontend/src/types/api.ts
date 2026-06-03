@@ -61,6 +61,7 @@ export type Theme = {
 export type Website = {
   id: string;
   tenantId: string;
+  tenant?: Pick<Tenant, 'slug'>;
   templateId: string;
   themeId?: string | null;
   status: WebsiteStatus;

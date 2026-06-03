@@ -7,7 +7,9 @@ import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { TenantGuard } from '../../common/guards/tenant.guard';
 import { TenantContext } from '../../common/types/tenant-context.type';
+import { AddGalleryItemDto } from './dto/add-gallery-item.dto';
 import { CreateWebsiteDto } from './dto/create-website.dto';
+import { UpdateThemeAssetsDto } from './dto/update-theme-assets.dto';
 import { UpdateWebsiteDto } from './dto/update-website.dto';
 import { WebsitesService } from './websites.service';
 
@@ -41,6 +43,20 @@ export class WebsitesController {
   @Roles(RoleName.TENANT_ADMIN, RoleName.EDITOR)
   update(@TenantContextDecorator() tenant: TenantContext, @Param('id') id: string, @Body() dto: UpdateWebsiteDto) {
     return this.websites.update(tenant.tenantId, id, dto);
+  }
+
+  @Patch('websites/:id/theme-assets')
+  @UseGuards(JwtAuthGuard, TenantGuard, RolesGuard)
+  @Roles(RoleName.TENANT_ADMIN, RoleName.EDITOR)
+  updateThemeAssets(@TenantContextDecorator() tenant: TenantContext, @Param('id') id: string, @Body() dto: UpdateThemeAssetsDto) {
+    return this.websites.updateThemeAssets(tenant.tenantId, id, dto);
+  }
+
+  @Post('websites/:id/gallery')
+  @UseGuards(JwtAuthGuard, TenantGuard, RolesGuard)
+  @Roles(RoleName.TENANT_ADMIN, RoleName.EDITOR)
+  addGalleryItem(@TenantContextDecorator() tenant: TenantContext, @Param('id') id: string, @Body() dto: AddGalleryItemDto) {
+    return this.websites.addGalleryItem(tenant.tenantId, id, dto);
   }
 
   @Patch('websites/:id/publish')
