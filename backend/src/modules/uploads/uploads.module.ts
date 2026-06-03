@@ -10,6 +10,6 @@ import { UploadsService } from './uploads.service';
   imports: [CommonModule],
   controllers: [UploadsController],
   providers: [MalwareScannerService, LocalUploadStorageAdapter, UploadStorageService, UploadsService],
-  exports: [UploadStorageService],
+  exports: [UploadStorageService, UploadsService],
 })
 export class UploadsModule {}

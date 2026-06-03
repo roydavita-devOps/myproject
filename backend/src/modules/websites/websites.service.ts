@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ContentStatus, Prisma, WebsiteStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { UploadsService } from '../uploads/uploads.service';
 import { AddGalleryItemDto } from './dto/add-gallery-item.dto';
 import { CreateWebsiteDto } from './dto/create-website.dto';
 import { UpdateThemeAssetsDto } from './dto/update-theme-assets.dto';
@@ -8,7 +9,10 @@ import { UpdateWebsiteDto } from './dto/update-website.dto';
 
 @Injectable()
 export class WebsitesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly uploads: UploadsService,
+  ) {}
 
   findAll(tenantId: string) {
     return this.prisma.website.findMany({
@@ -105,6 +109,23 @@ export class WebsitesService {
     return this.findOne(tenantId, id);
   }
 
+  async deleteThemeAsset(tenantId: string, id: string, assetType: 'logo' | 'hero') {
+    const website = await this.findOne(tenantId, id);
+    if (!website.themeId || !website.theme) throw new NotFoundException('Theme asset not found');
+
+    const field = assetType === 'logo' ? 'logoUrl' : 'heroImageUrl';
+    const url = website.theme[field];
+    if (!url) throw new NotFoundException('Theme asset not found');
+
+    await this.uploads.deleteTenantAssetByUrl(tenantId, url, assetType);
+    await this.prisma.theme.updateMany({
+      where: { id: website.themeId, tenantId },
+      data: { [field]: null },
+    });
+
+    return this.findOne(tenantId, id);
+  }
+
   async addGalleryItem(tenantId: string, id: string, dto: AddGalleryItemDto) {
     await this.findOne(tenantId, id);
     const count = await this.prisma.gallery.count({ where: { tenantId, websiteId: id } });
@@ -117,6 +138,22 @@ export class WebsitesService {
         altText: dto.altText,
         sortOrder: count + 1,
       },
+    });
+
+    return this.findOne(tenantId, id);
+  }
+
+  async deleteGalleryItem(tenantId: string, id: string, galleryId: string) {
+    await this.findOne(tenantId, id);
+    const gallery = await this.prisma.gallery.findFirst({
+      where: { id: galleryId, tenantId, websiteId: id, status: ContentStatus.ACTIVE },
+    });
+    if (!gallery) throw new NotFoundException('Gallery image not found');
+
+    await this.uploads.deleteTenantAssetByUrl(tenantId, gallery.imageUrl, 'gallery');
+    await this.prisma.gallery.update({
+      where: { id: galleryId },
+      data: { status: ContentStatus.ARCHIVED },
     });
 
     return this.findOne(tenantId, id);

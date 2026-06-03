@@ -1,5 +1,5 @@
 import { ChangeEvent, DragEvent, useMemo, useRef, useState } from 'react';
-import { ImagePlus, UploadCloud } from 'lucide-react';
+import { ImagePlus, Trash2, UploadCloud } from 'lucide-react';
 import { clsx } from 'clsx';
 import { uploadsApi, UploadAssetType } from '../../features/uploads/uploads.api';
 import { resolveAssetUrl } from '../../lib/api/assets';
@@ -14,14 +14,16 @@ type ImageUploadProps = {
   currentUrl?: string | null;
   maxSizeMb: number;
   onUploaded: (url: string) => Promise<void> | void;
+  onDelete?: () => Promise<void> | void;
 };
 
-export function ImageUpload({ assetType, label, description, currentUrl, maxSizeMb, onUploaded }: ImageUploadProps) {
+export function ImageUpload({ assetType, label, description, currentUrl, maxSizeMb, onUploaded, onDelete }: ImageUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
   const [isUploading, setIsUploading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const imageUrl = previewUrl ?? resolveAssetUrl(currentUrl);
 
   const acceptedLabel = useMemo(() => `JPG, PNG, WEBP up to ${maxSizeMb}MB`, [maxSizeMb]);
@@ -65,6 +67,21 @@ export function ImageUpload({ assetType, label, description, currentUrl, maxSize
     event.target.value = '';
   }
 
+  async function handleDelete() {
+    if (!onDelete) return;
+    setError('');
+    setIsDeleting(true);
+    try {
+      await onDelete();
+      setPreviewUrl(null);
+      setProgress(0);
+    } catch {
+      setError('Hapus gambar gagal. Coba ulangi beberapa saat lagi.');
+    } finally {
+      setIsDeleting(false);
+    }
+  }
+
   return (
     <div className="grid gap-3">
       <div
@@ -93,6 +110,12 @@ export function ImageUpload({ assetType, label, description, currentUrl, maxSize
               <UploadCloud className="size-4" />
               {isUploading ? 'Uploading' : 'Choose image'}
             </Button>
+            {currentUrl && onDelete && (
+              <Button variant="danger" onClick={handleDelete} disabled={isUploading || isDeleting}>
+                <Trash2 className="size-4" />
+                {isDeleting ? 'Deleting' : 'Delete image'}
+              </Button>
+            )}
             <input ref={inputRef} className="hidden" type="file" accept="image/jpeg,image/png,image/webp" onChange={handleSelect} />
             <span className="text-xs text-slate-500">atau tarik file ke area ini</span>
           </div>

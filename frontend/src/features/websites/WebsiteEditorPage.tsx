@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router';
-import { CheckCircle2, Copy, Eye, ExternalLink, Images, MessageCircle, Save, Send, XCircle } from 'lucide-react';
+import { CheckCircle2, Copy, Eye, ExternalLink, Images, MessageCircle, Save, Send, Trash2, XCircle } from 'lucide-react';
 import { websitesApi } from './websites.api';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
@@ -79,6 +79,20 @@ export function WebsiteEditorPage() {
   });
   const galleryMutation = useMutation({
     mutationFn: (imageUrl: string) => websitesApi.addGalleryItem(websiteId, { imageUrl, altText: website?.businessName ?? 'Gallery image' }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['websites'] });
+      queryClient.invalidateQueries({ queryKey: ['websites', websiteId] });
+    },
+  });
+  const deleteThemeAssetMutation = useMutation({
+    mutationFn: (assetType: 'logo' | 'hero') => websitesApi.deleteThemeAsset(websiteId, assetType),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['websites'] });
+      queryClient.invalidateQueries({ queryKey: ['websites', websiteId] });
+    },
+  });
+  const deleteGalleryMutation = useMutation({
+    mutationFn: (galleryId: string) => websitesApi.deleteGalleryItem(websiteId, galleryId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['websites'] });
       queryClient.invalidateQueries({ queryKey: ['websites', websiteId] });
@@ -209,6 +223,9 @@ export function WebsiteEditorPage() {
           onUploaded={async (logoUrl) => {
             await themeAssetsMutation.mutateAsync({ logoUrl });
           }}
+          onDelete={async () => {
+            await deleteThemeAssetMutation.mutateAsync('logo');
+          }}
         />
         <ImageUpload
           assetType="hero"
@@ -218,6 +235,9 @@ export function WebsiteEditorPage() {
           maxSizeMb={5}
           onUploaded={async (heroImageUrl) => {
             await themeAssetsMutation.mutateAsync({ heroImageUrl });
+          }}
+          onDelete={async () => {
+            await deleteThemeAssetMutation.mutateAsync('hero');
           }}
         />
       </section>
@@ -247,6 +267,17 @@ export function WebsiteEditorPage() {
             {website.galleries?.map((item) => (
               <figure key={item.id} className="overflow-hidden rounded-md border border-slate-200 bg-slate-50">
                 <img src={resolveAssetUrl(item.imageUrl) ?? ''} alt={item.altText ?? 'Gallery'} className="aspect-video w-full object-cover" />
+                <figcaption className="flex items-center justify-end p-2">
+                  <Button
+                    variant="danger"
+                    className="min-h-9 px-3 py-1.5"
+                    onClick={() => deleteGalleryMutation.mutate(item.id)}
+                    disabled={deleteGalleryMutation.isPending}
+                  >
+                    <Trash2 className="size-4" />
+                    Delete
+                  </Button>
+                </figcaption>
               </figure>
             ))}
           </div>

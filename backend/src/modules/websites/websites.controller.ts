@@ -52,11 +52,34 @@ export class WebsitesController {
     return this.websites.updateThemeAssets(tenant.tenantId, id, dto);
   }
 
+  @Delete('websites/:id/theme-assets/:assetType')
+  @UseGuards(JwtAuthGuard, TenantGuard, RolesGuard)
+  @Roles(RoleName.TENANT_ADMIN, RoleName.EDITOR)
+  deleteThemeAsset(
+    @TenantContextDecorator() tenant: TenantContext,
+    @Param('id') id: string,
+    @Param('assetType') assetType: string,
+  ) {
+    if (assetType !== 'logo' && assetType !== 'hero') throw new NotFoundException('Theme asset not found');
+    return this.websites.deleteThemeAsset(tenant.tenantId, id, assetType);
+  }
+
   @Post('websites/:id/gallery')
   @UseGuards(JwtAuthGuard, TenantGuard, RolesGuard)
   @Roles(RoleName.TENANT_ADMIN, RoleName.EDITOR)
   addGalleryItem(@TenantContextDecorator() tenant: TenantContext, @Param('id') id: string, @Body() dto: AddGalleryItemDto) {
     return this.websites.addGalleryItem(tenant.tenantId, id, dto);
+  }
+
+  @Delete('websites/:id/gallery/:galleryId')
+  @UseGuards(JwtAuthGuard, TenantGuard, RolesGuard)
+  @Roles(RoleName.TENANT_ADMIN, RoleName.EDITOR)
+  deleteGalleryItem(
+    @TenantContextDecorator() tenant: TenantContext,
+    @Param('id') id: string,
+    @Param('galleryId') galleryId: string,
+  ) {
+    return this.websites.deleteGalleryItem(tenant.tenantId, id, galleryId);
   }
 
   @Patch('websites/:id/publish')

@@ -27,13 +27,27 @@ describe('WebsitesService', () => {
       gallery: {
         count: jest.fn(),
         create: jest.fn(),
+        findFirst: jest.fn().mockResolvedValue({
+          id: 'gallery-1',
+          tenantId,
+          websiteId,
+          imageUrl: '/api/v1/uploads/tenant-1/gallery/gallery.png',
+          status: ContentStatus.ACTIVE,
+        }),
+        update: jest.fn().mockResolvedValue({ id: 'gallery-1', status: ContentStatus.ARCHIVED }),
       },
+    };
+  }
+
+  function createUploadsMock() {
+    return {
+      deleteTenantAssetByUrl: jest.fn().mockResolvedValue({ deleted: true, reason: 'deleted' }),
     };
   }
 
   it('persists submitted website fields through Prisma', async () => {
     const prisma = createPrismaMock();
-    const service = new WebsitesService(prisma as never);
+    const service = new WebsitesService(prisma as never, createUploadsMock() as never);
 
     await service.update(tenantId, websiteId, {
       businessName: 'Updated Business',
@@ -67,7 +81,7 @@ describe('WebsitesService', () => {
 
   it('rejects empty website update payloads instead of returning a no-op success', async () => {
     const prisma = createPrismaMock();
-    const service = new WebsitesService(prisma as never);
+    const service = new WebsitesService(prisma as never, createUploadsMock() as never);
 
     await expect(service.update(tenantId, websiteId, {})).rejects.toBeInstanceOf(BadRequestException);
     expect(prisma.website.update).not.toHaveBeenCalled();
@@ -75,7 +89,7 @@ describe('WebsitesService', () => {
 
   it('persists submitted theme asset fields through Prisma', async () => {
     const prisma = createPrismaMock();
-    const service = new WebsitesService(prisma as never);
+    const service = new WebsitesService(prisma as never, createUploadsMock() as never);
 
     await service.updateThemeAssets(tenantId, websiteId, {
       logoUrl: '/api/v1/uploads/tenant-1/logo/logo.png',
@@ -105,9 +119,46 @@ describe('WebsitesService', () => {
 
   it('rejects empty theme asset payloads instead of returning a no-op success', async () => {
     const prisma = createPrismaMock();
-    const service = new WebsitesService(prisma as never);
+    const service = new WebsitesService(prisma as never, createUploadsMock() as never);
 
     await expect(service.updateThemeAssets(tenantId, websiteId, {})).rejects.toBeInstanceOf(BadRequestException);
     expect(prisma.theme.updateMany).not.toHaveBeenCalled();
+  });
+
+  it('clears a logo theme asset and deletes the owned upload', async () => {
+    const prisma = createPrismaMock();
+    prisma.website.findFirst.mockResolvedValue({
+      id: websiteId,
+      tenantId,
+      themeId: 'theme-1',
+      theme: { logoUrl: '/api/v1/uploads/tenant-1/logo/logo.png', heroImageUrl: null },
+    });
+    const uploads = createUploadsMock();
+    const service = new WebsitesService(prisma as never, uploads as never);
+
+    await service.deleteThemeAsset(tenantId, websiteId, 'logo');
+
+    expect(uploads.deleteTenantAssetByUrl).toHaveBeenCalledWith(tenantId, '/api/v1/uploads/tenant-1/logo/logo.png', 'logo');
+    expect(prisma.theme.updateMany).toHaveBeenCalledWith({
+      where: { id: 'theme-1', tenantId },
+      data: { logoUrl: null },
+    });
+  });
+
+  it('archives a gallery item and deletes the owned upload', async () => {
+    const prisma = createPrismaMock();
+    const uploads = createUploadsMock();
+    const service = new WebsitesService(prisma as never, uploads as never);
+
+    await service.deleteGalleryItem(tenantId, websiteId, 'gallery-1');
+
+    expect(prisma.gallery.findFirst).toHaveBeenCalledWith({
+      where: { id: 'gallery-1', tenantId, websiteId, status: ContentStatus.ACTIVE },
+    });
+    expect(uploads.deleteTenantAssetByUrl).toHaveBeenCalledWith(tenantId, '/api/v1/uploads/tenant-1/gallery/gallery.png', 'gallery');
+    expect(prisma.gallery.update).toHaveBeenCalledWith({
+      where: { id: 'gallery-1' },
+      data: { status: ContentStatus.ARCHIVED },
+    });
   });
 });

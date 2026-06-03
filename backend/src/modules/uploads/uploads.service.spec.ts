@@ -50,6 +50,32 @@ describe('UploadsService', () => {
     });
   });
 
+  it('deletes a tenant scoped uploaded asset from storage', async () => {
+    const result = await service.store('tenant-1', 'logo', {
+      originalname: 'logo.png',
+      mimetype: 'image/png',
+      size: pngBuffer.length,
+      buffer: pngBuffer,
+    });
+
+    await expect(service.deleteTenantAssetByUrl('tenant-1', result.url, 'logo')).resolves.toMatchObject({
+      deleted: true,
+      reason: 'deleted',
+    });
+    await expect(service.readPublicFile('tenant-1', 'logo', result.fileName)).rejects.toThrow('Asset not found');
+  });
+
+  it('rejects deletion when the asset URL belongs to another tenant', async () => {
+    const result = await service.store('tenant-1', 'logo', {
+      originalname: 'logo.png',
+      mimetype: 'image/png',
+      size: pngBuffer.length,
+      buffer: pngBuffer,
+    });
+
+    await expect(service.deleteTenantAssetByUrl('tenant-2', result.url, 'logo')).rejects.toThrow('Asset does not belong to tenant');
+  });
+
   it('rejects content that does not match the declared MIME type', async () => {
     await expect(
       service.store('tenant-1', 'gallery', {

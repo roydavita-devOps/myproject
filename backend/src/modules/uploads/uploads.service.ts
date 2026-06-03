@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { extname } from 'path';
 import { extensionForMimeType, isUploadAssetType, StoredUpload, UploadAssetType, UPLOAD_POLICIES } from './upload-policy';
@@ -50,6 +50,25 @@ export class UploadsService {
     return this.storage.adapter().readObject({ tenantId, assetType, directory: policy.directory, fileName });
   }
 
+  async deleteTenantAssetByUrl(tenantId: string, url?: string | null, expectedAssetType?: UploadAssetType) {
+    if (!url) return { deleted: false, reason: 'empty_url' };
+
+    const parsed = this.parseUploadedAssetUrl(url);
+    if (!parsed) return { deleted: false, reason: 'external_url' };
+    if (parsed.tenantId !== tenantId) throw new ForbiddenException('Asset does not belong to tenant');
+    if (expectedAssetType && parsed.assetType !== expectedAssetType) throw new BadRequestException('Asset type does not match');
+
+    const policy = UPLOAD_POLICIES[parsed.assetType];
+    await this.storage.adapter().deleteObject({
+      tenantId: parsed.tenantId,
+      assetType: parsed.assetType,
+      directory: policy.directory,
+      fileName: parsed.fileName,
+    });
+
+    return { deleted: true, reason: 'deleted' };
+  }
+
   private validateFile(file: UploadedFile, maxSize: number) {
     if (!file.buffer?.length) throw new BadRequestException('File is empty');
     if (file.size > maxSize) throw new BadRequestException(`File exceeds ${maxSize} bytes`);
@@ -92,4 +111,23 @@ export class UploadsService {
     return false;
   }
 
+  private parseUploadedAssetUrl(url: string) {
+    const path = this.extractPath(url);
+    const match = path.match(/^\/api\/v1\/uploads\/([^/]+)\/([^/]+)\/([^/]+)$/);
+    if (!match) return null;
+
+    const [, tenantId, assetType, fileName] = match;
+    if (!isUploadAssetType(assetType)) return null;
+
+    return { tenantId, assetType, fileName };
+  }
+
+  private extractPath(url: string) {
+    if (url.startsWith('/')) return url;
+    try {
+      return new URL(url).pathname;
+    } catch {
+      return '';
+    }
+  }
 }

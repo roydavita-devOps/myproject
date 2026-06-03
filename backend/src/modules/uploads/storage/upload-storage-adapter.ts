@@ -25,9 +25,17 @@ export type ReadObjectInput = {
   fileName: string;
 };
 
+export type DeleteObjectInput = {
+  tenantId: string;
+  assetType: string;
+  directory: string;
+  fileName: string;
+};
+
 export interface UploadStorageAdapter {
   readonly driver: string;
   putObject(input: PutObjectInput): Promise<StoredObject>;
   readObject(input: ReadObjectInput): Promise<ReadObject>;
+  deleteObject(input: DeleteObjectInput): Promise<void>;
   health(): Promise<Record<string, unknown>>;
 }

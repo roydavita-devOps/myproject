@@ -10,6 +10,8 @@ export type UpdateThemeAssetsPayload = {
   heroImageUrl?: string;
 };
 
+export type ThemeAssetType = 'logo' | 'hero';
+
 export type AddGalleryItemPayload = {
   imageUrl: string;
   category?: string;
@@ -33,8 +35,16 @@ export const websitesApi = {
     const { data } = await http.patch<Website>(`/websites/${id}/theme-assets`, payload);
     return data;
   },
+  async deleteThemeAsset(id: string, assetType: ThemeAssetType) {
+    const { data } = await http.delete<Website>(`/websites/${id}/theme-assets/${assetType}`);
+    return data;
+  },
   async addGalleryItem(id: string, payload: AddGalleryItemPayload) {
     const { data } = await http.post<Website>(`/websites/${id}/gallery`, payload);
+    return data;
+  },
+  async deleteGalleryItem(id: string, galleryId: string) {
+    const { data } = await http.delete<Website>(`/websites/${id}/gallery/${galleryId}`);
     return data;
   },
   async publish(id: string) {

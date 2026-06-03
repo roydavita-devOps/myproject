@@ -2,9 +2,9 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { ConfigService } from '@nestjs/config';
 import { createReadStream } from 'fs';
 import { constants } from 'fs';
-import { access, mkdir, stat, writeFile } from 'fs/promises';
+import { access, mkdir, stat, unlink, writeFile } from 'fs/promises';
 import { basename, extname, join, resolve } from 'path';
-import { PutObjectInput, ReadObjectInput, ReadObject, StoredObject, UploadStorageAdapter } from './upload-storage-adapter';
+import { DeleteObjectInput, PutObjectInput, ReadObjectInput, ReadObject, StoredObject, UploadStorageAdapter } from './upload-storage-adapter';
 
 @Injectable()
 export class LocalUploadStorageAdapter implements UploadStorageAdapter {
@@ -45,6 +45,21 @@ export class LocalUploadStorageAdapter implements UploadStorageAdapter {
       stream: createReadStream(filePath),
       contentType: this.mimeTypeForExtension(extname(input.fileName).toLowerCase()),
     };
+  }
+
+  async deleteObject(input: DeleteObjectInput): Promise<void> {
+    this.validatePathSegment(input.tenantId, 'tenant id');
+    this.validatePathSegment(input.fileName, 'file name');
+
+    const root = resolve(this.storageRoot(), input.tenantId, input.directory);
+    const filePath = resolve(root, input.fileName);
+    if (!filePath.startsWith(root)) throw new NotFoundException('Asset not found');
+
+    try {
+      await unlink(filePath);
+    } catch {
+      throw new NotFoundException('Asset not found');
+    }
   }
 
   async health() {
