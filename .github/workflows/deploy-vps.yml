@@ -19,29 +19,39 @@ jobs:
     name: Deploy production stack
     runs-on: ubuntu-latest
     environment: production
+    env:
+      VPS_USER: ${{ secrets.VPS_USER }}
+      VPS_HOST: ${{ secrets.VPS_HOST }}
+      VPS_PORT: ${{ secrets.VPS_PORT }}
+      VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+      APP_DIR: ${{ secrets.VPS_APP_DIR }}
+      DEPLOY_BRANCH: ${{ github.event_name == 'workflow_dispatch' && inputs.branch || 'main' }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Check deployment secrets
+        id: preflight
+        run: |
+          if [ -z "${VPS_USER}" ] || [ -z "${VPS_HOST}" ] || [ -z "${VPS_SSH_PRIVATE_KEY}" ]; then
+            echo "Deployment skipped: VPS_USER, VPS_HOST, and VPS_SSH_PRIVATE_KEY secrets are required."
+            echo "deploy_enabled=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy_enabled=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Install SSH key
-        env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
+        if: steps.preflight.outputs.deploy_enabled == 'true'
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          printf '%s\n' "${{ secrets.VPS_SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          printf '%s\n' "${VPS_SSH_PRIVATE_KEY}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -p "${VPS_PORT:-22}" -H "${VPS_HOST}" >> ~/.ssh/known_hosts
 
       - name: Deploy over SSH
-        env:
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
-          APP_DIR: ${{ secrets.VPS_APP_DIR }}
-          DEPLOY_BRANCH: ${{ github.event_name == 'workflow_dispatch' && inputs.branch || 'main' }}
+        if: steps.preflight.outputs.deploy_enabled == 'true'
         run: |
           SSH_PORT="${VPS_PORT:-22}"
           ssh -i ~/.ssh/deploy_key -p "${SSH_PORT}" "${VPS_USER}@${VPS_HOST}" \
