@@ -8,10 +8,11 @@ import { TenantsModule } from './modules/tenants/tenants.module';
 import { WebsitesModule } from './modules/websites/websites.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { TenantResolverMiddleware } from './common/middleware/tenant-resolver.middleware';
+import { validateEnv } from './config/env.validation';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, validate: validateEnv }),
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 120 }]),
     CommonModule,
     PrismaModule,
