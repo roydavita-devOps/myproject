@@ -1,0 +1,8 @@
+{
+  "name": "umkm-website-builder",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "seed": "npm --prefix backend run seed"
+  }
+}
