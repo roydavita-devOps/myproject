@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "seed": "npm --prefix backend run seed"
+    "seed": "npm --prefix backend run seed",
+    "smoke-test": "playwright test --config=playwright.config.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0"
   }
 }

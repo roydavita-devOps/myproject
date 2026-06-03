@@ -29,3 +29,7 @@ nginx/certs/*
 # TypeScript incremental cache
 *.tsbuildinfo
 frontend/node_modules/.tmp/
+
+# Playwright
+test-results/
+playwright-report/
