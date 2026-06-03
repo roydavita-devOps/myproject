@@ -2,12 +2,12 @@ name: Build Backend
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, staging, pilot]
     paths:
       - "backend/**"
       - ".github/workflows/backend-build.yml"
   pull_request:
-    branches: [main, develop]
+    branches: [main, staging, pilot]
     paths:
       - "backend/**"
       - ".github/workflows/backend-build.yml"
