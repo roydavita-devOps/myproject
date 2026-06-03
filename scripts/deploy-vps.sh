@@ -27,7 +27,7 @@ docker compose up -d
 docker compose ps
 
 if command -v curl >/dev/null 2>&1; then
-  curl --fail --silent --show-error http://localhost/health >/dev/null
+  curl --fail --silent --show-error http://localhost/health/ready >/dev/null
 fi
 
 echo "Deployment complete."

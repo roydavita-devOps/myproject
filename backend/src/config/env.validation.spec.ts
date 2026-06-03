@@ -25,6 +25,16 @@ describe('validateEnv', () => {
     ).toThrow('JWT_REFRESH_SECRET');
   });
 
+  it('rejects replace-with production placeholders', () => {
+    expect(() =>
+      validateEnv({
+        NODE_ENV: 'production',
+        JWT_ACCESS_SECRET: 'replace-with-production-access-secret-min-32-chars',
+        JWT_REFRESH_SECRET: 'b'.repeat(32),
+      }),
+    ).toThrow('JWT_ACCESS_SECRET');
+  });
+
   it('allows strong production secrets', () => {
     const config = {
       NODE_ENV: 'production',

@@ -39,6 +39,8 @@ services:
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost}
       ROOT_DOMAIN: ${ROOT_DOMAIN:-localhost}
       RUN_MIGRATIONS: ${RUN_MIGRATIONS:-true}
+      STORAGE_DRIVER: ${STORAGE_DRIVER:-none}
+      CACHE_DRIVER: ${CACHE_DRIVER:-none}
     expose:
       - "4000"
     networks:

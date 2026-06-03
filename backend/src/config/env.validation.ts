@@ -16,11 +16,13 @@ export function validateEnv(config: Record<string, unknown>) {
 }
 
 function assertSecret(value: unknown, name: string) {
-  if (typeof value !== 'string' || PLACEHOLDER_VALUES.has(value.trim())) {
+  const trimmed = typeof value === 'string' ? value.trim() : '';
+
+  if (!trimmed || PLACEHOLDER_VALUES.has(trimmed) || trimmed.startsWith('replace-with-')) {
     throw new Error(`${name} must be set to a non-placeholder value in production`);
   }
 
-  if (value.trim().length < 32) {
+  if (trimmed.length < 32) {
     throw new Error(`${name} must be at least 32 characters in production`);
   }
 }

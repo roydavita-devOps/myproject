@@ -6,6 +6,7 @@ import { CommonModule } from './common/common.module';
 import { MenusModule } from './modules/menus/menus.module';
 import { TenantsModule } from './modules/tenants/tenants.module';
 import { WebsitesModule } from './modules/websites/websites.module';
+import { HealthModule } from './modules/health/health.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { TenantResolverMiddleware } from './common/middleware/tenant-resolver.middleware';
 import { validateEnv } from './config/env.validation';
@@ -17,6 +18,7 @@ import { validateEnv } from './config/env.validation';
     CommonModule,
     PrismaModule,
     AuthModule,
+    HealthModule,
     TenantsModule,
     WebsitesModule,
     MenusModule,
