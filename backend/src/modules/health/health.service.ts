@@ -1,9 +1,7 @@
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { constants } from 'fs';
-import { access, mkdir } from 'fs/promises';
-import { resolve } from 'path';
 import { PrismaService } from '../../prisma/prisma.service';
+import { UploadStorageService } from '../uploads/storage/upload-storage.service';
 
 type HealthState = 'ok' | 'degraded' | 'not_configured' | 'error';
 
@@ -22,6 +20,7 @@ export class HealthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly config: ConfigService,
+    private readonly uploadStorage: UploadStorageService,
   ) {}
 
   async check(): Promise<HealthResponse> {
@@ -65,17 +64,12 @@ export class HealthService {
   async storage(): Promise<HealthResponse> {
     const driver = this.config.get<string>('STORAGE_DRIVER', 'none');
     if (driver === 'none') return this.response('not_configured', { driver });
-    if (driver !== 'local') return this.response('not_configured', { driver });
 
-    const path = resolve(this.config.get<string>('UPLOAD_STORAGE_PATH', '/app/uploads'));
     try {
-      await mkdir(path, { recursive: true });
-      await access(path, constants.R_OK | constants.W_OK);
-      return this.response('ok', { driver, path });
+      return this.response('ok', await this.uploadStorage.adapter().health());
     } catch (error) {
       return this.response('error', {
         driver,
-        path,
         message: error instanceof Error ? error.message : 'Storage check failed',
       });
     }

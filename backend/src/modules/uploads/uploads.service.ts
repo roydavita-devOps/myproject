@@ -1,17 +1,15 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { randomUUID } from 'crypto';
-import { createReadStream } from 'fs';
-import { mkdir, stat, writeFile } from 'fs/promises';
-import { basename, extname, join, resolve } from 'path';
+import { extname } from 'path';
 import { extensionForMimeType, isUploadAssetType, StoredUpload, UploadAssetType, UPLOAD_POLICIES } from './upload-policy';
 import { UploadedFile } from './uploaded-file.type';
 import { MalwareScannerService } from './malware-scanner.service';
+import { UploadStorageService } from './storage/upload-storage.service';
 
 @Injectable()
 export class UploadsService {
   constructor(
-    private readonly config: ConfigService,
+    private readonly storage: UploadStorageService,
     private readonly scanner: MalwareScannerService,
   ) {}
 
@@ -25,47 +23,31 @@ export class UploadsService {
     const extension = extensionForMimeType(file.mimetype);
     if (!extension) throw new BadRequestException('Unsupported file type');
 
-    const storageRoot = this.storageRoot();
-    const directory = join(storageRoot, tenantId, policy.directory);
-    await mkdir(directory, { recursive: true });
-
     const fileName = `${Date.now()}-${randomUUID()}.${extension}`;
-    const filePath = join(directory, fileName);
-    await writeFile(filePath, file.buffer, { flag: 'wx' });
+    const stored = await this.storage.adapter().putObject({
+      tenantId,
+      assetType,
+      directory: policy.directory,
+      fileName,
+      buffer: file.buffer,
+    });
 
     return {
       tenantId,
       assetType,
       originalName: file.originalname,
-      fileName,
+      fileName: stored.fileName,
       mimeType: file.mimetype,
       size: file.size,
-      url: this.publicUrl(tenantId, assetType, fileName),
+      url: stored.url,
       scan,
     };
   }
 
   async readPublicFile(tenantId: string, assetType: string, fileName: string) {
     if (!isUploadAssetType(assetType)) throw new NotFoundException('Asset not found');
-    this.validatePathSegment(tenantId, 'tenant id');
-    this.validatePathSegment(fileName, 'file name');
-
     const policy = UPLOAD_POLICIES[assetType];
-    const filePath = resolve(this.storageRoot(), tenantId, policy.directory, fileName);
-    const root = resolve(this.storageRoot(), tenantId, policy.directory);
-    if (!filePath.startsWith(root)) throw new NotFoundException('Asset not found');
-
-    try {
-      const fileStat = await stat(filePath);
-      if (!fileStat.isFile()) throw new NotFoundException('Asset not found');
-    } catch {
-      throw new NotFoundException('Asset not found');
-    }
-
-    return {
-      stream: createReadStream(filePath),
-      contentType: this.mimeTypeForExtension(extname(fileName).toLowerCase()),
-    };
+    return this.storage.adapter().readObject({ tenantId, assetType, directory: policy.directory, fileName });
   }
 
   private validateFile(file: UploadedFile, maxSize: number) {
@@ -110,26 +92,4 @@ export class UploadsService {
     return false;
   }
 
-  private publicUrl(tenantId: string, assetType: UploadAssetType, fileName: string) {
-    const baseUrl = this.config.get<string>('UPLOAD_PUBLIC_BASE_URL', '');
-    const path = `/api/v1/uploads/${tenantId}/${assetType}/${fileName}`;
-    return baseUrl ? `${baseUrl.replace(/\/$/, '')}${path}` : path;
-  }
-
-  private storageRoot() {
-    return resolve(this.config.get<string>('UPLOAD_STORAGE_PATH', '/app/uploads'));
-  }
-
-  private validatePathSegment(value: string, label: string) {
-    if (value !== basename(value) || value.includes('..') || !/^[a-zA-Z0-9._-]+$/.test(value)) {
-      throw new BadRequestException(`Invalid ${label}`);
-    }
-  }
-
-  private mimeTypeForExtension(extension: string) {
-    if (extension === '.jpg' || extension === '.jpeg') return 'image/jpeg';
-    if (extension === '.png') return 'image/png';
-    if (extension === '.webp') return 'image/webp';
-    return 'application/octet-stream';
-  }
 }

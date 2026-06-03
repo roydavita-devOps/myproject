@@ -3,6 +3,8 @@ import { mkdtemp, rm } from 'fs/promises';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { MalwareScannerService } from './malware-scanner.service';
+import { LocalUploadStorageAdapter } from './storage/local-upload-storage.adapter';
+import { UploadStorageService } from './storage/upload-storage.service';
 import { UploadsService } from './uploads.service';
 
 const pngBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00]);
@@ -21,7 +23,10 @@ describe('UploadsService', () => {
       }),
     } as unknown as ConfigService;
 
-    service = new UploadsService(config, new MalwareScannerService(config));
+    service = new UploadsService(
+      new UploadStorageService(config, new LocalUploadStorageAdapter(config)),
+      new MalwareScannerService(config),
+    );
   });
 
   afterEach(async () => {
