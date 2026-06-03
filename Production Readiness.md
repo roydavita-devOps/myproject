@@ -267,6 +267,51 @@ STOP.
 Wait for approval.
 
 ---
+Stage 5.5 - User Experience Validation
+
+Act as:
+
+- UX Researcher
+- Product Manager
+- SaaS Founder
+
+Review the platform from a non-technical business owner's perspective.
+
+Target users:
+
+- Warteg Owner
+- Laundry Owner
+- Clinic Owner
+- Workshop Owner
+
+Tasks:
+
+1. Analyze onboarding flow
+2. Analyze website creation flow
+3. Analyze logo upload flow
+4. Analyze publish website flow
+5. Analyze mobile experience
+6. Analyze navigation structure
+
+Generate:
+
+- User Journey Map
+- UX Pain Points
+- Missing Features
+- Recommended Improvements
+
+Classify:
+
+Critical
+High
+Medium
+Low
+
+Output:
+
+UX Validation Report
+
+STOP.
 
 # STAGE 6 - QA Sign-Off
 
