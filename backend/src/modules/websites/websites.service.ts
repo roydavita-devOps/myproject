@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ContentStatus, Prisma, WebsiteStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AddGalleryItemDto } from './dto/add-gallery-item.dto';
@@ -54,20 +54,23 @@ export class WebsitesService {
 
   async update(tenantId: string, id: string, dto: UpdateWebsiteDto) {
     await this.findOne(tenantId, id);
+    const data = stripUndefined({
+      businessName: dto.businessName,
+      tagline: dto.tagline,
+      description: dto.description,
+      address: dto.address,
+      phone: dto.phone,
+      whatsapp: dto.whatsapp,
+      email: dto.email,
+      socialMedia: dto.socialMedia as Prisma.InputJsonValue,
+      mapsUrl: dto.mapsUrl,
+      openingHours: dto.openingHours as Prisma.InputJsonValue,
+    });
+    if (Object.keys(data).length === 0) throw new BadRequestException('At least one website field is required');
+
     return this.prisma.website.update({
       where: { id },
-      data: {
-        businessName: dto.businessName,
-        tagline: dto.tagline,
-        description: dto.description,
-        address: dto.address,
-        phone: dto.phone,
-        whatsapp: dto.whatsapp,
-        email: dto.email,
-        socialMedia: dto.socialMedia as Prisma.InputJsonValue,
-        mapsUrl: dto.mapsUrl,
-        openingHours: dto.openingHours as Prisma.InputJsonValue,
-      },
+      data,
     });
   }
 
@@ -77,6 +80,7 @@ export class WebsitesService {
       ...(dto.logoUrl !== undefined ? { logoUrl: dto.logoUrl } : {}),
       ...(dto.heroImageUrl !== undefined ? { heroImageUrl: dto.heroImageUrl } : {}),
     };
+    if (Object.keys(data).length === 0) throw new BadRequestException('At least one theme asset is required');
 
     if (website.themeId) {
       await this.prisma.theme.updateMany({
@@ -168,4 +172,8 @@ export class WebsitesService {
     if (!tenant) throw new NotFoundException('Published site not found');
     return this.publicSite(tenant.id);
   }
+}
+
+function stripUndefined<T extends Record<string, unknown>>(data: T) {
+  return Object.fromEntries(Object.entries(data).filter(([, value]) => value !== undefined)) as Partial<T>;
 }
