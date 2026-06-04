@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router';
 import { Building2 } from 'lucide-react';
 import { AuthLayout } from './AuthLayout';
 import { authApi } from './auth.api';
-import { useAuth } from './AuthProvider';
+import { useAuth } from './useAuth';
 import { Button } from '../../components/ui/Button';
 import { Field, TextInput } from '../../components/ui/Field';
 

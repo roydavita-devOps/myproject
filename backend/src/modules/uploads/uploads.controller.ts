@@ -22,7 +22,7 @@ import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { TenantGuard } from '../../common/guards/tenant.guard';
 import { TenantContext } from '../../common/types/tenant-context.type';
-import { isUploadAssetType, UploadAssetType, UPLOAD_POLICIES } from './upload-policy';
+import { isUploadAssetType, UPLOAD_POLICIES } from './upload-policy';
 import { UploadedFile } from './uploaded-file.type';
 import { UploadsService } from './uploads.service';
 

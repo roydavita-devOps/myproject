@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { LogIn } from 'lucide-react';
-import { useAuth } from './AuthProvider';
+import { useAuth } from './useAuth';
 import { authApi } from './auth.api';
 import { AuthLayout } from './AuthLayout';
 import { Button } from '../../components/ui/Button';

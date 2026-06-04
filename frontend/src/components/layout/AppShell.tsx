@@ -11,7 +11,7 @@ import {
   Shield,
 } from 'lucide-react';
 import { clsx } from 'clsx';
-import { useAuth } from '../../features/auth/AuthProvider';
+import { useAuth } from '../../features/auth/useAuth';
 import { Button } from '../ui/Button';
 
 type NavItem = {

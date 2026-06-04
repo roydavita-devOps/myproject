@@ -1,6 +1,6 @@
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router';
 import { AppShell } from '../components/layout/AppShell';
-import { useAuth } from '../features/auth/AuthProvider';
+import { useAuth } from '../features/auth/useAuth';
 import { LoginPage } from '../features/auth/LoginPage';
 import { RegisterPage } from '../features/auth/RegisterPage';
 import { TenantDashboardPage } from '../features/dashboard/TenantDashboardPage';
