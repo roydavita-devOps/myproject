@@ -9,6 +9,7 @@ import { Field, TextArea, TextInput } from '../../components/ui/Field';
 import { ImageUpload } from '../../components/ui/ImageUpload';
 import { LoadingState } from '../../components/ui/State';
 import { resolveAssetUrl } from '../../lib/api/assets';
+import { Website } from '../../types/api';
 
 export function WebsiteEditorPage() {
   const { websiteId = '' } = useParams();
@@ -51,53 +52,53 @@ export function WebsiteEditorPage() {
 
   const saveMutation = useMutation({
     mutationFn: () => websitesApi.update(websiteId, sanitizeWebsiteForm(form)),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['websites'] });
-      queryClient.invalidateQueries({ queryKey: ['websites', websiteId] });
+    onSuccess: (updatedWebsite) => {
+      syncWebsiteQueries(updatedWebsite);
     },
   });
   const publishMutation = useMutation({
     mutationFn: () => websitesApi.publish(websiteId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['websites'] });
-      queryClient.invalidateQueries({ queryKey: ['websites', websiteId] });
+    onSuccess: (updatedWebsite) => {
+      syncWebsiteQueries(updatedWebsite);
     },
   });
   const unpublishMutation = useMutation({
     mutationFn: () => websitesApi.unpublish(websiteId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['websites'] });
-      queryClient.invalidateQueries({ queryKey: ['websites', websiteId] });
+    onSuccess: (updatedWebsite) => {
+      syncWebsiteQueries(updatedWebsite);
     },
   });
   const themeAssetsMutation = useMutation({
     mutationFn: (payload: { logoUrl?: string; heroImageUrl?: string }) => websitesApi.updateThemeAssets(websiteId, payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['websites'] });
-      queryClient.invalidateQueries({ queryKey: ['websites', websiteId] });
+    onSuccess: (updatedWebsite) => {
+      syncWebsiteQueries(updatedWebsite);
     },
   });
   const galleryMutation = useMutation({
     mutationFn: (imageUrl: string) => websitesApi.addGalleryItem(websiteId, { imageUrl, altText: website?.businessName ?? 'Gallery image' }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['websites'] });
-      queryClient.invalidateQueries({ queryKey: ['websites', websiteId] });
+    onSuccess: (updatedWebsite) => {
+      syncWebsiteQueries(updatedWebsite);
     },
   });
   const deleteThemeAssetMutation = useMutation({
     mutationFn: (assetType: 'logo' | 'hero') => websitesApi.deleteThemeAsset(websiteId, assetType),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['websites'] });
-      queryClient.invalidateQueries({ queryKey: ['websites', websiteId] });
+    onSuccess: (updatedWebsite) => {
+      syncWebsiteQueries(updatedWebsite);
     },
   });
   const deleteGalleryMutation = useMutation({
     mutationFn: (galleryId: string) => websitesApi.deleteGalleryItem(websiteId, galleryId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['websites'] });
-      queryClient.invalidateQueries({ queryKey: ['websites', websiteId] });
+    onSuccess: (updatedWebsite) => {
+      syncWebsiteQueries(updatedWebsite);
     },
   });
+
+  function syncWebsiteQueries(updatedWebsite: Website) {
+    queryClient.setQueryData(['websites', websiteId], updatedWebsite);
+    queryClient.setQueryData(['websites'], (current: Website[] | undefined) =>
+      current?.map((item) => (item.id === updatedWebsite.id ? updatedWebsite : item)),
+    );
+  }
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
