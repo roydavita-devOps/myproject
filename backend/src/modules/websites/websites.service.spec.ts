@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { ContentStatus, WebsiteStatus } from '@prisma/client';
 import { WebsitesService } from './websites.service';
 
@@ -145,6 +145,27 @@ describe('WebsitesService', () => {
     });
   });
 
+  it('clears a logo theme asset even when the uploaded file is already missing', async () => {
+    const prisma = createPrismaMock();
+    prisma.website.findFirst.mockResolvedValue({
+      id: websiteId,
+      tenantId,
+      themeId: 'theme-1',
+      theme: { logoUrl: '/api/v1/uploads/tenant-1/logo/missing.png', heroImageUrl: null },
+    });
+    const uploads = {
+      deleteTenantAssetByUrl: jest.fn().mockRejectedValue(new NotFoundException('Asset not found')),
+    };
+    const service = new WebsitesService(prisma as never, uploads as never);
+
+    await service.deleteThemeAsset(tenantId, websiteId, 'logo');
+
+    expect(prisma.theme.updateMany).toHaveBeenCalledWith({
+      where: { id: 'theme-1', tenantId },
+      data: { logoUrl: null },
+    });
+  });
+
   it('archives a gallery item and deletes the owned upload', async () => {
     const prisma = createPrismaMock();
     const uploads = createUploadsMock();
@@ -156,6 +177,21 @@ describe('WebsitesService', () => {
       where: { id: 'gallery-1', tenantId, websiteId, status: ContentStatus.ACTIVE },
     });
     expect(uploads.deleteTenantAssetByUrl).toHaveBeenCalledWith(tenantId, '/api/v1/uploads/tenant-1/gallery/gallery.png', 'gallery');
+    expect(prisma.gallery.update).toHaveBeenCalledWith({
+      where: { id: 'gallery-1' },
+      data: { status: ContentStatus.ARCHIVED },
+    });
+  });
+
+  it('archives a gallery item even when the uploaded file is already missing', async () => {
+    const prisma = createPrismaMock();
+    const uploads = {
+      deleteTenantAssetByUrl: jest.fn().mockRejectedValue(new NotFoundException('Asset not found')),
+    };
+    const service = new WebsitesService(prisma as never, uploads as never);
+
+    await service.deleteGalleryItem(tenantId, websiteId, 'gallery-1');
+
     expect(prisma.gallery.update).toHaveBeenCalledWith({
       where: { id: 'gallery-1' },
       data: { status: ContentStatus.ARCHIVED },

@@ -117,7 +117,7 @@ export class WebsitesService {
     const url = website.theme[field];
     if (!url) throw new NotFoundException('Theme asset not found');
 
-    await this.uploads.deleteTenantAssetByUrl(tenantId, url, assetType);
+    await this.deleteUploadIfPresent(tenantId, url, assetType);
     await this.prisma.theme.updateMany({
       where: { id: website.themeId, tenantId },
       data: { [field]: null },
@@ -150,7 +150,7 @@ export class WebsitesService {
     });
     if (!gallery) throw new NotFoundException('Gallery image not found');
 
-    await this.uploads.deleteTenantAssetByUrl(tenantId, gallery.imageUrl, 'gallery');
+    await this.deleteUploadIfPresent(tenantId, gallery.imageUrl, 'gallery');
     await this.prisma.gallery.update({
       where: { id: galleryId },
       data: { status: ContentStatus.ARCHIVED },
@@ -208,6 +208,15 @@ export class WebsitesService {
     const tenant = await this.prisma.tenant.findUnique({ where: { slug } });
     if (!tenant) throw new NotFoundException('Published site not found');
     return this.publicSite(tenant.id);
+  }
+
+  private async deleteUploadIfPresent(tenantId: string, url: string, assetType: 'logo' | 'hero' | 'gallery') {
+    try {
+      await this.uploads.deleteTenantAssetByUrl(tenantId, url, assetType);
+    } catch (error) {
+      if (error instanceof NotFoundException) return;
+      throw error;
+    }
   }
 }
 
