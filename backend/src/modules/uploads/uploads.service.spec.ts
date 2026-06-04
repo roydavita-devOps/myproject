@@ -7,7 +7,11 @@ import { LocalUploadStorageAdapter } from './storage/local-upload-storage.adapte
 import { UploadStorageService } from './storage/upload-storage.service';
 import { UploadsService } from './uploads.service';
 
-const pngBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00]);
+const pngBuffer = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=',
+  'base64',
+);
+const truncatedPngBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00]);
 
 describe('UploadsService', () => {
   let storagePath: string;
@@ -83,6 +87,17 @@ describe('UploadsService', () => {
         mimetype: 'image/png',
         size: 5,
         buffer: Buffer.from('hello'),
+      }),
+    ).rejects.toThrow('File content does not match MIME type');
+  });
+
+  it('rejects truncated images that cannot be rendered by browsers', async () => {
+    await expect(
+      service.store('tenant-1', 'gallery', {
+        originalname: 'truncated.png',
+        mimetype: 'image/png',
+        size: truncatedPngBuffer.length,
+        buffer: truncatedPngBuffer,
       }),
     ).rejects.toThrow('File content does not match MIME type');
   });

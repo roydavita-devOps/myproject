@@ -81,16 +81,25 @@ export class UploadsService {
       throw new BadRequestException('File extension does not match MIME type');
     }
 
-    if (!this.matchesMagicBytes(file.mimetype, file.buffer)) {
+    if (!this.hasValidImageSignature(file.mimetype, file.buffer)) {
       throw new BadRequestException('File content does not match MIME type');
     }
   }
 
-  private matchesMagicBytes(mimeType: string, buffer: Buffer) {
-    if (mimeType === 'image/jpeg') return buffer.length > 3 && buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff;
+  private hasValidImageSignature(mimeType: string, buffer: Buffer) {
+    if (mimeType === 'image/jpeg') {
+      return (
+        buffer.length > 4 &&
+        buffer[0] === 0xff &&
+        buffer[1] === 0xd8 &&
+        buffer[2] === 0xff &&
+        buffer[buffer.length - 2] === 0xff &&
+        buffer[buffer.length - 1] === 0xd9
+      );
+    }
     if (mimeType === 'image/png') {
       return (
-        buffer.length > 8 &&
+        buffer.length > 24 &&
         buffer[0] === 0x89 &&
         buffer[1] === 0x50 &&
         buffer[2] === 0x4e &&
@@ -98,14 +107,17 @@ export class UploadsService {
         buffer[4] === 0x0d &&
         buffer[5] === 0x0a &&
         buffer[6] === 0x1a &&
-        buffer[7] === 0x0a
+        buffer[7] === 0x0a &&
+        buffer.includes(Buffer.from('IEND'))
       );
     }
     if (mimeType === 'image/webp') {
+      const declaredSize = buffer.readUInt32LE(4) + 8;
       return (
         buffer.length > 12 &&
         buffer.toString('ascii', 0, 4) === 'RIFF' &&
-        buffer.toString('ascii', 8, 12) === 'WEBP'
+        buffer.toString('ascii', 8, 12) === 'WEBP' &&
+        declaredSize <= buffer.length
       );
     }
     return false;
