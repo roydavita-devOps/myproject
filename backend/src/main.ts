@@ -19,7 +19,11 @@ async function bootstrap() {
       { path: 'health/cache', method: RequestMethod.GET },
     ],
   });
-  app.use(helmet());
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+    }),
+  );
   app.enableCors({
     origin: corsOrigins.map((origin) => origin.trim()),
     credentials: true,
