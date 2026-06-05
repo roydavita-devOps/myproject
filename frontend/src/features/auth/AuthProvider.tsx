@@ -20,6 +20,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (refreshToken) {
           await authApi.logout(refreshToken).catch(() => undefined);
         }
+        window.google?.accounts?.id.disableAutoSelect();
         clearAuthSession();
         setUser(null);
       },

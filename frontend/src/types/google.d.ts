@@ -19,6 +19,7 @@ declare global {
               width?: number;
             },
           ): void;
+          disableAutoSelect(): void;
         };
       };
     };
