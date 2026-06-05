@@ -154,6 +154,10 @@ Notes:
 | Stage 8 API validation script | PASS: 6/6 checks |
 | `npm --prefix backend audit --audit-level=critical` | PASS: 0 vulnerabilities |
 | `npm --prefix frontend audit --audit-level=critical` | PASS: 0 vulnerabilities |
+| Railway production health | PASS |
+| Vercel production auth pages | PASS |
+| Production demo login and sessions endpoint | PASS |
+| Production Google endpoint without client id | PASS: fails closed with 400 |
 
 ## Remaining Configuration Work
 
