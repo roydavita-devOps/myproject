@@ -7,6 +7,12 @@ import { AuthLayout } from './AuthLayout';
 import { GoogleAuthButton } from './GoogleAuthButton';
 import { Button } from '../../components/ui/Button';
 import { Field, TextInput } from '../../components/ui/Field';
+import type { AuthResponse } from '../../types/api';
+
+function resolvePostAuthPath(session: AuthResponse) {
+  if (session.user.role === 'SUPER_ADMIN') return '/admin/dashboard';
+  return session.user.onboardingCompleted ? '/app/dashboard' : '/onboarding';
+}
 
 export function LoginPage() {
   const { setSession } = useAuth();
@@ -24,7 +30,7 @@ export function LoginPage() {
       try {
         const session = await authApi.googleLogin({ idToken, tenantSlug: tenantSlug || undefined });
         setSession(session);
-        navigate(session.user.role === 'SUPER_ADMIN' ? '/admin/dashboard' : '/app/dashboard');
+        navigate(resolvePostAuthPath(session));
       } catch {
         setError('Akun Google belum terdaftar untuk tenant ini.');
       } finally {
@@ -41,7 +47,7 @@ export function LoginPage() {
     try {
       const session = await authApi.login({ email, password, tenantSlug: tenantSlug || undefined });
       setSession(session);
-      navigate(session.user.role === 'SUPER_ADMIN' ? '/admin/dashboard' : '/app/dashboard');
+      navigate(resolvePostAuthPath(session));
     } catch {
       setError('Email atau password tidak valid.');
     } finally {

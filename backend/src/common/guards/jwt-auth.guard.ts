@@ -32,6 +32,7 @@ export class JwtAuthGuard implements CanActivate {
         id: payload.sub,
         tenantId: payload.tenantId ?? null,
         email: payload.email,
+        onboardingCompleted: payload.onboardingCompleted ?? Boolean(payload.tenantId),
         role: payload.role,
         scope: payload.scope,
       };

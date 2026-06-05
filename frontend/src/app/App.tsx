@@ -7,6 +7,7 @@ import { ForgotPasswordPage } from '../features/auth/ForgotPasswordPage';
 import { ResetPasswordPage } from '../features/auth/ResetPasswordPage';
 import { VerifyEmailPage } from '../features/auth/VerifyEmailPage';
 import { AccountSettingsPage } from '../features/auth/AccountSettingsPage';
+import { OnboardingPage } from '../features/auth/OnboardingPage';
 import { TenantDashboardPage } from '../features/dashboard/TenantDashboardPage';
 import { AdminDashboardPage } from '../features/dashboard/AdminDashboardPage';
 import { TenantListPage } from '../features/tenants/TenantListPage';
@@ -22,12 +23,14 @@ function ProtectedRoute({ roles }: { roles?: string[] }) {
   const location = useLocation();
   if (!isAuthenticated) return <Navigate to="/auth/login" replace state={{ from: location }} />;
   if (roles && !roles.includes(user?.role ?? '')) return <Navigate to="/" replace />;
+  if (user && user.role !== 'SUPER_ADMIN' && !hasCompletedOnboarding(user)) return <Navigate to="/onboarding" replace />;
   return <Outlet />;
 }
 
 function GuestRoute() {
   const { user, isAuthenticated } = useAuth();
   if (!isAuthenticated) return <Outlet />;
+  if (user && user.role !== 'SUPER_ADMIN' && !hasCompletedOnboarding(user)) return <Navigate to="/onboarding" replace />;
   return <Navigate to={user?.role === 'SUPER_ADMIN' ? '/admin/dashboard' : '/app/dashboard'} replace />;
 }
 
@@ -50,8 +53,20 @@ function AdminLayout() {
 function HomeRedirect() {
   const { user } = useAuth();
   if (user?.role === 'SUPER_ADMIN') return <Navigate to="/admin/dashboard" replace />;
-  if (user) return <Navigate to="/app/dashboard" replace />;
+  if (user) return <Navigate to={hasCompletedOnboarding(user) ? '/app/dashboard' : '/onboarding'} replace />;
   return <Navigate to="/auth/login" replace />;
+}
+
+function OnboardingRoute() {
+  const { user, isAuthenticated } = useAuth();
+  if (!isAuthenticated) return <Navigate to="/auth/login" replace />;
+  if (user?.role === 'SUPER_ADMIN') return <Navigate to="/admin/dashboard" replace />;
+  if (user && hasCompletedOnboarding(user)) return <Navigate to="/app/dashboard" replace />;
+  return <OnboardingPage />;
+}
+
+function hasCompletedOnboarding(user: { tenantId: string | null; onboardingCompleted?: boolean }) {
+  return user.onboardingCompleted ?? Boolean(user.tenantId);
 }
 
 export function App() {
@@ -65,6 +80,7 @@ export function App() {
         <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
         <Route path="/auth/verify-email" element={<VerifyEmailPage />} />
       </Route>
+      <Route path="/onboarding" element={<OnboardingRoute />} />
       <Route element={<ProtectedRoute roles={['TENANT_ADMIN', 'EDITOR']} />}>
         <Route path="/app" element={<TenantLayout />}>
           <Route index element={<Navigate to="/app/dashboard" replace />} />

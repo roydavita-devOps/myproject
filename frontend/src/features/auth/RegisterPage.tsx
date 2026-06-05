@@ -7,8 +7,14 @@ import { GoogleAuthButton } from './GoogleAuthButton';
 import { useAuth } from './useAuth';
 import { Button } from '../../components/ui/Button';
 import { Field, TextInput } from '../../components/ui/Field';
+import type { AuthResponse } from '../../types/api';
 
 const businessTypes = ['WARTEG', 'RESTAURANT', 'CAFE', 'LAUNDRY', 'WORKSHOP', 'CLINIC', 'SALON', 'RETAIL', 'LOCAL_SERVICE'];
+
+function resolvePostAuthPath(session: AuthResponse) {
+  if (session.user.role === 'SUPER_ADMIN') return '/admin/dashboard';
+  return session.user.onboardingCompleted ? '/app/dashboard' : '/onboarding';
+}
 
 export function RegisterPage() {
   const { setSession } = useAuth();
@@ -26,28 +32,19 @@ export function RegisterPage() {
 
   const handleGoogleCredential = useCallback(
     async (idToken: string) => {
-      if (!form.businessName || !form.slug || !form.businessType) {
-        setError('Isi nama bisnis, slug, dan tipe bisnis sebelum register dengan Google.');
-        return;
-      }
       setSubmitting(true);
       setError('');
       try {
-        const session = await authApi.googleRegister({
-          idToken,
-          businessName: form.businessName,
-          slug: form.slug,
-          businessType: form.businessType,
-        });
+        const session = await authApi.googleLogin({ idToken });
         setSession(session);
-        navigate('/app/dashboard');
+        navigate(resolvePostAuthPath(session));
       } catch {
-        setError('Registrasi Google gagal. Periksa slug dan konfigurasi Google.');
+        setError('Registrasi Google gagal. Periksa konfigurasi Google.');
       } finally {
         setSubmitting(false);
       }
     },
-    [form.businessName, form.businessType, form.slug, navigate, setSession],
+    [navigate, setSession],
   );
 
   async function handleSubmit(event: FormEvent) {
@@ -57,7 +54,7 @@ export function RegisterPage() {
     try {
       const session = await authApi.register(form);
       setSession(session);
-      navigate('/app/dashboard');
+      navigate(resolvePostAuthPath(session));
     } catch {
       setError('Registrasi gagal. Periksa slug, email, dan password.');
     } finally {
@@ -66,7 +63,15 @@ export function RegisterPage() {
   }
 
   return (
-    <AuthLayout title="Register tenant" subtitle="Buat workspace dan draft website pertama.">
+    <AuthLayout title="Register" subtitle="Buat akun dan lanjutkan setup website bisnis.">
+      <div className="mb-5 grid gap-3">
+        <GoogleAuthButton disabled={isSubmitting} mode="signup" onCredential={handleGoogleCredential} />
+        <div className="flex items-center gap-3 text-xs uppercase text-slate-400">
+          <span className="h-px flex-1 bg-slate-200" />
+          atau register dengan email
+          <span className="h-px flex-1 bg-slate-200" />
+        </div>
+      </div>
       <form className="grid gap-4" onSubmit={handleSubmit}>
         <Field label="Business name">
           <TextInput value={form.businessName} onChange={(event) => setForm({ ...form, businessName: event.target.value })} required />
@@ -94,14 +99,6 @@ export function RegisterPage() {
           {isSubmitting ? 'Creating tenant' : 'Create tenant'}
         </Button>
       </form>
-      <div className="my-5 grid gap-3">
-        <div className="flex items-center gap-3 text-xs uppercase text-slate-400">
-          <span className="h-px flex-1 bg-slate-200" />
-          atau
-          <span className="h-px flex-1 bg-slate-200" />
-        </div>
-        <GoogleAuthButton disabled={isSubmitting} mode="signup" onCredential={handleGoogleCredential} />
-      </div>
       <p className="mt-5 text-sm text-slate-500">
         Sudah punya akun? <Link className="font-medium text-teal-700" to="/auth/login">Login</Link>
       </p>

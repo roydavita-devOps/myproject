@@ -18,6 +18,7 @@ import { compare, hash } from 'bcryptjs';
 import { randomBytes } from 'crypto';
 import { OAuth2Client } from 'google-auth-library';
 import { PrismaService } from '../../prisma/prisma.service';
+import { CompleteOnboardingDto } from './dto/complete-onboarding.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { GoogleLoginDto } from './dto/google-login.dto';
 import { GoogleRegisterDto } from './dto/google-register.dto';
@@ -30,6 +31,7 @@ type AuthUser = {
   tenantId: string | null;
   email: string;
   emailVerifiedAt?: Date | null;
+  onboardingCompleted: boolean;
   role: { name: RoleName; scope: RoleScope };
 };
 
@@ -50,11 +52,7 @@ export class AuthService {
   ) {}
 
   async register(dto: RegisterDto, ipAddress?: string, userAgent?: string) {
-    const existingTenant = await this.prisma.tenant.findUnique({ where: { slug: dto.slug } });
-    if (existingTenant) throw new BadRequestException('Tenant slug is already used');
-
     const passwordHash = await hash(dto.password, 12);
-    const rootDomain = this.config.get<string>('ROOT_DOMAIN', 'localhost');
 
     const result = await this.prisma.$transaction(async (tx) => {
       const role = await tx.role.upsert({
@@ -62,9 +60,10 @@ export class AuthService {
         create: { name: RoleName.TENANT_ADMIN, scope: RoleScope.TENANT },
         update: {},
       });
-      const template = await this.findOrCreateTemplate(tx, dto.businessType);
-      const tenant = await tx.tenant.create({
-        data: { name: dto.businessName, slug: dto.slug, status: TenantStatus.TRIAL },
+      const tenant = await this.createTenantWorkspace(tx, {
+        businessName: dto.businessName,
+        slug: dto.slug,
+        businessType: dto.businessType,
       });
       const user = await tx.user.create({
         data: {
@@ -73,45 +72,12 @@ export class AuthService {
           name: dto.adminName,
           email: dto.email.toLowerCase(),
           passwordHash,
+          onboardingCompleted: true,
           status: UserStatus.ACTIVE,
         },
         include: { role: true },
       });
       await this.createEmailVerificationToken(tx, user.id);
-      await tx.subscription.create({
-        data: {
-          tenantId: tenant.id,
-          plan: SubscriptionPlan.FREE,
-          status: SubscriptionStatus.TRIALING,
-          monthlyPrice: new Prisma.Decimal(0),
-        },
-      });
-      const theme = await tx.theme.create({
-        data: {
-          tenantId: tenant.id,
-          name: 'Default Theme',
-          primaryColor: '#0f766e',
-          secondaryColor: '#f59e0b',
-          typography: { heading: 'Inter', body: 'Inter' },
-        },
-      });
-      await tx.website.create({
-        data: {
-          tenantId: tenant.id,
-          templateId: template.id,
-          themeId: theme.id,
-          businessName: dto.businessName,
-        },
-      });
-      await tx.domain.create({
-        data: {
-          tenantId: tenant.id,
-          domain: `${dto.slug}.${rootDomain}`,
-          type: DomainType.SUBDOMAIN,
-          status: DomainStatus.VERIFIED,
-          verifiedAt: new Date(),
-        },
-      });
 
       return { user, tenant };
     });
@@ -121,11 +87,7 @@ export class AuthService {
 
   async googleRegister(dto: GoogleRegisterDto, ipAddress?: string, userAgent?: string) {
     const profile = await this.verifyGoogleIdToken(dto.idToken);
-    const existingTenant = await this.prisma.tenant.findUnique({ where: { slug: dto.slug } });
-    if (existingTenant) throw new BadRequestException('Tenant slug is already used');
-
     const passwordHash = await hash(randomBytes(32).toString('hex'), 12);
-    const rootDomain = this.config.get<string>('ROOT_DOMAIN', 'localhost');
 
     const result = await this.prisma.$transaction(async (tx) => {
       const role = await tx.role.upsert({
@@ -133,9 +95,10 @@ export class AuthService {
         create: { name: RoleName.TENANT_ADMIN, scope: RoleScope.TENANT },
         update: {},
       });
-      const template = await this.findOrCreateTemplate(tx, dto.businessType);
-      const tenant = await tx.tenant.create({
-        data: { name: dto.businessName, slug: dto.slug, status: TenantStatus.TRIAL },
+      const tenant = await this.createTenantWorkspace(tx, {
+        businessName: dto.businessName,
+        slug: dto.slug,
+        businessType: dto.businessType,
       });
       const user = await tx.user.create({
         data: {
@@ -146,43 +109,10 @@ export class AuthService {
           passwordHash,
           googleSubject: profile.subject,
           emailVerifiedAt: profile.emailVerified ? new Date() : null,
+          onboardingCompleted: true,
           status: UserStatus.ACTIVE,
         },
         include: { role: true },
-      });
-      await tx.subscription.create({
-        data: {
-          tenantId: tenant.id,
-          plan: SubscriptionPlan.FREE,
-          status: SubscriptionStatus.TRIALING,
-          monthlyPrice: new Prisma.Decimal(0),
-        },
-      });
-      const theme = await tx.theme.create({
-        data: {
-          tenantId: tenant.id,
-          name: 'Default Theme',
-          primaryColor: '#0f766e',
-          secondaryColor: '#f59e0b',
-          typography: { heading: 'Inter', body: 'Inter' },
-        },
-      });
-      await tx.website.create({
-        data: {
-          tenantId: tenant.id,
-          templateId: template.id,
-          themeId: theme.id,
-          businessName: dto.businessName,
-        },
-      });
-      await tx.domain.create({
-        data: {
-          tenantId: tenant.id,
-          domain: `${dto.slug}.${rootDomain}`,
-          type: DomainType.SUBDOMAIN,
-          status: DomainStatus.VERIFIED,
-          verifiedAt: new Date(),
-        },
       });
 
       return { user, tenant };
@@ -217,7 +147,7 @@ export class AuthService {
 
   async googleLogin(dto: GoogleLoginDto, ipAddress?: string, userAgent?: string) {
     const profile = await this.verifyGoogleIdToken(dto.idToken);
-    const user = await this.prisma.user.findFirst({
+    let user = await this.prisma.user.findFirst({
       where: {
         ...(dto.tenantSlug ? { tenant: { slug: dto.tenantSlug } } : {}),
         OR: [{ googleSubject: profile.subject }, { email: profile.email }],
@@ -225,7 +155,31 @@ export class AuthService {
       include: { role: true, tenant: true },
     });
 
-    if (!user) throw new UnauthorizedException('Google account is not registered for this tenant');
+    if (!user) {
+      if (dto.tenantSlug) throw new UnauthorizedException('Google account is not registered for this tenant');
+
+      const passwordHash = await hash(randomBytes(32).toString('hex'), 12);
+      const role = await this.prisma.role.upsert({
+        where: { name: RoleName.TENANT_ADMIN },
+        create: { name: RoleName.TENANT_ADMIN, scope: RoleScope.TENANT },
+        update: {},
+      });
+      user = await this.prisma.user.create({
+        data: {
+          roleId: role.id,
+          name: profile.name,
+          email: profile.email,
+          passwordHash,
+          googleSubject: profile.subject,
+          emailVerifiedAt: profile.emailVerified ? new Date() : null,
+          onboardingCompleted: false,
+          status: UserStatus.ACTIVE,
+          lastLoginAt: new Date(),
+        },
+        include: { role: true, tenant: true },
+      });
+    }
+
     if (user.status !== UserStatus.ACTIVE || user.tenant?.status === TenantStatus.SUSPENDED) {
       throw new UnauthorizedException('Account is not active');
     }
@@ -251,8 +205,36 @@ export class AuthService {
       tenantId: user.tenantId,
       email: user.email,
       emailVerifiedAt: user.emailVerifiedAt ?? (profile.emailVerified ? new Date() : null),
+      onboardingCompleted: user.onboardingCompleted,
       role: user.role,
     }, ipAddress, userAgent);
+  }
+
+  async completeOnboarding(userId: string, dto: CompleteOnboardingDto, ipAddress?: string, userAgent?: string) {
+    const currentUser = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: { role: true, tenant: true },
+    });
+    if (!currentUser) throw new UnauthorizedException('Invalid access token');
+    if (currentUser.role.name === RoleName.SUPER_ADMIN) throw new BadRequestException('Platform admins do not require tenant onboarding');
+    if (currentUser.onboardingCompleted && currentUser.tenantId) {
+      return this.issueTokens(currentUser, ipAddress, userAgent);
+    }
+
+    const result = await this.prisma.$transaction(async (tx) => {
+      const tenant = await this.createTenantWorkspace(tx, dto);
+      const user = await tx.user.update({
+        where: { id: userId },
+        data: {
+          tenantId: tenant.id,
+          onboardingCompleted: true,
+        },
+        include: { role: true },
+      });
+      return { user };
+    });
+
+    return this.issueTokens(result.user, ipAddress, userAgent);
   }
 
   async refresh(refreshToken: string, ipAddress?: string, userAgent?: string) {
@@ -376,6 +358,7 @@ export class AuthService {
       sub: user.id,
       tenantId: user.tenantId,
       email: user.email,
+      onboardingCompleted: user.onboardingCompleted,
       role: user.role.name,
       scope: user.role.scope,
     };
@@ -401,6 +384,7 @@ export class AuthService {
         tenantId: user.tenantId,
         email: user.email,
         emailVerified: Boolean(user.emailVerifiedAt),
+        onboardingCompleted: user.onboardingCompleted,
         role: user.role.name,
         scope: user.role.scope,
       },
@@ -455,6 +439,64 @@ export class AuthService {
       return { success: true, delivery: 'console', token };
     }
     return { success: true, delivery: 'email' };
+  }
+
+  private async createTenantWorkspace(tx: Prisma.TransactionClient, dto: CompleteOnboardingDto) {
+    const existingTenant = await tx.tenant.findUnique({ where: { slug: dto.slug } });
+    if (existingTenant) throw new BadRequestException('Tenant slug is already used');
+
+    const rootDomain = this.config.get<string>('ROOT_DOMAIN', 'localhost');
+    const template = await this.findOrCreateTemplate(tx, dto.businessType);
+    const tenant = await tx.tenant.create({
+      data: { name: dto.businessName, slug: dto.slug, status: TenantStatus.TRIAL },
+    });
+    await tx.subscription.create({
+      data: {
+        tenantId: tenant.id,
+        plan: SubscriptionPlan.FREE,
+        status: SubscriptionStatus.TRIALING,
+        monthlyPrice: new Prisma.Decimal(0),
+      },
+    });
+    const colorPreset = this.resolveColorPreset(dto.colorPreset);
+    const theme = await tx.theme.create({
+      data: {
+        tenantId: tenant.id,
+        name: dto.themePreference?.trim() || 'Default Theme',
+        primaryColor: colorPreset.primaryColor,
+        secondaryColor: colorPreset.secondaryColor,
+        accentColor: colorPreset.accentColor,
+        typography: { heading: 'Inter', body: 'Inter' },
+      },
+    });
+    await tx.website.create({
+      data: {
+        tenantId: tenant.id,
+        templateId: template.id,
+        themeId: theme.id,
+        businessName: dto.businessName,
+      },
+    });
+    await tx.domain.create({
+      data: {
+        tenantId: tenant.id,
+        domain: `${dto.slug}.${rootDomain}`,
+        type: DomainType.SUBDOMAIN,
+        status: DomainStatus.VERIFIED,
+        verifiedAt: new Date(),
+      },
+    });
+
+    return tenant;
+  }
+
+  private resolveColorPreset(colorPreset?: string) {
+    const presets: Record<string, { primaryColor: string; secondaryColor: string; accentColor: string }> = {
+      teal: { primaryColor: '#0f766e', secondaryColor: '#f59e0b', accentColor: '#2563eb' },
+      blue: { primaryColor: '#2563eb', secondaryColor: '#14b8a6', accentColor: '#f97316' },
+      rose: { primaryColor: '#be123c', secondaryColor: '#0f766e', accentColor: '#f59e0b' },
+    };
+    return presets[colorPreset ?? 'teal'] ?? presets.teal;
   }
 
   private async findOrCreateTemplate(tx: Prisma.TransactionClient, businessType: BusinessType) {

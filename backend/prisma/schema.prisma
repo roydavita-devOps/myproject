@@ -131,6 +131,7 @@ model User {
   passwordHash        String               @map("password_hash")
   googleSubject       String?              @map("google_subject")
   emailVerifiedAt     DateTime?            @map("email_verified_at")
+  onboardingCompleted Boolean              @default(false) @map("onboarding_completed")
   status              UserStatus           @default(ACTIVE)
   lastLoginAt         DateTime?            @map("last_login_at")
   tenant              Tenant?              @relation(fields: [tenantId], references: [id], onDelete: Cascade)

@@ -28,6 +28,15 @@ export type GoogleLoginPayload = {
   tenantSlug?: string;
 };
 
+export type CompleteOnboardingPayload = {
+  businessName: string;
+  slug: string;
+  businessType: string;
+  templateName?: string;
+  themePreference?: string;
+  colorPreset?: string;
+};
+
 export const authApi = {
   async register(payload: RegisterPayload) {
     const { data } = await http.post<AuthResponse>('/auth/register', payload);
@@ -43,6 +52,10 @@ export const authApi = {
   },
   async googleLogin(payload: GoogleLoginPayload) {
     const { data } = await http.post<AuthResponse>('/auth/google/login', payload);
+    return data;
+  },
+  async completeOnboarding(payload: CompleteOnboardingPayload) {
+    const { data } = await http.post<AuthResponse>('/auth/onboarding/complete', payload);
     return data;
   },
   async logout(refreshToken: string) {

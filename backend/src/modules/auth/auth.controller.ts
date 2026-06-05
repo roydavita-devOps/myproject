@@ -4,6 +4,7 @@ import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Public } from '../../common/decorators/public.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { AuthenticatedUser } from '../../common/types/authenticated-user.type';
+import { CompleteOnboardingDto } from './dto/complete-onboarding.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { GoogleLoginDto } from './dto/google-login.dto';
 import { GoogleRegisterDto } from './dto/google-register.dto';
@@ -70,6 +71,12 @@ export class AuthController {
   @Post('verify-email')
   verifyEmail(@Body() dto: VerifyEmailDto) {
     return this.auth.verifyEmail(dto.token);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('onboarding/complete')
+  completeOnboarding(@CurrentUser() user: AuthenticatedUser, @Body() dto: CompleteOnboardingDto, @Req() request: Request) {
+    return this.auth.completeOnboarding(user.id, dto, request.ip, request.headers['user-agent']);
   }
 
   @UseGuards(JwtAuthGuard)

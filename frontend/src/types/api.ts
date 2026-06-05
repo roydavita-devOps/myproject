@@ -7,6 +7,7 @@ export type AuthUser = {
   tenantId: string | null;
   email: string;
   emailVerified: boolean;
+  onboardingCompleted: boolean;
   role: RoleName;
   scope: RoleScope;
 };
