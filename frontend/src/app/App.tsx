@@ -3,6 +3,10 @@ import { AppShell } from '../components/layout/AppShell';
 import { useAuth } from '../features/auth/useAuth';
 import { LoginPage } from '../features/auth/LoginPage';
 import { RegisterPage } from '../features/auth/RegisterPage';
+import { ForgotPasswordPage } from '../features/auth/ForgotPasswordPage';
+import { ResetPasswordPage } from '../features/auth/ResetPasswordPage';
+import { VerifyEmailPage } from '../features/auth/VerifyEmailPage';
+import { AccountSettingsPage } from '../features/auth/AccountSettingsPage';
 import { TenantDashboardPage } from '../features/dashboard/TenantDashboardPage';
 import { AdminDashboardPage } from '../features/dashboard/AdminDashboardPage';
 import { TenantListPage } from '../features/tenants/TenantListPage';
@@ -57,6 +61,9 @@ export function App() {
       <Route element={<GuestRoute />}>
         <Route path="/auth/login" element={<LoginPage />} />
         <Route path="/auth/register" element={<RegisterPage />} />
+        <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/auth/verify-email" element={<VerifyEmailPage />} />
       </Route>
       <Route element={<ProtectedRoute roles={['TENANT_ADMIN', 'EDITOR']} />}>
         <Route path="/app" element={<TenantLayout />}>
@@ -68,7 +75,7 @@ export function App() {
           <Route path="menu" element={<MenuManagementPage />} />
           <Route path="analytics" element={<PlaceholderPage title="Analytics" />} />
           <Route path="domains" element={<PlaceholderPage title="Domains" />} />
-          <Route path="settings" element={<PlaceholderPage title="Settings" />} />
+          <Route path="settings" element={<AccountSettingsPage />} />
         </Route>
       </Route>
       <Route element={<ProtectedRoute roles={['SUPER_ADMIN']} />}>

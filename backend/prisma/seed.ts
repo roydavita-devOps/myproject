@@ -458,6 +458,7 @@ async function main() {
         passwordHash,
         roleId: tenantAdminRole.id,
         status: UserStatus.ACTIVE,
+        emailVerifiedAt: new Date(),
       },
       create: {
         tenantId: tenant.id,
@@ -466,6 +467,7 @@ async function main() {
         email: demo.ownerEmail,
         passwordHash,
         status: UserStatus.ACTIVE,
+        emailVerifiedAt: new Date(),
       },
     });
 

@@ -6,6 +6,7 @@ export type AuthUser = {
   id: string;
   tenantId: string | null;
   email: string;
+  emailVerified: boolean;
   role: RoleName;
   scope: RoleScope;
 };
@@ -14,6 +15,16 @@ export type AuthResponse = {
   accessToken: string;
   refreshToken: string;
   user: AuthUser;
+};
+
+export type AuthSession = {
+  id: string;
+  userAgent?: string | null;
+  ipAddress?: string | null;
+  expiresAt: string;
+  revokedAt?: string | null;
+  createdAt: string;
+  active: boolean;
 };
 
 export type Tenant = {

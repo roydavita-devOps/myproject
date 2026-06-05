@@ -1,4 +1,4 @@
-import { AuthResponse } from '../../types/api';
+import { AuthResponse, AuthSession } from '../../types/api';
 import { http } from '../../lib/api/http';
 
 export type RegisterPayload = {
@@ -16,6 +16,18 @@ export type LoginPayload = {
   tenantSlug?: string;
 };
 
+export type GoogleRegisterPayload = {
+  idToken: string;
+  businessName: string;
+  slug: string;
+  businessType: string;
+};
+
+export type GoogleLoginPayload = {
+  idToken: string;
+  tenantSlug?: string;
+};
+
 export const authApi = {
   async register(payload: RegisterPayload) {
     const { data } = await http.post<AuthResponse>('/auth/register', payload);
@@ -25,12 +37,40 @@ export const authApi = {
     const { data } = await http.post<AuthResponse>('/auth/login', payload);
     return data;
   },
+  async googleRegister(payload: GoogleRegisterPayload) {
+    const { data } = await http.post<AuthResponse>('/auth/google/register', payload);
+    return data;
+  },
+  async googleLogin(payload: GoogleLoginPayload) {
+    const { data } = await http.post<AuthResponse>('/auth/google/login', payload);
+    return data;
+  },
   async logout(refreshToken: string) {
     const { data } = await http.post<{ success: boolean }>('/auth/logout', { refreshToken });
     return data;
   },
   async forgotPassword(email: string) {
-    const { data } = await http.post<{ success: boolean }>('/auth/forgot-password', { email });
+    const { data } = await http.post<{ success: boolean; delivery?: string; token?: string }>('/auth/forgot-password', { email });
+    return data;
+  },
+  async resetPassword(token: string, newPassword: string) {
+    const { data } = await http.post<{ success: boolean }>('/auth/reset-password', { token, newPassword });
+    return data;
+  },
+  async verifyEmail(token: string) {
+    const { data } = await http.post<{ success: boolean }>('/auth/verify-email', { token });
+    return data;
+  },
+  async resendVerification() {
+    const { data } = await http.post<{ success: boolean; delivery?: string; token?: string }>('/auth/resend-verification');
+    return data;
+  },
+  async sessions() {
+    const { data } = await http.get<AuthSession[]>('/auth/sessions');
+    return data;
+  },
+  async revokeSession(sessionId: string) {
+    const { data } = await http.delete<{ success: boolean }>(`/auth/sessions/${sessionId}`);
     return data;
   },
 };

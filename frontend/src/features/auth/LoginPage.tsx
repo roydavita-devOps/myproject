@@ -1,9 +1,10 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { LogIn } from 'lucide-react';
 import { useAuth } from './useAuth';
 import { authApi } from './auth.api';
 import { AuthLayout } from './AuthLayout';
+import { GoogleAuthButton } from './GoogleAuthButton';
 import { Button } from '../../components/ui/Button';
 import { Field, TextInput } from '../../components/ui/Field';
 
@@ -15,6 +16,23 @@ export function LoginPage() {
   const [tenantSlug, setTenantSlug] = useState('');
   const [isSubmitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  const handleGoogleCredential = useCallback(
+    async (idToken: string) => {
+      setSubmitting(true);
+      setError('');
+      try {
+        const session = await authApi.googleLogin({ idToken, tenantSlug: tenantSlug || undefined });
+        setSession(session);
+        navigate(session.user.role === 'SUPER_ADMIN' ? '/admin/dashboard' : '/app/dashboard');
+      } catch {
+        setError('Akun Google belum terdaftar untuk tenant ini.');
+      } finally {
+        setSubmitting(false);
+      }
+    },
+    [navigate, setSession, tenantSlug],
+  );
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -54,8 +72,19 @@ export function LoginPage() {
           {isSubmitting ? 'Logging in' : 'Login'}
         </Button>
       </form>
+      <div className="my-5 grid gap-3">
+        <div className="flex items-center gap-3 text-xs uppercase text-slate-400">
+          <span className="h-px flex-1 bg-slate-200" />
+          atau
+          <span className="h-px flex-1 bg-slate-200" />
+        </div>
+        <GoogleAuthButton disabled={isSubmitting} mode="signin" onCredential={handleGoogleCredential} />
+      </div>
       <p className="mt-5 text-sm text-slate-500">
         Belum punya akun? <Link className="font-medium text-teal-700" to="/auth/register">Register</Link>
+      </p>
+      <p className="mt-2 text-sm text-slate-500">
+        Lupa password? <Link className="font-medium text-teal-700" to="/auth/forgot-password">Reset password</Link>
       </p>
     </AuthLayout>
   );

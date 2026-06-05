@@ -16,8 +16,11 @@ import {
 } from '@prisma/client';
 import { compare, hash } from 'bcryptjs';
 import { randomBytes } from 'crypto';
+import { OAuth2Client } from 'google-auth-library';
 import { PrismaService } from '../../prisma/prisma.service';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { GoogleLoginDto } from './dto/google-login.dto';
+import { GoogleRegisterDto } from './dto/google-register.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
@@ -26,11 +29,20 @@ type AuthUser = {
   id: string;
   tenantId: string | null;
   email: string;
+  emailVerifiedAt?: Date | null;
   role: { name: RoleName; scope: RoleScope };
+};
+
+type TokenDelivery = {
+  success: true;
+  delivery: 'email' | 'console' | 'suppressed';
+  token?: string;
 };
 
 @Injectable()
 export class AuthService {
+  private readonly googleClient = new OAuth2Client();
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
@@ -61,6 +73,79 @@ export class AuthService {
           name: dto.adminName,
           email: dto.email.toLowerCase(),
           passwordHash,
+          status: UserStatus.ACTIVE,
+        },
+        include: { role: true },
+      });
+      await this.createEmailVerificationToken(tx, user.id);
+      await tx.subscription.create({
+        data: {
+          tenantId: tenant.id,
+          plan: SubscriptionPlan.FREE,
+          status: SubscriptionStatus.TRIALING,
+          monthlyPrice: new Prisma.Decimal(0),
+        },
+      });
+      const theme = await tx.theme.create({
+        data: {
+          tenantId: tenant.id,
+          name: 'Default Theme',
+          primaryColor: '#0f766e',
+          secondaryColor: '#f59e0b',
+          typography: { heading: 'Inter', body: 'Inter' },
+        },
+      });
+      await tx.website.create({
+        data: {
+          tenantId: tenant.id,
+          templateId: template.id,
+          themeId: theme.id,
+          businessName: dto.businessName,
+        },
+      });
+      await tx.domain.create({
+        data: {
+          tenantId: tenant.id,
+          domain: `${dto.slug}.${rootDomain}`,
+          type: DomainType.SUBDOMAIN,
+          status: DomainStatus.VERIFIED,
+          verifiedAt: new Date(),
+        },
+      });
+
+      return { user, tenant };
+    });
+
+    return this.issueTokens(result.user, ipAddress, userAgent);
+  }
+
+  async googleRegister(dto: GoogleRegisterDto, ipAddress?: string, userAgent?: string) {
+    const profile = await this.verifyGoogleIdToken(dto.idToken);
+    const existingTenant = await this.prisma.tenant.findUnique({ where: { slug: dto.slug } });
+    if (existingTenant) throw new BadRequestException('Tenant slug is already used');
+
+    const passwordHash = await hash(randomBytes(32).toString('hex'), 12);
+    const rootDomain = this.config.get<string>('ROOT_DOMAIN', 'localhost');
+
+    const result = await this.prisma.$transaction(async (tx) => {
+      const role = await tx.role.upsert({
+        where: { name: RoleName.TENANT_ADMIN },
+        create: { name: RoleName.TENANT_ADMIN, scope: RoleScope.TENANT },
+        update: {},
+      });
+      const template = await this.findOrCreateTemplate(tx, dto.businessType);
+      const tenant = await tx.tenant.create({
+        data: { name: dto.businessName, slug: dto.slug, status: TenantStatus.TRIAL },
+      });
+      const user = await tx.user.create({
+        data: {
+          tenantId: tenant.id,
+          roleId: role.id,
+          name: profile.name,
+          email: profile.email,
+          passwordHash,
+          googleSubject: profile.subject,
+          emailVerifiedAt: profile.emailVerified ? new Date() : null,
           status: UserStatus.ACTIVE,
         },
         include: { role: true },
@@ -130,6 +215,46 @@ export class AuthService {
     return this.issueTokens(user, ipAddress, userAgent);
   }
 
+  async googleLogin(dto: GoogleLoginDto, ipAddress?: string, userAgent?: string) {
+    const profile = await this.verifyGoogleIdToken(dto.idToken);
+    const user = await this.prisma.user.findFirst({
+      where: {
+        ...(dto.tenantSlug ? { tenant: { slug: dto.tenantSlug } } : {}),
+        OR: [{ googleSubject: profile.subject }, { email: profile.email }],
+      },
+      include: { role: true, tenant: true },
+    });
+
+    if (!user) throw new UnauthorizedException('Google account is not registered for this tenant');
+    if (user.status !== UserStatus.ACTIVE || user.tenant?.status === TenantStatus.SUSPENDED) {
+      throw new UnauthorizedException('Account is not active');
+    }
+
+    if (!user.googleSubject || !user.emailVerifiedAt) {
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: {
+          googleSubject: user.googleSubject ?? profile.subject,
+          emailVerifiedAt: user.emailVerifiedAt ?? (profile.emailVerified ? new Date() : null),
+          lastLoginAt: new Date(),
+        },
+      });
+    } else {
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { lastLoginAt: new Date() },
+      });
+    }
+
+    return this.issueTokens({
+      id: user.id,
+      tenantId: user.tenantId,
+      email: user.email,
+      emailVerifiedAt: user.emailVerifiedAt ?? (profile.emailVerified ? new Date() : null),
+      role: user.role,
+    }, ipAddress, userAgent);
+  }
+
   async refresh(refreshToken: string, ipAddress?: string, userAgent?: string) {
     const tokenHash = await hashToken(refreshToken);
     const existing = await this.prisma.refreshToken.findFirst({
@@ -157,17 +282,10 @@ export class AuthService {
 
   async forgotPassword(dto: ForgotPasswordDto) {
     const user = await this.prisma.user.findFirst({ where: { email: dto.email.toLowerCase() } });
-    if (user) {
-      const token = randomBytes(32).toString('hex');
-      await this.prisma.passwordResetToken.create({
-        data: {
-          userId: user.id,
-          tokenHash: await hashToken(token),
-          expiresAt: new Date(Date.now() + 1000 * 60 * 30),
-        },
-      });
-    }
-    return { success: true };
+    if (!user) return { success: true, delivery: 'suppressed' as const };
+
+    const token = await this.createPasswordResetToken(this.prisma, user.id);
+    return this.tokenDelivery(token);
   }
 
   async resetPassword(dto: ResetPasswordDto) {
@@ -192,6 +310,64 @@ export class AuthService {
       }),
     ]);
 
+    return { success: true };
+  }
+
+  async verifyEmail(token: string) {
+    const tokenHash = await hashToken(token);
+    const verificationToken = await this.prisma.emailVerificationToken.findFirst({
+      where: { tokenHash, usedAt: null, expiresAt: { gt: new Date() } },
+    });
+    if (!verificationToken) throw new BadRequestException('Invalid verification token');
+
+    await this.prisma.$transaction([
+      this.prisma.user.update({
+        where: { id: verificationToken.userId },
+        data: { emailVerifiedAt: new Date() },
+      }),
+      this.prisma.emailVerificationToken.update({
+        where: { id: verificationToken.id },
+        data: { usedAt: new Date() },
+      }),
+    ]);
+
+    return { success: true };
+  }
+
+  async resendVerification(userId: string): Promise<TokenDelivery> {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) throw new UnauthorizedException('Invalid access token');
+    if (user.emailVerifiedAt) return { success: true, delivery: 'suppressed' };
+
+    const token = await this.createEmailVerificationToken(this.prisma, user.id);
+    return this.tokenDelivery(token);
+  }
+
+  async sessions(userId: string) {
+    const sessions = await this.prisma.refreshToken.findMany({
+      where: { userId, expiresAt: { gt: new Date() } },
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        userAgent: true,
+        ipAddress: true,
+        expiresAt: true,
+        revokedAt: true,
+        createdAt: true,
+      },
+    });
+
+    return sessions.map((session) => ({
+      ...session,
+      active: !session.revokedAt,
+    }));
+  }
+
+  async revokeSession(userId: string, sessionId: string) {
+    await this.prisma.refreshToken.updateMany({
+      where: { id: sessionId, userId, revokedAt: null },
+      data: { revokedAt: new Date() },
+    });
     return { success: true };
   }
 
@@ -224,10 +400,61 @@ export class AuthService {
         id: user.id,
         tenantId: user.tenantId,
         email: user.email,
+        emailVerified: Boolean(user.emailVerifiedAt),
         role: user.role.name,
         scope: user.role.scope,
       },
     };
+  }
+
+  private async verifyGoogleIdToken(idToken: string) {
+    const clientId = this.config.get<string>('GOOGLE_CLIENT_ID', '').trim();
+    if (!clientId) throw new BadRequestException('Google authentication is not configured');
+
+    const ticket = await this.googleClient.verifyIdToken({
+      idToken,
+      audience: clientId,
+    });
+    const payload = ticket.getPayload();
+    if (!payload?.sub || !payload.email) throw new UnauthorizedException('Invalid Google token');
+
+    return {
+      subject: payload.sub,
+      email: payload.email.toLowerCase(),
+      emailVerified: payload.email_verified === true,
+      name: payload.name || payload.email.split('@')[0],
+    };
+  }
+
+  private async createPasswordResetToken(tx: Prisma.TransactionClient | PrismaService, userId: string) {
+    const token = randomBytes(32).toString('hex');
+    await tx.passwordResetToken.create({
+      data: {
+        userId,
+        tokenHash: await hashToken(token),
+        expiresAt: new Date(Date.now() + 1000 * 60 * 30),
+      },
+    });
+    return token;
+  }
+
+  private async createEmailVerificationToken(tx: Prisma.TransactionClient | PrismaService, userId: string) {
+    const token = randomBytes(32).toString('hex');
+    await tx.emailVerificationToken.create({
+      data: {
+        userId,
+        tokenHash: await hashToken(token),
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      },
+    });
+    return token;
+  }
+
+  private tokenDelivery(token: string): TokenDelivery {
+    if (this.config.get<string>('AUTH_TOKEN_RESPONSE_ENABLED', 'false') === 'true') {
+      return { success: true, delivery: 'console', token };
+    }
+    return { success: true, delivery: 'email' };
   }
 
   private async findOrCreateTemplate(tx: Prisma.TransactionClient, businessType: BusinessType) {

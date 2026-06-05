@@ -1,8 +1,9 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { Building2 } from 'lucide-react';
 import { AuthLayout } from './AuthLayout';
 import { authApi } from './auth.api';
+import { GoogleAuthButton } from './GoogleAuthButton';
 import { useAuth } from './useAuth';
 import { Button } from '../../components/ui/Button';
 import { Field, TextInput } from '../../components/ui/Field';
@@ -22,6 +23,32 @@ export function RegisterPage() {
   });
   const [error, setError] = useState('');
   const [isSubmitting, setSubmitting] = useState(false);
+
+  const handleGoogleCredential = useCallback(
+    async (idToken: string) => {
+      if (!form.businessName || !form.slug || !form.businessType) {
+        setError('Isi nama bisnis, slug, dan tipe bisnis sebelum register dengan Google.');
+        return;
+      }
+      setSubmitting(true);
+      setError('');
+      try {
+        const session = await authApi.googleRegister({
+          idToken,
+          businessName: form.businessName,
+          slug: form.slug,
+          businessType: form.businessType,
+        });
+        setSession(session);
+        navigate('/app/dashboard');
+      } catch {
+        setError('Registrasi Google gagal. Periksa slug dan konfigurasi Google.');
+      } finally {
+        setSubmitting(false);
+      }
+    },
+    [form.businessName, form.businessType, form.slug, navigate, setSession],
+  );
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -67,6 +94,14 @@ export function RegisterPage() {
           {isSubmitting ? 'Creating tenant' : 'Create tenant'}
         </Button>
       </form>
+      <div className="my-5 grid gap-3">
+        <div className="flex items-center gap-3 text-xs uppercase text-slate-400">
+          <span className="h-px flex-1 bg-slate-200" />
+          atau
+          <span className="h-px flex-1 bg-slate-200" />
+        </div>
+        <GoogleAuthButton disabled={isSubmitting} mode="signup" onCredential={handleGoogleCredential} />
+      </div>
       <p className="mt-5 text-sm text-slate-500">
         Sudah punya akun? <Link className="font-medium text-teal-700" to="/auth/login">Login</Link>
       </p>

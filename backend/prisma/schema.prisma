@@ -129,18 +129,23 @@ model User {
   name                String
   email               String
   passwordHash        String               @map("password_hash")
+  googleSubject       String?              @map("google_subject")
+  emailVerifiedAt     DateTime?            @map("email_verified_at")
   status              UserStatus           @default(ACTIVE)
   lastLoginAt         DateTime?            @map("last_login_at")
   tenant              Tenant?              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   role                Role                 @relation(fields: [roleId], references: [id])
   refreshTokens       RefreshToken[]
   passwordResetTokens PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
   createdAt           DateTime             @default(now()) @map("created_at")
   updatedAt           DateTime             @updatedAt @map("updated_at")
 
   @@unique([tenantId, email])
+  @@unique([tenantId, googleSubject])
   @@index([tenantId])
   @@index([roleId])
+  @@index([googleSubject])
   @@map("users")
 }
 
@@ -404,4 +409,18 @@ model PasswordResetToken {
   @@index([userId])
   @@index([expiresAt])
   @@map("password_reset_tokens")
+}
+
+model EmailVerificationToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  tokenHash String    @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("email_verification_tokens")
 }
