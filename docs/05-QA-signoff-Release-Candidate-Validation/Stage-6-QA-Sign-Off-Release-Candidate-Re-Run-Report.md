@@ -186,3 +186,24 @@ Recommendation:
   - Implement tenant switch flow, or
   - Formally accept/descope tenant switching from the release candidate scope.
 
+## Stage 6.2 Product Scope Addendum
+
+Date: 2026-06-05
+
+Tenant Switch has been formally descoped from the current release candidate by product decision.
+
+Current accepted SaaS model:
+
+```text
+1 User = 1 Tenant
+```
+
+Users access tenants through tenant-scoped authentication using `tenantSlug` during login.
+
+Tenant Switch will be treated as a future additional feature after the web application is running normally and the current release candidate is stable.
+
+Updated interpretation:
+
+- Stage 6.1 remediation remains PASS.
+- The previous Tenant Switch blocker is now accepted as a product scope decision.
+- Stage 6 QA Sign-Off may proceed without implementing Tenant Switch.
