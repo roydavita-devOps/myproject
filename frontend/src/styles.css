@@ -9,6 +9,24 @@
   --tenant-accent: #2563eb;
   --tenant-font-heading: Inter, ui-sans-serif, system-ui, sans-serif;
   --tenant-font-body: Inter, ui-sans-serif, system-ui, sans-serif;
+  --tpl-primary: #0f766e;
+  --tpl-secondary: #f59e0b;
+  --tpl-accent: #2563eb;
+  --tpl-success: #16a34a;
+  --tpl-warning: #f59e0b;
+  --tpl-error: #dc2626;
+  --tpl-background: #f8fafc;
+  --tpl-surface: #ffffff;
+  --tpl-border: #e2e8f0;
+  --tpl-text-primary: #0f172a;
+  --tpl-text-secondary: #475569;
+  --tpl-space-xs: 0.5rem;
+  --tpl-space-sm: 0.75rem;
+  --tpl-space-md: 1rem;
+  --tpl-space-lg: 1.5rem;
+  --tpl-space-xl: 2rem;
+  --tpl-space-2xl: 3rem;
+  --tpl-space-3xl: 4rem;
 }
 
 * {
@@ -35,6 +53,10 @@ a {
   text-decoration: none;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .field-label {
   @apply text-sm font-medium text-slate-700;
 }
@@ -53,4 +75,50 @@ a {
 
 .tenant-body {
   font-family: var(--tenant-font-body);
+}
+
+.tpl-display {
+  font-size: clamp(2.5rem, 8vw, 4.75rem);
+  line-height: 0.98;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.tpl-h1 {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.tpl-h2 {
+  font-size: clamp(1.75rem, 5vw, 2.75rem);
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.tpl-h3 {
+  font-size: clamp(1.125rem, 3vw, 1.35rem);
+  line-height: 1.25;
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+.tpl-body {
+  font-size: 1rem;
+  line-height: 1.75;
+  letter-spacing: 0;
+}
+
+.tpl-caption {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+}
+
+.tpl-small {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  letter-spacing: 0;
 }
