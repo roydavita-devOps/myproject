@@ -18,6 +18,7 @@ import { compare, hash } from 'bcryptjs';
 import { randomBytes } from 'crypto';
 import { OAuth2Client } from 'google-auth-library';
 import { PrismaService } from '../../prisma/prisma.service';
+import { EmailService } from '../email/email.service';
 import { CompleteOnboardingDto } from './dto/complete-onboarding.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { GoogleLoginDto } from './dto/google-login.dto';
@@ -37,7 +38,7 @@ type AuthUser = {
 
 type TokenDelivery = {
   success: true;
-  delivery: 'email' | 'console' | 'suppressed';
+  delivery: 'email' | 'console' | 'suppressed' | 'unconfigured' | 'provider-error';
   token?: string;
 };
 
@@ -49,6 +50,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
     private readonly config: ConfigService,
+    private readonly email: EmailService,
   ) {}
 
   async register(dto: RegisterDto, ipAddress?: string, userAgent?: string) {
@@ -267,7 +269,7 @@ export class AuthService {
     if (!user) return { success: true, delivery: 'suppressed' as const };
 
     const token = await this.createPasswordResetToken(this.prisma, user.id);
-    return this.tokenDelivery(token);
+    return this.tokenDelivery({ token, to: user.email, type: 'password-reset' });
   }
 
   async resetPassword(dto: ResetPasswordDto) {
@@ -322,7 +324,7 @@ export class AuthService {
     if (user.emailVerifiedAt) return { success: true, delivery: 'suppressed' };
 
     const token = await this.createEmailVerificationToken(this.prisma, user.id);
-    return this.tokenDelivery(token);
+    return this.tokenDelivery({ token, to: user.email, type: 'email-verification' });
   }
 
   async sessions(userId: string) {
@@ -434,11 +436,13 @@ export class AuthService {
     return token;
   }
 
-  private tokenDelivery(token: string): TokenDelivery {
+  private async tokenDelivery(payload: { token: string; to: string; type: 'password-reset' | 'email-verification' }): Promise<TokenDelivery> {
     if (this.config.get<string>('AUTH_TOKEN_RESPONSE_ENABLED', 'false') === 'true') {
-      return { success: true, delivery: 'console', token };
+      return { success: true, delivery: 'console', token: payload.token };
     }
-    return { success: true, delivery: 'email' };
+    const result = await this.email.sendAuthEmail(payload);
+    if (result.delivered) return { success: true, delivery: 'email' };
+    return { success: true, delivery: result.reason ?? 'provider-error' };
   }
 
   private async createTenantWorkspace(tx: Prisma.TransactionClient, dto: CompleteOnboardingDto) {
