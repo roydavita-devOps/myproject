@@ -831,52 +831,71 @@ Wait for approval.
 
 ---
 
-# STAGE 8 - Observability
+# UPDATED ROADMAP AFTER STAGE 7 SECURITY AUDIT
 
-After approval:
+Current Status:
+
+* Stage 6 QA Sign-Off = PASS
+* Stage 6.1 Remediation = PASS
+* Stage 7 Security Audit = PASS WITH NON-CRITICAL FINDINGS
+* Release Candidate = APPROVED
+* Pilot Environment = LIVE
+
+IMPORTANT
+
+The platform has completed:
+
+* Architecture Validation
+* Deployment Validation
+* QA Validation
+* Security Validation
+
+The next priority is NOT infrastructure expansion.
+
+The next priority is:
+
+1. User Adoption
+2. User Onboarding
+3. Conversion Improvement
+4. Product Attractiveness
+5. Customer Acquisition
+
+---
+
+# STAGE 8 - Authentication Enhancement
+
+Objective:
+
+Reduce onboarding friction and improve activation rate.
 
 Implement:
 
-- Prometheus
-- Grafana
-- Loki
-- AlertManager
-
-Generate:
-
-- Dashboards
-- Metrics
-- Alerts
-
-Output:
-
-PHASE 9H REPORT
-
-STOP.
-
-Wait for approval.
-
----
-
-# STAGE 9 - Backup & Disaster Recovery
-
-After approval:
-
-Generate:
-
-- Backup Strategy
-- Restore Strategy
-- Disaster Recovery Plan
+1. Google Login
+2. Google Register
+3. Forgot Password
+4. Password Reset
+5. Email Verification
+6. Session Management Review
 
 Requirements:
 
-RPO = 15 minutes
+* Preserve existing JWT architecture
+* Preserve existing multi-tenant architecture
+* Do NOT migrate authentication to Supabase Auth
+* Google acts only as Identity Provider
+* JWT remains owned by backend
 
-RTO = 1 hour
+Deliverables:
+
+* Authentication Enhancement Report
+* Database Changes
+* Backend Changes
+* Frontend Changes
+* Security Validation
 
 Output:
 
-PHASE 9I REPORT
+PHASE 10A REPORT
 
 STOP.
 
@@ -884,56 +903,192 @@ Wait for approval.
 
 ---
 
-# STAGE 10 - Go Live Validation
+# STAGE 9 - Modern Template System
 
-After approval:
+Objective:
 
-Review:
+Increase product attractiveness and commercial value.
 
-- Docker
-- Compose
-- Nginx
-- SSL
-- Domain
-- VPS
+Current state:
 
-Generate:
+* Functional Website Builder
 
-1. Deployment Checklist
-2. Rollback Plan
-3. Blue Green Deployment Plan
-4. Production Checklist
+Target state:
 
-Generate final verdict:
+* Industry-Specific Website Builder
 
-PASS
-or
-FAIL
+Implement:
 
-If FAIL:
+1. Modern Restaurant Template
+2. Laundry Template
+3. Clinic Template
+4. Corporate Template
+5. Cafe Template
 
-List blockers.
+Requirements:
 
-If PASS:
+* Mobile First
+* Modern UI
+* Fast Loading
+* Reusable Components
+* Theme-Based Architecture
 
-Declare system ready for:
+Do NOT redesign backend architecture.
 
-Pilot Customers
-or
-Production Customers
+Focus on:
+
+* Visual Quality
+* UX
+* Preview Experience
+
+Deliverables:
+
+* Template Catalog
+* Design System
+* UI Component Library
+* Before/After Comparison
 
 Output:
 
-PHASE 9 FINAL REPORT
+PHASE 10B REPORT
 
 STOP.
 
-Do not continue to:
+Wait for approval.
 
-- Billing
-- Payments
-- Monetization
-- White Label
-- GTM
+---
 
-until Production Readiness status = PASS.
+# STAGE 10 - Pilot Customer Program
+
+Objective:
+
+Validate product with real users.
+
+Target:
+
+* 5 Pilot Customers
+* 10 Pilot Customers
+* 20 Pilot Customers
+
+Collect:
+
+* User Feedback
+* UX Pain Points
+* Missing Features
+* Adoption Metrics
+
+KPIs:
+
+* Activation Rate
+* Publish Rate
+* Retention Rate
+* Time To First Publish
+
+Deliverables:
+
+* Pilot Customer Report
+* KPI Dashboard
+* Product Feedback Summary
+
+Output:
+
+PHASE 10C REPORT
+
+STOP.
+
+Wait for approval.
+
+---
+
+# STAGE 11 - Monetization
+
+Objective:
+
+Enable commercial operation.
+
+Implement:
+
+1. Subscription Plans
+2. Trial Period
+3. Billing Management
+4. Midtrans or Xendit Integration
+5. Plan Upgrade/Downgrade
+
+Deliverables:
+
+* Pricing Architecture
+* Subscription System
+* Billing Flow
+
+Output:
+
+PHASE 10D REPORT
+
+STOP.
+
+Wait for approval.
+
+---
+
+# STAGE 12 - Production Hardening
+
+Objective:
+
+Prepare platform for larger scale usage.
+
+Implement:
+
+1. Security Headers Hardening
+2. Malware Scanning Provider
+3. Monitoring
+4. Observability
+5. Backup Automation
+6. Disaster Recovery
+7. Audit Logging
+8. PostgreSQL RLS Review
+
+Deliverables:
+
+* Hardening Report
+* Monitoring Dashboards
+* Backup Validation
+* Recovery Validation
+
+Output:
+
+PHASE 10E REPORT
+
+STOP.
+
+Wait for approval.
+
+---
+
+# STAGE 13 - Production Customer Go-Live
+
+Review:
+
+* Security
+* Reliability
+* Monitoring
+* Billing
+* Customer Support Readiness
+
+Generate:
+
+1. Production Checklist
+2. Rollback Plan
+3. Support Plan
+4. SLA Readiness
+
+Decision:
+
+PASS = Production Customers
+
+FAIL = Additional Hardening Required
+
+Output:
+
+PHASE 10 FINAL REPORT
+
+STOP.
