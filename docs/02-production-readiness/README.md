@@ -12,11 +12,11 @@ Phase 9 production readiness and go-live validation artifacts.
 - Stage 5.5: UX validation
 - Stage 5.6: UX remediation and pilot readiness
 - Stage 5.7: pilot user validation
+- Stage 6 / Phase 9F: QA Sign-Off
+- Stage 7 / Phase 9G: Security Audit, moved to `../06-Security Audit`
 
 ## Pending
 
-- Stage 6 / Phase 9F: QA Sign-Off
-- Stage 7 / Phase 9G: Security Audit
 - Stage 8 / Phase 9H: Observability
 - Stage 9 / Phase 9I: Backup & Disaster Recovery
 - Stage 10 / Phase 9 Final: final go-live validation
