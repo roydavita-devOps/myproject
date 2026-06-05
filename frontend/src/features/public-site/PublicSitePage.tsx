@@ -17,6 +17,7 @@ import {
   TemplateTestimonials,
   TemplateContactSection,
 } from '../templates/TemplateComponents';
+import { RestaurantTemplate } from '../templates/RestaurantTemplate';
 
 export function PublicSitePage() {
   const { slug = '' } = useParams();
@@ -33,19 +34,27 @@ export function PublicSitePage() {
 }
 
 export function PublicSiteRenderer({ website }: { website: Website }) {
+  const businessType = website.template?.businessType;
+
   return (
     <main className="tenant-body min-h-screen bg-[var(--tpl-surface)] text-[var(--tpl-text-primary)]" style={resolveTemplateTheme(website)}>
-      <TemplateNavigation website={website} />
-      <TemplateHero website={website} />
-      <TemplateFeatureSection website={website} />
-      <TemplateServiceList items={website.menus ?? []} />
-      <TemplatePricingBlock items={website.menus ?? []} />
-      <TemplateGallery items={website.galleries ?? []} businessName={website.businessName} />
-      <TemplateTestimonials reviews={website.reviews ?? []} />
-      <TemplateLocationSection website={website} />
-      <TemplateCTASection website={website} />
-      <TemplateContactSection website={website} />
-      <TemplateFooter website={website} />
+      {businessType === 'RESTAURANT' || businessType === 'WARTEG' ? (
+        <RestaurantTemplate website={website} />
+      ) : (
+        <>
+          <TemplateNavigation website={website} />
+          <TemplateHero website={website} />
+          <TemplateFeatureSection website={website} />
+          <TemplateServiceList items={website.menus ?? []} />
+          <TemplatePricingBlock items={website.menus ?? []} />
+          <TemplateGallery items={website.galleries ?? []} businessName={website.businessName} />
+          <TemplateTestimonials reviews={website.reviews ?? []} />
+          <TemplateLocationSection website={website} />
+          <TemplateCTASection website={website} />
+          <TemplateContactSection website={website} />
+          <TemplateFooter website={website} />
+        </>
+      )}
     </main>
   );
 }

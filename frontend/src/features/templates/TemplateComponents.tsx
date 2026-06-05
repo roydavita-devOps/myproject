@@ -1,17 +1,13 @@
 import { ReactNode } from 'react';
 import { clsx } from 'clsx';
-import { Images, MapPin, MessageCircle, Phone, Star } from 'lucide-react';
+import { ArrowUpRight, Images, MapPin, Star } from 'lucide-react';
 import { GalleryItem, MenuItem, ReviewItem, Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
-
-type TemplateAction = {
-  label: string;
-  href: string;
-  icon?: ReactNode;
-  variant?: 'primary' | 'secondary';
-};
+import { resolveContactActions, TemplateAction } from './templateActions';
 
 export function TemplateNavigation({ website }: { website: Website }) {
+  const primaryAction = resolveContactActions(website)[0];
+
   return (
     <header className="sticky top-0 z-20 border-b border-[var(--tpl-border)] bg-[color:var(--tpl-surface)]/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
@@ -32,15 +28,17 @@ export function TemplateNavigation({ website }: { website: Website }) {
           <a className="transition hover:text-[var(--tpl-primary)]" href="#reviews">Reviews</a>
           <a className="transition hover:text-[var(--tpl-primary)]" href="#contact">Contact</a>
         </nav>
-        {website.whatsapp && (
-          <TemplateButton href={`https://wa.me/${website.whatsapp}`} icon={<MessageCircle className="size-4" />} label="WhatsApp" />
-        )}
+        {primaryAction && <TemplateButton {...primaryAction} />}
       </div>
     </header>
   );
 }
 
 export function TemplateButton({ href, icon, label, variant = 'primary' }: TemplateAction) {
+  const safeHref = href.trim();
+  const safeLabel = label.trim();
+  if (!safeHref || !safeLabel) return null;
+
   return (
     <a
       className={clsx(
@@ -48,12 +46,12 @@ export function TemplateButton({ href, icon, label, variant = 'primary' }: Templ
         variant === 'primary' && 'bg-[var(--tpl-primary)] text-white hover:brightness-95',
         variant === 'secondary' && 'border border-[var(--tpl-border)] bg-[var(--tpl-surface)] text-[var(--tpl-text-primary)] hover:bg-[var(--tpl-background)]',
       )}
-      href={href}
-      rel={href.startsWith('http') ? 'noreferrer' : undefined}
-      target={href.startsWith('http') ? '_blank' : undefined}
+      href={safeHref}
+      rel={safeHref.startsWith('http') ? 'noreferrer' : undefined}
+      target={safeHref.startsWith('http') ? '_blank' : undefined}
     >
-      {icon}
-      {label}
+      {icon ?? <ArrowUpRight className="size-4" />}
+      <span>{safeLabel}</span>
     </a>
   );
 }
@@ -117,9 +115,11 @@ export function TemplateHero({ website }: { website: Website }) {
           <h1 className="tpl-display tenant-heading">{website.businessName}</h1>
           {website.tagline && <p className="tpl-h3 mt-5 max-w-2xl text-slate-100">{website.tagline}</p>}
           {website.description && <p className="tpl-body mt-5 max-w-2xl text-slate-200">{website.description}</p>}
-          <div className="mt-8 flex flex-wrap gap-3">
-            {actions.map((action) => <TemplateButton key={action.href} {...action} />)}
-          </div>
+          {actions.length > 0 && (
+            <div className="mt-8 flex flex-wrap gap-3">
+              {actions.map((action) => <TemplateButton key={action.href} {...action} />)}
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -229,24 +229,29 @@ export function TemplatePricingBlock({ items }: { items: MenuItem[] }) {
 
 export function TemplateContactSection({ website }: { website: Website }) {
   const actions = resolveContactActions(website);
+  const hasBusinessInfo = Boolean(website.address || website.email || website.phone);
   return (
     <TemplateSection id="contact" title="Contact" description="Hubungi bisnis ini langsung melalui kanal yang tersedia.">
       <div className="grid gap-4 md:grid-cols-[1fr_0.8fr]">
         <div className="rounded-lg bg-[var(--tpl-primary)] p-6 text-white md:p-8">
           <h3 className="tpl-h2 tenant-heading">Siap melayani pelanggan</h3>
           <p className="tpl-body mt-3 text-white/80">Gunakan WhatsApp, telepon, atau maps untuk menghubungi bisnis ini.</p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            {actions.map((action) => <TemplateButton key={action.href} {...action} variant="secondary" />)}
-          </div>
+          {actions.length > 0 && (
+            <div className="mt-6 flex flex-wrap gap-3">
+              {actions.map((action) => <TemplateButton key={action.href} {...action} variant="secondary" />)}
+            </div>
+          )}
         </div>
-        <TemplateCard>
-          <p className="font-semibold">Business info</p>
-          <div className="mt-4 grid gap-3 text-sm text-[var(--tpl-text-secondary)]">
-            {website.address && <p>{website.address}</p>}
-            {website.email && <p>{website.email}</p>}
-            {website.phone && <p>{website.phone}</p>}
-          </div>
-        </TemplateCard>
+        {hasBusinessInfo && (
+          <TemplateCard>
+            <p className="font-semibold">Business info</p>
+            <div className="mt-4 grid gap-3 text-sm text-[var(--tpl-text-secondary)]">
+              {website.address && <p>{website.address}</p>}
+              {website.email && <p>{website.email}</p>}
+              {website.phone && <p>{website.phone}</p>}
+            </div>
+          </TemplateCard>
+        )}
       </div>
     </TemplateSection>
   );
@@ -267,10 +272,12 @@ export function TemplateLocationSection({ website }: { website: Website }) {
   if (!website.address && !website.mapsUrl) return null;
   return (
     <TemplateSection muted title="Location" description="Alamat dan akses maps untuk pelanggan.">
-      <div className="flex flex-wrap items-center gap-3 text-[var(--tpl-text-secondary)]">
-        <MapPin className="size-5 text-[var(--tpl-primary)]" />
-        <span>{website.address}</span>
-      </div>
+      {website.address && (
+        <div className="flex flex-wrap items-center gap-3 text-[var(--tpl-text-secondary)]">
+          <MapPin className="size-5 text-[var(--tpl-primary)]" />
+          <span>{website.address}</span>
+        </div>
+      )}
       {website.mapsUrl && (
         <div className="mt-6">
           <TemplateButton href={website.mapsUrl} icon={<MapPin className="size-4" />} label="Open Maps" variant="secondary" />
@@ -281,7 +288,9 @@ export function TemplateLocationSection({ website }: { website: Website }) {
 }
 
 export function TemplateCTASection({ website }: { website: Website }) {
-  if (!website.whatsapp && !website.phone) return null;
+  const actions = resolveContactActions(website).filter((action) => action.label !== 'Maps');
+  if (actions.length === 0) return null;
+
   return (
     <section className="bg-[var(--tpl-text-primary)] py-14 text-white">
       <div className="mx-auto flex max-w-6xl flex-col gap-5 px-4 md:flex-row md:items-center md:justify-between">
@@ -290,19 +299,11 @@ export function TemplateCTASection({ website }: { website: Website }) {
           <h2 className="tpl-h2 tenant-heading mt-2">Hubungi {website.businessName}</h2>
         </div>
         <div className="flex flex-wrap gap-3">
-          {resolveContactActions(website).map((action) => <TemplateButton key={action.href} {...action} />)}
+          {actions.map((action) => <TemplateButton key={action.href} {...action} />)}
         </div>
       </div>
     </section>
   );
-}
-
-function resolveContactActions(website: Website): TemplateAction[] {
-  const actions: TemplateAction[] = [];
-  if (website.whatsapp) actions.push({ label: 'Chat WhatsApp', href: `https://wa.me/${website.whatsapp}`, icon: <MessageCircle className="size-4" /> });
-  if (website.phone) actions.push({ label: 'Call', href: `tel:${website.phone}`, icon: <Phone className="size-4" />, variant: 'secondary' });
-  if (website.mapsUrl) actions.push({ label: 'Maps', href: website.mapsUrl, icon: <MapPin className="size-4" />, variant: 'secondary' });
-  return actions;
 }
 
 export function TemplateGalleryIcon() {
