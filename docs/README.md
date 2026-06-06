@@ -54,8 +54,8 @@ Historical implementation phase records:
 Deployment and operations references:
 
 - [Deployment folder](./03-deployment/)
-- [Production Readiness](./03-deployment/Production%20Readiness.md)
-- [Public Pilot Deployment](./03-deployment/Public%20Pilot%20Deployment.md)
+- [Production Readiness](<./03-deployment/Production Readiness.md>)
+- [Public Pilot Deployment](<./03-deployment/Public Pilot Deployment.md>)
 - [DevOps Infrastructure](./03-deployment/Phase-6-DevOps-Infrastructure.md)
 - [CI/CD](./03-deployment/Phase-7-CICD.md)
 
