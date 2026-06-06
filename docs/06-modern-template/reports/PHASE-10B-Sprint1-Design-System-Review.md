@@ -138,9 +138,9 @@ Validation checks:
 ## Preview Evidence
 
 Screenshots:
-- `docs/08-Modern Template/evidence/sprint1-mobile.png`
-- `docs/08-Modern Template/evidence/sprint1-tablet.png`
-- `docs/08-Modern Template/evidence/sprint1-desktop.png`
+- `docs/evidence/modern-template/sprint1/sprint1-mobile.png`
+- `docs/evidence/modern-template/sprint1/sprint1-tablet.png`
+- `docs/evidence/modern-template/sprint1/sprint1-desktop.png`
 
 ## Design Philosophy
 

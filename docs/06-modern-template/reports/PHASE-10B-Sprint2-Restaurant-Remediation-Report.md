@@ -48,14 +48,14 @@ Updated Restaurant hero:
 ## Before / After Screenshots
 
 Before:
-- `docs/08-Modern Template/evidence/sprint2-restaurant-mobile.png`
-- `docs/08-Modern Template/evidence/sprint2-restaurant-tablet.png`
-- `docs/08-Modern Template/evidence/sprint2-restaurant-desktop.png`
+- `docs/evidence/modern-template/sprint2/restaurant/sprint2-restaurant-mobile.png`
+- `docs/evidence/modern-template/sprint2/restaurant/sprint2-restaurant-tablet.png`
+- `docs/evidence/modern-template/sprint2/restaurant/sprint2-restaurant-desktop.png`
 
 After:
-- `docs/08-Modern Template/evidence/sprint2-remediation-mobile.png`
-- `docs/08-Modern Template/evidence/sprint2-remediation-tablet.png`
-- `docs/08-Modern Template/evidence/sprint2-remediation-desktop.png`
+- `docs/evidence/modern-template/sprint2/remediation/sprint2-remediation-mobile.png`
+- `docs/evidence/modern-template/sprint2/remediation/sprint2-remediation-tablet.png`
+- `docs/evidence/modern-template/sprint2/remediation/sprint2-remediation-desktop.png`
 
 ## Mobile Validation
 

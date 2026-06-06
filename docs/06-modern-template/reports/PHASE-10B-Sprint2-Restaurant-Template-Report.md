@@ -58,9 +58,9 @@ Passed:
 - CTA/button audit.
 
 Evidence:
-- `docs/08-Modern Template/evidence/sprint2-restaurant-mobile.png`
-- `docs/08-Modern Template/evidence/sprint2-restaurant-tablet.png`
-- `docs/08-Modern Template/evidence/sprint2-restaurant-desktop.png`
+- `docs/evidence/modern-template/sprint2/restaurant/sprint2-restaurant-mobile.png`
+- `docs/evidence/modern-template/sprint2/restaurant/sprint2-restaurant-tablet.png`
+- `docs/evidence/modern-template/sprint2/restaurant/sprint2-restaurant-desktop.png`
 
 Validation result:
 - Required restaurant texts present in DOM across mobile/tablet/desktop.

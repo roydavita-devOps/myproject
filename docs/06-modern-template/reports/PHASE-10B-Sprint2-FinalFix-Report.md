@@ -29,10 +29,10 @@ During the audit, a second weakness was also found: `TemplateButton` normalized 
 - `frontend/src/features/templates/TemplateComponents.tsx`
 - `frontend/src/features/templates/RestaurantTemplate.tsx`
 - `smoke/saas.smoke.spec.ts`
-- `docs/08-Modern Template/PHASE-10B-Sprint2-FinalFix-Report.md`
-- `docs/08-Modern Template/evidence/sprint2-finalfix-mobile.png`
-- `docs/08-Modern Template/evidence/sprint2-finalfix-tablet.png`
-- `docs/08-Modern Template/evidence/sprint2-finalfix-desktop.png`
+- `docs/06-modern-template/reports/PHASE-10B-Sprint2-FinalFix-Report.md`
+- `docs/evidence/modern-template/sprint2/finalfix/sprint2-finalfix-mobile.png`
+- `docs/evidence/modern-template/sprint2/finalfix/sprint2-finalfix-tablet.png`
+- `docs/evidence/modern-template/sprint2/finalfix/sprint2-finalfix-desktop.png`
 
 ## 3. CTA Fix Details
 
@@ -77,15 +77,15 @@ The test now verifies:
 
 ## 5. Mobile Screenshot
 
-`docs/08-Modern Template/evidence/sprint2-finalfix-mobile.png`
+`docs/evidence/modern-template/sprint2/finalfix/sprint2-finalfix-mobile.png`
 
 ## 6. Tablet Screenshot
 
-`docs/08-Modern Template/evidence/sprint2-finalfix-tablet.png`
+`docs/evidence/modern-template/sprint2/finalfix/sprint2-finalfix-tablet.png`
 
 ## 7. Desktop Screenshot
 
-`docs/08-Modern Template/evidence/sprint2-finalfix-desktop.png`
+`docs/evidence/modern-template/sprint2/finalfix/sprint2-finalfix-desktop.png`
 
 ## 8. Validation Results
 
