@@ -1,12 +1,13 @@
 import { createElement, ReactNode } from 'react';
-import { MapPin, MessageCircle, Phone } from 'lucide-react';
+import { ArrowUpRight, MapPin, MessageCircle, Phone, Utensils } from 'lucide-react';
 import { Website } from '../../types/api';
 
 export type TemplateAction = {
+  action: 'whatsapp' | 'phone' | 'menu' | 'directions' | 'external';
   label: string;
   href: string;
   icon?: ReactNode;
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'tertiary';
 };
 
 export function resolveContactActions(website: Website): TemplateAction[] {
@@ -15,6 +16,7 @@ export function resolveContactActions(website: Website): TemplateAction[] {
   const whatsappNumber = normalizePhoneNumber(website.whatsapp);
   if (whatsappNumber) {
     actions.push({
+      action: 'whatsapp',
       label: 'Chat WhatsApp',
       href: `https://wa.me/${whatsappNumber}`,
       icon: createElement(MessageCircle, { className: 'size-4' }),
@@ -24,6 +26,7 @@ export function resolveContactActions(website: Website): TemplateAction[] {
   const phoneNumber = normalizePhoneNumber(website.phone);
   if (phoneNumber) {
     actions.push({
+      action: 'phone',
       label: 'Call',
       href: `tel:+${phoneNumber}`,
       icon: createElement(Phone, { className: 'size-4' }),
@@ -34,14 +37,52 @@ export function resolveContactActions(website: Website): TemplateAction[] {
   const mapsUrl = website.mapsUrl?.trim();
   if (mapsUrl && /^https?:\/\//.test(mapsUrl)) {
     actions.push({
+      action: 'directions',
       label: 'Maps',
       href: mapsUrl,
       icon: createElement(MapPin, { className: 'size-4' }),
-      variant: 'secondary',
+      variant: 'tertiary',
     });
   }
 
-  return actions;
+  return validateTemplateActions(actions);
+}
+
+export function resolveRestaurantHeroActions(website: Website): TemplateAction[] {
+  const contactActions = resolveContactActions(website);
+  const whatsapp = contactActions.find((item) => item.action === 'whatsapp');
+  const directions = contactActions.find((item) => item.action === 'directions');
+
+  return validateTemplateActions([
+    whatsapp ? { ...whatsapp, label: 'Chat WhatsApp', variant: 'primary' } : null,
+    { action: 'menu', label: 'View Menu', href: '#services', icon: createElement(Utensils, { className: 'size-4' }), variant: 'secondary' },
+    directions ? { ...directions, label: 'Get Directions', variant: 'tertiary' } : null,
+  ]);
+}
+
+export function validateTemplateActions(actions: Array<TemplateAction | null | undefined>) {
+  return actions
+    .map((action) => normalizeTemplateAction(action))
+    .filter((action): action is TemplateAction => Boolean(action));
+}
+
+export function normalizeTemplateAction(action?: TemplateAction | null): TemplateAction | null {
+  if (!action?.action) return null;
+
+  const label = action.label?.trim();
+  const href = action.href?.trim();
+  if (!label || !href || !isValidHref(href)) return null;
+
+  return {
+    ...action,
+    label,
+    href,
+    icon: action.icon ?? createElement(ArrowUpRight, { className: 'size-4' }),
+  };
+}
+
+function isValidHref(href: string) {
+  return href.startsWith('http://') || href.startsWith('https://') || href.startsWith('tel:') || href.startsWith('#');
 }
 
 function normalizePhoneNumber(value?: string | null) {

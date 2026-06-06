@@ -3,7 +3,7 @@ import { clsx } from 'clsx';
 import { ArrowUpRight, Images, MapPin, Star } from 'lucide-react';
 import { GalleryItem, MenuItem, ReviewItem, Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
-import { resolveContactActions, TemplateAction } from './templateActions';
+import { normalizeTemplateAction, resolveContactActions, TemplateAction } from './templateActions';
 
 export function TemplateNavigation({ website }: { website: Website }) {
   const primaryAction = resolveContactActions(website)[0];
@@ -35,9 +35,8 @@ export function TemplateNavigation({ website }: { website: Website }) {
 }
 
 export function TemplateButton({ href, icon, label, variant = 'primary' }: TemplateAction) {
-  const safeHref = href.trim();
-  const safeLabel = label.trim();
-  if (!safeHref || !safeLabel) return null;
+  const action = normalizeTemplateAction({ action: 'external', href, icon, label, variant });
+  if (!action) return null;
 
   return (
     <a
@@ -45,13 +44,14 @@ export function TemplateButton({ href, icon, label, variant = 'primary' }: Templ
         'inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-5 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-[var(--tpl-accent)] focus:ring-offset-2',
         variant === 'primary' && 'bg-[var(--tpl-primary)] text-white hover:brightness-95',
         variant === 'secondary' && 'border border-[var(--tpl-border)] bg-[var(--tpl-surface)] text-[var(--tpl-text-primary)] hover:bg-[var(--tpl-background)]',
+        variant === 'tertiary' && 'bg-white/10 text-white ring-1 ring-white/30 hover:bg-white/15',
       )}
-      href={safeHref}
-      rel={safeHref.startsWith('http') ? 'noreferrer' : undefined}
-      target={safeHref.startsWith('http') ? '_blank' : undefined}
+      href={action.href}
+      rel={action.href.startsWith('http') ? 'noreferrer' : undefined}
+      target={action.href.startsWith('http') ? '_blank' : undefined}
     >
-      {icon ?? <ArrowUpRight className="size-4" />}
-      <span>{safeLabel}</span>
+      {action.icon ?? <ArrowUpRight className="size-4" />}
+      <span>{action.label}</span>
     </a>
   );
 }
@@ -173,7 +173,7 @@ export function TemplateServiceList({ items }: { items: MenuItem[] }) {
   );
 }
 
-export function TemplateGallery({ items, businessName }: { items: GalleryItem[]; businessName: string }) {
+export function TemplateGallery({ items, businessName, cta }: { items: GalleryItem[]; businessName: string; cta?: TemplateAction }) {
   if (items.length === 0) return null;
   return (
     <TemplateSection id="gallery" eyebrow="Visual" title="Gallery" description="Foto yang membantu pelanggan mengenali suasana, produk, dan layanan.">
@@ -184,6 +184,11 @@ export function TemplateGallery({ items, businessName }: { items: GalleryItem[];
           </figure>
         ))}
       </div>
+      {cta && (
+        <div className="mt-8">
+          <TemplateButton {...cta} />
+        </div>
+      )}
     </TemplateSection>
   );
 }
@@ -258,11 +263,16 @@ export function TemplateContactSection({ website }: { website: Website }) {
 }
 
 export function TemplateFooter({ website }: { website: Website }) {
+  const primaryAction = resolveContactActions(website)[0];
+
   return (
     <footer className="border-t border-[var(--tpl-border)] bg-[var(--tpl-background)] py-8">
       <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 text-sm text-[var(--tpl-text-secondary)] md:flex-row md:items-center md:justify-between">
-        <p className="font-semibold text-[var(--tpl-text-primary)]">{website.businessName}</p>
-        <p>Powered by UMKM Builder</p>
+        <div>
+          <p className="font-semibold text-[var(--tpl-text-primary)]">{website.businessName}</p>
+          <p>Powered by UMKM Builder</p>
+        </div>
+        {primaryAction && <TemplateButton {...primaryAction} variant="secondary" />}
       </div>
     </footer>
   );
@@ -280,7 +290,7 @@ export function TemplateLocationSection({ website }: { website: Website }) {
       )}
       {website.mapsUrl && (
         <div className="mt-6">
-          <TemplateButton href={website.mapsUrl} icon={<MapPin className="size-4" />} label="Open Maps" variant="secondary" />
+          <TemplateButton action="directions" href={website.mapsUrl} icon={<MapPin className="size-4" />} label="Open Maps" variant="secondary" />
         </div>
       )}
     </TemplateSection>
