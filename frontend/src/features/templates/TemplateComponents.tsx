@@ -34,20 +34,23 @@ export function TemplateNavigation({ website }: { website: Website }) {
   );
 }
 
-export function TemplateButton({ href, icon, label, variant = 'primary' }: TemplateAction) {
-  const action = normalizeTemplateAction({ action: 'external', href, icon, label, variant });
+export function TemplateButton(templateAction: TemplateAction) {
+  const action = normalizeTemplateAction(templateAction);
   if (!action) return null;
+  const variant = action.variant ?? 'primary';
 
   return (
     <a
+      data-template-cta={action.action}
       className={clsx(
         'inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-5 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-[var(--tpl-accent)] focus:ring-offset-2',
         variant === 'primary' && 'bg-[var(--tpl-primary)] text-white hover:brightness-95',
-        variant === 'secondary' && 'border border-[var(--tpl-border)] bg-[var(--tpl-surface)] text-[var(--tpl-text-primary)] hover:bg-[var(--tpl-background)]',
+        variant === 'secondary' && 'border border-[var(--tpl-border)] bg-[var(--tpl-surface)] text-[#0f172a] hover:bg-[var(--tpl-background)]',
         variant === 'tertiary' && 'bg-white/10 text-white ring-1 ring-white/30 hover:bg-white/15',
       )}
       href={action.href}
       rel={action.href.startsWith('http') ? 'noreferrer' : undefined}
+      style={variant === 'secondary' ? { color: '#0f172a' } : undefined}
       target={action.href.startsWith('http') ? '_blank' : undefined}
     >
       {action.icon ?? <ArrowUpRight className="size-4" />}
@@ -174,6 +177,7 @@ export function TemplateServiceList({ items }: { items: MenuItem[] }) {
 }
 
 export function TemplateGallery({ items, businessName, cta }: { items: GalleryItem[]; businessName: string; cta?: TemplateAction }) {
+  const normalizedCta = normalizeTemplateAction(cta);
   if (items.length === 0) return null;
   return (
     <TemplateSection id="gallery" eyebrow="Visual" title="Gallery" description="Foto yang membantu pelanggan mengenali suasana, produk, dan layanan.">
@@ -184,9 +188,9 @@ export function TemplateGallery({ items, businessName, cta }: { items: GalleryIt
           </figure>
         ))}
       </div>
-      {cta && (
+      {normalizedCta && (
         <div className="mt-8">
-          <TemplateButton {...cta} />
+          <TemplateButton {...normalizedCta} />
         </div>
       )}
     </TemplateSection>

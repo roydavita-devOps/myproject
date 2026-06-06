@@ -71,18 +71,25 @@ export function normalizeTemplateAction(action?: TemplateAction | null): Templat
 
   const label = action.label?.trim();
   const href = action.href?.trim();
-  if (!label || !href || !isValidHref(href)) return null;
+  if (!label || !href || !isValidHrefForAction(action.action, href)) return null;
+
+  const icon = action.icon ?? createElement(ArrowUpRight, { className: 'size-4' });
+  if (!icon) return null;
 
   return {
     ...action,
     label,
     href,
-    icon: action.icon ?? createElement(ArrowUpRight, { className: 'size-4' }),
+    icon,
   };
 }
 
-function isValidHref(href: string) {
-  return href.startsWith('http://') || href.startsWith('https://') || href.startsWith('tel:') || href.startsWith('#');
+function isValidHrefForAction(action: TemplateAction['action'], href: string) {
+  if (action === 'whatsapp') return /^https:\/\/wa\.me\/\d+/.test(href);
+  if (action === 'phone') return /^tel:\+\d+/.test(href);
+  if (action === 'menu') return href.startsWith('#') && href.length > 1;
+  if (action === 'directions') return href.startsWith('http://') || href.startsWith('https://');
+  return href.startsWith('http://') || href.startsWith('https://') || href.startsWith('#');
 }
 
 function normalizePhoneNumber(value?: string | null) {

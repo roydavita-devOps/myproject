@@ -1,4 +1,4 @@
-import { expect, request, test } from '@playwright/test';
+import { APIRequestContext, expect, request, test } from '@playwright/test';
 
 const password = 'Password12345';
 const pngBytes = Buffer.from(
@@ -165,4 +165,99 @@ test.describe('SaaS smoke test', () => {
 
     await api.dispose();
   });
+
+  test('validates warteg-moncer restaurant CTA visibility across viewports', async ({ page, baseURL }) => {
+    const api = await request.newContext({ baseURL });
+    await ensureWartegMoncerDemo(api);
+
+    const viewports = [
+      { name: 'mobile', width: 390, height: 844 },
+      { name: 'tablet', width: 768, height: 1024 },
+      { name: 'desktop', width: 1440, height: 1100 },
+    ];
+
+    for (const viewport of viewports) {
+      await test.step(`verify restaurant CTAs on ${viewport.name}`, async () => {
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        await page.goto('/site/warteg-moncer');
+
+        await expect(page.getByText('Restaurant landing page')).toBeVisible();
+
+        const hero = page.locator('#home');
+        await expect(hero.getByRole('link', { name: /chat whatsapp/i })).toBeVisible();
+        await expect(hero.getByRole('link', { name: /view menu/i })).toBeVisible();
+        await expect(hero.getByRole('link', { name: /get directions/i })).toBeVisible();
+        await expect(page.locator('#contact a[data-template-cta]').first()).toBeVisible();
+        await expect(page.locator('footer a[data-template-cta]').first()).toBeVisible();
+
+        const ctas = page.locator('a[data-template-cta]');
+        const count = await ctas.count();
+        expect(count).toBeGreaterThan(0);
+
+        for (let index = 0; index < count; index += 1) {
+          const cta = ctas.nth(index);
+          await expect(cta).toBeVisible();
+          expect((await cta.textContent())?.trim().length ?? 0).toBeGreaterThan(0);
+          await expect(cta.locator('svg')).toHaveCount(1);
+          await expect(cta).toHaveAttribute('href', /.+/);
+        }
+      });
+    }
+
+    await api.dispose();
+  });
 });
+
+async function ensureWartegMoncerDemo(api: APIRequestContext) {
+  const existing = await api.get('/api/v1/public/site/warteg-moncer');
+  if (existing.ok()) return;
+
+  const email = 'admin@warteg-moncer.demo';
+  const password = 'Password12345';
+  const tenantSlug = 'warteg-moncer';
+
+  const register = await api.post('/api/v1/auth/register', {
+    data: {
+      businessName: 'WARTEG MONCER',
+      slug: tenantSlug,
+      adminName: 'Demo Admin',
+      email,
+      password,
+      businessType: 'WARTEG',
+    },
+  });
+  expect(register.ok()).toBeTruthy();
+
+  const login = await api.post('/api/v1/auth/login', {
+    data: { email, password, tenantSlug },
+  });
+  expect(login.ok()).toBeTruthy();
+  const session = await login.json();
+
+  const websites = await api.get('/api/v1/websites', {
+    headers: { Authorization: `Bearer ${session.accessToken}` },
+  });
+  expect(websites.ok()).toBeTruthy();
+  const [website] = await websites.json();
+  expect(website?.id).toBeTruthy();
+
+  const update = await api.put(`/api/v1/websites/${website.id}`, {
+    headers: { Authorization: `Bearer ${session.accessToken}` },
+    data: {
+      businessName: 'WARTEG MONCER',
+      tagline: 'Masakan rumahan hangat untuk makan siang cepat.',
+      description: 'Warteg demo untuk validasi restaurant template dengan CTA WhatsApp, menu, dan maps.',
+      address: 'Jl. Demo UMKM No. 9, Jakarta',
+      phone: '02175001001',
+      whatsapp: '081210010010',
+      email: 'halo@warteg-moncer.demo',
+      mapsUrl: 'https://maps.google.com',
+    },
+  });
+  expect(update.ok()).toBeTruthy();
+
+  const publish = await api.patch(`/api/v1/websites/${website.id}/publish`, {
+    headers: { Authorization: `Bearer ${session.accessToken}` },
+  });
+  expect(publish.ok()).toBeTruthy();
+}

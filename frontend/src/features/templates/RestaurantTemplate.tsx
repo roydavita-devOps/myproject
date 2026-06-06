@@ -1,6 +1,7 @@
 import { Clock, MapPin, MessageCircle, Sparkles, Utensils } from 'lucide-react';
 import { Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
+import { normalizeTemplateAction } from './templateActions';
 import {
   SectionHeading,
   TemplateButton,
@@ -76,6 +77,7 @@ function RestaurantHero({ website }: { website: Website }) {
 }
 
 function FeaturedMenu({ items, cta }: { items: NonNullable<Website['menus']>; cta?: ReturnType<typeof resolveContactActions>[number] }) {
+  const normalizedCta = normalizeTemplateAction(cta);
   if (items.length === 0) return null;
   return (
     <TemplateSection
@@ -96,9 +98,9 @@ function FeaturedMenu({ items, cta }: { items: NonNullable<Website['menus']>; ct
           </TemplateCard>
         ))}
       </div>
-      {cta && (
+      {normalizedCta && (
         <div className="mt-8">
-          <TemplateButton {...cta} />
+          <TemplateButton {...normalizedCta} />
         </div>
       )}
     </TemplateSection>
