@@ -1,12 +1,12 @@
 # Project Status
 
-Last updated: 2026-06-06
+Last updated: 2026-06-08
 
 ## Current Stage
 
-Stage 9.1B - Documentation Refactor Execution.
+Stage 9.2A - Template Registry Foundation.
 
-Status: completed locally and ready for review after validation.
+Status: implemented and ready for approval.
 
 ## Completed Stages
 
@@ -27,20 +27,22 @@ Status: completed locally and ready for review after validation.
 | Stage 9 Sprint 2 Restaurant Template | Completed. |
 | Stage 9 Sprint 2 Final CTA Fix | Completed and validated on local, GitHub Actions, Vercel, and Railway. |
 | Stage 9.1A Documentation Refactor Planning | Completed and approved. |
+| Stage 9.1B Documentation Refactor Execution | Completed. |
+| Stage 9.2 Template Architecture Validation | Completed and approved with conditions. |
+| Stage 9.2A Template Registry Foundation | Implemented; awaiting approval. |
 
 ## Current Blockers
 
 | Blocker | Status | Notes |
 | --- | --- | --- |
-| Documentation refactor review | Active | Stage 9.1B must be reviewed before future stages continue. |
 | Email production activation | Pending | Requires final domain, verified sender, and production email environment values. |
-| Future template stages | Paused | Stage 9.2 and later template work must wait for approval. |
+| Future template stages | Paused | Stage 9.3 and later template work must wait for approval. |
 
 ## Next Actions
 
-1. Review Stage 9.1B documentation refactor execution.
-2. Approve or request corrections to the knowledge-base structure.
-3. After approval, proceed to Stage 9.2 Template Architecture Validation.
+1. Review Stage 9.2A Template Registry Foundation.
+2. Approve or request corrections to the registry architecture and documentation.
+3. After approval, proceed only to the next approved stage.
 4. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
 
 ## Operational Snapshot
@@ -60,3 +62,5 @@ Status: completed locally and ready for review after validation.
 - Decisions: [DECISIONS.md](./DECISIONS.md)
 - Documentation refactor plan: [../DOCUMENTATION_REFACTOR_PLAN.md](../DOCUMENTATION_REFACTOR_PLAN.md)
 - Documentation audit report: [../DOCUMENTATION_AUDIT_REPORT.md](../DOCUMENTATION_AUDIT_REPORT.md)
+- Template architecture: [../01-architecture/TEMPLATE_ARCHITECTURE.md](../01-architecture/TEMPLATE_ARCHITECTURE.md)
+- Template registry foundation: [../01-architecture/TEMPLATE_REGISTRY_FOUNDATION.md](../01-architecture/TEMPLATE_REGISTRY_FOUNDATION.md)

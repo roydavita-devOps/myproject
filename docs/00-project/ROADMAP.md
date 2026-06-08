@@ -1,6 +1,6 @@
 # Roadmap
 
-Last updated: 2026-06-06
+Last updated: 2026-06-08
 
 ## Completed
 
@@ -21,23 +21,14 @@ Last updated: 2026-06-06
 - Stage 9 Sprint 2 Final CTA Visibility Fix.
 - Stage 9.1A Documentation Refactor Planning.
 - Stage 9.1B Documentation Refactor Execution.
+- Stage 9.2 Template Architecture Validation.
+- Stage 9.2A Template Registry Foundation.
 
 ## In Progress
 
-- Documentation refactor review.
 - Modern Template System as the active product quality track.
 
 ## Planned
-
-### Stage 9.2
-
-Template Architecture Validation.
-
-Goal:
-
-- Validate the template data model.
-- Confirm template selection independence from business type.
-- Ensure template keys, business type recommendations, and subscription plan access can evolve without locking tenants.
 
 ### Stage 9.3
 

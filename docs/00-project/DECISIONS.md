@@ -91,6 +91,36 @@ Examples:
 - Business Type = Cafe, Template = Restaurant Luxury.
 - Business Type = Clinic, Template = Corporate Executive.
 
+## Template Registry Architecture
+
+Status: Approved.
+
+Decision:
+
+- Renderer selection must use template identity through the template registry.
+- Renderer selection must not rely on business type.
+
+Approved flow:
+
+```text
+template_key
+-> templateRegistry
+-> renderer
+```
+
+Rejected flow:
+
+```text
+businessType
+-> renderer
+```
+
+Reason:
+
+- Business type is a recommendation signal, not a renderer identity.
+- Future marketplace templates must support cross-category selection.
+- Existing tenants need legacy compatibility while the database evolves toward explicit template keys.
+
 ## Future Template Marketplace
 
 Decision:

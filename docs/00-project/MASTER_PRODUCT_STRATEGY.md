@@ -320,6 +320,35 @@ Features:
 
 Generate reusable templates for:
 
+## Template Marketplace Foundation
+
+The template system must follow this product principle:
+
+```text
+Business Type = Recommendation
+Template = User Choice
+Template Registry = Foundation Layer
+```
+
+Business type should recommend a starting point. Template selection must remain independent so users can choose a template from another business category when appropriate.
+
+Renderer selection should use:
+
+```text
+template_key
+-> templateRegistry
+-> renderer
+```
+
+Renderer selection should not use:
+
+```text
+businessType
+-> renderer
+```
+
+This foundation supports future template marketplace, premium templates, luxury templates, and subscription-based template access without implementing those features in the current stage.
+
 ## Warteg Template
 
 Sections:

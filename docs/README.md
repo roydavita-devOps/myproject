@@ -23,8 +23,9 @@ Current summary:
 - Email provider integration completed at code level.
 - Production deployment integrations confirmed for Vercel, Railway, and Supabase.
 - Stage 9 Sprint 2 Restaurant Template completed and final CTA defect fixed.
-- Stage 9.1B documentation refactor completed and awaiting review.
-- Stage 9.2 Template Architecture Validation is next, pending approval.
+- Stage 9.1B documentation refactor completed.
+- Stage 9.2 Template Architecture Validation completed.
+- Stage 9.2A Template Registry Foundation implemented and awaiting approval.
 
 ## Architecture
 
@@ -34,6 +35,8 @@ Architecture references:
 - [Phase 1 Architecture](./01-architecture/Phase-1-Architecture.md)
 - [Database and Backend Design](./01-architecture/Phase-2-Database-Backend-Design.md)
 - [SaaS Operations](./01-architecture/Phase-8-SaaS-Operations.md)
+- [Template Architecture](./01-architecture/TEMPLATE_ARCHITECTURE.md)
+- [Template Registry Foundation](./01-architecture/TEMPLATE_REGISTRY_FOUNDATION.md)
 
 Decision log:
 
@@ -103,7 +106,7 @@ Current status:
 Template implementation references:
 
 - [Modern Template folder](./06-modern-template/)
-- [Stage 9 Modern Template System](./06-modern-template/#%20STAGE%209%20%E2%80%94%20Modern%20Template%20System.md)
+- [Stage 9 Modern Template System](<./06-modern-template/# STAGE 9 — Modern Template System.md>)
 - [Template reports](./06-modern-template/reports/)
 - [Template evidence](./evidence/modern-template/)
 
@@ -113,6 +116,7 @@ Current status:
 - Sprint 1 Stabilization completed.
 - Sprint 2 Restaurant Template completed.
 - Sprint 2 Final CTA Visibility Fix completed.
+- Stage 9.2A Template Registry Foundation implemented.
 
 ## Product Vision And Monetization
 

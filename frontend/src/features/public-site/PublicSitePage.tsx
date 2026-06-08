@@ -4,20 +4,7 @@ import { publicSiteApi } from './publicSite.api';
 import { Website } from '../../types/api';
 import { ErrorState, LoadingState } from '../../components/ui/State';
 import { resolveTemplateTheme } from '../templates/templateTheme';
-import {
-  TemplateCTASection,
-  TemplateFeatureSection,
-  TemplateFooter,
-  TemplateGallery,
-  TemplateHero,
-  TemplateLocationSection,
-  TemplateNavigation,
-  TemplatePricingBlock,
-  TemplateServiceList,
-  TemplateTestimonials,
-  TemplateContactSection,
-} from '../templates/TemplateComponents';
-import { RestaurantTemplate } from '../templates/RestaurantTemplate';
+import { resolveTemplate } from '../templates/registry/templateResolver';
 
 export function PublicSitePage() {
   const { slug = '' } = useParams();
@@ -34,27 +21,15 @@ export function PublicSitePage() {
 }
 
 export function PublicSiteRenderer({ website }: { website: Website }) {
-  const businessType = website.template?.businessType;
+  const { renderer: TemplateRenderer, metadata } = resolveTemplate(website);
 
   return (
-    <main className="tenant-body min-h-screen bg-[var(--tpl-surface)] text-[var(--tpl-text-primary)]" style={resolveTemplateTheme(website)}>
-      {businessType === 'RESTAURANT' || businessType === 'WARTEG' ? (
-        <RestaurantTemplate website={website} />
-      ) : (
-        <>
-          <TemplateNavigation website={website} />
-          <TemplateHero website={website} />
-          <TemplateFeatureSection website={website} />
-          <TemplateServiceList items={website.menus ?? []} />
-          <TemplatePricingBlock items={website.menus ?? []} />
-          <TemplateGallery items={website.galleries ?? []} businessName={website.businessName} />
-          <TemplateTestimonials reviews={website.reviews ?? []} />
-          <TemplateLocationSection website={website} />
-          <TemplateCTASection website={website} />
-          <TemplateContactSection website={website} />
-          <TemplateFooter website={website} />
-        </>
-      )}
+    <main
+      className="tenant-body min-h-screen bg-[var(--tpl-surface)] text-[var(--tpl-text-primary)]"
+      data-template-key={metadata.key}
+      style={resolveTemplateTheme(website)}
+    >
+      <TemplateRenderer website={website} />
     </main>
   );
 }
