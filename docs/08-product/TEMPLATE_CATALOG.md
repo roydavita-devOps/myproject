@@ -10,7 +10,7 @@ This document tracks future template catalog planning. It is not an implementati
 | --- | --- |
 | Base template system | Implemented. |
 | Restaurant / Warteg template | Implemented through Stage 9 Sprint 2 and final CTA fix. |
-| Laundry template | Planned. |
+| Laundry template | Implemented through Stage 9.3. |
 | Clinic template | Planned. |
 | Corporate template | Planned. |
 | Cafe template | Planned. |

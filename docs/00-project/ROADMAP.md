@@ -24,16 +24,13 @@ Last updated: 2026-06-08
 - Stage 9.2 Template Architecture Validation.
 - Stage 9.2A Template Registry Foundation.
 - Stage 9.2B Template Registry Validation & Test Coverage.
+- Stage 9.3 Laundry Template.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
 
 ## Planned
-
-### Stage 9.3
-
-Laundry Template.
 
 ### Stage 9.4
 

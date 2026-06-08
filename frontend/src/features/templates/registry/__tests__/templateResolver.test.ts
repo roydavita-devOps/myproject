@@ -69,6 +69,15 @@ describe('resolveTemplate', () => {
     expect(resolved.source).toBe('fallback');
   });
 
+  it('maps legacy laundry default templates to laundry_clean', () => {
+    const resolved = resolveTemplate(websiteWithTemplate({ name: 'laundry-default' }));
+
+    expect(resolved.metadata.key).toBe('laundry_clean');
+    expect(resolved.metadata.rendererKey).toBe('laundry');
+    expect(resolved.renderer).toBe(templateRegistry.getRenderer('laundry'));
+    expect(resolved.source).toBe('legacy-name');
+  });
+
   it('handles undefined template metadata safely', () => {
     const resolved = resolveTemplate(websiteWithTemplate());
 
@@ -111,6 +120,7 @@ describe('template registry integrity', () => {
       'restaurant_classic',
       'restaurant_premium',
       'restaurant_luxury',
+      'laundry_clean',
       'cafe_minimal',
       'cafe_modern',
       'cafe_premium',

@@ -14,6 +14,7 @@ import {
   TemplateTestimonials,
 } from '../TemplateComponents';
 import { RestaurantTemplate } from '../RestaurantTemplate';
+import { LaundryTemplate } from '../LaundryTemplate';
 import { defaultTemplateKey, templateMetadata } from './templateMetadata';
 import { TemplateRenderer, TemplateRendererKey } from './templateTypes';
 
@@ -37,6 +38,7 @@ function GenericBusinessTemplate({ website }: { website: Website }) {
 
 const renderers: Record<TemplateRendererKey, TemplateRenderer> = {
   restaurant: RestaurantTemplate,
+  laundry: LaundryTemplate,
   generic_business: GenericBusinessTemplate,
 };
 

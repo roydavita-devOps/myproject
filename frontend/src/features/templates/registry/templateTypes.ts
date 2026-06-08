@@ -5,6 +5,7 @@ export type TemplateKey =
   | 'restaurant_classic'
   | 'restaurant_premium'
   | 'restaurant_luxury'
+  | 'laundry_clean'
   | 'cafe_minimal'
   | 'cafe_modern'
   | 'cafe_premium'
@@ -12,7 +13,7 @@ export type TemplateKey =
   | 'corporate_executive'
   | 'minimal_business';
 
-export type TemplateRendererKey = 'restaurant' | 'generic_business';
+export type TemplateRendererKey = 'restaurant' | 'laundry' | 'generic_business';
 
 export type TemplateTier = 'standard' | 'premium' | 'luxury';
 

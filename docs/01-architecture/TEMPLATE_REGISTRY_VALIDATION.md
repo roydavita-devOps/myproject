@@ -57,6 +57,7 @@ The registry must support these future keys at the architecture level:
 restaurant_classic
 restaurant_premium
 restaurant_luxury
+laundry_clean
 cafe_minimal
 cafe_modern
 cafe_premium
@@ -74,6 +75,7 @@ Dedicated resolver tests must cover:
 - Legacy Restaurant mapping.
 - Legacy Warteg mapping.
 - Known stable key mapping.
+- Legacy Laundry mapping.
 - Planned premium key mapping.
 - Unknown key fallback.
 - Undefined, null, and empty schema fallback.

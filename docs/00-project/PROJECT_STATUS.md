@@ -4,7 +4,7 @@ Last updated: 2026-06-08
 
 ## Current Stage
 
-Stage 9.2B - Template Registry Validation & Test Coverage.
+Stage 9.3 - Laundry Template.
 
 Status: implemented and ready for approval.
 
@@ -31,18 +31,19 @@ Status: implemented and ready for approval.
 | Stage 9.2 Template Architecture Validation | Completed and approved with conditions. |
 | Stage 9.2A Template Registry Foundation | Completed. |
 | Stage 9.2B Template Registry Validation & Test Coverage | Implemented; awaiting approval. |
+| Stage 9.3 Laundry Template | Implemented; awaiting approval. |
 
 ## Current Blockers
 
 | Blocker | Status | Notes |
 | --- | --- | --- |
 | Email production activation | Pending | Requires final domain, verified sender, and production email environment values. |
-| Future template stages | Paused | Stage 9.3 and later template work must wait for approval. |
+| Future template stages | Paused | Stage 9.4 and later template work must wait for approval. |
 
 ## Next Actions
 
-1. Review Stage 9.2B Template Registry Validation & Test Coverage.
-2. Approve or request corrections to registry tests or documentation.
+1. Review Stage 9.3 Laundry Template.
+2. Approve or request corrections to Laundry Template implementation.
 3. After approval, proceed only to the next approved stage.
 4. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
 

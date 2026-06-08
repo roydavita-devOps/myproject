@@ -206,6 +206,45 @@ test.describe('SaaS smoke test', () => {
 
     await api.dispose();
   });
+
+  test('validates laundry-suka-suka laundry template across viewports', async ({ page, baseURL }) => {
+    const api = await request.newContext({ baseURL });
+    await ensureLaundrySukaSukaDemo(api);
+
+    const viewports = [
+      { name: 'mobile', width: 390, height: 844 },
+      { name: 'tablet', width: 768, height: 1024 },
+      { name: 'desktop', width: 1440, height: 1100 },
+    ];
+
+    for (const viewport of viewports) {
+      await test.step(`verify laundry template on ${viewport.name}`, async () => {
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        await page.goto('/site/laundry-suka-suka');
+
+        await expect(page.getByText('Laundry service website')).toBeVisible();
+        await expect(page.getByRole('link', { name: /schedule pickup/i })).toBeVisible();
+        await expect(page.getByRole('link', { name: /view services/i })).toBeVisible();
+        await expect(page.getByText('Layanan laundry yang mudah dipilih')).toBeVisible();
+        await expect(page.getByText('Pickup & delivery')).toBeVisible();
+        await expect(page.getByText('Process timeline')).toBeVisible();
+
+        const ctas = page.locator('a[data-template-cta]');
+        const count = await ctas.count();
+        expect(count).toBeGreaterThan(0);
+
+        for (let index = 0; index < count; index += 1) {
+          const cta = ctas.nth(index);
+          await expect(cta).toBeVisible();
+          expect((await cta.textContent())?.trim().length ?? 0).toBeGreaterThan(0);
+          await expect(cta.locator('svg')).toHaveCount(1);
+          await expect(cta).toHaveAttribute('href', /.+/);
+        }
+      });
+    }
+
+    await api.dispose();
+  });
 });
 
 async function ensureWartegMoncerDemo(api: APIRequestContext) {
@@ -251,6 +290,60 @@ async function ensureWartegMoncerDemo(api: APIRequestContext) {
       phone: '02175001001',
       whatsapp: '081210010010',
       email: 'halo@warteg-moncer.demo',
+      mapsUrl: 'https://maps.google.com',
+    },
+  });
+  expect(update.ok()).toBeTruthy();
+
+  const publish = await api.patch(`/api/v1/websites/${website.id}/publish`, {
+    headers: { Authorization: `Bearer ${session.accessToken}` },
+  });
+  expect(publish.ok()).toBeTruthy();
+}
+
+async function ensureLaundrySukaSukaDemo(api: APIRequestContext) {
+  const existing = await api.get('/api/v1/public/site/laundry-suka-suka');
+  if (existing.ok()) return;
+
+  const email = 'admin@laundry-suka-suka.demo';
+  const password = 'Password12345';
+  const tenantSlug = 'laundry-suka-suka';
+
+  const register = await api.post('/api/v1/auth/register', {
+    data: {
+      businessName: 'Laundry Suka Suka',
+      slug: tenantSlug,
+      adminName: 'Demo Admin',
+      email,
+      password,
+      businessType: 'LAUNDRY',
+    },
+  });
+  expect(register.ok()).toBeTruthy();
+
+  const login = await api.post('/api/v1/auth/login', {
+    data: { email, password, tenantSlug },
+  });
+  expect(login.ok()).toBeTruthy();
+  const session = await login.json();
+
+  const websites = await api.get('/api/v1/websites', {
+    headers: { Authorization: `Bearer ${session.accessToken}` },
+  });
+  expect(websites.ok()).toBeTruthy();
+  const [website] = await websites.json();
+  expect(website?.id).toBeTruthy();
+
+  const update = await api.put(`/api/v1/websites/${website.id}`, {
+    headers: { Authorization: `Bearer ${session.accessToken}` },
+    data: {
+      businessName: 'Laundry Suka Suka',
+      tagline: 'Cucian rapi, wangi, dan tepat waktu.',
+      description: 'Laundry demo untuk validasi template laundry dengan layanan, harga, pickup, dan kontak langsung.',
+      address: 'Jl. Demo Laundry No. 8, Bandung',
+      phone: '02220001002',
+      whatsapp: '081220010020',
+      email: 'halo@laundry-suka-suka.demo',
       mapsUrl: 'https://maps.google.com',
     },
   });

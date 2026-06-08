@@ -19,7 +19,8 @@ Current status:
 - Sprint 2 Final CTA Visibility Fix completed.
 - Stage 9.2 Template Architecture Validation completed.
 - Stage 9.2A Template Registry Foundation completed.
-- Stage 9.2B Template Registry Validation & Test Coverage implemented and awaiting approval.
+- Stage 9.2B Template Registry Validation & Test Coverage completed.
+- Sprint 3 Laundry Template implemented and awaiting approval.
 
 Evidence:
 

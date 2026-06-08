@@ -39,6 +39,7 @@ Supported architecture keys:
 restaurant_classic
 restaurant_premium
 restaurant_luxury
+laundry_clean
 cafe_minimal
 cafe_modern
 cafe_premium
@@ -68,6 +69,7 @@ This allows the current database to keep working while future migrations add exp
 | `restaurant_classic` | `restaurant` | Active. |
 | `restaurant_premium` | `restaurant` | Planned. |
 | `restaurant_luxury` | `restaurant` | Planned. |
+| `laundry_clean` | `laundry` | Active. |
 | `minimal_business` | `generic_business` | Active fallback. |
 | `cafe_minimal` | `generic_business` | Planned. |
 | `cafe_modern` | `generic_business` | Planned. |
@@ -114,6 +116,7 @@ Validated:
 - Legacy Restaurant mapping.
 - Legacy Warteg mapping.
 - Stable template key mapping.
+- Laundry legacy mapping.
 - Planned premium key mapping.
 - Unknown key fallback.
 - Undefined, null, and empty schema fallback.
@@ -128,5 +131,5 @@ frontend/src/features/templates/registry/__tests__/templateResolver.test.ts
 Current result:
 
 ```text
-11 resolver and registry tests passing
+12 resolver and registry tests passing
 ```
