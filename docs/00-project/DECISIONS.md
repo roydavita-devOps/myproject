@@ -153,6 +153,22 @@ Reason:
 - Premium and luxury template strategy requires clear tier metadata.
 - Preview and description fields must be standardized before additional template expansion continues.
 
+## Template Consistency Standard
+
+Status: Approved.
+
+Decision:
+
+- All future active templates must satisfy consistency requirements before activation.
+- Required consistency areas include architecture compliance, metadata completeness, section parity, CTA visibility, evidence coverage, preview asset readiness, and documentation placement.
+- Premium and Luxury expansion must not inherit known consistency gaps without explicit approval.
+
+Reason:
+
+- Active templates are the baseline for future marketplace-quality templates.
+- Consistency gaps in standard templates can compound during premium expansion.
+- Evidence and documentation must remain auditable before commercial launch.
+
 ## Future Template Marketplace
 
 Decision:

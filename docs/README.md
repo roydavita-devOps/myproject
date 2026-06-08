@@ -30,8 +30,9 @@ Current summary:
 - Stage 9.3 Laundry Template completed.
 - Stage 9.3B Template Catalog Readiness Audit completed.
 - Stage 9.4 Clinic Professional Template completed.
-- Stage 9.5 Corporate Executive Template completed and awaiting approval.
-- Stage 9.6 Cafe Modern Template completed and awaiting approval.
+- Stage 9.5 Corporate Executive Template completed.
+- Stage 9.6 Cafe Modern Template completed.
+- Stage 9.6A Template Consistency Audit completed and awaiting approval.
 
 ## Architecture
 
@@ -45,6 +46,7 @@ Architecture references:
 - [Template Registry Foundation](./01-architecture/TEMPLATE_REGISTRY_FOUNDATION.md)
 - [Template Registry Validation](./01-architecture/TEMPLATE_REGISTRY_VALIDATION.md)
 - [Template Metadata Standard](./01-architecture/TEMPLATE_METADATA_STANDARD.md)
+- [Template Consistency Audit](./01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md)
 
 Decision log:
 
@@ -131,6 +133,7 @@ Current status:
 - Sprint 4 Clinic Professional Template completed.
 - Sprint 5 Corporate Executive Template completed.
 - Sprint 6 Cafe Modern Template completed.
+- Stage 9.6A Template Consistency Audit completed.
 
 ## Product Vision And Monetization
 

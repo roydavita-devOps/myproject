@@ -14,6 +14,7 @@ Key documents:
 - [PHASE-9.2-Template-Architecture-Validation-Report.md](./PHASE-9.2-Template-Architecture-Validation-Report.md)
 - [PHASE-9.2A-Template-Registry-Foundation-Report.md](./PHASE-9.2A-Template-Registry-Foundation-Report.md)
 - [PHASE-9.2B-Template-Registry-Validation-Report.md](./PHASE-9.2B-Template-Registry-Validation-Report.md)
+- [PHASE-9.6A-Template-Consistency-Audit-Report.md](./PHASE-9.6A-Template-Consistency-Audit-Report.md)
 - [PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md](./PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md)
 
 Product-level architecture decisions are tracked in:
