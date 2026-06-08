@@ -14,8 +14,36 @@ import {
   TemplateTestimonials,
 } from './TemplateComponents';
 
+type LaundryDisplayItem = {
+  id: string;
+  name: string;
+  description?: string | null;
+  price?: string | number | null;
+};
+
+const defaultLaundryItems: LaundryDisplayItem[] = [
+  {
+    id: 'default-cuci-kering',
+    name: 'Cuci Kering',
+    description: 'Cuci dan kering untuk pakaian harian.',
+    price: '7000',
+  },
+  {
+    id: 'default-cuci-setrika',
+    name: 'Cuci Setrika',
+    description: 'Paket lengkap cuci, kering, dan setrika.',
+    price: '10000',
+  },
+  {
+    id: 'default-bed-cover',
+    name: 'Bed Cover',
+    description: 'Pencucian bed cover besar dengan pewangi premium.',
+    price: '35000',
+  },
+];
+
 export function LaundryTemplate({ website }: { website: Website }) {
-  const services = website.menus ?? [];
+  const services = (website.menus?.length ? website.menus : defaultLaundryItems) as LaundryDisplayItem[];
   const primaryAction = resolveContactActions(website)[0];
 
   return (
@@ -72,7 +100,7 @@ function LaundryHero({ website }: { website: Website }) {
   );
 }
 
-function LaundryServices({ items, cta }: { items: NonNullable<Website['menus']>; cta?: TemplateAction }) {
+function LaundryServices({ items, cta }: { items: LaundryDisplayItem[]; cta?: TemplateAction }) {
   const normalizedCta = normalizeTemplateAction(cta);
   const featured = items.slice(0, 4);
   if (featured.length === 0) return null;
@@ -105,7 +133,7 @@ function LaundryServices({ items, cta }: { items: NonNullable<Website['menus']>;
   );
 }
 
-function LaundryPricing({ items }: { items: NonNullable<Website['menus']> }) {
+function LaundryPricing({ items }: { items: LaundryDisplayItem[] }) {
   const pricedItems = items.filter((item) => item.price).slice(0, 3);
   if (pricedItems.length === 0) return null;
 

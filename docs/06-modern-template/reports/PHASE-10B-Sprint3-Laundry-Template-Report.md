@@ -26,6 +26,11 @@ Registry updates:
 - `laundry` added as a renderer key.
 - `laundry-default` and `laundry-demo-template` legacy names now resolve to `laundry_clean`.
 
+Data fallback:
+
+- Laundry services and pricing render default laundry service cards when a tenant has not added menu/service items yet.
+- This keeps the public site commercially recognizable during early setup.
+
 ## Required Sections
 
 Implemented sections:
@@ -137,6 +142,7 @@ Smoke test coverage validates:
 | Risk | Mitigation |
 | --- | --- |
 | Laundry legacy templates could still use generic renderer. | Added resolver test and legacy alias to `laundry_clean`. |
+| Laundry tenant has no service/menu items yet. | Added fallback service and pricing cards. |
 | Template expansion could bypass registry. | Implemented only through registry key and renderer mapping. |
 | CTA regression could create blank buttons. | Smoke test validates CTA text, SVG icon, and href. |
 | Visual overlap on mobile. | Screenshot validation covers mobile, tablet, and desktop. |
