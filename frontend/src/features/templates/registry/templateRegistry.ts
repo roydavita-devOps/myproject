@@ -16,6 +16,8 @@ import {
 import { RestaurantTemplate } from '../RestaurantTemplate';
 import { LaundryTemplate } from '../LaundryTemplate';
 import { ClinicTemplate } from '../ClinicTemplate';
+import { CorporateTemplate } from '../CorporateTemplate';
+import { CafeTemplate } from '../CafeTemplate';
 import { defaultTemplateKey, templateMetadata } from './templateMetadata';
 import { TemplateRenderer, TemplateRendererKey } from './templateTypes';
 
@@ -41,6 +43,8 @@ const renderers: Record<TemplateRendererKey, TemplateRenderer> = {
   restaurant: RestaurantTemplate,
   laundry: LaundryTemplate,
   clinic: ClinicTemplate,
+  corporate: CorporateTemplate,
+  cafe: CafeTemplate,
   generic_business: GenericBusinessTemplate,
 };
 

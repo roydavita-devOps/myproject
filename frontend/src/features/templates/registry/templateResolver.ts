@@ -50,7 +50,7 @@ function resolutionFor(key: TemplateKey, source: TemplateResolution['source']): 
 }
 
 function isRendererKey(value?: string | null): value is TemplateRendererKey {
-  return value === 'restaurant' || value === 'laundry' || value === 'clinic' || value === 'generic_business';
+  return value === 'restaurant' || value === 'laundry' || value === 'clinic' || value === 'corporate' || value === 'cafe' || value === 'generic_business';
 }
 
 function normalizeKey(value?: string | null) {

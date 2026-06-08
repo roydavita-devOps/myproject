@@ -1,4 +1,4 @@
-import { APIRequestContext, expect, request, test } from '@playwright/test';
+import { APIRequestContext, Page, expect, request, test } from '@playwright/test';
 
 const password = 'Password12345';
 const pngBytes = Buffer.from(
@@ -287,7 +287,87 @@ test.describe('SaaS smoke test', () => {
 
     await api.dispose();
   });
+
+  test('validates corporate-maju-bersama corporate template across viewports', async ({ page, baseURL }) => {
+    const api = await request.newContext({ baseURL });
+    await ensureCorporateMajuBersamaDemo(api);
+
+    const viewports = [
+      { name: 'mobile', width: 390, height: 844 },
+      { name: 'tablet', width: 768, height: 1024 },
+      { name: 'desktop', width: 1440, height: 1100 },
+    ];
+
+    for (const viewport of viewports) {
+      await test.step(`verify corporate template on ${viewport.name}`, async () => {
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        await page.goto('/site/corporate-maju-bersama');
+
+        await expect(page.getByText('Corporate executive website')).toBeVisible();
+        const hero = page.locator('#home');
+        await expect(hero.getByRole('link', { name: /start consultation/i })).toBeVisible();
+        await expect(hero.getByRole('link', { name: /view services/i })).toBeVisible();
+        await expect(page.getByText('Built for clear executive communication')).toBeVisible();
+        await expect(page.getByText('Professional services for business growth')).toBeVisible();
+        await expect(page.getByText('Why choose us')).toBeVisible();
+        await expect(page.getByText('Experienced leadership team')).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Client logos' })).toBeVisible();
+        await expect(page.getByText('Discuss a business engagement')).toBeVisible();
+
+        await assertTemplateCtas(page);
+      });
+    }
+
+    await api.dispose();
+  });
+
+  test('validates cafe-senja-modern cafe template across viewports', async ({ page, baseURL }) => {
+    const api = await request.newContext({ baseURL });
+    await ensureCafeSenjaModernDemo(api);
+
+    const viewports = [
+      { name: 'mobile', width: 390, height: 844 },
+      { name: 'tablet', width: 768, height: 1024 },
+      { name: 'desktop', width: 1440, height: 1100 },
+    ];
+
+    for (const viewport of viewports) {
+      await test.step(`verify cafe template on ${viewport.name}`, async () => {
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        await page.goto('/site/cafe-senja-modern');
+
+        await expect(page.getByText('Cafe modern website')).toBeVisible();
+        const hero = page.locator('#home');
+        await expect(hero.getByRole('link', { name: /chat cafe/i })).toBeVisible();
+        await expect(hero.getByRole('link', { name: /view menu/i })).toBeVisible();
+        await expect(page.getByText('Cafe menu made easy to browse')).toBeVisible();
+        await expect(page.getByText('Drinks worth coming back for')).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Gallery' })).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Reviews' })).toBeVisible();
+        await expect(page.getByText('Location and opening hours')).toBeVisible();
+        await expect(page.getByText('Plan your next coffee visit')).toBeVisible();
+
+        await assertTemplateCtas(page);
+      });
+    }
+
+    await api.dispose();
+  });
 });
+
+async function assertTemplateCtas(page: Page) {
+  const ctas = page.locator('a[data-template-cta]');
+  const count = await ctas.count();
+  expect(count).toBeGreaterThan(0);
+
+  for (let index = 0; index < count; index += 1) {
+    const cta = ctas.nth(index);
+    await expect(cta).toBeVisible();
+    expect((await cta.textContent())?.trim().length ?? 0).toBeGreaterThan(0);
+    await expect(cta.locator('svg')).toHaveCount(1);
+    await expect(cta).toHaveAttribute('href', /.+/);
+  }
+}
 
 async function ensureWartegMoncerDemo(api: APIRequestContext) {
   const existing = await api.get('/api/v1/public/site/warteg-moncer');
@@ -462,6 +542,147 @@ async function updateAndPublishClinicDemo(api: APIRequestContext, accessToken: s
         Thursday: '08.00 - 20.00',
         Friday: '08.00 - 20.00',
         Saturday: '08.00 - 16.00',
+      },
+    },
+  });
+  expect(update.ok()).toBeTruthy();
+
+  const publish = await api.patch(`/api/v1/websites/${website.id}/publish`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  expect(publish.ok()).toBeTruthy();
+}
+
+async function ensureCorporateMajuBersamaDemo(api: APIRequestContext) {
+  const existing = await api.get('/api/v1/public/site/corporate-maju-bersama');
+  if (existing.ok()) {
+    const body = await existing.json();
+    if (body.whatsapp && body.phone && body.mapsUrl) return;
+  }
+
+  const email = 'admin@corporate-maju-bersama.demo';
+  const tenantSlug = 'corporate-maju-bersama';
+
+  const register = await api.post('/api/v1/auth/register', {
+    data: {
+      businessName: 'Corporate Maju Bersama',
+      slug: tenantSlug,
+      adminName: 'Demo Admin',
+      email,
+      password,
+      businessType: 'LOCAL_SERVICE',
+    },
+  });
+
+  if (!register.ok()) {
+    const loginExisting = await api.post('/api/v1/auth/login', {
+      data: { email, password, tenantSlug },
+    });
+    expect(loginExisting.ok()).toBeTruthy();
+    await updateAndPublishCorporateDemo(api, (await loginExisting.json()).accessToken);
+    return;
+  }
+
+  const login = await api.post('/api/v1/auth/login', {
+    data: { email, password, tenantSlug },
+  });
+  expect(login.ok()).toBeTruthy();
+  await updateAndPublishCorporateDemo(api, (await login.json()).accessToken);
+}
+
+async function updateAndPublishCorporateDemo(api: APIRequestContext, accessToken: string) {
+  const websites = await api.get('/api/v1/websites', {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  expect(websites.ok()).toBeTruthy();
+  const [website] = await websites.json();
+  expect(website?.id).toBeTruthy();
+
+  const update = await api.put(`/api/v1/websites/${website.id}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    data: {
+      businessName: 'Corporate Maju Bersama',
+      tagline: 'Executive business advisory for growing local companies.',
+      description: 'Corporate demo untuk validasi Corporate Executive Template dengan services, team, client logos, testimonial, gallery, dan CTA.',
+      address: 'Jl. Eksekutif No. 45, Jakarta',
+      phone: '02140001004',
+      whatsapp: '081240010040',
+      email: 'hello@corporate-maju-bersama.demo',
+      mapsUrl: 'https://maps.google.com',
+    },
+  });
+  expect(update.ok()).toBeTruthy();
+
+  const publish = await api.patch(`/api/v1/websites/${website.id}/publish`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  expect(publish.ok()).toBeTruthy();
+}
+
+async function ensureCafeSenjaModernDemo(api: APIRequestContext) {
+  const existing = await api.get('/api/v1/public/site/cafe-senja-modern');
+  if (existing.ok()) {
+    const body = await existing.json();
+    if (body.whatsapp && body.phone && body.mapsUrl) return;
+  }
+
+  const email = 'admin@cafe-senja-modern.demo';
+  const tenantSlug = 'cafe-senja-modern';
+
+  const register = await api.post('/api/v1/auth/register', {
+    data: {
+      businessName: 'Cafe Senja Modern',
+      slug: tenantSlug,
+      adminName: 'Demo Admin',
+      email,
+      password,
+      businessType: 'CAFE',
+    },
+  });
+
+  if (!register.ok()) {
+    const loginExisting = await api.post('/api/v1/auth/login', {
+      data: { email, password, tenantSlug },
+    });
+    expect(loginExisting.ok()).toBeTruthy();
+    await updateAndPublishCafeDemo(api, (await loginExisting.json()).accessToken);
+    return;
+  }
+
+  const login = await api.post('/api/v1/auth/login', {
+    data: { email, password, tenantSlug },
+  });
+  expect(login.ok()).toBeTruthy();
+  await updateAndPublishCafeDemo(api, (await login.json()).accessToken);
+}
+
+async function updateAndPublishCafeDemo(api: APIRequestContext, accessToken: string) {
+  const websites = await api.get('/api/v1/websites', {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  expect(websites.ok()).toBeTruthy();
+  const [website] = await websites.json();
+  expect(website?.id).toBeTruthy();
+
+  const update = await api.put(`/api/v1/websites/${website.id}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    data: {
+      businessName: 'Cafe Senja Modern',
+      tagline: 'Modern coffee, brunch, and warm everyday hangout.',
+      description: 'Cafe demo untuk validasi Cafe Modern Template dengan featured menu, signature drinks, gallery, reviews, location, dan CTA.',
+      address: 'Jl. Kopi Senja No. 18, Bandung',
+      phone: '02250001005',
+      whatsapp: '081250010050',
+      email: 'hello@cafe-senja-modern.demo',
+      mapsUrl: 'https://maps.google.com',
+      openingHours: {
+        Monday: '08.00 - 22.00',
+        Tuesday: '08.00 - 22.00',
+        Wednesday: '08.00 - 22.00',
+        Thursday: '08.00 - 22.00',
+        Friday: '08.00 - 23.00',
+        Saturday: '08.00 - 23.00',
+        Sunday: '09.00 - 22.00',
       },
     },
   });

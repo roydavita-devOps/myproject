@@ -67,6 +67,36 @@ tier: standard
 recommended_business_types: CLINIC
 ```
 
+## Corporate Executive Example
+
+```text
+template_key: corporate_executive
+display_name: Corporate Executive
+description: Executive business template for corporate, professional service, and consulting websites.
+industry: Business Services
+category: Corporate
+renderer_key: corporate
+status: active
+preview_image: corporate-executive.jpg
+tier: premium
+recommended_business_types: CLINIC, LOCAL_SERVICE, RETAIL
+```
+
+## Cafe Modern Example
+
+```text
+template_key: cafe_modern
+display_name: Cafe Modern
+description: Modern cafe template for lifestyle-focused cafes and coffee shops.
+industry: Food & Beverage
+category: Cafe
+renderer_key: cafe
+status: active
+preview_image: cafe-modern.jpg
+tier: premium
+recommended_business_types: CAFE
+```
+
 ## Current Code Mapping
 
 The current registry uses TypeScript-friendly camelCase names.
@@ -117,6 +147,8 @@ Current Stage 9.4 preview placeholder:
 
 ```text
 frontend/public/template-previews/clinic-professional.jpg
+frontend/public/template-previews/corporate-executive.jpg
+frontend/public/template-previews/cafe-modern.jpg
 ```
 
 Rules:

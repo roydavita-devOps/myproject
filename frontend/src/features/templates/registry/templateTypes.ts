@@ -13,7 +13,7 @@ export type TemplateKey =
   | 'corporate_executive'
   | 'minimal_business';
 
-export type TemplateRendererKey = 'restaurant' | 'laundry' | 'clinic' | 'generic_business';
+export type TemplateRendererKey = 'restaurant' | 'laundry' | 'clinic' | 'corporate' | 'cafe' | 'generic_business';
 
 export type TemplateTier = 'standard' | 'premium' | 'luxury';
 

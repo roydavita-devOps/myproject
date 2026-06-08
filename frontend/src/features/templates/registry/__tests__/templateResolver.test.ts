@@ -107,6 +107,64 @@ describe('resolveTemplate', () => {
     expect(resolved.source).toBe('schema-renderer');
   });
 
+  it('maps legacy local service default templates to corporate_executive', () => {
+    const resolved = resolveTemplate(websiteWithTemplate({ name: 'local-service-default' }));
+
+    expect(resolved.metadata.key).toBe('corporate_executive');
+    expect(resolved.metadata.rendererKey).toBe('corporate');
+    expect(resolved.renderer).toBe(templateRegistry.getRenderer('corporate'));
+    expect(resolved.source).toBe('legacy-name');
+  });
+
+  it('resolves corporate_executive to the corporate renderer through schema key', () => {
+    const resolved = resolveTemplate(websiteWithTemplate({ schema: { templateKey: 'corporate_executive' } }));
+
+    expect(resolved.metadata.key).toBe('corporate_executive');
+    expect(resolved.metadata.displayName).toBe('Corporate Executive');
+    expect(resolved.metadata.status).toBe('active');
+    expect(resolved.metadata.rendererKey).toBe('corporate');
+    expect(resolved.renderer).toBe(templateRegistry.getRenderer('corporate'));
+    expect(resolved.source).toBe('schema-key');
+  });
+
+  it('resolves corporate renderer schema without business type branching', () => {
+    const resolved = resolveTemplate(websiteWithTemplate({ schema: { rendererKey: 'corporate' } }));
+
+    expect(resolved.metadata.key).toBe('corporate_executive');
+    expect(resolved.metadata.rendererKey).toBe('corporate');
+    expect(resolved.renderer).toBe(templateRegistry.getRenderer('corporate'));
+    expect(resolved.source).toBe('schema-renderer');
+  });
+
+  it('maps legacy cafe default templates to cafe_modern', () => {
+    const resolved = resolveTemplate(websiteWithTemplate({ name: 'cafe-default' }));
+
+    expect(resolved.metadata.key).toBe('cafe_modern');
+    expect(resolved.metadata.rendererKey).toBe('cafe');
+    expect(resolved.renderer).toBe(templateRegistry.getRenderer('cafe'));
+    expect(resolved.source).toBe('legacy-name');
+  });
+
+  it('resolves cafe_modern to the cafe renderer through schema key', () => {
+    const resolved = resolveTemplate(websiteWithTemplate({ schema: { templateKey: 'cafe_modern' } }));
+
+    expect(resolved.metadata.key).toBe('cafe_modern');
+    expect(resolved.metadata.displayName).toBe('Cafe Modern');
+    expect(resolved.metadata.status).toBe('active');
+    expect(resolved.metadata.rendererKey).toBe('cafe');
+    expect(resolved.renderer).toBe(templateRegistry.getRenderer('cafe'));
+    expect(resolved.source).toBe('schema-key');
+  });
+
+  it('resolves cafe renderer schema without business type branching', () => {
+    const resolved = resolveTemplate(websiteWithTemplate({ schema: { rendererKey: 'cafe' } }));
+
+    expect(resolved.metadata.key).toBe('cafe_modern');
+    expect(resolved.metadata.rendererKey).toBe('cafe');
+    expect(resolved.renderer).toBe(templateRegistry.getRenderer('cafe'));
+    expect(resolved.source).toBe('schema-renderer');
+  });
+
   it('handles undefined template metadata safely', () => {
     const resolved = resolveTemplate(websiteWithTemplate());
 

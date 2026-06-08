@@ -4,7 +4,7 @@ Last updated: 2026-06-08
 
 ## Current Stage
 
-Stage 9.4 - Clinic Professional Template.
+Stage 9.5 + Stage 9.6 - Corporate Executive and Cafe Modern Templates.
 
 Status: implemented and ready for approval.
 
@@ -33,21 +33,24 @@ Status: implemented and ready for approval.
 | Stage 9.2B Template Registry Validation & Test Coverage | Implemented; awaiting approval. |
 | Stage 9.3 Laundry Template | Completed. |
 | Stage 9.3B Template Catalog Readiness Audit | Completed. |
-| Stage 9.4 Clinic Professional Template | Completed; awaiting approval. |
+| Stage 9.4 Clinic Professional Template | Completed. |
+| Stage 9.5 Corporate Executive Template | Completed; awaiting approval. |
+| Stage 9.6 Cafe Modern Template | Completed; awaiting approval. |
 
 ## Current Blockers
 
 | Blocker | Status | Notes |
 | --- | --- | --- |
 | Email production activation | Pending | Requires final domain, verified sender, and production email environment values. |
-| Future template stages | Paused | Stage 9.4 and later template work must wait for approval. |
+| Future template stages | Paused | Stage 9.7 and later template work must wait for approval. |
 
 ## Next Actions
 
-1. Review Stage 9.4 Clinic Professional Template.
-2. Approve or request corrections to Clinic Professional implementation.
-3. After approval, proceed only to the next approved stage.
-4. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
+1. Review Stage 9.5 Corporate Executive Template.
+2. Review Stage 9.6 Cafe Modern Template.
+3. Approve or request corrections to either template implementation.
+4. After approval, proceed only to the next approved stage.
+5. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
 
 ## Operational Snapshot
 

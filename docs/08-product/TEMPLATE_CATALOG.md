@@ -22,8 +22,8 @@ Decision:
 | Restaurant / Warteg template | Implemented through Stage 9 Sprint 2 and final CTA fix. |
 | Laundry template | Implemented through Stage 9.3. |
 | Clinic template | Implemented through Stage 9.4. |
-| Corporate template | Planned. |
-| Cafe template | Planned. |
+| Corporate template | Implemented through Stage 9.5. |
+| Cafe template | Implemented through Stage 9.6. |
 
 ## Metadata Standard
 
@@ -60,13 +60,13 @@ Current implementation note:
 | `restaurant_classic` | Active | Standard | Partial metadata. |
 | `laundry_clean` | Active | Standard | Partial metadata. |
 | `clinic_professional` | Active | Standard | Catalog-ready metadata with preview placeholder. |
+| `corporate_executive` | Active | Premium | Catalog-ready metadata with preview placeholder. |
+| `cafe_modern` | Active | Premium | Catalog-ready metadata with preview placeholder. |
 | `minimal_business` | Active fallback | Standard | Partial metadata. |
 | `restaurant_premium` | Planned | Premium | Partial metadata. |
 | `restaurant_luxury` | Planned | Luxury | Partial metadata. |
 | `cafe_minimal` | Planned | Standard | Partial metadata. |
-| `cafe_modern` | Planned | Premium | Partial metadata. |
 | `cafe_premium` | Planned | Premium | Partial metadata. |
-| `corporate_executive` | Planned | Premium | Partial metadata. |
 
 ## Catalog Principle
 
@@ -142,3 +142,33 @@ Architecture audit:
 | Preview image | `clinic-professional.jpg` |
 | Tier | Standard |
 | Recommended business types | `CLINIC` |
+
+## Corporate Executive Catalog Entry
+
+| Field | Value |
+| --- | --- |
+| Template key | `corporate_executive` |
+| Display name | Corporate Executive |
+| Description | Executive business template for corporate, professional service, and consulting websites. |
+| Industry | Business Services |
+| Category | Corporate |
+| Renderer key | `corporate` |
+| Status | Active |
+| Preview image | `corporate-executive.jpg` |
+| Tier | Premium |
+| Recommended business types | `CLINIC`, `LOCAL_SERVICE`, `RETAIL` |
+
+## Cafe Modern Catalog Entry
+
+| Field | Value |
+| --- | --- |
+| Template key | `cafe_modern` |
+| Display name | Cafe Modern |
+| Description | Modern cafe template for lifestyle-focused cafes and coffee shops. |
+| Industry | Food & Beverage |
+| Category | Cafe |
+| Renderer key | `cafe` |
+| Status | Active |
+| Preview image | `cafe-modern.jpg` |
+| Tier | Premium |
+| Recommended business types | `CAFE` |

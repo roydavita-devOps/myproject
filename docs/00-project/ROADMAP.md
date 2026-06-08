@@ -27,20 +27,14 @@ Last updated: 2026-06-08
 - Stage 9.3 Laundry Template.
 - Stage 9.3B Template Catalog Readiness Audit.
 - Stage 9.4 Clinic Professional Template.
+- Stage 9.5 Corporate Executive Template.
+- Stage 9.6 Cafe Modern Template.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
 
 ## Planned
-
-### Stage 9.5
-
-Corporate Template.
-
-### Stage 9.6
-
-Cafe Template.
 
 ### Stage 10
 
