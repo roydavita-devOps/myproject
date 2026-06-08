@@ -104,3 +104,29 @@ When future templates are approved:
 3. Keep template access separate from business type.
 4. Keep subscription gating outside this registry until marketplace stage.
 5. Preserve fallback behavior for existing tenants.
+
+## Validation Status
+
+Stage 9.2B added dedicated resolver test coverage for the registry.
+
+Validated:
+
+- Legacy Restaurant mapping.
+- Legacy Warteg mapping.
+- Stable template key mapping.
+- Planned premium key mapping.
+- Unknown key fallback.
+- Undefined, null, and empty schema fallback.
+- Active template metadata and renderer availability.
+
+Test file:
+
+```text
+frontend/src/features/templates/registry/__tests__/templateResolver.test.ts
+```
+
+Current result:
+
+```text
+11 resolver and registry tests passing
+```

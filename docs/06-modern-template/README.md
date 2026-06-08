@@ -8,6 +8,7 @@ Key documents:
 - [reports/](./reports/)
 - [../01-architecture/TEMPLATE_ARCHITECTURE.md](../01-architecture/TEMPLATE_ARCHITECTURE.md)
 - [../01-architecture/TEMPLATE_REGISTRY_FOUNDATION.md](../01-architecture/TEMPLATE_REGISTRY_FOUNDATION.md)
+- [../01-architecture/TEMPLATE_REGISTRY_VALIDATION.md](../01-architecture/TEMPLATE_REGISTRY_VALIDATION.md)
 - [../08-product/TEMPLATE_MARKETPLACE.md](../08-product/TEMPLATE_MARKETPLACE.md)
 
 Current status:
@@ -17,7 +18,8 @@ Current status:
 - Sprint 2 Restaurant Template completed.
 - Sprint 2 Final CTA Visibility Fix completed.
 - Stage 9.2 Template Architecture Validation completed.
-- Stage 9.2A Template Registry Foundation implemented and awaiting approval.
+- Stage 9.2A Template Registry Foundation completed.
+- Stage 9.2B Template Registry Validation & Test Coverage implemented and awaiting approval.
 
 Evidence:
 

@@ -23,6 +23,7 @@ Last updated: 2026-06-08
 - Stage 9.1B Documentation Refactor Execution.
 - Stage 9.2 Template Architecture Validation.
 - Stage 9.2A Template Registry Foundation.
+- Stage 9.2B Template Registry Validation & Test Coverage.
 
 ## In Progress
 

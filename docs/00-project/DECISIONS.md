@@ -121,6 +121,22 @@ Reason:
 - Future marketplace templates must support cross-category selection.
 - Existing tenants need legacy compatibility while the database evolves toward explicit template keys.
 
+## Template Registry Validation
+
+Status: Approved.
+
+Decision:
+
+- All template renderer selection must be validated through registry tests.
+- Future templates must register through the registry layer.
+- Direct renderer branching is prohibited.
+
+Reason:
+
+- Registry growth must remain controlled and testable.
+- Legacy mappings must not regress.
+- Unknown template records must resolve safely through fallback behavior.
+
 ## Future Template Marketplace
 
 Decision:

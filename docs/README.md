@@ -25,7 +25,8 @@ Current summary:
 - Stage 9 Sprint 2 Restaurant Template completed and final CTA defect fixed.
 - Stage 9.1B documentation refactor completed.
 - Stage 9.2 Template Architecture Validation completed.
-- Stage 9.2A Template Registry Foundation implemented and awaiting approval.
+- Stage 9.2A Template Registry Foundation completed.
+- Stage 9.2B Template Registry Validation & Test Coverage implemented and awaiting approval.
 
 ## Architecture
 
@@ -37,6 +38,7 @@ Architecture references:
 - [SaaS Operations](./01-architecture/Phase-8-SaaS-Operations.md)
 - [Template Architecture](./01-architecture/TEMPLATE_ARCHITECTURE.md)
 - [Template Registry Foundation](./01-architecture/TEMPLATE_REGISTRY_FOUNDATION.md)
+- [Template Registry Validation](./01-architecture/TEMPLATE_REGISTRY_VALIDATION.md)
 
 Decision log:
 
@@ -116,7 +118,8 @@ Current status:
 - Sprint 1 Stabilization completed.
 - Sprint 2 Restaurant Template completed.
 - Sprint 2 Final CTA Visibility Fix completed.
-- Stage 9.2A Template Registry Foundation implemented.
+- Stage 9.2A Template Registry Foundation completed.
+- Stage 9.2B Template Registry Validation & Test Coverage implemented.
 
 ## Product Vision And Monetization
 

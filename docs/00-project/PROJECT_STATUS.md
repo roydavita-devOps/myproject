@@ -4,7 +4,7 @@ Last updated: 2026-06-08
 
 ## Current Stage
 
-Stage 9.2A - Template Registry Foundation.
+Stage 9.2B - Template Registry Validation & Test Coverage.
 
 Status: implemented and ready for approval.
 
@@ -29,7 +29,8 @@ Status: implemented and ready for approval.
 | Stage 9.1A Documentation Refactor Planning | Completed and approved. |
 | Stage 9.1B Documentation Refactor Execution | Completed. |
 | Stage 9.2 Template Architecture Validation | Completed and approved with conditions. |
-| Stage 9.2A Template Registry Foundation | Implemented; awaiting approval. |
+| Stage 9.2A Template Registry Foundation | Completed. |
+| Stage 9.2B Template Registry Validation & Test Coverage | Implemented; awaiting approval. |
 
 ## Current Blockers
 
@@ -40,8 +41,8 @@ Status: implemented and ready for approval.
 
 ## Next Actions
 
-1. Review Stage 9.2A Template Registry Foundation.
-2. Approve or request corrections to the registry architecture and documentation.
+1. Review Stage 9.2B Template Registry Validation & Test Coverage.
+2. Approve or request corrections to registry tests or documentation.
 3. After approval, proceed only to the next approved stage.
 4. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
 
@@ -64,3 +65,4 @@ Status: implemented and ready for approval.
 - Documentation audit report: [../DOCUMENTATION_AUDIT_REPORT.md](../DOCUMENTATION_AUDIT_REPORT.md)
 - Template architecture: [../01-architecture/TEMPLATE_ARCHITECTURE.md](../01-architecture/TEMPLATE_ARCHITECTURE.md)
 - Template registry foundation: [../01-architecture/TEMPLATE_REGISTRY_FOUNDATION.md](../01-architecture/TEMPLATE_REGISTRY_FOUNDATION.md)
+- Template registry validation: [../01-architecture/TEMPLATE_REGISTRY_VALIDATION.md](../01-architecture/TEMPLATE_REGISTRY_VALIDATION.md)
