@@ -27,7 +27,8 @@ Current summary:
 - Stage 9.2 Template Architecture Validation completed.
 - Stage 9.2A Template Registry Foundation completed.
 - Stage 9.2B Template Registry Validation & Test Coverage completed.
-- Stage 9.3 Laundry Template implemented and awaiting approval.
+- Stage 9.3 Laundry Template completed.
+- Stage 9.3B Template Catalog Readiness Audit completed and awaiting approval.
 
 ## Architecture
 
@@ -40,6 +41,7 @@ Architecture references:
 - [Template Architecture](./01-architecture/TEMPLATE_ARCHITECTURE.md)
 - [Template Registry Foundation](./01-architecture/TEMPLATE_REGISTRY_FOUNDATION.md)
 - [Template Registry Validation](./01-architecture/TEMPLATE_REGISTRY_VALIDATION.md)
+- [Template Metadata Standard](./01-architecture/TEMPLATE_METADATA_STANDARD.md)
 
 Decision log:
 
@@ -120,8 +122,9 @@ Current status:
 - Sprint 2 Restaurant Template completed.
 - Sprint 2 Final CTA Visibility Fix completed.
 - Stage 9.2A Template Registry Foundation completed.
-- Stage 9.2B Template Registry Validation & Test Coverage implemented.
-- Sprint 3 Laundry Template implemented.
+- Stage 9.2B Template Registry Validation & Test Coverage completed.
+- Sprint 3 Laundry Template completed.
+- Stage 9.3B Template Catalog Readiness Audit completed.
 
 ## Product Vision And Monetization
 

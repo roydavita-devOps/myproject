@@ -25,6 +25,7 @@ Last updated: 2026-06-08
 - Stage 9.2A Template Registry Foundation.
 - Stage 9.2B Template Registry Validation & Test Coverage.
 - Stage 9.3 Laundry Template.
+- Stage 9.3B Template Catalog Readiness Audit.
 
 ## In Progress
 

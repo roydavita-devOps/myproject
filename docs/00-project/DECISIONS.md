@@ -137,6 +137,22 @@ Reason:
 - Legacy mappings must not regress.
 - Unknown template records must resolve safely through fallback behavior.
 
+## Template Metadata Standard
+
+Status: Approved.
+
+Decision:
+
+- All future templates must provide catalog-ready metadata.
+- Required metadata includes template identity, display name, description, industry, category, renderer key, lifecycle status, preview image, tier, and recommended business types.
+- Template metadata supports recommendations and future catalog display, not subscription enforcement.
+
+Reason:
+
+- Template Catalog readiness depends on consistent metadata before UI implementation.
+- Premium and luxury template strategy requires clear tier metadata.
+- Preview and description fields must be standardized before additional template expansion continues.
+
 ## Future Template Marketplace
 
 Decision:
