@@ -21,7 +21,7 @@ Decision:
 | Base template system | Implemented. |
 | Restaurant / Warteg template | Implemented through Stage 9 Sprint 2 and final CTA fix. |
 | Laundry template | Implemented through Stage 9.3. |
-| Clinic template | Planned. |
+| Clinic template | Implemented through Stage 9.4. |
 | Corporate template | Planned. |
 | Cafe template | Planned. |
 
@@ -49,7 +49,8 @@ recommended_business_types
 Current implementation note:
 
 - Operational registry metadata exists.
-- Catalog display fields such as `description`, `industry`, `category`, and `preview_image` are not implemented in code yet.
+- Catalog display fields such as `description`, `industry`, `category`, and `preview_image` are now represented in the frontend registry metadata contract.
+- `clinic_professional` includes preview placeholder support.
 - Template Catalog UI must not start until those fields are added and validated.
 
 ## Current Template Keys
@@ -58,13 +59,13 @@ Current implementation note:
 | --- | --- | --- | --- |
 | `restaurant_classic` | Active | Standard | Partial metadata. |
 | `laundry_clean` | Active | Standard | Partial metadata. |
+| `clinic_professional` | Active | Standard | Catalog-ready metadata with preview placeholder. |
 | `minimal_business` | Active fallback | Standard | Partial metadata. |
 | `restaurant_premium` | Planned | Premium | Partial metadata. |
 | `restaurant_luxury` | Planned | Luxury | Partial metadata. |
 | `cafe_minimal` | Planned | Standard | Partial metadata. |
 | `cafe_modern` | Planned | Premium | Partial metadata. |
 | `cafe_premium` | Planned | Premium | Partial metadata. |
-| `clinic_professional` | Planned | Standard | Partial metadata. |
 | `corporate_executive` | Planned | Premium | Partial metadata. |
 
 ## Catalog Principle
@@ -126,3 +127,18 @@ Before implementing Template Catalog UI:
 Architecture audit:
 
 - [../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md](../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md)
+
+## Clinic Professional Catalog Entry
+
+| Field | Value |
+| --- | --- |
+| Template key | `clinic_professional` |
+| Display name | Clinic Professional |
+| Description | Professional healthcare landing page designed for clinics and medical practices. |
+| Industry | Healthcare |
+| Category | Clinic |
+| Renderer key | `clinic` |
+| Status | Active |
+| Preview image | `clinic-professional.jpg` |
+| Tier | Standard |
+| Recommended business types | `CLINIC` |

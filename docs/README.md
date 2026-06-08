@@ -28,7 +28,8 @@ Current summary:
 - Stage 9.2A Template Registry Foundation completed.
 - Stage 9.2B Template Registry Validation & Test Coverage completed.
 - Stage 9.3 Laundry Template completed.
-- Stage 9.3B Template Catalog Readiness Audit completed and awaiting approval.
+- Stage 9.3B Template Catalog Readiness Audit completed.
+- Stage 9.4 Clinic Professional Template completed and awaiting approval.
 
 ## Architecture
 
@@ -125,6 +126,7 @@ Current status:
 - Stage 9.2B Template Registry Validation & Test Coverage completed.
 - Sprint 3 Laundry Template completed.
 - Stage 9.3B Template Catalog Readiness Audit completed.
+- Sprint 4 Clinic Professional Template completed.
 
 ## Product Vision And Monetization
 

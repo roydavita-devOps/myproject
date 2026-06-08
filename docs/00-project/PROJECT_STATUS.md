@@ -4,9 +4,9 @@ Last updated: 2026-06-08
 
 ## Current Stage
 
-Stage 9.3B - Template Catalog Readiness Audit.
+Stage 9.4 - Clinic Professional Template.
 
-Status: documentation audit completed and ready for approval.
+Status: implemented and ready for approval.
 
 ## Completed Stages
 
@@ -32,7 +32,8 @@ Status: documentation audit completed and ready for approval.
 | Stage 9.2A Template Registry Foundation | Completed. |
 | Stage 9.2B Template Registry Validation & Test Coverage | Implemented; awaiting approval. |
 | Stage 9.3 Laundry Template | Completed. |
-| Stage 9.3B Template Catalog Readiness Audit | Completed; awaiting approval. |
+| Stage 9.3B Template Catalog Readiness Audit | Completed. |
+| Stage 9.4 Clinic Professional Template | Completed; awaiting approval. |
 
 ## Current Blockers
 
@@ -43,8 +44,8 @@ Status: documentation audit completed and ready for approval.
 
 ## Next Actions
 
-1. Review Stage 9.3B Template Catalog Readiness Audit.
-2. Approve or request corrections to the metadata standard and audit report.
+1. Review Stage 9.4 Clinic Professional Template.
+2. Approve or request corrections to Clinic Professional implementation.
 3. After approval, proceed only to the next approved stage.
 4. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
 
@@ -52,7 +53,7 @@ Status: documentation audit completed and ready for approval.
 
 | System | Current Status |
 | --- | --- |
-| Local Docker | Running and validated before Stage 9.1B. |
+| Local Docker | Running and validated during Stage 9.4. |
 | GitHub | Latest code and documentation branch strategy uses `main`, `staging`, and `pilot`. |
 | Vercel | Production frontend active. |
 | Railway | Backend health endpoints active. |

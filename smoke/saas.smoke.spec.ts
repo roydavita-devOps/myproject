@@ -245,6 +245,48 @@ test.describe('SaaS smoke test', () => {
 
     await api.dispose();
   });
+
+  test('validates clinic-sehat-sentosa clinic template across viewports', async ({ page, baseURL }) => {
+    const api = await request.newContext({ baseURL });
+    await ensureClinicSehatSentosaDemo(api);
+
+    const viewports = [
+      { name: 'mobile', width: 390, height: 844 },
+      { name: 'tablet', width: 768, height: 1024 },
+      { name: 'desktop', width: 1440, height: 1100 },
+    ];
+
+    for (const viewport of viewports) {
+      await test.step(`verify clinic template on ${viewport.name}`, async () => {
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        await page.goto('/site/clinic-sehat-sentosa');
+
+        await expect(page.getByText('Clinic professional website')).toBeVisible();
+        const hero = page.locator('#home');
+        await expect(hero.getByRole('link', { name: /book appointment/i })).toBeVisible();
+        await expect(hero.getByRole('link', { name: /view services/i })).toBeVisible();
+        await expect(page.getByText('Healthcare services patients can understand')).toBeVisible();
+        await expect(page.getByText('Healthcare professionals')).toBeVisible();
+        await expect(page.getByText('Appointment process')).toBeVisible();
+        await expect(page.getByText('Opening hours, location, and contact')).toBeVisible();
+        await expect(page.getByText('Need clinic information today?')).toBeVisible();
+
+        const ctas = page.locator('a[data-template-cta]');
+        const count = await ctas.count();
+        expect(count).toBeGreaterThan(0);
+
+        for (let index = 0; index < count; index += 1) {
+          const cta = ctas.nth(index);
+          await expect(cta).toBeVisible();
+          expect((await cta.textContent())?.trim().length ?? 0).toBeGreaterThan(0);
+          await expect(cta.locator('svg')).toHaveCount(1);
+          await expect(cta).toHaveAttribute('href', /.+/);
+        }
+      });
+    }
+
+    await api.dispose();
+  });
 });
 
 async function ensureWartegMoncerDemo(api: APIRequestContext) {
@@ -351,6 +393,82 @@ async function ensureLaundrySukaSukaDemo(api: APIRequestContext) {
 
   const publish = await api.patch(`/api/v1/websites/${website.id}/publish`, {
     headers: { Authorization: `Bearer ${session.accessToken}` },
+  });
+  expect(publish.ok()).toBeTruthy();
+}
+
+async function ensureClinicSehatSentosaDemo(api: APIRequestContext) {
+  const existing = await api.get('/api/v1/public/site/clinic-sehat-sentosa');
+  if (existing.ok()) {
+    const body = await existing.json();
+    if (body.whatsapp && body.phone && body.mapsUrl) return;
+  }
+
+  const email = 'admin@clinic-sehat-sentosa.demo';
+  const password = 'Password12345';
+  const tenantSlug = 'clinic-sehat-sentosa';
+
+  const register = await api.post('/api/v1/auth/register', {
+    data: {
+      businessName: 'Clinic Sehat Sentosa',
+      slug: tenantSlug,
+      adminName: 'Demo Admin',
+      email,
+      password,
+      businessType: 'CLINIC',
+    },
+  });
+
+  if (!register.ok()) {
+    const loginExisting = await api.post('/api/v1/auth/login', {
+      data: { email, password, tenantSlug },
+    });
+    expect(loginExisting.ok()).toBeTruthy();
+    await updateAndPublishClinicDemo(api, (await loginExisting.json()).accessToken);
+    return;
+  }
+
+  const login = await api.post('/api/v1/auth/login', {
+    data: { email, password, tenantSlug },
+  });
+  expect(login.ok()).toBeTruthy();
+  const session = await login.json();
+  await updateAndPublishClinicDemo(api, session.accessToken);
+}
+
+async function updateAndPublishClinicDemo(api: APIRequestContext, accessToken: string) {
+  const websites = await api.get('/api/v1/websites', {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  expect(websites.ok()).toBeTruthy();
+  const [website] = await websites.json();
+  expect(website?.id).toBeTruthy();
+
+  const update = await api.put(`/api/v1/websites/${website.id}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    data: {
+      businessName: 'Clinic Sehat Sentosa',
+      tagline: 'Professional medical care for families and local community.',
+      description: 'Clinic demo untuk validasi Clinic Professional Template dengan layanan medis, dokter, appointment, dan contact CTA.',
+      address: 'Jl. Sehat Sentosa No. 12, Jakarta',
+      phone: '02130001003',
+      whatsapp: '081230010030',
+      email: 'halo@clinic-sehat-sentosa.demo',
+      mapsUrl: 'https://maps.google.com',
+      openingHours: {
+        Monday: '08.00 - 20.00',
+        Tuesday: '08.00 - 20.00',
+        Wednesday: '08.00 - 20.00',
+        Thursday: '08.00 - 20.00',
+        Friday: '08.00 - 20.00',
+        Saturday: '08.00 - 16.00',
+      },
+    },
+  });
+  expect(update.ok()).toBeTruthy();
+
+  const publish = await api.patch(`/api/v1/websites/${website.id}/publish`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
   });
   expect(publish.ok()).toBeTruthy();
 }

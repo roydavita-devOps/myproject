@@ -52,6 +52,21 @@ tier: standard
 recommended_business_types: WARTEG, RESTAURANT, CAFE
 ```
 
+## Clinic Professional Example
+
+```text
+template_key: clinic_professional
+display_name: Clinic Professional
+description: Professional healthcare landing page designed for clinics and medical practices.
+industry: Healthcare
+category: Clinic
+renderer_key: clinic
+status: active
+preview_image: clinic-professional.jpg
+tier: standard
+recommended_business_types: CLINIC
+```
+
 ## Current Code Mapping
 
 The current registry uses TypeScript-friendly camelCase names.
@@ -64,10 +79,10 @@ The current registry uses TypeScript-friendly camelCase names.
 | `recommended_business_types` | `recommendedBusinessTypes` |
 | `status` | `status` |
 | `tier` | `tier` |
-| `description` | Not implemented yet. |
-| `industry` | Not implemented yet. |
-| `category` | Not implemented yet. |
-| `preview_image` | Not implemented yet. |
+| `description` | `description` |
+| `industry` | `industry` |
+| `category` | `category` |
+| `preview_image` | `previewImage` |
 
 ## Status Rules
 
@@ -98,6 +113,12 @@ Recommended future preview path:
 frontend/public/template-previews/<template_key>.jpg
 ```
 
+Current Stage 9.4 preview placeholder:
+
+```text
+frontend/public/template-previews/clinic-professional.jpg
+```
+
 Rules:
 
 - One preview image per registered template.
@@ -119,7 +140,7 @@ Future registry tests should enforce:
 
 ## Implementation Boundary
 
-This standard is documentation only for Stage 9.3B.
+Stage 9.4 implements the metadata contract in the frontend registry for current template entries and adds Clinic Professional preview placeholder support.
 
 It does not create:
 

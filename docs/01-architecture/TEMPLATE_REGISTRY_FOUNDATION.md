@@ -70,11 +70,11 @@ This allows the current database to keep working while future migrations add exp
 | `restaurant_premium` | `restaurant` | Planned. |
 | `restaurant_luxury` | `restaurant` | Planned. |
 | `laundry_clean` | `laundry` | Active. |
+| `clinic_professional` | `clinic` | Active. |
 | `minimal_business` | `generic_business` | Active fallback. |
 | `cafe_minimal` | `generic_business` | Planned. |
 | `cafe_modern` | `generic_business` | Planned. |
 | `cafe_premium` | `generic_business` | Planned. |
-| `clinic_professional` | `generic_business` | Planned. |
 | `corporate_executive` | `generic_business` | Planned. |
 
 ## Future Cross-Category Proof
@@ -117,10 +117,14 @@ Validated:
 - Legacy Warteg mapping.
 - Stable template key mapping.
 - Laundry legacy mapping.
+- Clinic legacy mapping.
+- Clinic schema key mapping.
+- Clinic renderer key mapping.
 - Planned premium key mapping.
 - Unknown key fallback.
 - Undefined, null, and empty schema fallback.
 - Active template metadata and renderer availability.
+- Catalog metadata completeness for every registered template.
 
 Test file:
 
@@ -131,5 +135,5 @@ frontend/src/features/templates/registry/__tests__/templateResolver.test.ts
 Current result:
 
 ```text
-12 resolver and registry tests passing
+15 resolver and registry tests passing
 ```

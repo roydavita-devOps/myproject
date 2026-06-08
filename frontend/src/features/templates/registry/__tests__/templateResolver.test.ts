@@ -78,6 +78,35 @@ describe('resolveTemplate', () => {
     expect(resolved.source).toBe('legacy-name');
   });
 
+  it('maps legacy clinic default templates to clinic_professional', () => {
+    const resolved = resolveTemplate(websiteWithTemplate({ name: 'clinic-default' }));
+
+    expect(resolved.metadata.key).toBe('clinic_professional');
+    expect(resolved.metadata.rendererKey).toBe('clinic');
+    expect(resolved.renderer).toBe(templateRegistry.getRenderer('clinic'));
+    expect(resolved.source).toBe('legacy-name');
+  });
+
+  it('resolves clinic_professional to the clinic renderer through schema key', () => {
+    const resolved = resolveTemplate(websiteWithTemplate({ schema: { templateKey: 'clinic_professional' } }));
+
+    expect(resolved.metadata.key).toBe('clinic_professional');
+    expect(resolved.metadata.displayName).toBe('Clinic Professional');
+    expect(resolved.metadata.status).toBe('active');
+    expect(resolved.metadata.rendererKey).toBe('clinic');
+    expect(resolved.renderer).toBe(templateRegistry.getRenderer('clinic'));
+    expect(resolved.source).toBe('schema-key');
+  });
+
+  it('resolves clinic renderer schema without business type branching', () => {
+    const resolved = resolveTemplate(websiteWithTemplate({ schema: { rendererKey: 'clinic' } }));
+
+    expect(resolved.metadata.key).toBe('clinic_professional');
+    expect(resolved.metadata.rendererKey).toBe('clinic');
+    expect(resolved.renderer).toBe(templateRegistry.getRenderer('clinic'));
+    expect(resolved.source).toBe('schema-renderer');
+  });
+
   it('handles undefined template metadata safely', () => {
     const resolved = resolveTemplate(websiteWithTemplate());
 
@@ -135,6 +164,10 @@ describe('template registry integrity', () => {
       const metadata = templateMetadata[key];
       expect(metadata.key).toBe(key);
       expect(metadata.displayName.trim().length).toBeGreaterThan(0);
+      expect(metadata.description.trim().length).toBeGreaterThan(0);
+      expect(metadata.industry.trim().length).toBeGreaterThan(0);
+      expect(metadata.category.trim().length).toBeGreaterThan(0);
+      expect(metadata.previewImage.trim().length).toBeGreaterThan(0);
       expect(metadata.recommendedBusinessTypes.length).toBeGreaterThan(0);
       expect(templateRegistry.getRenderer(metadata.rendererKey)).toBeTypeOf('function');
     }

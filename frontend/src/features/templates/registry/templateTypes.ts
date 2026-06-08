@@ -13,14 +13,18 @@ export type TemplateKey =
   | 'corporate_executive'
   | 'minimal_business';
 
-export type TemplateRendererKey = 'restaurant' | 'laundry' | 'generic_business';
+export type TemplateRendererKey = 'restaurant' | 'laundry' | 'clinic' | 'generic_business';
 
 export type TemplateTier = 'standard' | 'premium' | 'luxury';
 
 export type TemplateMetadata = {
   key: TemplateKey;
   displayName: string;
+  description: string;
+  industry: string;
+  category: string;
   rendererKey: TemplateRendererKey;
+  previewImage: string;
   tier: TemplateTier;
   recommendedBusinessTypes: string[];
   status: 'active' | 'planned';

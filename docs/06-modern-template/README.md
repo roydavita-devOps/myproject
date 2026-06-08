@@ -22,6 +22,7 @@ Current status:
 - Stage 9.2B Template Registry Validation & Test Coverage completed.
 - Sprint 3 Laundry Template completed.
 - Stage 9.3B Template Catalog Readiness Audit completed and tracked in architecture/product documentation.
+- Sprint 4 Clinic Professional Template completed and awaiting approval.
 
 Evidence:
 
