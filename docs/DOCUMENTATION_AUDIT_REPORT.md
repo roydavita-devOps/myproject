@@ -128,7 +128,7 @@ Classification values:
 | --- | --- | --- | --- | --- | --- |
 | `05-QA-signoff-Release-Candidate-Validation` | `# Stage 6 - QA Sign-Off & Release Candidate Validation.md` | Audit | Stage 6 QA sign-off source brief. | Active audit reference. | MOVE |
 | `05-QA-signoff-Release-Candidate-Validation` | `# STAGE 6.1 - QA REMEDIATION PROGRAM.md` | Audit | QA remediation program source brief. | Historical plan. | ARCHIVE |
-| `05-QA-signoff-Release-Candidate-Validation` | `# STAGE 6.2 - Product Scope Clarification.md` | Project, Business | Product scope decision; tenant switch deferred. | Active decision reference. | MERGE |
+| `05-QA-signoff-Release-Candidate-Validation` | `# STAGE 6.2 - Product Scope Clarification.md` | Project, Business, QA | Product scope decision; tenant switch deferred. | Active QA sign-off evidence and decision reference. | KEEP |
 | `05-QA-signoff-Release-Candidate-Validation` | `Phase-9F.1-Website-Persistence-Remediation-Report.md` | Audit | Website persistence remediation report. | Historical evidence. | MOVE |
 | `05-QA-signoff-Release-Candidate-Validation` | `Phase-9F.2-Media-Deletion-Remediation-Report.md` | Audit | Media deletion remediation report. | Historical evidence. | MOVE |
 | `05-QA-signoff-Release-Candidate-Validation` | `Phase-9F.3-Lint-Code-Quality-Remediation-Report.md` | Audit | Lint/code quality remediation report. | Historical evidence. | MOVE |

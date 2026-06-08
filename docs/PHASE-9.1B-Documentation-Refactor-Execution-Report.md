@@ -51,7 +51,7 @@ Execution report:
 Project strategy:
 
 - `docs/01-master-development/Master&Development.md` -> `docs/00-project/MASTER_PRODUCT_STRATEGY.md`
-- `docs/05-QA-signoff-Release-Candidate-Validation/# STAGE 6.2 - Product Scope Clarification.md` -> `docs/00-project/# STAGE 6.2 - Product Scope Clarification.md`
+- `docs/05-QA-signoff-Release-Candidate-Validation/# STAGE 6.2 - Product Scope Clarification.md` remains in the QA sign-off folder as the original Stage 6.2 record.
 
 Architecture:
 

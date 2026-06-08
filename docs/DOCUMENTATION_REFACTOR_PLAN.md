@@ -307,7 +307,7 @@ Merge means copy the active decision/status content into new knowledge-base docu
 | Source | Merge target | Reason |
 | --- | --- | --- |
 | `docs/README.md` | `docs/README.md`, `docs/00-project/PROJECT_STATUS.md`, `docs/00-project/ROADMAP.md` | Current index has useful folder summary but outdated status. |
-| `docs/05-QA-signoff-Release-Candidate-Validation/# STAGE 6.2 - Product Scope Clarification.md` | `docs/00-project/DECISIONS.md`, `docs/00-project/PROJECT_STATUS.md`, `docs/00-project/ROADMAP.md` | Tenant Switch deferral is a product decision, not only QA history. |
+| `docs/05-QA-signoff-Release-Candidate-Validation/# STAGE 6.2 - Product Scope Clarification.md` | Keep original Stage 6.2 record in QA sign-off folder; summarize decision in `docs/00-project/DECISIONS.md`, `docs/00-project/PROJECT_STATUS.md`, and `docs/00-project/ROADMAP.md`. | Tenant Switch deferral is a product decision and QA sign-off evidence. |
 | Stage 8 reports | `docs/05-authentication/AUTHENTICATION_OVERVIEW.md` | Auth stage should have one readable overview. |
 | Stage 9 reports | `docs/06-modern-template/MODERN_TEMPLATE_SYSTEM.md` and `docs/06-modern-template/TEMPLATE_MARKETPLACE_STRATEGY.md` | Template direction should be readable without opening every sprint report. |
 | Deployment reports | `docs/03-deployment/README.md` | Deployment status needs a single operational index. |
