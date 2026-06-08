@@ -169,6 +169,22 @@ Reason:
 - Consistency gaps in standard templates can compound during premium expansion.
 - Evidence and documentation must remain auditable before commercial launch.
 
+## Basic Template Quality Baseline Approved
+
+Status: Approved.
+
+Decision:
+
+- Restaurant Classic and Laundry Clean must follow the same fallback, preview, and section-quality baseline as newer active templates.
+- Standard templates must include value propositions, fallback testimonials, fallback gallery content, business hours fallback, and a credibility section or team equivalent.
+- Missing preview assets for active templates are not acceptable before Premium Expansion.
+
+Reason:
+
+- Premium and Luxury templates should inherit from a stable quality baseline.
+- Catalog readiness depends on every active template having complete preview support.
+- Older templates must not remain below the active portfolio standard.
+
 ## Future Template Marketplace
 
 Decision:

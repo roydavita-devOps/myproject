@@ -143,9 +143,11 @@ Recommended future preview path:
 frontend/public/template-previews/<template_key>.jpg
 ```
 
-Current Stage 9.4 preview placeholder:
+Current active-template preview placeholders:
 
 ```text
+frontend/public/template-previews/restaurant_classic.jpg
+frontend/public/template-previews/laundry_clean.jpg
 frontend/public/template-previews/clinic-professional.jpg
 frontend/public/template-previews/corporate-executive.jpg
 frontend/public/template-previews/cafe-modern.jpg
@@ -172,7 +174,7 @@ Future registry tests should enforce:
 
 ## Implementation Boundary
 
-Stage 9.4 implements the metadata contract in the frontend registry for current template entries and adds Clinic Professional preview placeholder support.
+Stage 9.6B completes preview placeholder support for the active template baseline and standardizes Restaurant Classic and Laundry Clean fallback sections.
 
 It does not create:
 

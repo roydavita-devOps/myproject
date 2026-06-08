@@ -4,9 +4,9 @@ Last updated: 2026-06-08
 
 ## Current Stage
 
-Stage 9.6A - Template Consistency Audit.
+Stage 9.6B - Basic Template Standardization.
 
-Status: audit completed and ready for approval.
+Status: implemented and ready for approval.
 
 ## Completed Stages
 
@@ -36,21 +36,22 @@ Status: audit completed and ready for approval.
 | Stage 9.4 Clinic Professional Template | Completed. |
 | Stage 9.5 Corporate Executive Template | Completed. |
 | Stage 9.6 Cafe Modern Template | Completed. |
-| Stage 9.6A Template Consistency Audit | Completed; awaiting approval. |
+| Stage 9.6A Template Consistency Audit | Completed. |
+| Stage 9.6B Basic Template Standardization | Completed; awaiting approval. |
 
 ## Current Blockers
 
 | Blocker | Status | Notes |
 | --- | --- | --- |
 | Email production activation | Pending | Requires final domain, verified sender, and production email environment values. |
-| Template consistency gaps | Pending | Restaurant and Laundry preview/fallback gaps are documented in Stage 9.6A audit. |
+| Template consistency gaps | Resolved | Restaurant and Laundry preview/fallback gaps were addressed in Stage 9.6B. |
 | Future template stages | Paused | Stage 9.7 and later template work must wait for approval. |
 
 ## Next Actions
 
-1. Review Stage 9.6A Template Consistency Audit.
-2. Decide whether Restaurant and Laundry preview/fallback gaps must be fixed before Stage 9.7.
-3. Approve or request corrections to the audit findings.
+1. Review Stage 9.6B Basic Template Standardization.
+2. Approve or request corrections to Restaurant and Laundry standardization.
+3. Confirm whether Premium Expansion can proceed after approval.
 4. After approval, proceed only to the next approved stage.
 5. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
 
@@ -58,7 +59,7 @@ Status: audit completed and ready for approval.
 
 | System | Current Status |
 | --- | --- |
-| Local Docker | Running and validated through Stage 9.5 + 9.6 implementation; Stage 9.6A is docs-only audit. |
+| Local Docker | Running and validated during Stage 9.6B. |
 | GitHub | Latest code and documentation branch strategy uses `main`, `staging`, and `pilot`. |
 | Vercel | Production frontend active. |
 | Railway | Backend health endpoints active. |

@@ -189,18 +189,12 @@ test.describe('SaaS smoke test', () => {
         await expect(hero.getByRole('link', { name: /get directions/i })).toBeVisible();
         await expect(page.locator('#contact a[data-template-cta]').first()).toBeVisible();
         await expect(page.locator('footer a[data-template-cta]').first()).toBeVisible();
+        await expect(page.getByText('Why choose us')).toBeVisible();
+        await expect(page.getByText('Our quality commitment')).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Gallery' })).toBeVisible();
+        await expect(page.getByText('Business information')).toBeVisible();
 
-        const ctas = page.locator('a[data-template-cta]');
-        const count = await ctas.count();
-        expect(count).toBeGreaterThan(0);
-
-        for (let index = 0; index < count; index += 1) {
-          const cta = ctas.nth(index);
-          await expect(cta).toBeVisible();
-          expect((await cta.textContent())?.trim().length ?? 0).toBeGreaterThan(0);
-          await expect(cta.locator('svg')).toHaveCount(1);
-          await expect(cta).toHaveAttribute('href', /.+/);
-        }
+        await assertTemplateCtas(page);
       });
     }
 
@@ -226,20 +220,14 @@ test.describe('SaaS smoke test', () => {
         await expect(page.getByRole('link', { name: /schedule pickup/i })).toBeVisible();
         await expect(page.getByRole('link', { name: /view services/i })).toBeVisible();
         await expect(page.getByText('Layanan laundry yang mudah dipilih')).toBeVisible();
+        await expect(page.getByText('Why choose us')).toBeVisible();
         await expect(page.getByText('Pickup & delivery')).toBeVisible();
         await expect(page.getByText('Process timeline')).toBeVisible();
+        await expect(page.getByText('Our laundry process')).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Gallery' })).toBeVisible();
+        await expect(page.getByText('Business information')).toBeVisible();
 
-        const ctas = page.locator('a[data-template-cta]');
-        const count = await ctas.count();
-        expect(count).toBeGreaterThan(0);
-
-        for (let index = 0; index < count; index += 1) {
-          const cta = ctas.nth(index);
-          await expect(cta).toBeVisible();
-          expect((await cta.textContent())?.trim().length ?? 0).toBeGreaterThan(0);
-          await expect(cta.locator('svg')).toHaveCount(1);
-          await expect(cta).toHaveAttribute('href', /.+/);
-        }
+        await assertTemplateCtas(page);
       });
     }
 

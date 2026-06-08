@@ -1,4 +1,4 @@
-import { Clock, MapPin, MessageCircle, PackageCheck, Phone, ShieldCheck, Sparkles, Truck, WashingMachine } from 'lucide-react';
+import { CheckCircle2, Clock, Images, MapPin, MessageCircle, PackageCheck, Phone, ShieldCheck, Sparkles, Truck, WashingMachine } from 'lucide-react';
 import { Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
 import { normalizeTemplateAction, resolveContactActions, TemplateAction, validateTemplateActions } from './templateActions';
@@ -42,9 +42,22 @@ const defaultLaundryItems: LaundryDisplayItem[] = [
   },
 ];
 
+const defaultLaundryReviews = [
+  { id: 'laundry-review-1', customerName: 'Pelanggan Pickup', rating: 5, comment: 'Jadwal pickup mudah, cucian kembali rapi, dan komunikasi lewat WhatsApp jelas.' },
+  { id: 'laundry-review-2', customerName: 'Pelanggan Harian', rating: 5, comment: 'Pakaian wangi dan selesai tepat waktu. Harga juga mudah dipahami.' },
+  { id: 'laundry-review-3', customerName: 'Pelanggan Keluarga', rating: 5, comment: 'Layanan bed cover dan pakaian harian praktis untuk kebutuhan rumah.' },
+];
+
+const laundryGalleryFallbacks = [
+  { title: 'Wash process', description: 'Visual proses pencucian untuk memperkuat kepercayaan pelanggan.' },
+  { title: 'Neat folding', description: 'Area visual untuk hasil lipatan, kemasan, dan pakaian rapi.' },
+  { title: 'Pickup ready', description: 'Tampilkan layanan antar jemput dan kemudahan service area.' },
+];
+
 export function LaundryTemplate({ website }: { website: Website }) {
   const services = (website.menus?.length ? website.menus : defaultLaundryItems) as LaundryDisplayItem[];
   const primaryAction = resolveContactActions(website)[0];
+  const reviews = website.reviews?.length ? website.reviews : defaultLaundryReviews;
 
   return (
     <>
@@ -52,14 +65,39 @@ export function LaundryTemplate({ website }: { website: Website }) {
       <LaundryHero website={website} />
       <LaundryServices items={services} cta={primaryAction} />
       <LaundryPricing items={services} />
+      <LaundryWhyChooseUs />
       <PickupDelivery website={website} />
       <ProcessTimeline />
-      <TemplateTestimonials reviews={website.reviews ?? []} />
-      <TemplateGallery items={website.galleries ?? []} businessName={website.businessName} cta={primaryAction} />
+      <QualityAssurance />
+      <TemplateTestimonials reviews={reviews} />
+      <LaundryGallery website={website} cta={primaryAction} />
+      <LaundryBusinessInfo website={website} />
       <LaundryContactCTA website={website} />
       <TemplateContactSection website={website} />
       <TemplateFooter website={website} />
     </>
+  );
+}
+
+function LaundryWhyChooseUs() {
+  const items = [
+    { title: 'Fast Turnaround', description: 'Pelanggan melihat layanan yang dirancang untuk kebutuhan cucian harian yang cepat.' },
+    { title: 'Quality Control', description: 'Proses cuci, lipat, dan kemas ditampilkan sebagai bagian dari standar layanan.' },
+    { title: 'Pickup Available', description: 'CTA dan service area menonjolkan kemudahan antar jemput cucian.' },
+  ];
+
+  return (
+    <TemplateSection title="Why choose us" description="Service strengths dibuat eksplisit agar Laundry Clean setara dengan template modern lain.">
+      <div className="grid gap-4 md:grid-cols-3">
+        {items.map((item) => (
+          <TemplateCard key={item.title} className="min-h-44">
+            <CheckCircle2 className="mb-4 size-5 text-[var(--tpl-primary)]" />
+            <h3 className="tpl-h3 tenant-heading">{item.title}</h3>
+            <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{item.description}</p>
+          </TemplateCard>
+        ))}
+      </div>
+    </TemplateSection>
   );
 }
 
@@ -213,6 +251,81 @@ function ProcessTimeline() {
   );
 }
 
+function QualityAssurance() {
+  const items = [
+    { title: 'Sort', description: 'Cucian diterima dan dipilah sesuai jenis layanan.' },
+    { title: 'Wash', description: 'Proses cuci disesuaikan dengan kebutuhan pakaian pelanggan.' },
+    { title: 'Check', description: 'Hasil akhir dicek sebelum dilipat atau dikemas.' },
+  ];
+
+  return (
+    <TemplateSection eyebrow="Quality assurance" title="Our laundry process" description="Team equivalent untuk laundry: kredibilitas ditunjukkan lewat proses kerja dan quality control.">
+      <div className="grid gap-4 md:grid-cols-3">
+        {items.map((item, index) => (
+          <TemplateCard key={item.title}>
+            <p className="flex size-9 items-center justify-center rounded-full bg-[var(--tpl-primary)] text-sm font-semibold text-white">{index + 1}</p>
+            <h3 className="tpl-h3 tenant-heading mt-4">{item.title}</h3>
+            <p className="tpl-body mt-2 text-[var(--tpl-text-secondary)]">{item.description}</p>
+          </TemplateCard>
+        ))}
+      </div>
+    </TemplateSection>
+  );
+}
+
+function LaundryGallery({ website, cta }: { website: Website; cta?: TemplateAction }) {
+  if (website.galleries?.length) {
+    return <TemplateGallery items={website.galleries} businessName={website.businessName} cta={cta} />;
+  }
+
+  const normalizedCta = normalizeTemplateAction(cta);
+
+  return (
+    <TemplateSection id="gallery" muted eyebrow="Laundry visuals" title="Gallery" description="Fallback gallery menjaga halaman tetap lengkap saat tenant belum mengunggah foto.">
+      <div className="grid gap-4 md:grid-cols-3">
+        {laundryGalleryFallbacks.map((item) => (
+          <TemplateCard key={item.title}>
+            <div className="mb-5 flex aspect-[4/3] items-center justify-center rounded-md bg-[var(--tpl-primary)]/10 text-[var(--tpl-primary)]">
+              <Images className="size-8" />
+            </div>
+            <h3 className="tpl-h3 tenant-heading">{item.title}</h3>
+            <p className="tpl-body mt-2 text-[var(--tpl-text-secondary)]">{item.description}</p>
+          </TemplateCard>
+        ))}
+      </div>
+      {normalizedCta && (
+        <div className="mt-8">
+          <TemplateButton {...normalizedCta} />
+        </div>
+      )}
+    </TemplateSection>
+  );
+}
+
+function LaundryBusinessInfo({ website }: { website: Website }) {
+  return (
+    <TemplateSection title="Business information" description="Alamat, telepon, dan jam operasional tetap tampil walaupun tenant belum mengisi semua data.">
+      <div className="grid gap-4 md:grid-cols-3">
+        <TemplateCard>
+          <MapPin className="mb-4 size-5 text-[var(--tpl-primary)]" />
+          <h3 className="tpl-h3 tenant-heading">Address</h3>
+          <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{website.address ?? 'Alamat laundry dapat ditampilkan untuk pelanggan lokal.'}</p>
+        </TemplateCard>
+        <TemplateCard>
+          <Phone className="mb-4 size-5 text-[var(--tpl-primary)]" />
+          <h3 className="tpl-h3 tenant-heading">Phone</h3>
+          <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{website.phone ?? website.whatsapp ?? 'Nomor telepon atau WhatsApp dapat ditampilkan di sini.'}</p>
+        </TemplateCard>
+        <TemplateCard>
+          <Clock className="mb-4 size-5 text-[var(--tpl-primary)]" />
+          <h3 className="tpl-h3 tenant-heading">Hours</h3>
+          <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{formatOpeningHours(website.openingHours)}</p>
+        </TemplateCard>
+      </div>
+    </TemplateSection>
+  );
+}
+
 function LaundryContactCTA({ website }: { website: Website }) {
   const actions = resolveContactActions(website).filter((action) => action.label !== 'Maps');
   if (actions.length === 0) return null;
@@ -242,4 +355,12 @@ function resolveLaundryHeroActions(website: Website) {
     { action: 'menu', label: 'View Services', href: '#services', icon: <WashingMachine className="size-4" />, variant: 'secondary' },
     phone ? { ...phone, label: 'Call Laundry', variant: 'tertiary' } : null,
   ]);
+}
+
+function formatOpeningHours(openingHours?: Record<string, unknown> | null) {
+  if (!openingHours || Object.keys(openingHours).length === 0) return 'Monday - Saturday, 08.00 - 20.00';
+
+  return Object.entries(openingHours)
+    .map(([day, value]) => `${day}: ${String(value)}`)
+    .join(', ');
 }
