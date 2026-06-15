@@ -14,10 +14,12 @@ import {
   TemplateTestimonials,
 } from '../TemplateComponents';
 import { RestaurantTemplate } from '../RestaurantTemplate';
+import { RestaurantPremiumTemplate } from '../RestaurantPremiumTemplate';
 import { LaundryTemplate } from '../LaundryTemplate';
 import { ClinicTemplate } from '../ClinicTemplate';
 import { CorporateTemplate } from '../CorporateTemplate';
 import { CafeTemplate } from '../CafeTemplate';
+import { CafePremiumTemplate } from '../CafePremiumTemplate';
 import { defaultTemplateKey, templateMetadata } from './templateMetadata';
 import { TemplateRenderer, TemplateRendererKey } from './templateTypes';
 
@@ -41,10 +43,12 @@ function GenericBusinessTemplate({ website }: { website: Website }) {
 
 const renderers: Record<TemplateRendererKey, TemplateRenderer> = {
   restaurant: RestaurantTemplate,
+  restaurant_premium: RestaurantPremiumTemplate,
   laundry: LaundryTemplate,
   clinic: ClinicTemplate,
   corporate: CorporateTemplate,
   cafe: CafeTemplate,
+  cafe_premium: CafePremiumTemplate,
   generic_business: GenericBusinessTemplate,
 };
 

@@ -1,10 +1,10 @@
 # Project Status
 
-Last updated: 2026-06-08
+Last updated: 2026-06-15
 
 ## Current Stage
 
-Stage 9.6B - Basic Template Standardization.
+Stage 9.7 - Premium Template Expansion.
 
 Status: implemented and ready for approval.
 
@@ -37,7 +37,8 @@ Status: implemented and ready for approval.
 | Stage 9.5 Corporate Executive Template | Completed. |
 | Stage 9.6 Cafe Modern Template | Completed. |
 | Stage 9.6A Template Consistency Audit | Completed. |
-| Stage 9.6B Basic Template Standardization | Completed; awaiting approval. |
+| Stage 9.6B Basic Template Standardization | Completed. |
+| Stage 9.7 Premium Template Expansion | Implemented Restaurant Premium and Cafe Premium; awaiting approval. |
 
 ## Current Blockers
 
@@ -45,13 +46,14 @@ Status: implemented and ready for approval.
 | --- | --- | --- |
 | Email production activation | Pending | Requires final domain, verified sender, and production email environment values. |
 | Template consistency gaps | Resolved | Restaurant and Laundry preview/fallback gaps were addressed in Stage 9.6B. |
-| Future template stages | Paused | Stage 9.7 and later template work must wait for approval. |
+| Luxury templates | Paused | No Luxury template implementation until separately approved. |
+| Template Catalog UI | Paused | No marketplace, switching UI, entitlement, or subscription access logic in Stage 9.7. |
 
 ## Next Actions
 
-1. Review Stage 9.6B Basic Template Standardization.
-2. Approve or request corrections to Restaurant and Laundry standardization.
-3. Confirm whether Premium Expansion can proceed after approval.
+1. Review Stage 9.7 Premium Template Expansion.
+2. Approve or request corrections to Restaurant Premium and Cafe Premium.
+3. Keep Luxury, Catalog UI, marketplace, subscription, and entitlement work paused until separately approved.
 4. After approval, proceed only to the next approved stage.
 5. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
 

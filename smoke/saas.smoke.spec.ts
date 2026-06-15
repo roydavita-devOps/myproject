@@ -341,6 +341,76 @@ test.describe('SaaS smoke test', () => {
 
     await api.dispose();
   });
+
+  test('validates restaurant premium template sections across viewports', async ({ page, baseURL }) => {
+    await page.route('**/api/v1/public/site/restaurant-premium-demo', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(buildPremiumWebsitePayload('restaurant_premium')),
+      });
+    });
+
+    const viewports = [
+      { name: 'mobile', width: 390, height: 844 },
+      { name: 'tablet', width: 768, height: 1024 },
+      { name: 'desktop', width: 1440, height: 1100 },
+    ];
+
+    for (const viewport of viewports) {
+      await test.step(`verify restaurant premium on ${viewport.name}`, async () => {
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        await page.goto(`${baseURL}/site/restaurant-premium-demo`);
+
+        await expect(page.locator('main')).toHaveAttribute('data-template-key', 'restaurant_premium');
+        await expect(page.getByText('Restaurant premium website')).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Chef Story' })).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Signature Dishes' })).toBeVisible();
+        await expect(page.getByText('Reserve your table tonight')).toBeVisible();
+        const hero = page.locator('#home');
+        await expect(hero.getByRole('link', { name: /reserve table/i })).toBeVisible();
+        await expect(hero.getByRole('link', { name: /explore signature dishes/i })).toBeVisible();
+        await expect(hero.getByRole('link', { name: /get directions/i })).toBeVisible();
+
+        await assertTemplateCtas(page);
+      });
+    }
+  });
+
+  test('validates cafe premium template sections across viewports', async ({ page, baseURL }) => {
+    await page.route('**/api/v1/public/site/cafe-premium-demo', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(buildPremiumWebsitePayload('cafe_premium')),
+      });
+    });
+
+    const viewports = [
+      { name: 'mobile', width: 390, height: 844 },
+      { name: 'tablet', width: 768, height: 1024 },
+      { name: 'desktop', width: 1440, height: 1100 },
+    ];
+
+    for (const viewport of viewports) {
+      await test.step(`verify cafe premium on ${viewport.name}`, async () => {
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        await page.goto(`${baseURL}/site/cafe-premium-demo`);
+
+        await expect(page.locator('main')).toHaveAttribute('data-template-key', 'cafe_premium');
+        await expect(page.getByText('Cafe premium website')).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Brand Story' })).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Signature Menu' })).toBeVisible();
+        await expect(page.getByText('Plan your next premium cafe visit')).toBeVisible();
+        const hero = page.locator('#home');
+        await expect(hero.getByRole('link', { name: /chat cafe/i })).toBeVisible();
+        await expect(hero.getByRole('link', { name: /view signature menu/i })).toBeVisible();
+        await expect(hero.getByRole('link', { name: /get directions/i })).toBeVisible();
+
+        await assertTemplateCtas(page);
+      });
+    }
+  });
 });
 
 async function assertTemplateCtas(page: Page) {
@@ -355,6 +425,65 @@ async function assertTemplateCtas(page: Page) {
     await expect(cta.locator('svg')).toHaveCount(1);
     await expect(cta).toHaveAttribute('href', /.+/);
   }
+}
+
+function buildPremiumWebsitePayload(templateKey: 'restaurant_premium' | 'cafe_premium') {
+  const isRestaurant = templateKey === 'restaurant_premium';
+
+  return {
+    id: `${templateKey}-website`,
+    tenantId: `${templateKey}-tenant`,
+    tenant: { slug: isRestaurant ? 'restaurant-premium-demo' : 'cafe-premium-demo' },
+    templateId: `${templateKey}-template`,
+    themeId: `${templateKey}-theme`,
+    status: 'PUBLISHED',
+    businessName: isRestaurant ? 'Restaurant Premium Demo' : 'Cafe Premium Demo',
+    tagline: isRestaurant ? 'Curated dining for memorable local occasions.' : 'Specialty coffee, brunch, and slow everyday moments.',
+    description: isRestaurant
+      ? 'Premium restaurant validation tenant for chef story, signature dishes, reservation CTA, gallery, reviews, and contact flows.'
+      : 'Premium cafe validation tenant for brand story, signature menu, visit planning, gallery, reviews, and contact flows.',
+    address: isRestaurant ? 'Jl. Premium Dining No. 17, Jakarta' : 'Jl. Kopi Premium No. 21, Bandung',
+    phone: isRestaurant ? '02160001006' : '02260001007',
+    whatsapp: isRestaurant ? '081260010060' : '081270010070',
+    email: isRestaurant ? 'reserve@restaurant-premium.demo' : 'hello@cafe-premium.demo',
+    mapsUrl: 'https://maps.google.com',
+    openingHours: {
+      Monday: isRestaurant ? '11.00 - 22.00' : '08.00 - 23.00',
+      Tuesday: isRestaurant ? '11.00 - 22.00' : '08.00 - 23.00',
+      Wednesday: isRestaurant ? '11.00 - 22.00' : '08.00 - 23.00',
+      Thursday: isRestaurant ? '11.00 - 22.00' : '08.00 - 23.00',
+      Friday: isRestaurant ? '11.00 - 23.00' : '08.00 - 24.00',
+      Saturday: isRestaurant ? '10.00 - 23.00' : '08.00 - 24.00',
+      Sunday: isRestaurant ? '10.00 - 22.00' : '09.00 - 23.00',
+    },
+    template: {
+      id: `${templateKey}-template`,
+      name: templateKey,
+      businessType: isRestaurant ? 'RESTAURANT' : 'CAFE',
+      schema: { templateKey, rendererKey: templateKey },
+    },
+    theme: {
+      id: `${templateKey}-theme`,
+      name: `${templateKey} theme`,
+      primaryColor: isRestaurant ? '#1f2937' : '#0f766e',
+      secondaryColor: isRestaurant ? '#f7c873' : '#f97316',
+      accentColor: isRestaurant ? '#0f766e' : '#facc15',
+    },
+    menus: isRestaurant
+      ? [
+          { id: 'rp-menu-1', websiteId: `${templateKey}-website`, name: 'Chef Signature Rice Set', description: 'House signature rice with curated sides.', price: '58000', sortOrder: 1 },
+          { id: 'rp-menu-2', websiteId: `${templateKey}-website`, name: 'Slow Cooked Beef Plate', description: 'Tender beef with aromatic spices.', price: '68000', sortOrder: 2 },
+          { id: 'rp-menu-3', websiteId: `${templateKey}-website`, name: 'Seasonal Family Platter', description: 'Shareable premium platter.', price: '128000', sortOrder: 3 },
+        ]
+      : [
+          { id: 'cp-menu-1', websiteId: `${templateKey}-website`, name: 'House Reserve Latte', description: 'Espresso blend with balanced house syrup.', price: '42000', sortOrder: 1 },
+          { id: 'cp-menu-2', websiteId: `${templateKey}-website`, name: 'Single Origin Pour Over', description: 'Rotating beans brewed by hand.', price: '48000', sortOrder: 2 },
+          { id: 'cp-menu-3', websiteId: `${templateKey}-website`, name: 'Weekend Brunch Plate', description: 'Warm toast with seasonal garnish.', price: '68000', sortOrder: 3 },
+          { id: 'cp-menu-4', websiteId: `${templateKey}-website`, name: 'Craft Mocktail Coffee', description: 'Bright non-alcoholic coffee drink.', price: '46000', sortOrder: 4 },
+        ],
+    galleries: [],
+    reviews: [],
+  };
 }
 
 async function ensureWartegMoncerDemo(api: APIRequestContext) {

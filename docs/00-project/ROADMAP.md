@@ -1,6 +1,6 @@
 # Roadmap
 
-Last updated: 2026-06-08
+Last updated: 2026-06-15
 
 ## Completed
 
@@ -31,10 +31,12 @@ Last updated: 2026-06-08
 - Stage 9.6 Cafe Modern Template.
 - Stage 9.6A Template Consistency Audit.
 - Stage 9.6B Basic Template Standardization.
+- Stage 9.7 Premium Template Expansion: Restaurant Premium and Cafe Premium.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
+- Stage 9.7 validation and approval checkpoint.
 
 ## Planned
 

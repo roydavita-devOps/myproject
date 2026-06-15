@@ -50,6 +50,26 @@ describe('resolveTemplate', () => {
     expect(resolved.source).toBe('template-name');
   });
 
+  it('resolves restaurant_premium to the restaurant_premium renderer through schema key', () => {
+    const resolved = resolveTemplate(websiteWithTemplate({ schema: { templateKey: 'restaurant_premium' } }));
+
+    expect(resolved.metadata.key).toBe('restaurant_premium');
+    expect(resolved.metadata.displayName).toBe('Restaurant Premium');
+    expect(resolved.metadata.status).toBe('active');
+    expect(resolved.metadata.rendererKey).toBe('restaurant_premium');
+    expect(resolved.renderer).toBe(templateRegistry.getRenderer('restaurant_premium'));
+    expect(resolved.source).toBe('schema-key');
+  });
+
+  it('resolves restaurant_premium renderer schema without business type branching', () => {
+    const resolved = resolveTemplate(websiteWithTemplate({ schema: { rendererKey: 'restaurant_premium' } }));
+
+    expect(resolved.metadata.key).toBe('restaurant_premium');
+    expect(resolved.metadata.rendererKey).toBe('restaurant_premium');
+    expect(resolved.renderer).toBe(templateRegistry.getRenderer('restaurant_premium'));
+    expect(resolved.source).toBe('schema-renderer');
+  });
+
   it('resolves planned premium keys without requiring template implementation', () => {
     const resolved = resolveTemplate(websiteWithTemplate({ schema: { templateKey: 'restaurant_luxury' } }));
 
@@ -154,6 +174,26 @@ describe('resolveTemplate', () => {
     expect(resolved.metadata.rendererKey).toBe('cafe');
     expect(resolved.renderer).toBe(templateRegistry.getRenderer('cafe'));
     expect(resolved.source).toBe('schema-key');
+  });
+
+  it('resolves cafe_premium to the cafe_premium renderer through schema key', () => {
+    const resolved = resolveTemplate(websiteWithTemplate({ schema: { templateKey: 'cafe_premium' } }));
+
+    expect(resolved.metadata.key).toBe('cafe_premium');
+    expect(resolved.metadata.displayName).toBe('Cafe Premium');
+    expect(resolved.metadata.status).toBe('active');
+    expect(resolved.metadata.rendererKey).toBe('cafe_premium');
+    expect(resolved.renderer).toBe(templateRegistry.getRenderer('cafe_premium'));
+    expect(resolved.source).toBe('schema-key');
+  });
+
+  it('resolves cafe_premium renderer schema without business type branching', () => {
+    const resolved = resolveTemplate(websiteWithTemplate({ schema: { rendererKey: 'cafe_premium' } }));
+
+    expect(resolved.metadata.key).toBe('cafe_premium');
+    expect(resolved.metadata.rendererKey).toBe('cafe_premium');
+    expect(resolved.renderer).toBe(templateRegistry.getRenderer('cafe_premium'));
+    expect(resolved.source).toBe('schema-renderer');
   });
 
   it('resolves cafe renderer schema without business type branching', () => {

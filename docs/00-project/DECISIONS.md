@@ -185,6 +185,23 @@ Reason:
 - Catalog readiness depends on every active template having complete preview support.
 - Older templates must not remain below the active portfolio standard.
 
+## Premium Template Line Approved
+
+Status: Approved for Stage 9.7 implementation.
+
+Decision:
+
+- Restaurant Premium and Cafe Premium are implemented as active premium templates.
+- Premium tier remains metadata only at this stage.
+- Premium renderer identity is explicit through `restaurant_premium` and `cafe_premium`.
+- No Template Catalog UI, marketplace, template switching, entitlement, subscription enforcement, billing, database schema change, or Prisma migration is introduced by Stage 9.7.
+
+Reason:
+
+- Premium templates create a commercial-quality portfolio layer without changing access control.
+- Explicit renderer keys keep premium template expansion aligned with the registry architecture.
+- Premium differentiation can be validated before marketplace and subscription features are approved.
+
 ## Future Template Marketplace
 
 Decision:
