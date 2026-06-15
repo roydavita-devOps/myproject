@@ -18,6 +18,10 @@ export type AddGalleryItemPayload = {
   altText?: string;
 };
 
+export type AssignTemplatePayload = {
+  templateKey: string;
+};
+
 export const websitesApi = {
   async list() {
     const { data } = await http.get<Website[]>('/websites');
@@ -29,6 +33,10 @@ export const websitesApi = {
   },
   async update(id: string, payload: UpdateWebsitePayload) {
     const { data } = await http.put<Website>(`/websites/${id}`, payload);
+    return data;
+  },
+  async assignTemplate(id: string, payload: AssignTemplatePayload) {
+    const { data } = await http.patch<Website>(`/websites/${id}/template`, payload);
     return data;
   },
   async updateThemeAssets(id: string, payload: UpdateThemeAssetsPayload) {

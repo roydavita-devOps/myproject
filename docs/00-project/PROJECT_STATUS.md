@@ -4,7 +4,7 @@ Last updated: 2026-06-15
 
 ## Current Stage
 
-Stage 9.7 - Premium Template Expansion.
+Stage 9.7B - Template Selection Foundation.
 
 Status: implemented and ready for approval.
 
@@ -38,7 +38,9 @@ Status: implemented and ready for approval.
 | Stage 9.6 Cafe Modern Template | Completed. |
 | Stage 9.6A Template Consistency Audit | Completed. |
 | Stage 9.6B Basic Template Standardization | Completed. |
-| Stage 9.7 Premium Template Expansion | Implemented Restaurant Premium and Cafe Premium; awaiting approval. |
+| Stage 9.7 Premium Template Expansion | Completed. |
+| Stage 9.7A Template Selection & Assignment Audit | Completed. |
+| Stage 9.7B Template Selection Foundation | Completed; awaiting approval. |
 
 ## Current Blockers
 
@@ -46,14 +48,15 @@ Status: implemented and ready for approval.
 | --- | --- | --- |
 | Email production activation | Pending | Requires final domain, verified sender, and production email environment values. |
 | Template consistency gaps | Resolved | Restaurant and Laundry preview/fallback gaps were addressed in Stage 9.6B. |
+| Template selection flow | Resolved for foundation | Tenants can view active templates, see current template, and apply another template. Comparison, marketplace, and preview-before-apply remain out of scope. |
 | Luxury templates | Paused | No Luxury template implementation until separately approved. |
-| Template Catalog UI | Paused | No marketplace, switching UI, entitlement, or subscription access logic in Stage 9.7. |
+| Template Catalog UI | Paused | No marketplace, comparison page, entitlement, or subscription access logic in Stage 9.7B. |
 
 ## Next Actions
 
-1. Review Stage 9.7 Premium Template Expansion.
-2. Approve or request corrections to Restaurant Premium and Cafe Premium.
-3. Keep Luxury, Catalog UI, marketplace, subscription, and entitlement work paused until separately approved.
+1. Review Stage 9.7B Template Selection Foundation.
+2. Approve or request corrections to the template management page and assignment flow.
+3. Keep Luxury, Catalog UI, marketplace, subscription, entitlement, preview-before-apply, and switch history paused until separately approved.
 4. After approval, proceed only to the next approved stage.
 5. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
 
@@ -78,5 +81,7 @@ Status: implemented and ready for approval.
 - Template registry foundation: [../01-architecture/TEMPLATE_REGISTRY_FOUNDATION.md](../01-architecture/TEMPLATE_REGISTRY_FOUNDATION.md)
 - Template registry validation: [../01-architecture/TEMPLATE_REGISTRY_VALIDATION.md](../01-architecture/TEMPLATE_REGISTRY_VALIDATION.md)
 - Template metadata standard: [../01-architecture/TEMPLATE_METADATA_STANDARD.md](../01-architecture/TEMPLATE_METADATA_STANDARD.md)
+- Template selection audit: [../01-architecture/PHASE-9.7A-Template-Selection-And-Assignment-Audit-Report.md](../01-architecture/PHASE-9.7A-Template-Selection-And-Assignment-Audit-Report.md)
+- Template selection foundation report: [../06-modern-template/reports/PHASE-9.7B-Template-Selection-Foundation-Report.md](../06-modern-template/reports/PHASE-9.7B-Template-Selection-Foundation-Report.md)
 - Template Catalog readiness audit: [../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md](../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md)
 - Template consistency audit: [../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md](../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md)

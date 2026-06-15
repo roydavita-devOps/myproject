@@ -1,7 +1,7 @@
 import { ReactNode, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
-import { CheckCircle2, ExternalLink, Globe2, ImageIcon, MenuSquare, MonitorSmartphone } from 'lucide-react';
+import { CheckCircle2, ExternalLink, Globe2, ImageIcon, Layers3, MenuSquare, MonitorSmartphone } from 'lucide-react';
 import { websitesApi } from '../websites/websites.api';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
@@ -91,6 +91,14 @@ export function TenantDashboardPage() {
               Manage menu
             </Button>
           </Link>
+          {website && (
+            <Link to={`/app/websites/${website.id}/templates`}>
+              <Button variant="secondary" className="w-full sm:w-auto">
+                <Layers3 className="size-4" />
+                Templates
+              </Button>
+            </Link>
+          )}
           {website && (
             <Link to={`/app/websites/${website.id}/preview`}>
               <Button variant="ghost" className="w-full sm:w-auto">

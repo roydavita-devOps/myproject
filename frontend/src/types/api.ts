@@ -59,6 +59,17 @@ export type Template = {
   schema: { sections?: string[] };
 };
 
+export type TemplateCatalogItem = {
+  templateKey: string;
+  displayName: string;
+  description: string;
+  industry: string;
+  category: string;
+  tier: 'standard' | 'premium';
+  previewImage: string;
+  recommendedBusinessTypes: string[];
+};
+
 export type Theme = {
   id: string;
   name: string;

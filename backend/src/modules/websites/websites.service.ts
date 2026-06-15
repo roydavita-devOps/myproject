@@ -1,8 +1,10 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ContentStatus, Prisma, WebsiteStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { TemplatesService } from '../templates/templates.service';
 import { UploadsService } from '../uploads/uploads.service';
 import { AddGalleryItemDto } from './dto/add-gallery-item.dto';
+import { AssignTemplateDto } from './dto/assign-template.dto';
 import { CreateWebsiteDto } from './dto/create-website.dto';
 import { UpdateThemeAssetsDto } from './dto/update-theme-assets.dto';
 import { UpdateWebsiteDto } from './dto/update-website.dto';
@@ -12,6 +14,7 @@ export class WebsitesService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly uploads: UploadsService,
+    private readonly templates: TemplatesService,
   ) {}
 
   findAll(tenantId: string) {
@@ -76,6 +79,18 @@ export class WebsitesService {
       where: { id },
       data,
     });
+  }
+
+  async assignTemplate(tenantId: string, id: string, dto: AssignTemplateDto) {
+    await this.findOne(tenantId, id);
+    const template = await this.templates.findOrCreateDatabaseTemplate(dto.templateKey);
+
+    await this.prisma.website.update({
+      where: { id },
+      data: { templateId: template.id },
+    });
+
+    return this.findOne(tenantId, id);
   }
 
   async updateThemeAssets(tenantId: string, id: string, dto: UpdateThemeAssetsDto) {

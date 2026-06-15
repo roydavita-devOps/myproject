@@ -13,6 +13,7 @@ describe('WebsitesService', () => {
           id: websiteId,
           tenantId,
           themeId: 'theme-1',
+          templateId: 'template-old',
           status: WebsiteStatus.DRAFT,
           businessName: 'Original Business',
         }),
@@ -45,9 +46,15 @@ describe('WebsitesService', () => {
     };
   }
 
+  function createTemplatesMock() {
+    return {
+      findOrCreateDatabaseTemplate: jest.fn().mockResolvedValue({ id: 'template-premium', name: 'restaurant_premium' }),
+    };
+  }
+
   it('persists submitted website fields through Prisma', async () => {
     const prisma = createPrismaMock();
-    const service = new WebsitesService(prisma as never, createUploadsMock() as never);
+    const service = new WebsitesService(prisma as never, createUploadsMock() as never, createTemplatesMock() as never);
 
     await service.update(tenantId, websiteId, {
       businessName: 'Updated Business',
@@ -81,7 +88,7 @@ describe('WebsitesService', () => {
 
   it('rejects empty website update payloads instead of returning a no-op success', async () => {
     const prisma = createPrismaMock();
-    const service = new WebsitesService(prisma as never, createUploadsMock() as never);
+    const service = new WebsitesService(prisma as never, createUploadsMock() as never, createTemplatesMock() as never);
 
     await expect(service.update(tenantId, websiteId, {})).rejects.toBeInstanceOf(BadRequestException);
     expect(prisma.website.update).not.toHaveBeenCalled();
@@ -89,7 +96,7 @@ describe('WebsitesService', () => {
 
   it('persists submitted theme asset fields through Prisma', async () => {
     const prisma = createPrismaMock();
-    const service = new WebsitesService(prisma as never, createUploadsMock() as never);
+    const service = new WebsitesService(prisma as never, createUploadsMock() as never, createTemplatesMock() as never);
 
     await service.updateThemeAssets(tenantId, websiteId, {
       logoUrl: '/api/v1/uploads/tenant-1/logo/logo.png',
@@ -119,10 +126,24 @@ describe('WebsitesService', () => {
 
   it('rejects empty theme asset payloads instead of returning a no-op success', async () => {
     const prisma = createPrismaMock();
-    const service = new WebsitesService(prisma as never, createUploadsMock() as never);
+    const service = new WebsitesService(prisma as never, createUploadsMock() as never, createTemplatesMock() as never);
 
     await expect(service.updateThemeAssets(tenantId, websiteId, {})).rejects.toBeInstanceOf(BadRequestException);
     expect(prisma.theme.updateMany).not.toHaveBeenCalled();
+  });
+
+  it('persists selected template assignment through website.templateId', async () => {
+    const prisma = createPrismaMock();
+    const templates = createTemplatesMock();
+    const service = new WebsitesService(prisma as never, createUploadsMock() as never, templates as never);
+
+    await service.assignTemplate(tenantId, websiteId, { templateKey: 'restaurant_premium' });
+
+    expect(templates.findOrCreateDatabaseTemplate).toHaveBeenCalledWith('restaurant_premium');
+    expect(prisma.website.update).toHaveBeenCalledWith({
+      where: { id: websiteId },
+      data: { templateId: 'template-premium' },
+    });
   });
 
   it('clears a logo theme asset and deletes the owned upload', async () => {
@@ -134,7 +155,7 @@ describe('WebsitesService', () => {
       theme: { logoUrl: '/api/v1/uploads/tenant-1/logo/logo.png', heroImageUrl: null },
     });
     const uploads = createUploadsMock();
-    const service = new WebsitesService(prisma as never, uploads as never);
+    const service = new WebsitesService(prisma as never, uploads as never, createTemplatesMock() as never);
 
     await service.deleteThemeAsset(tenantId, websiteId, 'logo');
 
@@ -156,7 +177,7 @@ describe('WebsitesService', () => {
     const uploads = {
       deleteTenantAssetByUrl: jest.fn().mockRejectedValue(new NotFoundException('Asset not found')),
     };
-    const service = new WebsitesService(prisma as never, uploads as never);
+    const service = new WebsitesService(prisma as never, uploads as never, createTemplatesMock() as never);
 
     await service.deleteThemeAsset(tenantId, websiteId, 'logo');
 
@@ -169,7 +190,7 @@ describe('WebsitesService', () => {
   it('archives a gallery item and deletes the owned upload', async () => {
     const prisma = createPrismaMock();
     const uploads = createUploadsMock();
-    const service = new WebsitesService(prisma as never, uploads as never);
+    const service = new WebsitesService(prisma as never, uploads as never, createTemplatesMock() as never);
 
     await service.deleteGalleryItem(tenantId, websiteId, 'gallery-1');
 
@@ -188,7 +209,7 @@ describe('WebsitesService', () => {
     const uploads = {
       deleteTenantAssetByUrl: jest.fn().mockRejectedValue(new NotFoundException('Asset not found')),
     };
-    const service = new WebsitesService(prisma as never, uploads as never);
+    const service = new WebsitesService(prisma as never, uploads as never, createTemplatesMock() as never);
 
     await service.deleteGalleryItem(tenantId, websiteId, 'gallery-1');
 

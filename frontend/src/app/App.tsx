@@ -14,6 +14,7 @@ import { TenantListPage } from '../features/tenants/TenantListPage';
 import { WebsiteListPage } from '../features/websites/WebsiteListPage';
 import { WebsiteEditorPage } from '../features/websites/WebsiteEditorPage';
 import { WebsitePreviewPage } from '../features/websites/WebsitePreviewPage';
+import { TemplateSelectionPage } from '../features/templates/TemplateSelectionPage';
 import { MenuManagementPage } from '../features/menus/MenuManagementPage';
 import { PublicSitePage } from '../features/public-site/PublicSitePage';
 import { PlaceholderPage } from '../pages/PlaceholderPage';
@@ -87,6 +88,7 @@ export function App() {
           <Route path="dashboard" element={<TenantDashboardPage />} />
           <Route path="websites" element={<WebsiteListPage />} />
           <Route path="websites/:websiteId/preview" element={<WebsitePreviewPage />} />
+          <Route path="websites/:websiteId/templates" element={<TemplateSelectionPage />} />
           <Route path="websites/:websiteId" element={<WebsiteEditorPage />} />
           <Route path="menu" element={<MenuManagementPage />} />
           <Route path="analytics" element={<PlaceholderPage title="Analytics" />} />

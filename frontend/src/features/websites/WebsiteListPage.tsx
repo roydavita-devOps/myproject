@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
-import { Edit3, Eye, Globe2 } from 'lucide-react';
+import { Edit3, Eye, Globe2, Layers3 } from 'lucide-react';
 import { websitesApi } from './websites.api';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
@@ -40,6 +40,12 @@ export function WebsiteListPage() {
                   <Button variant="secondary">
                     <Eye className="size-4" />
                     Preview
+                  </Button>
+                </Link>
+                <Link to={`/app/websites/${website.id}/templates`}>
+                  <Button variant="secondary">
+                    <Layers3 className="size-4" />
+                    Templates
                   </Button>
                 </Link>
                 <Button variant="ghost" disabled title="Custom domain coming soon">

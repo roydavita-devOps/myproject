@@ -202,6 +202,42 @@ Reason:
 - Explicit renderer keys keep premium template expansion aligned with the registry architecture.
 - Premium differentiation can be validated before marketplace and subscription features are approved.
 
+## Template Selection And Assignment Audit
+
+Status: Completed for Stage 9.7A.
+
+Decision:
+
+- Current tenant registration and onboarding use business type auto-assignment, not true template selection.
+- Current persisted assignment is `Website.templateId` pointing to a database `Template` row.
+- Frontend template rendering is resolved through the approved registry, but premium templates require explicit template key or renderer key data in the API payload.
+- Tenants cannot currently view, select, change, compare, or choose Premium templates through product UI.
+- Admin users cannot assign, change, or override website templates through current admin UI/API.
+
+Reason:
+
+- The existing onboarding `templateName` value is not used by backend assignment logic.
+- Premium templates are active in frontend metadata but not reachable through the current registration/onboarding flow.
+- Commercial messaging must distinguish auto-assigned templates from user-selected templates until a future template selection stage is approved.
+
+## Business Type Recommendation And Template User Choice
+
+Status: Approved for Stage 9.7B foundation.
+
+Decision:
+
+- Business Type remains a recommendation signal.
+- Template is now a user choice within the active template selection foundation.
+- Users may apply templates outside their current business type recommendation.
+- Premium template tier remains metadata only; no billing, entitlement, or subscription enforcement is implemented in Stage 9.7B.
+- Template selection persists through the existing `Website.templateId -> Template` relationship.
+
+Reason:
+
+- Stage 9.7A found that Premium templates existed but were not reachable by users.
+- Stage 9.7B closes the minimum usability gap without building a marketplace or changing database schema.
+- This keeps the approved architecture direction: `template_key -> templateRegistry -> renderer`.
+
 ## Future Template Marketplace
 
 Decision:

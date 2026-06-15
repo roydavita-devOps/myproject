@@ -32,11 +32,13 @@ Last updated: 2026-06-15
 - Stage 9.6A Template Consistency Audit.
 - Stage 9.6B Basic Template Standardization.
 - Stage 9.7 Premium Template Expansion: Restaurant Premium and Cafe Premium.
+- Stage 9.7A Template Selection & Assignment Audit.
+- Stage 9.7B Template Selection Foundation.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.7 validation and approval checkpoint.
+- Stage 9.7B implementation review and approval checkpoint.
 
 ## Planned
 

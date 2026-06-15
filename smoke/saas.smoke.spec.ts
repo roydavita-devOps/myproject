@@ -411,6 +411,76 @@ test.describe('SaaS smoke test', () => {
       });
     }
   });
+
+  test('allows a restaurant tenant to apply Restaurant Premium and render it publicly', async ({ page, baseURL }) => {
+    const api = await request.newContext({ baseURL });
+    const stamp = Date.now();
+    const slug = `restaurant-template-${stamp}`;
+    const email = `restaurant-template-${stamp}@example.com`;
+    const session = await createTemplateSelectionTenant(api, {
+      businessName: `Restaurant Template ${stamp}`,
+      slug,
+      email,
+      businessType: 'RESTAURANT',
+    });
+
+    await seedSession(page, session);
+    await page.goto(`/app/websites/${session.websiteId}/templates`);
+
+    await expect(page.getByRole('heading', { name: 'Templates' })).toBeVisible();
+    const restaurantClassic = page.locator('article').filter({ hasText: 'Restaurant Classic' });
+    await expect(restaurantClassic.getByRole('button', { name: /current template/i })).toBeVisible();
+    const restaurantPremium = page.locator('article').filter({ hasText: 'Restaurant Premium' });
+    await expect(restaurantPremium.getByText('PREMIUM', { exact: true })).toBeVisible();
+    await restaurantPremium.getByRole('button', { name: /apply template/i }).click();
+    await expect(restaurantPremium.getByRole('button', { name: /current template/i })).toBeVisible();
+
+    const publicSite = await api.get(`/api/v1/public/site/${slug}`);
+    expect(publicSite.ok()).toBeTruthy();
+    const publicBody = await publicSite.json();
+    expect(publicBody.template.schema.templateKey).toBe('restaurant_premium');
+
+    await page.goto(`/site/${slug}`);
+    await expect(page.locator('main')).toHaveAttribute('data-template-key', 'restaurant_premium');
+    await expect(page.getByText('Restaurant premium website')).toBeVisible();
+
+    await api.dispose();
+  });
+
+  test('allows a cafe tenant to apply Cafe Premium and render it publicly', async ({ page, baseURL }) => {
+    const api = await request.newContext({ baseURL });
+    const stamp = Date.now();
+    const slug = `cafe-template-${stamp}`;
+    const email = `cafe-template-${stamp}@example.com`;
+    const session = await createTemplateSelectionTenant(api, {
+      businessName: `Cafe Template ${stamp}`,
+      slug,
+      email,
+      businessType: 'CAFE',
+    });
+
+    await seedSession(page, session);
+    await page.goto(`/app/websites/${session.websiteId}/templates`);
+
+    await expect(page.getByRole('heading', { name: 'Templates' })).toBeVisible();
+    const cafeModern = page.locator('article').filter({ hasText: 'Cafe Modern' });
+    await expect(cafeModern.getByRole('button', { name: /current template/i })).toBeVisible();
+    const cafePremium = page.locator('article').filter({ hasText: 'Cafe Premium' });
+    await expect(cafePremium.getByText('PREMIUM', { exact: true })).toBeVisible();
+    await cafePremium.getByRole('button', { name: /apply template/i }).click();
+    await expect(cafePremium.getByRole('button', { name: /current template/i })).toBeVisible();
+
+    const publicSite = await api.get(`/api/v1/public/site/${slug}`);
+    expect(publicSite.ok()).toBeTruthy();
+    const publicBody = await publicSite.json();
+    expect(publicBody.template.schema.templateKey).toBe('cafe_premium');
+
+    await page.goto(`/site/${slug}`);
+    await expect(page.locator('main')).toHaveAttribute('data-template-key', 'cafe_premium');
+    await expect(page.getByText('Cafe premium website')).toBeVisible();
+
+    await api.dispose();
+  });
 });
 
 async function assertTemplateCtas(page: Page) {
@@ -484,6 +554,64 @@ function buildPremiumWebsitePayload(templateKey: 'restaurant_premium' | 'cafe_pr
     galleries: [],
     reviews: [],
   };
+}
+
+async function createTemplateSelectionTenant(
+  api: APIRequestContext,
+  input: { businessName: string; slug: string; email: string; businessType: string },
+) {
+  const register = await api.post('/api/v1/auth/register', {
+    data: {
+      businessName: input.businessName,
+      slug: input.slug,
+      adminName: 'Template Admin',
+      email: input.email,
+      password,
+      businessType: input.businessType,
+    },
+  });
+  expect(register.ok()).toBeTruthy();
+  const session = await register.json();
+
+  const websites = await api.get('/api/v1/websites', {
+    headers: { Authorization: `Bearer ${session.accessToken}` },
+  });
+  expect(websites.ok()).toBeTruthy();
+  const [website] = await websites.json();
+  expect(website?.id).toBeTruthy();
+
+  const update = await api.put(`/api/v1/websites/${website.id}`, {
+    headers: { Authorization: `Bearer ${session.accessToken}` },
+    data: {
+      businessName: input.businessName,
+      tagline: 'Template selection validation tenant.',
+      description: 'Smoke tenant used to validate template selection persistence and public rendering.',
+      address: 'Jl. Template Selection No. 1, Jakarta',
+      phone: '02170001008',
+      whatsapp: '081280010080',
+      email: input.email,
+      mapsUrl: 'https://maps.google.com',
+    },
+  });
+  expect(update.ok()).toBeTruthy();
+
+  const publish = await api.patch(`/api/v1/websites/${website.id}/publish`, {
+    headers: { Authorization: `Bearer ${session.accessToken}` },
+  });
+  expect(publish.ok()).toBeTruthy();
+
+  return {
+    ...session,
+    websiteId: website.id,
+  };
+}
+
+async function seedSession(page: Page, session: { accessToken: string; refreshToken: string; user: unknown }) {
+  await page.addInitScript((authSession) => {
+    window.localStorage.setItem('umkm.accessToken', authSession.accessToken);
+    window.localStorage.setItem('umkm.refreshToken', authSession.refreshToken);
+    window.localStorage.setItem('umkm.user', JSON.stringify(authSession.user));
+  }, session);
 }
 
 async function ensureWartegMoncerDemo(api: APIRequestContext) {

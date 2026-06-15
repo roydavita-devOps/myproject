@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router';
-import { CheckCircle2, Copy, Eye, ExternalLink, Images, MessageCircle, Save, Send, Trash2, XCircle } from 'lucide-react';
+import { CheckCircle2, Copy, Eye, ExternalLink, Images, Layers3, MessageCircle, Save, Send, Trash2, XCircle } from 'lucide-react';
 import { websitesApi } from './websites.api';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
@@ -126,6 +126,12 @@ export function WebsiteEditorPage() {
             <Button className="w-full sm:w-auto" variant="secondary">
               <Eye className="size-4" />
               Preview
+            </Button>
+          </Link>
+          <Link to={`/app/websites/${website.id}/templates`}>
+            <Button className="w-full sm:w-auto" variant="secondary">
+              <Layers3 className="size-4" />
+              Templates
             </Button>
           </Link>
           {website.status === 'PUBLISHED' ? (

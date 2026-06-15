@@ -5,6 +5,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { CommonModule } from './common/common.module';
 import { MenusModule } from './modules/menus/menus.module';
 import { TenantsModule } from './modules/tenants/tenants.module';
+import { TemplatesModule } from './modules/templates/templates.module';
 import { WebsitesModule } from './modules/websites/websites.module';
 import { HealthModule } from './modules/health/health.module';
 import { UploadsModule } from './modules/uploads/uploads.module';
@@ -21,6 +22,7 @@ import { validateEnv } from './config/env.validation';
     AuthModule,
     HealthModule,
     TenantsModule,
+    TemplatesModule,
     WebsitesModule,
     MenusModule,
     UploadsModule,
