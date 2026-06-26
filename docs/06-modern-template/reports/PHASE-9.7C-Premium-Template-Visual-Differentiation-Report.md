@@ -228,6 +228,107 @@ R1 did not introduce:
 - Template registry changes.
 - Template resolver changes.
 
+## R2 Polish - Premium Hero Motion and Menu Photo Enhancement
+
+### Scope
+
+Stage 9.7C-R2 adds small visual enhancements to Premium templates only:
+
+- `restaurant_premium`
+- `cafe_premium`
+
+Corporate Executive was not modified in R2.
+
+### Files Modified
+
+- `frontend/src/features/templates/RestaurantPremiumTemplate.tsx`
+- `frontend/src/features/templates/CafePremiumTemplate.tsx`
+- `frontend/src/styles.css`
+- `smoke/saas.smoke.spec.ts`
+- `docs/06-modern-template/reports/PHASE-9.7C-Premium-Template-Visual-Differentiation-Report.md`
+
+### Hero Motion Summary
+
+R2 adds a subtle `premium-hero-motion` treatment:
+
+- Slow Ken Burns style zoom.
+- Scale from `1` to `1.06`.
+- Subtle translate movement.
+- `18s` duration.
+- Infinite alternate easing.
+- No layout shift because the image remains inside an overflow-hidden hero/media container.
+
+### Menu Photo Enhancement Summary
+
+Premium menu cards now include a media area:
+
+- If `menu.imageUrl` exists, the card uses the uploaded menu image.
+- If `menu.imageUrl` is missing, the card renders a safe gradient visual fallback.
+- No remote fallback image is required for menu cards.
+- Media areas use object-fit cover for real images.
+- Images include meaningful alt text and lazy loading.
+
+Restaurant Premium:
+
+- Signature Dishes now display a top media panel.
+- Fallback cards use dark editorial dining visuals and badges such as `Chef Pick`, `House Favorite`, and `Popular`.
+
+Cafe Premium:
+
+- Signature Menu now displays a top media panel.
+- Fallback menu copy was made more premium-neutral for generic tenant data.
+- Fallback cards use warm premium visual panels and badges such as `House Favorite`, `Popular`, `Signature`, and `Seasonal`.
+
+### Accessibility Notes
+
+- Motion respects `prefers-reduced-motion: reduce`.
+- Reduced-motion users receive no hero animation.
+- CTA visibility and clickability remain unchanged.
+- Menu media images use descriptive alt text when real `imageUrl` values exist.
+
+### Test Results
+
+| Check | Result |
+| --- | --- |
+| Frontend lint | Passed. |
+| Frontend production build | Passed with non-blocking Vite chunk-size warning. |
+| Frontend registry tests | Passed: 25/25. |
+| Docker rebuild for frontend/nginx | Passed. |
+| Existing smoke tests | Passed: 10/10. |
+| Restaurant Premium screenshot regeneration | Passed for desktop, tablet, and mobile. |
+| Cafe Premium screenshot regeneration | Passed for desktop, tablet, and mobile. |
+| Automated visual checks | Passed: no horizontal overflow, no broken image, no blank section, CTA visible/clickable, correct `data-template-key`, hero motion present, menu media present. |
+
+### Screenshot Evidence Paths
+
+```text
+docs/evidence/premium-template-visual-validation/restaurant_premium/restaurant_premium-desktop.png
+docs/evidence/premium-template-visual-validation/restaurant_premium/restaurant_premium-tablet.png
+docs/evidence/premium-template-visual-validation/restaurant_premium/restaurant_premium-mobile.png
+docs/evidence/premium-template-visual-validation/cafe_premium/cafe_premium-desktop.png
+docs/evidence/premium-template-visual-validation/cafe_premium/cafe_premium-tablet.png
+docs/evidence/premium-template-visual-validation/cafe_premium/cafe_premium-mobile.png
+docs/evidence/premium-template-visual-validation/premium-r2-validation-results.json
+```
+
+### R2 Scope Confirmation
+
+R2 did not introduce:
+
+- New product features outside visual enhancement.
+- Backend changes.
+- Prisma schema changes.
+- Database migrations.
+- Billing.
+- Subscription.
+- Entitlement enforcement.
+- Marketplace.
+- Catalog UI.
+- Preview-before-apply.
+- Template switch history.
+- Template registry changes.
+- Template resolver changes.
+
 ## Rollback Strategy
 
 1. Revert visual changes in Premium renderer files.

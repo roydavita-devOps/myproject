@@ -18,13 +18,14 @@ type PremiumCafeMenuItem = {
   name: string;
   description?: string | null;
   price?: string | number | null;
+  imageUrl?: string | null;
 };
 
 const defaultPremiumMenu: PremiumCafeMenuItem[] = [
-  { id: 'premium-cafe-1', name: 'House Reserve Latte', description: 'Espresso blend, silky milk, and a balanced house syrup finish.', price: '42000' },
-  { id: 'premium-cafe-2', name: 'Single Origin Pour Over', description: 'Rotating beans brewed by hand for clear tasting notes.', price: '48000' },
-  { id: 'premium-cafe-3', name: 'Weekend Brunch Plate', description: 'Warm toast, seasonal garnish, egg, and cafe-style side salad.', price: '68000' },
-  { id: 'premium-cafe-4', name: 'Craft Mocktail Coffee', description: 'A bright non-alcoholic coffee drink for slow afternoons.', price: '46000' },
+  { id: 'premium-cafe-1', name: 'Signature Selection', description: 'A featured customer favorite with polished presentation and clear value.', price: '42000' },
+  { id: 'premium-cafe-2', name: 'House Favorite', description: 'A recommended item for first-time customers browsing the menu.', price: '48000' },
+  { id: 'premium-cafe-3', name: 'Premium Set', description: 'A complete offer designed for easy ordering and confident choice.', price: '68000' },
+  { id: 'premium-cafe-4', name: 'Seasonal Highlight', description: 'A rotating feature that gives the menu a fresh premium feel.', price: '46000' },
 ];
 
 const premiumCafeReviews = [
@@ -65,11 +66,11 @@ function PremiumCafeHero({ website }: { website: Website }) {
         <div className="relative z-10">
           <p className="tpl-caption mb-5 inline-flex items-center gap-2 rounded-full border border-[#8b5e34]/20 bg-white/80 px-4 py-2 font-semibold uppercase text-[#7a4a24] shadow-sm backdrop-blur">
             <Coffee className="size-4" />
-            Lifestyle cafe presence
+            Premium business presence
           </p>
           <h1 className="tenant-heading text-[clamp(3rem,9vw,6.25rem)] font-semibold leading-[.94] text-[#2f1f16]">{website.businessName}</h1>
           <p className="mt-6 max-w-2xl text-xl leading-8 text-[#4a3022] md:text-2xl">
-            {website.tagline ?? 'A refined cafe experience for specialty drinks, daily rituals, and memorable visits.'}
+            {website.tagline ?? 'A refined premium experience for featured menus, daily visits, and memorable customer moments.'}
           </p>
           <p className="tpl-body mt-5 max-w-2xl text-[#72523d]">
             {website.description ?? 'Cafe Premium adds stronger brand storytelling, signature menu cards, experience highlights, and contact-focused conversion sections.'}
@@ -80,19 +81,19 @@ function PremiumCafeHero({ website }: { website: Website }) {
             </div>
           )}
           <div className="mt-10 flex flex-wrap gap-3 text-sm text-[#5f3d28]">
-            {['Specialty coffee', 'Slow brunch', 'Warm workspace'].map((item) => (
+            {['Signature selection', 'Featured menu', 'Open today'].map((item) => (
               <span key={item} className="rounded-full border border-[#8b5e34]/18 bg-white/70 px-4 py-2 font-semibold shadow-sm">{item}</span>
             ))}
           </div>
         </div>
         <div className="relative">
           <div className="absolute -left-4 top-8 z-10 max-w-48 rounded-lg border border-white/70 bg-white/85 p-4 shadow-xl backdrop-blur md:-left-8">
-            <p className="text-xs font-semibold uppercase text-[#8b5e34]">Today's favorite</p>
-            <p className="mt-2 text-lg font-semibold leading-snug text-[#2f1f16]">House Reserve Latte</p>
-            <p className="mt-2 text-sm leading-5 text-[#72523d]">A warm cue for the product guests should try first.</p>
+            <p className="text-xs font-semibold uppercase text-[#8b5e34]">Featured menu</p>
+            <p className="mt-2 text-lg font-semibold leading-snug text-[#2f1f16]">Signature Selection</p>
+            <p className="mt-2 text-sm leading-5 text-[#72523d]">A warm cue for the item customers should notice first.</p>
           </div>
           <div className="overflow-hidden rounded-lg border border-white/70 bg-white shadow-[0_28px_80px_rgba(88,54,28,.22)]">
-            <img className="aspect-[4/3] w-full object-cover" src={heroImage} alt={`${website.businessName} cafe atmosphere`} />
+            <img className="premium-hero-motion aspect-[4/3] w-full object-cover" src={heroImage} alt={`${website.businessName} premium atmosphere`} />
             <div className="grid gap-3 bg-[#fffaf2] p-5 text-sm text-[#72523d] sm:grid-cols-3">
               <p className="flex items-center gap-2"><CupSoda className="size-4 text-[#7a4a24]" />Signature</p>
               <p className="flex items-center gap-2"><Music className="size-4 text-[#c17b3a]" />Atmosphere</p>
@@ -139,25 +140,52 @@ function SignatureMenu({ items }: { items: PremiumCafeMenuItem[] }) {
   if (signatureItems.length === 0) return null;
 
   return (
-    <TemplateSection id="services" muted eyebrow="Signature menu" title="Signature Menu" description="Premium cafe cards highlight specialty drinks, brunch items, and price clarity.">
+    <TemplateSection id="services" muted eyebrow="Signature menu" title="Signature Menu" description="Premium cards highlight featured items, clear descriptions, and price clarity.">
       <div className="grid gap-4 md:grid-cols-2">
         {signatureItems.map((item, index) => (
-          <TemplateCard key={item.id} className="flex min-h-56 flex-col justify-between bg-[#fffaf2] p-6 shadow-lg">
+          <TemplateCard key={item.id} className="flex min-h-80 flex-col justify-between overflow-hidden bg-[#fffaf2] p-0 shadow-lg">
+            <PremiumCafeMenuMedia item={item} index={index} />
             <div>
-              <div className="mb-5 flex items-center justify-between">
+              <div className="mb-5 flex items-center justify-between px-6 pt-6">
                 <div className="flex size-12 items-center justify-center rounded-md bg-[#7a4a24] text-[#fff4df]">
                   <Sandwich className="size-5" />
                 </div>
-                <span className="rounded-full bg-[#ead3b5] px-3 py-1 text-xs font-semibold text-[#5a3822]">Cafe pick {index + 1}</span>
+                <span className="rounded-full bg-[#ead3b5] px-3 py-1 text-xs font-semibold text-[#5a3822]">Signature {index + 1}</span>
               </div>
-              <h3 className="tpl-h3 tenant-heading">{item.name}</h3>
-              {item.description && <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{item.description}</p>}
+              <div className="px-6">
+                <h3 className="tpl-h3 tenant-heading">{item.name}</h3>
+                {item.description && <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{item.description}</p>}
+              </div>
             </div>
-            {item.price && <p className="mt-6 text-2xl font-semibold text-[#7a4a24]">Rp {Number(item.price).toLocaleString('id-ID')}</p>}
+            {item.price && <p className="px-6 pb-6 pt-6 text-2xl font-semibold text-[#7a4a24]">Rp {Number(item.price).toLocaleString('id-ID')}</p>}
           </TemplateCard>
         ))}
       </div>
     </TemplateSection>
+  );
+}
+
+function PremiumCafeMenuMedia({ item, index }: { item: PremiumCafeMenuItem; index: number }) {
+  const imageUrl = resolveAssetUrl(item.imageUrl);
+  if (imageUrl) {
+    return (
+      <img
+        className="aspect-[16/10] w-full object-cover"
+        src={imageUrl}
+        alt={`${item.name} menu photo`}
+        loading="lazy"
+      />
+    );
+  }
+
+  const labels = ['House Favorite', 'Popular', 'Signature', 'Seasonal'];
+  return (
+    <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_38%_28%,rgba(255,255,255,.58),transparent_30%),linear-gradient(135deg,#e8c99f,#7a4a24)] text-white">
+      <Coffee className="size-10" />
+      <span className="absolute left-4 top-4 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-[#5a3822] backdrop-blur">
+        {labels[index % labels.length]}
+      </span>
+    </div>
   );
 }
 
@@ -225,7 +253,7 @@ function CafeVisitInfo({ website }: { website: Website }) {
         <TemplateCard>
           <Star className="mb-4 size-5 text-[var(--tpl-primary)]" />
           <h3 className="tpl-h3 tenant-heading">Best for</h3>
-          <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">Specialty coffee, brunch, remote work, casual meetings, and weekend visits.</p>
+          <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">Featured menu browsing, customer visits, quick contact, and easy location planning.</p>
         </TemplateCard>
       </div>
     </TemplateSection>
@@ -258,7 +286,7 @@ function resolvePremiumCafeHeroActions(website: Website) {
   const directions = contactActions.find((item) => item.action === 'directions');
 
   return validateTemplateActions([
-    whatsapp ? { ...whatsapp, label: 'Chat Cafe', icon: <MessageCircle className="size-4" />, variant: 'primary' } : null,
+    whatsapp ? { ...whatsapp, label: 'Chat WhatsApp', icon: <MessageCircle className="size-4" />, variant: 'primary' } : null,
     { action: 'menu', label: 'View Signature Menu', href: '#services', icon: <Coffee className="size-4" />, variant: 'secondary' },
     directions ? { ...directions, label: 'Get Directions', icon: <MapPin className="size-4" />, variant: 'tertiary' } : null,
   ]);
@@ -271,8 +299,8 @@ function resolvePremiumCafeContactActions(website: Website) {
   const directions = contactActions.find((item) => item.action === 'directions');
 
   return validateTemplateActions([
-    whatsapp ? { ...whatsapp, label: 'WhatsApp Cafe', icon: <MessageCircle className="size-4" />, variant: 'primary' } : null,
-    phone ? { ...phone, label: 'Call Cafe', icon: <Phone className="size-4" />, variant: 'secondary' } : null,
+    whatsapp ? { ...whatsapp, label: 'Chat WhatsApp', icon: <MessageCircle className="size-4" />, variant: 'primary' } : null,
+    phone ? { ...phone, label: 'Call Business', icon: <Phone className="size-4" />, variant: 'secondary' } : null,
     directions ? { ...directions, label: 'Get Directions', icon: <MapPin className="size-4" />, variant: 'tertiary' } : null,
   ]);
 }

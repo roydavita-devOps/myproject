@@ -399,13 +399,13 @@ test.describe('SaaS smoke test', () => {
         await page.goto(`${baseURL}/site/cafe-premium-demo`);
 
         await expect(page.locator('main')).toHaveAttribute('data-template-key', 'cafe_premium');
-        await expect(page.getByText('Lifestyle cafe presence')).toBeVisible();
+        await expect(page.getByText('Premium business presence')).toBeVisible();
         await expect(page.getByRole('heading', { name: 'Brand Story' })).toBeVisible();
         await expect(page.getByRole('heading', { name: 'Signature Menu' })).toBeVisible();
         await expect(page.getByRole('heading', { name: 'Lifestyle Gallery' })).toBeVisible();
         await expect(page.getByText('Plan your next premium cafe visit')).toBeVisible();
         const hero = page.locator('#home');
-        await expect(hero.getByRole('link', { name: /chat cafe/i })).toBeVisible();
+        await expect(hero.getByRole('link', { name: /chat whatsapp/i })).toBeVisible();
         await expect(hero.getByRole('link', { name: /view signature menu/i })).toBeVisible();
         await expect(hero.getByRole('link', { name: /get directions/i })).toBeVisible();
 
@@ -479,7 +479,7 @@ test.describe('SaaS smoke test', () => {
 
     await page.goto(`/site/${slug}`);
     await expect(page.locator('main')).toHaveAttribute('data-template-key', 'cafe_premium');
-    await expect(page.getByText('Lifestyle cafe presence')).toBeVisible();
+    await expect(page.getByText('Premium business presence')).toBeVisible();
 
     await api.dispose();
   });

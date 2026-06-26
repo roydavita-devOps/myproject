@@ -122,3 +122,27 @@ html {
   line-height: 1.5;
   letter-spacing: 0;
 }
+
+.premium-hero-motion {
+  animation: premium-hero-ken-burns 18s ease-in-out infinite alternate;
+  transform-origin: center;
+  will-change: transform;
+}
+
+@keyframes premium-hero-ken-burns {
+  from {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: scale(1.06) translate3d(-1.25%, -1%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .premium-hero-motion {
+    animation: none;
+    transform: none;
+    will-change: auto;
+  }
+}

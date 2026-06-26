@@ -18,6 +18,7 @@ type PremiumDish = {
   name: string;
   description?: string | null;
   price?: string | number | null;
+  imageUrl?: string | null;
 };
 
 const defaultSignatureDishes: PremiumDish[] = [
@@ -59,7 +60,7 @@ function PremiumRestaurantHero({ website }: { website: Website }) {
 
   return (
     <section id="home" className="relative min-h-[94vh] overflow-hidden bg-[#120f0b]">
-      <img className="absolute inset-0 size-full object-cover opacity-70" src={heroImage} alt={`${website.businessName} dining room`} />
+      <img className="premium-hero-motion absolute inset-0 size-full object-cover opacity-70" src={heroImage} alt={`${website.businessName} dining room`} />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(247,200,115,.22),transparent_30%),linear-gradient(90deg,rgba(18,15,11,.97),rgba(18,15,11,.76),rgba(18,15,11,.32))]" />
       <div className="absolute inset-x-0 bottom-0 h-36 bg-[linear-gradient(180deg,transparent,rgba(18,15,11,.96))]" />
       <div className="relative mx-auto grid min-h-[94vh] max-w-6xl content-end gap-8 px-4 pb-12 pt-28 md:grid-cols-[1fr_0.46fr] md:items-end md:pb-20">
@@ -162,23 +163,50 @@ function SignatureDishes({ dishes }: { dishes: PremiumDish[] }) {
     <TemplateSection id="services" muted eyebrow="Signature dishes" title="Signature Dishes" description="Premium cards emphasize curated dishes, story, price clarity, and ordering confidence.">
       <div className="grid gap-5 md:grid-cols-3">
         {signatureDishes.map((dish, index) => (
-          <TemplateCard key={dish.id} className="relative flex min-h-72 flex-col justify-between overflow-hidden bg-[#fffaf1] p-6 shadow-lg">
+          <TemplateCard key={dish.id} className="relative flex min-h-96 flex-col justify-between overflow-hidden bg-[#fffaf1] p-0 shadow-lg">
             <div className="absolute right-0 top-0 h-24 w-24 rounded-bl-full bg-[#f7c873]/20" />
+            <PremiumDishMedia dish={dish} index={index} />
             <div>
-              <div className="mb-5 flex items-center justify-between">
+              <div className="mb-5 flex items-center justify-between px-6 pt-6">
                 <div className="flex size-12 items-center justify-center rounded-md bg-[#17120c] text-[#f7c873]">
                   <Utensils className="size-5" />
                 </div>
                 <span className="rounded-full border border-[#d6a650]/30 bg-white px-3 py-1 text-xs font-semibold text-[#8a5a12]">Signature {index + 1}</span>
               </div>
-              <h3 className="tpl-h3 tenant-heading">{dish.name}</h3>
-              {dish.description && <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{dish.description}</p>}
+              <div className="px-6">
+                <h3 className="tpl-h3 tenant-heading">{dish.name}</h3>
+                {dish.description && <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{dish.description}</p>}
+              </div>
             </div>
-            {dish.price && <p className="mt-8 text-2xl font-semibold text-[#8a5a12]">Rp {Number(dish.price).toLocaleString('id-ID')}</p>}
+            {dish.price && <p className="px-6 pb-6 pt-8 text-2xl font-semibold text-[#8a5a12]">Rp {Number(dish.price).toLocaleString('id-ID')}</p>}
           </TemplateCard>
         ))}
       </div>
     </TemplateSection>
+  );
+}
+
+function PremiumDishMedia({ dish, index }: { dish: PremiumDish; index: number }) {
+  const imageUrl = resolveAssetUrl(dish.imageUrl);
+  if (imageUrl) {
+    return (
+      <img
+        className="aspect-[4/3] w-full object-cover"
+        src={imageUrl}
+        alt={`${dish.name} menu photo`}
+        loading="lazy"
+      />
+    );
+  }
+
+  const labels = ['Chef Pick', 'House Favorite', 'Popular'];
+  return (
+    <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_35%_25%,rgba(247,200,115,.46),transparent_30%),linear-gradient(135deg,#342416,#120f0b)] text-[#f7c873]">
+      <Utensils className="size-10" />
+      <span className="absolute left-4 top-4 rounded-full border border-[#f7c873]/30 bg-[#120f0b]/80 px-3 py-1 text-xs font-semibold text-[#f7c873] backdrop-blur">
+        {labels[index % labels.length]}
+      </span>
+    </div>
   );
 }
 

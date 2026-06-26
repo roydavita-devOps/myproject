@@ -1,0 +1,104 @@
+[
+  {
+    "templateKey": "restaurant_premium",
+    "viewportName": "desktop",
+    "screenshotPath": "X:/PROJECT MANDIRI/product_SaaS/docs/evidence/premium-template-visual-validation/restaurant_premium/restaurant_premium-desktop.png",
+    "expectedTemplateKey": "restaurant_premium",
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "blankSections": [],
+    "ctaCount": 12,
+    "badCtas": [],
+    "heroMotionCount": 1,
+    "menuMediaCount": 3,
+    "viewport": {
+      "width": 1440,
+      "height": 1100
+    }
+  },
+  {
+    "templateKey": "restaurant_premium",
+    "viewportName": "tablet",
+    "screenshotPath": "X:/PROJECT MANDIRI/product_SaaS/docs/evidence/premium-template-visual-validation/restaurant_premium/restaurant_premium-tablet.png",
+    "expectedTemplateKey": "restaurant_premium",
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "blankSections": [],
+    "ctaCount": 12,
+    "badCtas": [],
+    "heroMotionCount": 1,
+    "menuMediaCount": 3,
+    "viewport": {
+      "width": 768,
+      "height": 1024
+    }
+  },
+  {
+    "templateKey": "restaurant_premium",
+    "viewportName": "mobile",
+    "screenshotPath": "X:/PROJECT MANDIRI/product_SaaS/docs/evidence/premium-template-visual-validation/restaurant_premium/restaurant_premium-mobile.png",
+    "expectedTemplateKey": "restaurant_premium",
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "blankSections": [],
+    "ctaCount": 12,
+    "badCtas": [],
+    "heroMotionCount": 1,
+    "menuMediaCount": 3,
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "templateKey": "cafe_premium",
+    "viewportName": "desktop",
+    "screenshotPath": "X:/PROJECT MANDIRI/product_SaaS/docs/evidence/premium-template-visual-validation/cafe_premium/cafe_premium-desktop.png",
+    "expectedTemplateKey": "cafe_premium",
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "blankSections": [],
+    "ctaCount": 12,
+    "badCtas": [],
+    "heroMotionCount": 1,
+    "menuMediaCount": 4,
+    "viewport": {
+      "width": 1440,
+      "height": 1100
+    }
+  },
+  {
+    "templateKey": "cafe_premium",
+    "viewportName": "tablet",
+    "screenshotPath": "X:/PROJECT MANDIRI/product_SaaS/docs/evidence/premium-template-visual-validation/cafe_premium/cafe_premium-tablet.png",
+    "expectedTemplateKey": "cafe_premium",
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "blankSections": [],
+    "ctaCount": 12,
+    "badCtas": [],
+    "heroMotionCount": 1,
+    "menuMediaCount": 4,
+    "viewport": {
+      "width": 768,
+      "height": 1024
+    }
+  },
+  {
+    "templateKey": "cafe_premium",
+    "viewportName": "mobile",
+    "screenshotPath": "X:/PROJECT MANDIRI/product_SaaS/docs/evidence/premium-template-visual-validation/cafe_premium/cafe_premium-mobile.png",
+    "expectedTemplateKey": "cafe_premium",
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "blankSections": [],
+    "ctaCount": 12,
+    "badCtas": [],
+    "heroMotionCount": 1,
+    "menuMediaCount": 4,
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  }
+]
