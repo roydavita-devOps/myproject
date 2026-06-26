@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { clsx } from 'clsx';
-import { ArrowUpRight, Images, MapPin, Star } from 'lucide-react';
+import { ArrowUpRight, Images, MapPin, Quote, Star } from 'lucide-react';
 import { GalleryItem, MenuItem, ReviewItem, Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
 import { normalizeTemplateAction, resolveContactActions, TemplateAction } from './templateActions';
@@ -214,6 +214,82 @@ export function TemplateTestimonials({ reviews }: { reviews: ReviewItem[] }) {
       </div>
     </TemplateSection>
   );
+}
+
+export function PremiumReviewsSlider({
+  reviews,
+  sliderId,
+  eyebrow = 'Premium reviews',
+  title = 'Reviews',
+  description = 'Customer feedback presented in a richer premium carousel format.',
+}: {
+  reviews: ReviewItem[];
+  sliderId: string;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+}) {
+  if (reviews.length === 0) return null;
+
+  return (
+    <TemplateSection id="reviews" muted eyebrow={eyebrow} title={title} description={description}>
+      <div
+        id={sliderId}
+        aria-label={`${title} carousel`}
+        className="premium-review-slider -mx-4 flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-4"
+        tabIndex={0}
+      >
+        {reviews.map((review, index) => (
+          <article
+            id={`${sliderId}-${index + 1}`}
+            key={review.id}
+            className="group relative min-h-72 min-w-[88%] snap-start overflow-hidden rounded-lg border border-[var(--tpl-border)] bg-white p-6 shadow-[0_18px_55px_rgba(15,23,42,.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_70px_rgba(15,23,42,.14)] sm:min-w-[48%] lg:min-w-[31%]"
+          >
+            <div className="absolute right-5 top-5 text-[var(--tpl-primary)]/10 transition group-hover:text-[var(--tpl-primary)]/20">
+              <Quote className="size-14" />
+            </div>
+            <div className="relative">
+              <div className="flex gap-1 text-amber-500" aria-label={`${review.rating} star rating`}>
+                {Array.from({ length: Math.max(1, Math.min(5, review.rating)) }).map((_, starIndex) => (
+                  <Star key={starIndex} className="size-4 fill-current" />
+                ))}
+              </div>
+              <p className="tpl-body mt-6 text-[var(--tpl-text-secondary)]">{review.comment}</p>
+              <div className="mt-8 flex items-center gap-3">
+                <span className="flex size-11 items-center justify-center rounded-full bg-[var(--tpl-primary)] text-sm font-semibold uppercase text-white shadow-sm">
+                  {initialsFor(review.customerName)}
+                </span>
+                <span>
+                  <span className="block font-semibold text-[var(--tpl-text-primary)]">{review.customerName}</span>
+                  <span className="block text-sm text-[var(--tpl-text-secondary)]">Verified customer</span>
+                </span>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+      <div className="mt-5 flex flex-wrap gap-2" aria-label={`${title} pagination`}>
+        {reviews.map((review, index) => (
+          <a
+            key={review.id}
+            href={`#${sliderId}-${index + 1}`}
+            aria-label={`Show review ${index + 1} from ${review.customerName}`}
+            className="size-3 rounded-full bg-[var(--tpl-primary)]/30 transition hover:bg-[var(--tpl-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--tpl-primary)] focus:ring-offset-2"
+          />
+        ))}
+      </div>
+    </TemplateSection>
+  );
+}
+
+function initialsFor(name: string) {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join('')
+    .toUpperCase() || 'C';
 }
 
 export function TemplatePricingBlock({ items }: { items: MenuItem[] }) {

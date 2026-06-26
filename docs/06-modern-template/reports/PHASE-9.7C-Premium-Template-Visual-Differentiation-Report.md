@@ -329,6 +329,110 @@ R2 did not introduce:
 - Template registry changes.
 - Template resolver changes.
 
+## R4 Polish - Premium Reviews Slider Enhancement
+
+### Scope
+
+Stage 9.7C-R4 upgrades Premium review sections into a lightweight carousel-style experience for:
+
+- `restaurant_premium`
+- `cafe_premium`
+- `corporate_executive`
+
+This is visual enhancement only.
+
+### Files Modified
+
+- `frontend/src/features/templates/TemplateComponents.tsx`
+- `frontend/src/features/templates/RestaurantPremiumTemplate.tsx`
+- `frontend/src/features/templates/CafePremiumTemplate.tsx`
+- `frontend/src/features/templates/CorporateTemplate.tsx`
+- `frontend/src/styles.css`
+- `docs/06-modern-template/reports/PHASE-9.7C-Premium-Template-Visual-Differentiation-Report.md`
+
+### Reviews Slider Summary
+
+R4 uses a lightweight CSS scroll-snap carousel instead of adding Swiper.js or another dependency.
+
+Behavior:
+
+- Desktop shows multiple cards per view.
+- Tablet shows two-card browsing behavior.
+- Mobile shows one-card horizontal browsing behavior.
+- Dot pagination uses keyboard-accessible anchor links.
+- The slider uses natural horizontal scrolling and touch behavior from the browser.
+- No autoplay was added, avoiding aggressive motion and preserving accessibility.
+
+### Review Card Design Summary
+
+Premium review cards now include:
+
+- Rating stars.
+- Review text.
+- Customer name.
+- `Verified customer` label.
+- Initial avatar badge.
+- Quote visual accent.
+- Softer premium shadow.
+- Hover lift on pointer devices.
+- Stronger card spacing and typography than the default testimonial grid.
+
+Fallback reviews for Restaurant Premium and Cafe Premium were made neutral and professional so they do not overfit to one business category.
+
+### Accessibility Notes
+
+- No autoplay is used.
+- Dot controls are keyboard-focusable anchors with descriptive `aria-label` values.
+- Slider region has an accessible carousel label.
+- `prefers-reduced-motion` disables smooth scroll behavior.
+- Review text contrast remains readable.
+
+### Screenshot Evidence Paths
+
+```text
+docs/evidence/premium-template-visual-validation/restaurant_premium/restaurant_premium-desktop.png
+docs/evidence/premium-template-visual-validation/restaurant_premium/restaurant_premium-tablet.png
+docs/evidence/premium-template-visual-validation/restaurant_premium/restaurant_premium-mobile.png
+docs/evidence/premium-template-visual-validation/cafe_premium/cafe_premium-desktop.png
+docs/evidence/premium-template-visual-validation/cafe_premium/cafe_premium-tablet.png
+docs/evidence/premium-template-visual-validation/cafe_premium/cafe_premium-mobile.png
+docs/evidence/premium-template-visual-validation/corporate_executive/corporate_executive-desktop.png
+docs/evidence/premium-template-visual-validation/corporate_executive/corporate_executive-tablet.png
+docs/evidence/premium-template-visual-validation/corporate_executive/corporate_executive-mobile.png
+docs/evidence/premium-template-visual-validation/premium-r4-reviews-slider-validation-results.json
+```
+
+### Test Results
+
+| Check | Result |
+| --- | --- |
+| Frontend lint | Passed. |
+| Frontend production build | Passed with non-blocking Vite chunk-size warning. |
+| Frontend registry tests | Passed: 25/25. |
+| Docker rebuild for frontend/nginx | Passed. |
+| Existing smoke tests | Passed: 10/10. |
+| Restaurant Premium screenshot regeneration | Passed for desktop, tablet, and mobile. |
+| Cafe Premium screenshot regeneration | Passed for desktop, tablet, and mobile. |
+| Corporate Executive screenshot regeneration | Passed for desktop, tablet, and mobile. |
+| Automated visual checks | Passed: no horizontal overflow, no broken image, no blank section, CTA visible/clickable, correct `data-template-key`, review slider present, review cards present, pagination present. |
+
+### R4 Scope Confirmation
+
+R4 did not introduce:
+
+- Backend changes.
+- Prisma schema changes.
+- Database migrations.
+- Billing.
+- Subscription.
+- Entitlement enforcement.
+- Marketplace.
+- Catalog UI.
+- Preview-before-apply.
+- Template switch history.
+- Template registry changes.
+- Template resolver changes.
+
 ## Rollback Strategy
 
 1. Revert visual changes in Premium renderer files.

@@ -1,0 +1,173 @@
+[
+  {
+    "templateKey": "restaurant_premium",
+    "viewportName": "desktop",
+    "screenshotPath": "X:/PROJECT MANDIRI/product_SaaS/docs/evidence/premium-template-visual-validation/restaurant_premium/restaurant_premium-desktop.png",
+    "expectedTemplateKey": "restaurant_premium",
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "blankSections": [],
+    "ctaCount": 12,
+    "badCtas": [],
+    "hasReviewSlider": true,
+    "sliderCards": 3,
+    "paginationDots": 3,
+    "reviewSectionText": "Premium reviewsReviewsPremium review cards help customers scan trust signals without a static default grid.Layanannya ce",
+    "viewport": {
+      "width": 1440,
+      "height": 1100
+    }
+  },
+  {
+    "templateKey": "restaurant_premium",
+    "viewportName": "tablet",
+    "screenshotPath": "X:/PROJECT MANDIRI/product_SaaS/docs/evidence/premium-template-visual-validation/restaurant_premium/restaurant_premium-tablet.png",
+    "expectedTemplateKey": "restaurant_premium",
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "blankSections": [],
+    "ctaCount": 12,
+    "badCtas": [],
+    "hasReviewSlider": true,
+    "sliderCards": 3,
+    "paginationDots": 3,
+    "reviewSectionText": "Premium reviewsReviewsPremium review cards help customers scan trust signals without a static default grid.Layanannya ce",
+    "viewport": {
+      "width": 768,
+      "height": 1024
+    }
+  },
+  {
+    "templateKey": "restaurant_premium",
+    "viewportName": "mobile",
+    "screenshotPath": "X:/PROJECT MANDIRI/product_SaaS/docs/evidence/premium-template-visual-validation/restaurant_premium/restaurant_premium-mobile.png",
+    "expectedTemplateKey": "restaurant_premium",
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "blankSections": [],
+    "ctaCount": 12,
+    "badCtas": [],
+    "hasReviewSlider": true,
+    "sliderCards": 3,
+    "paginationDots": 3,
+    "reviewSectionText": "Premium reviewsReviewsPremium review cards help customers scan trust signals without a static default grid.Layanannya ce",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "templateKey": "cafe_premium",
+    "viewportName": "desktop",
+    "screenshotPath": "X:/PROJECT MANDIRI/product_SaaS/docs/evidence/premium-template-visual-validation/cafe_premium/cafe_premium-desktop.png",
+    "expectedTemplateKey": "cafe_premium",
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "blankSections": [],
+    "ctaCount": 12,
+    "badCtas": [],
+    "hasReviewSlider": true,
+    "sliderCards": 3,
+    "paginationDots": 3,
+    "reviewSectionText": "Premium reviewsReviewsPremium review cards create a richer trust section while keeping customer feedback easy to browse.",
+    "viewport": {
+      "width": 1440,
+      "height": 1100
+    }
+  },
+  {
+    "templateKey": "cafe_premium",
+    "viewportName": "tablet",
+    "screenshotPath": "X:/PROJECT MANDIRI/product_SaaS/docs/evidence/premium-template-visual-validation/cafe_premium/cafe_premium-tablet.png",
+    "expectedTemplateKey": "cafe_premium",
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "blankSections": [],
+    "ctaCount": 12,
+    "badCtas": [],
+    "hasReviewSlider": true,
+    "sliderCards": 3,
+    "paginationDots": 3,
+    "reviewSectionText": "Premium reviewsReviewsPremium review cards create a richer trust section while keeping customer feedback easy to browse.",
+    "viewport": {
+      "width": 768,
+      "height": 1024
+    }
+  },
+  {
+    "templateKey": "cafe_premium",
+    "viewportName": "mobile",
+    "screenshotPath": "X:/PROJECT MANDIRI/product_SaaS/docs/evidence/premium-template-visual-validation/cafe_premium/cafe_premium-mobile.png",
+    "expectedTemplateKey": "cafe_premium",
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "blankSections": [],
+    "ctaCount": 12,
+    "badCtas": [],
+    "hasReviewSlider": true,
+    "sliderCards": 3,
+    "paginationDots": 3,
+    "reviewSectionText": "Premium reviewsReviewsPremium review cards create a richer trust section while keeping customer feedback easy to browse.",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "templateKey": "corporate_executive",
+    "viewportName": "desktop",
+    "screenshotPath": "X:/PROJECT MANDIRI/product_SaaS/docs/evidence/premium-template-visual-validation/corporate_executive/corporate_executive-desktop.png",
+    "expectedTemplateKey": "corporate_executive",
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "blankSections": [],
+    "ctaCount": 12,
+    "badCtas": [],
+    "hasReviewSlider": true,
+    "sliderCards": 3,
+    "paginationDots": 3,
+    "reviewSectionText": "Premium reviewsReviewsExecutive review cards make trust signals feel more premium while preserving the existing testimon",
+    "viewport": {
+      "width": 1440,
+      "height": 1100
+    }
+  },
+  {
+    "templateKey": "corporate_executive",
+    "viewportName": "tablet",
+    "screenshotPath": "X:/PROJECT MANDIRI/product_SaaS/docs/evidence/premium-template-visual-validation/corporate_executive/corporate_executive-tablet.png",
+    "expectedTemplateKey": "corporate_executive",
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "blankSections": [],
+    "ctaCount": 12,
+    "badCtas": [],
+    "hasReviewSlider": true,
+    "sliderCards": 3,
+    "paginationDots": 3,
+    "reviewSectionText": "Premium reviewsReviewsExecutive review cards make trust signals feel more premium while preserving the existing testimon",
+    "viewport": {
+      "width": 768,
+      "height": 1024
+    }
+  },
+  {
+    "templateKey": "corporate_executive",
+    "viewportName": "mobile",
+    "screenshotPath": "X:/PROJECT MANDIRI/product_SaaS/docs/evidence/premium-template-visual-validation/corporate_executive/corporate_executive-mobile.png",
+    "expectedTemplateKey": "corporate_executive",
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "blankSections": [],
+    "ctaCount": 12,
+    "badCtas": [],
+    "hasReviewSlider": true,
+    "sliderCards": 3,
+    "paginationDots": 3,
+    "reviewSectionText": "Premium reviewsReviewsExecutive review cards make trust signals feel more premium while preserving the existing testimon",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  }
+]

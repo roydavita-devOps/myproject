@@ -9,8 +9,8 @@ import {
   TemplateFooter,
   TemplateGallery,
   TemplateNavigation,
+  PremiumReviewsSlider,
   TemplateSection,
-  TemplateTestimonials,
 } from './TemplateComponents';
 
 type PremiumDish = {
@@ -28,9 +28,9 @@ const defaultSignatureDishes: PremiumDish[] = [
 ];
 
 const premiumReviews = [
-  { id: 'restaurant-premium-review-1', customerName: 'Family Guest', rating: 5, comment: 'The menu feels curated, the story is clear, and booking through WhatsApp is simple.' },
-  { id: 'restaurant-premium-review-2', customerName: 'Dinner Guest', rating: 5, comment: 'Signature dishes are easy to understand and the restaurant looks more trustworthy.' },
-  { id: 'restaurant-premium-review-3', customerName: 'Office Group', rating: 5, comment: 'Good for group meals because the reservation CTA and location are visible.' },
+  { id: 'restaurant-premium-review-1', customerName: 'Pelanggan Utama', rating: 5, comment: 'Layanannya cepat, tampilannya rapi, dan informasinya mudah ditemukan.' },
+  { id: 'restaurant-premium-review-2', customerName: 'Mitra Lokal', rating: 5, comment: 'Timnya responsif dan pengalaman pelanggannya terasa lebih profesional.' },
+  { id: 'restaurant-premium-review-3', customerName: 'Pelanggan Setia', rating: 5, comment: 'Informasi produk dan layanan tersaji jelas, membuat kami lebih percaya.' },
 ];
 
 export function RestaurantPremiumTemplate({ website }: { website: Website }) {
@@ -45,7 +45,11 @@ export function RestaurantPremiumTemplate({ website }: { website: Website }) {
       <SignatureDishes dishes={dishes} />
       <GuestExperience />
       <PremiumGallery website={website} />
-      <TemplateTestimonials reviews={reviews} />
+      <PremiumReviewsSlider
+        reviews={reviews}
+        sliderId="restaurant-premium-reviews"
+        description="Premium review cards help customers scan trust signals without a static default grid."
+      />
       <PremiumLocation website={website} />
       <ReservationCTA website={website} />
       <TemplateContactSection website={website} />

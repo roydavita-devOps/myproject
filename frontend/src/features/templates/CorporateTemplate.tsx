@@ -24,8 +24,8 @@ import {
   TemplateFooter,
   TemplateGallery,
   TemplateNavigation,
+  PremiumReviewsSlider,
   TemplateSection,
-  TemplateTestimonials,
 } from './TemplateComponents';
 
 type CorporateService = {
@@ -75,7 +75,11 @@ export function CorporateTemplate({ website }: { website: Website }) {
       <WhyChooseUs />
       <CorporateTeam />
       <ClientLogos />
-      <TemplateTestimonials reviews={reviews} />
+      <PremiumReviewsSlider
+        reviews={reviews}
+        sliderId="corporate-executive-reviews"
+        description="Executive review cards make trust signals feel more premium while preserving the existing testimonials data."
+      />
       <CorporateGallery website={website} cta={primaryAction} />
       <CorporateCTA website={website} />
       <TemplateContactSection website={website} />

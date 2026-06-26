@@ -9,8 +9,8 @@ import {
   TemplateFooter,
   TemplateGallery,
   TemplateNavigation,
+  PremiumReviewsSlider,
   TemplateSection,
-  TemplateTestimonials,
 } from './TemplateComponents';
 
 type PremiumCafeMenuItem = {
@@ -29,9 +29,9 @@ const defaultPremiumMenu: PremiumCafeMenuItem[] = [
 ];
 
 const premiumCafeReviews = [
-  { id: 'cafe-premium-review-1', customerName: 'Coffee Regular', rating: 5, comment: 'The brand story and signature menu make the cafe feel polished and worth visiting.' },
-  { id: 'cafe-premium-review-2', customerName: 'Weekend Guest', rating: 5, comment: 'Clear menu, strong atmosphere, and easy contact for planning a visit.' },
-  { id: 'cafe-premium-review-3', customerName: 'Remote Worker', rating: 5, comment: 'The page shows exactly what I need: vibe, menu, hours, and WhatsApp.' },
+  { id: 'cafe-premium-review-1', customerName: 'Pelanggan Utama', rating: 5, comment: 'Layanannya cepat, tampilannya rapi, dan informasinya mudah ditemukan.' },
+  { id: 'cafe-premium-review-2', customerName: 'Mitra Lokal', rating: 5, comment: 'Timnya responsif dan pengalaman pelanggannya terasa lebih profesional.' },
+  { id: 'cafe-premium-review-3', customerName: 'Pelanggan Setia', rating: 5, comment: 'Informasi produk dan layanan tersaji jelas, membuat kami lebih percaya.' },
 ];
 
 export function CafePremiumTemplate({ website }: { website: Website }) {
@@ -46,7 +46,11 @@ export function CafePremiumTemplate({ website }: { website: Website }) {
       <SignatureMenu items={menu} />
       <FeaturedExperience />
       <PremiumCafeGallery website={website} />
-      <TemplateTestimonials reviews={reviews} />
+      <PremiumReviewsSlider
+        reviews={reviews}
+        sliderId="cafe-premium-reviews"
+        description="Premium review cards create a richer trust section while keeping customer feedback easy to browse."
+      />
       <CafeVisitInfo website={website} />
       <ContactCTA website={website} />
       <TemplateContactSection website={website} />

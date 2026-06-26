@@ -129,6 +129,21 @@ html {
   will-change: transform;
 }
 
+.premium-review-slider {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--tpl-primary) 35%, transparent) transparent;
+}
+
+.premium-review-slider::-webkit-scrollbar {
+  height: 0.5rem;
+}
+
+.premium-review-slider::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--tpl-primary) 35%, transparent);
+  border-radius: 999px;
+}
+
 @keyframes premium-hero-ken-burns {
   from {
     transform: scale(1) translate3d(0, 0, 0);
@@ -144,5 +159,9 @@ html {
     animation: none;
     transform: none;
     will-change: auto;
+  }
+
+  .premium-review-slider {
+    scroll-behavior: auto;
   }
 }
