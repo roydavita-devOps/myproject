@@ -202,6 +202,24 @@ Reason:
 - Explicit renderer keys keep premium template expansion aligned with the registry architecture.
 - Premium differentiation can be validated before marketplace and subscription features are approved.
 
+## Premium Template Visual Differentiation
+
+Status: Approved for Stage 9.7C implementation.
+
+Decision:
+
+- Premium templates must be visibly different from Standard templates within the first few seconds of viewing.
+- Restaurant Premium should communicate an elegant dining experience through a darker editorial layout, champagne accent, reservation-led CTA language, signature dishes, chef story, and ambience framing.
+- Cafe Premium should communicate a modern lifestyle cafe experience through a warm cream, coffee, and espresso palette, layered hero composition, signature menu cards, brand story, lifestyle gallery, and visit-led CTA language.
+- Corporate Executive can receive safe visual enhancement through its existing dedicated corporate renderer.
+- Premium tier remains metadata only; Stage 9.7C does not introduce marketplace, billing, entitlement, subscription enforcement, database schema changes, or Prisma migrations.
+
+Reason:
+
+- Stage 9.7B made Premium templates selectable, but selectable Premium templates must also look commercially distinct.
+- Visual differentiation can improve perceived value without changing template assignment architecture.
+- Keeping the work renderer-only preserves the approved `template_key -> templateRegistry -> renderer` flow.
+
 ## Template Selection And Assignment Audit
 
 Status: Completed for Stage 9.7A.

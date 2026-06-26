@@ -89,19 +89,19 @@ function CorporateHero({ website }: { website: Website }) {
   const actions = resolveCorporateHeroActions(website);
 
   return (
-    <section id="home" className="relative overflow-hidden bg-[#f7f8f6]">
-      <div className="absolute inset-x-0 top-0 h-52 bg-[linear-gradient(180deg,rgba(20,83,45,.14),transparent)]" />
-      <div className="mx-auto grid min-h-[84vh] max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-[1fr_0.92fr] md:py-20">
+    <section id="home" className="relative overflow-hidden bg-[#07111f] text-white">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(59,130,246,.2),transparent_30%),linear-gradient(135deg,#07111f,#0f2338_55%,#f8fafc_55%)]" />
+      <div className="relative mx-auto grid min-h-[88vh] max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-[1fr_0.92fr] md:py-20">
         <div className="relative z-10">
-          <p className="tpl-caption mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--tpl-border)] bg-white px-3 py-1.5 font-semibold uppercase text-[var(--tpl-primary)] shadow-sm">
+          <p className="tpl-caption mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 font-semibold uppercase text-[#93c5fd] shadow-sm backdrop-blur">
             <BriefcaseBusiness className="size-4" />
             Corporate executive website
           </p>
-          <h1 className="tpl-display tenant-heading text-[var(--tpl-text-primary)]">{website.businessName}</h1>
-          <p className="tpl-h3 mt-5 max-w-2xl text-[var(--tpl-text-primary)]">
+          <h1 className="tpl-display tenant-heading text-white">{website.businessName}</h1>
+          <p className="tpl-h3 mt-5 max-w-2xl text-slate-100">
             {website.tagline ?? 'Executive business positioning for modern professional services.'}
           </p>
-          <p className="tpl-body mt-5 max-w-2xl text-[var(--tpl-text-secondary)]">
+          <p className="tpl-body mt-5 max-w-2xl text-slate-300">
             {website.description ?? 'Present company positioning, services, team credibility, and client confidence in one polished business website.'}
           </p>
           {actions.length > 0 && (
@@ -109,15 +109,31 @@ function CorporateHero({ website }: { website: Website }) {
               {actions.map((action) => <TemplateButton key={action.href} {...action} />)}
             </div>
           )}
+          <div className="mt-10 grid max-w-2xl gap-3 text-sm sm:grid-cols-3">
+            {[
+              ['12+', 'Growth projects'],
+              ['3', 'Advisory pillars'],
+              ['24h', 'Inquiry response'],
+            ].map(([value, label]) => (
+              <div key={label} className="rounded-lg border border-white/10 bg-white/8 p-4 backdrop-blur">
+                <p className="text-2xl font-semibold text-white">{value}</p>
+                <p className="mt-1 text-slate-300">{label}</p>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="relative">
-          <div className="overflow-hidden rounded-lg border border-[var(--tpl-border)] bg-white shadow-xl">
-            <img className="aspect-[4/3] w-full object-cover" src={heroImage} alt="" />
-            <div className="grid gap-3 p-5 text-sm text-[var(--tpl-text-secondary)] sm:grid-cols-3">
-              <p className="flex items-center gap-2"><Landmark className="size-4 text-[var(--tpl-primary)]" />Executive</p>
-              <p className="flex items-center gap-2"><Globe2 className="size-4 text-[var(--tpl-secondary)]" />Modern</p>
-              <p className="flex items-center gap-2"><ShieldCheck className="size-4 text-[var(--tpl-accent)]" />Trusted</p>
+          <div className="overflow-hidden rounded-lg border border-white/70 bg-white shadow-[0_28px_90px_rgba(2,6,23,.28)]">
+            <img className="aspect-[4/3] w-full object-cover" src={heroImage} alt={`${website.businessName} executive office`} />
+            <div className="grid gap-3 p-5 text-sm text-slate-600 sm:grid-cols-3">
+              <p className="flex items-center gap-2"><Landmark className="size-4 text-slate-900" />Executive</p>
+              <p className="flex items-center gap-2"><Globe2 className="size-4 text-blue-700" />Modern</p>
+              <p className="flex items-center gap-2"><ShieldCheck className="size-4 text-emerald-700" />Trusted</p>
             </div>
+          </div>
+          <div className="absolute -bottom-5 left-5 right-5 rounded-lg border border-slate-200 bg-white p-4 text-slate-900 shadow-xl">
+            <p className="text-sm font-semibold">Executive consultation ready</p>
+            <p className="mt-1 text-sm text-slate-600">Service clarity, credibility, and direct inquiry in one profile.</p>
           </div>
         </div>
       </div>
@@ -286,9 +302,9 @@ function resolveCorporateHeroActions(website: Website) {
   const phone = contactActions.find((item) => item.action === 'phone');
 
   return validateTemplateActions([
-    whatsapp ? { ...whatsapp, label: 'Start Consultation', variant: 'primary' } : null,
+    whatsapp ? { ...whatsapp, label: 'Start Consultation', icon: <MessageCircle className="size-4" />, variant: 'primary' } : null,
     { action: 'menu', label: 'View Services', href: '#services', icon: <BriefcaseBusiness className="size-4" />, variant: 'secondary' },
-    phone ? { ...phone, label: 'Call Office', variant: 'secondary' } : null,
+    phone ? { ...phone, label: 'Call Office', icon: <Phone className="size-4" />, variant: 'secondary' } : null,
   ]);
 }
 

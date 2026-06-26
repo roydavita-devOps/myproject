@@ -26,6 +26,7 @@ Decision:
 | Cafe template | Implemented through Stage 9.6. |
 | Restaurant Premium template | Implemented through Stage 9.7 Sprint 7. |
 | Cafe Premium template | Implemented through Stage 9.7 Sprint 8. |
+| Premium visual differentiation | Implemented through Stage 9.7C for Restaurant Premium, Cafe Premium, and safe Corporate Executive renderer enhancement. |
 
 ## Metadata Standard
 
@@ -196,8 +197,9 @@ Architecture audit:
 | --- | --- | --- |
 | Primary intent | Fast menu, location, and WhatsApp conversion. | Stronger dining story, signature menu, and reservation conversion. |
 | Story depth | Basic restaurant profile and kitchen commitment. | Chef Story and premium trust cues. |
-| Menu presentation | Featured menu and popular dishes. | Signature Dishes with more curated premium framing. |
-| CTA focus | Chat WhatsApp, View Menu, Get Directions. | Reserve Table, Explore Signature Dishes, Get Directions. |
+| Visual style | Functional restaurant landing page. | Dark editorial dining experience with champagne/gold accent, layered hero, and premium reservation card. |
+| Menu presentation | Featured menu and popular dishes. | Signature Dishes with curated ranking badges, stronger spacing, and premium pricing hierarchy. |
+| CTA focus | Chat WhatsApp, View Menu, Get Directions. | Reserve a Table, Explore Signature Dishes, Get Directions. |
 | Tier | Standard. | Premium metadata only. |
 
 ## Cafe Premium Catalog Entry
@@ -221,6 +223,27 @@ Architecture audit:
 | --- | --- | --- |
 | Primary intent | Lifestyle-focused cafe presentation. | Stronger brand story, signature menu, and premium visit planning. |
 | Story depth | Experience-focused cafe presence. | Brand Story with specialty and atmosphere positioning. |
-| Menu presentation | Featured menu and signature drinks. | Signature Menu with premium product framing. |
+| Visual style | Modern cafe website. | Warm cream, coffee, and espresso lifestyle experience with layered hero cards and visit planning cues. |
+| Menu presentation | Featured menu and signature drinks. | Signature Menu with premium product framing and cafe-pick badges. |
 | CTA focus | Chat Cafe, View Menu, Get Directions. | Chat Cafe, View Signature Menu, Get Directions. |
 | Tier | Premium metadata. | Premium metadata. |
+
+## Stage 9.7C Premium Differentiation Notes
+
+Stage 9.7C improves visual quality only.
+
+Implemented:
+
+- Restaurant Premium: near full-screen dark editorial hero, champagne accent, floating reservation card, stronger signature dishes, chef story, ambience gallery, and reservation CTA.
+- Cafe Premium: warm lifestyle hero, layered favorite/open cards, brand story, signature menu cards, lifestyle gallery, and visit CTA.
+- Corporate Executive: safe enhancement to the existing dedicated corporate renderer with executive navy hero, stats row, and consultation card.
+
+Not implemented:
+
+- Template Catalog UI.
+- Marketplace.
+- Billing or subscription enforcement.
+- Entitlement restrictions.
+- Preview-before-apply.
+- Template switch history.
+- Prisma schema changes or database migrations.

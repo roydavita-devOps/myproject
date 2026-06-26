@@ -363,12 +363,13 @@ test.describe('SaaS smoke test', () => {
         await page.goto(`${baseURL}/site/restaurant-premium-demo`);
 
         await expect(page.locator('main')).toHaveAttribute('data-template-key', 'restaurant_premium');
-        await expect(page.getByText('Restaurant premium website')).toBeVisible();
+        await expect(page.getByText('Private dining presence')).toBeVisible();
         await expect(page.getByRole('heading', { name: 'Chef Story' })).toBeVisible();
         await expect(page.getByRole('heading', { name: 'Signature Dishes' })).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Ambience Gallery' })).toBeVisible();
         await expect(page.getByText('Reserve your table tonight')).toBeVisible();
         const hero = page.locator('#home');
-        await expect(hero.getByRole('link', { name: /reserve table/i })).toBeVisible();
+        await expect(hero.getByRole('link', { name: /reserve a table/i })).toBeVisible();
         await expect(hero.getByRole('link', { name: /explore signature dishes/i })).toBeVisible();
         await expect(hero.getByRole('link', { name: /get directions/i })).toBeVisible();
 
@@ -398,9 +399,10 @@ test.describe('SaaS smoke test', () => {
         await page.goto(`${baseURL}/site/cafe-premium-demo`);
 
         await expect(page.locator('main')).toHaveAttribute('data-template-key', 'cafe_premium');
-        await expect(page.getByText('Cafe premium website')).toBeVisible();
+        await expect(page.getByText('Lifestyle cafe presence')).toBeVisible();
         await expect(page.getByRole('heading', { name: 'Brand Story' })).toBeVisible();
         await expect(page.getByRole('heading', { name: 'Signature Menu' })).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Lifestyle Gallery' })).toBeVisible();
         await expect(page.getByText('Plan your next premium cafe visit')).toBeVisible();
         const hero = page.locator('#home');
         await expect(hero.getByRole('link', { name: /chat cafe/i })).toBeVisible();
@@ -442,7 +444,7 @@ test.describe('SaaS smoke test', () => {
 
     await page.goto(`/site/${slug}`);
     await expect(page.locator('main')).toHaveAttribute('data-template-key', 'restaurant_premium');
-    await expect(page.getByText('Restaurant premium website')).toBeVisible();
+    await expect(page.getByText('Private dining presence')).toBeVisible();
 
     await api.dispose();
   });
@@ -477,7 +479,7 @@ test.describe('SaaS smoke test', () => {
 
     await page.goto(`/site/${slug}`);
     await expect(page.locator('main')).toHaveAttribute('data-template-key', 'cafe_premium');
-    await expect(page.getByText('Cafe premium website')).toBeVisible();
+    await expect(page.getByText('Lifestyle cafe presence')).toBeVisible();
 
     await api.dispose();
   });

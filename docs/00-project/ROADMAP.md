@@ -1,6 +1,6 @@
 # Roadmap
 
-Last updated: 2026-06-15
+Last updated: 2026-06-26
 
 ## Completed
 
@@ -34,11 +34,12 @@ Last updated: 2026-06-15
 - Stage 9.7 Premium Template Expansion: Restaurant Premium and Cafe Premium.
 - Stage 9.7A Template Selection & Assignment Audit.
 - Stage 9.7B Template Selection Foundation.
+- Stage 9.7C Premium Template Visual Differentiation.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.7B implementation review and approval checkpoint.
+- Stage 9.7C implementation review and approval checkpoint.
 
 ## Planned
 
@@ -97,6 +98,14 @@ Valid examples:
 ### Premium Template Strategy
 
 Premium templates should increase perceived value and support paid tiers.
+
+Stage 9.7C clarified the current visual standard:
+
+- Standard template = functional website.
+- Premium template = branded business experience.
+- Luxury template = high-end editorial experience.
+
+Premium visual differentiation is implemented for Restaurant Premium and Cafe Premium, with safe enhancement to the existing Corporate Executive renderer. Premium tier remains metadata only until subscription enforcement is approved separately.
 
 Potential categories:
 
