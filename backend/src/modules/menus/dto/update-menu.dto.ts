@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsNumber, IsOptional, IsString, IsUUID, Min } from 'class-validator';
+import { IsBoolean, IsInt, IsNumber, IsOptional, IsString, IsUUID, Min } from 'class-validator';
 
 export class UpdateMenuDto {
   @IsOptional()
@@ -23,6 +23,10 @@ export class UpdateMenuDto {
   @IsOptional()
   @IsString()
   imageUrl?: string | null;
+
+  @IsOptional()
+  @IsBoolean()
+  isFeatured?: boolean;
 
   @IsOptional()
   @IsInt()

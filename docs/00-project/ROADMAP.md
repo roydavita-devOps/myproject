@@ -36,11 +36,13 @@ Last updated: 2026-06-26
 - Stage 9.7B Template Selection Foundation.
 - Stage 9.7C Premium Template Visual Differentiation.
 - Stage 9.8A Menu Item Image Management.
+- Stage 9.8A-R1 Public Premium Menu Item Count Fix.
+- Stage 9.8B Featured Menu and Full Menu Modal.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.8A implementation review and approval checkpoint.
+- Stage 9.8B implementation review and approval checkpoint.
 
 ## Planned
 

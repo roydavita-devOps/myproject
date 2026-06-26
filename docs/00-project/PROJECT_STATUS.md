@@ -4,7 +4,7 @@ Last updated: 2026-06-26
 
 ## Current Stage
 
-Stage 9.8A - Menu Item Image Management.
+Stage 9.8B - Featured Menu and Full Menu Modal.
 
 Status: implemented and ready for approval.
 
@@ -42,7 +42,9 @@ Status: implemented and ready for approval.
 | Stage 9.7A Template Selection & Assignment Audit | Completed. |
 | Stage 9.7B Template Selection Foundation | Completed; awaiting approval. |
 | Stage 9.7C Premium Template Visual Differentiation | Completed with R1-R4 polish through reviews slider validation. |
-| Stage 9.8A Menu Item Image Management | Completed; awaiting approval. |
+| Stage 9.8A Menu Item Image Management | Completed. |
+| Stage 9.8A-R1 Public Premium Menu Item Count Fix | Completed. |
+| Stage 9.8B Featured Menu and Full Menu Modal | Completed; awaiting approval. |
 
 ## Current Blockers
 
@@ -53,13 +55,14 @@ Status: implemented and ready for approval.
 | Template selection flow | Resolved for foundation | Tenants can view active templates, see current template, and apply another template. Comparison, marketplace, and preview-before-apply remain out of scope. |
 | Premium visual differentiation | Resolved for Stage 9.7C | Restaurant Premium, Cafe Premium, and the existing Corporate Executive renderer now have stronger premium visual treatment without schema or entitlement changes. |
 | Menu item image management | Resolved for Stage 9.8A | Dashboard users can upload, preview, change, remove, and persist menu item photos. Premium public templates render `menu.imageUrl` and fallback safely when missing. |
+| Featured menu and full menu modal | Resolved for Stage 9.8B | Dashboard users can mark featured menu items. Premium public Signature sections show featured items, with a full menu modal for all items grouped by category. |
 | Luxury templates | Paused | No Luxury template implementation until separately approved. |
 | Template Catalog UI | Paused | No marketplace, comparison page, entitlement, or subscription access logic in Stage 9.7B. |
 
 ## Next Actions
 
-1. Review Stage 9.8A Menu Item Image Management.
-2. Approve or request corrections to dashboard menu image upload/change/remove behavior.
+1. Review Stage 9.8B Featured Menu and Full Menu Modal.
+2. Approve or request corrections to dashboard featured flag, premium Signature filtering, and full menu modal behavior.
 3. Keep Luxury, Catalog UI, marketplace, subscription, entitlement, preview-before-apply, and switch history paused until separately approved.
 4. After approval, proceed only to the next approved stage.
 5. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
@@ -89,5 +92,6 @@ Status: implemented and ready for approval.
 - Template selection foundation report: [../06-modern-template/reports/PHASE-9.7B-Template-Selection-Foundation-Report.md](../06-modern-template/reports/PHASE-9.7B-Template-Selection-Foundation-Report.md)
 - Premium visual differentiation report: [../06-modern-template/reports/PHASE-9.7C-Premium-Template-Visual-Differentiation-Report.md](../06-modern-template/reports/PHASE-9.7C-Premium-Template-Visual-Differentiation-Report.md)
 - Menu item image management report: [../06-modern-template/reports/PHASE-9.8A-Menu-Item-Image-Management-Report.md](../06-modern-template/reports/PHASE-9.8A-Menu-Item-Image-Management-Report.md)
+- Featured menu and full menu modal report: [../06-modern-template/reports/PHASE-9.8B-Featured-Menu-and-Full-Menu-Modal-Report.md](../06-modern-template/reports/PHASE-9.8B-Featured-Menu-and-Full-Menu-Modal-Report.md)
 - Template Catalog readiness audit: [../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md](../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md)
 - Template consistency audit: [../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md](../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md)

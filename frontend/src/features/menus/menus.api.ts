@@ -8,6 +8,7 @@ export type MenuPayload = {
   description?: string | null;
   price?: number;
   imageUrl?: string | null;
+  isFeatured?: boolean;
   sortOrder?: number;
 };
 

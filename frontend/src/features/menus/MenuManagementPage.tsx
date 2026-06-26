@@ -1,6 +1,6 @@
 import { FormEvent, useMemo, useState } from 'react';
 import { UseMutationResult, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Plus, Save, Trash2 } from 'lucide-react';
+import { Plus, Save, Star, Trash2 } from 'lucide-react';
 import { menusApi, UpdateMenuPayload } from './menus.api';
 import { websitesApi } from '../websites/websites.api';
 import { Button } from '../../components/ui/Button';
@@ -15,6 +15,7 @@ type MenuItemFormState = {
   price: string;
   categoryId: string;
   imageUrl: string | null;
+  isFeatured: boolean;
 };
 
 type UpdateMenuMutation = UseMutationResult<MenuItem, Error, { id: string; payload: UpdateMenuPayload }, unknown>;
@@ -53,6 +54,7 @@ export function MenuManagementPage() {
         categoryId: optionalValue(item.categoryId),
         price: optionalPrice(item.price),
         imageUrl: item.imageUrl || undefined,
+        isFeatured: item.isFeatured,
       }),
     onSuccess: () => {
       setItem(emptyMenuItemForm());
@@ -137,6 +139,10 @@ export function MenuManagementPage() {
             <Field label="Description">
               <TextArea value={item.description} onChange={(event) => setItem({ ...item, description: event.target.value })} />
             </Field>
+            <FeaturedToggle
+              checked={item.isFeatured}
+              onChange={(checked) => setItem({ ...item, isFeatured: checked })}
+            />
             <ImageUpload
               assetType="menu"
               label="Menu photo"
@@ -207,6 +213,7 @@ function MenuItemEditor({
         categoryId: optionalValue(form.categoryId) ?? null,
         price: optionalPrice(form.price),
         imageUrl: form.imageUrl,
+        isFeatured: form.isFeatured,
       },
     });
   }
@@ -240,9 +247,14 @@ function MenuItemEditor({
         <Field label="Description">
           <TextArea value={form.description} onChange={(event) => setForm({ ...form, description: event.target.value })} />
         </Field>
+        <FeaturedToggle
+          checked={form.isFeatured}
+          onChange={(checked) => setForm({ ...form, isFeatured: checked })}
+        />
         <div className="flex flex-col gap-1 text-xs text-slate-500">
           <span>{categoryMap.get(form.categoryId) ?? 'No category selected'}</span>
           <span>{form.imageUrl ? 'Photo selected. Save changes to publish it.' : 'No item photo. Premium templates will use the fallback visual.'}</span>
+          <span>{form.isFeatured ? 'Featured item: appears in premium Signature section.' : 'Normal item: appears in Full Menu modal.'}</span>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button type="submit" disabled={isSaving || !form.name.trim()}>
@@ -259,8 +271,28 @@ function MenuItemEditor({
   );
 }
 
+function FeaturedToggle({ checked, onChange }: { checked: boolean; onChange: (checked: boolean) => void }) {
+  return (
+    <label className="flex items-start gap-3 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+      <input
+        type="checkbox"
+        className="mt-1 size-4 rounded border-slate-300 text-teal-700 focus:ring-teal-600"
+        checked={checked}
+        onChange={(event) => onChange(event.target.checked)}
+      />
+      <span className="grid gap-1">
+        <span className="inline-flex items-center gap-2 font-medium text-slate-950">
+          <Star className="size-4 text-amber-500" />
+          Featured item
+        </span>
+        <span className="text-xs text-slate-500">Mark as Signature so this item appears in premium Signature sections.</span>
+      </span>
+    </label>
+  );
+}
+
 function emptyMenuItemForm(): MenuItemFormState {
-  return { name: '', description: '', price: '', categoryId: '', imageUrl: null };
+  return { name: '', description: '', price: '', categoryId: '', imageUrl: null, isFeatured: false };
 }
 
 function menuToForm(menu: MenuItem): MenuItemFormState {
@@ -270,6 +302,7 @@ function menuToForm(menu: MenuItem): MenuItemFormState {
     price: menu.price === undefined || menu.price === null ? '' : String(menu.price),
     categoryId: menu.categoryId ?? '',
     imageUrl: menu.imageUrl ?? null,
+    isFeatured: Boolean(menu.isFeatured),
   };
 }
 

@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { Award, CalendarCheck, ChefHat, Clock, Crown, MapPin, MessageCircle, Phone, Sparkles, Utensils, Wine } from 'lucide-react';
 import { Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
+import { PremiumFullMenuModal } from './PremiumFullMenuModal';
 import { normalizeTemplateAction, resolveContactActions, validateTemplateActions } from './templateActions';
 import {
   TemplateButton,
@@ -19,6 +21,9 @@ type PremiumDish = {
   description?: string | null;
   price?: string | number | null;
   imageUrl?: string | null;
+  categoryId?: string | null;
+  isFeatured?: boolean;
+  sortOrder?: number;
 };
 
 const defaultSignatureDishes: PremiumDish[] = [
@@ -34,7 +39,10 @@ const premiumReviews = [
 ];
 
 export function RestaurantPremiumTemplate({ website }: { website: Website }) {
-  const dishes = (website.menus?.length ? website.menus : defaultSignatureDishes) as PremiumDish[];
+  const [isFullMenuOpen, setIsFullMenuOpen] = useState(false);
+  const hasRealMenu = Boolean(website.menus?.length);
+  const allDishes = (hasRealMenu ? website.menus : defaultSignatureDishes) as PremiumDish[];
+  const dishes = resolveFeaturedItems(allDishes, hasRealMenu, 3);
   const reviews = website.reviews?.length ? website.reviews : premiumReviews;
 
   return (
@@ -42,7 +50,7 @@ export function RestaurantPremiumTemplate({ website }: { website: Website }) {
       <TemplateNavigation website={website} />
       <PremiumRestaurantHero website={website} />
       <ChefStory website={website} />
-      <SignatureDishes dishes={dishes} />
+      <SignatureDishes dishes={dishes} onOpenFullMenu={() => setIsFullMenuOpen(true)} />
       <GuestExperience />
       <PremiumGallery website={website} />
       <PremiumReviewsSlider
@@ -54,6 +62,14 @@ export function RestaurantPremiumTemplate({ website }: { website: Website }) {
       <ReservationCTA website={website} />
       <TemplateContactSection website={website} />
       <TemplateFooter website={website} />
+      <PremiumFullMenuModal
+        website={website}
+        items={allDishes}
+        isOpen={isFullMenuOpen}
+        onClose={() => setIsFullMenuOpen(false)}
+        title="Full Restaurant Menu"
+        variant="restaurant"
+      />
     </>
   );
 }
@@ -159,12 +175,23 @@ function ChefStory({ website }: { website: Website }) {
   );
 }
 
-function SignatureDishes({ dishes }: { dishes: PremiumDish[] }) {
+function SignatureDishes({ dishes, onOpenFullMenu }: { dishes: PremiumDish[]; onOpenFullMenu: () => void }) {
   const signatureDishes = dishes.slice(0, 3);
   if (signatureDishes.length === 0) return null;
 
   return (
     <TemplateSection id="services" muted eyebrow="Signature dishes" title="Signature Dishes" description="Premium cards emphasize curated dishes, story, price clarity, and ordering confidence.">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm text-[var(--tpl-text-secondary)]">Signature section highlights featured items only when they are configured.</p>
+        <button
+          type="button"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[#17120c] px-5 py-2.5 text-sm font-semibold text-[#f7c873] transition hover:bg-[#241b11] focus:outline-none focus:ring-2 focus:ring-[#f7c873] focus:ring-offset-2"
+          onClick={onOpenFullMenu}
+        >
+          <Utensils className="size-4" />
+          View Full Menu
+        </button>
+      </div>
       <div className="grid gap-5 md:grid-cols-3">
         {signatureDishes.map((dish, index) => (
           <TemplateCard key={dish.id} className="relative flex min-h-96 flex-col justify-between overflow-hidden bg-[#fffaf1] p-0 shadow-lg">
@@ -188,6 +215,12 @@ function SignatureDishes({ dishes }: { dishes: PremiumDish[] }) {
       </div>
     </TemplateSection>
   );
+}
+
+function resolveFeaturedItems(items: PremiumDish[], hasRealMenu: boolean, limit: number) {
+  if (!hasRealMenu) return items.slice(0, limit);
+  const featured = items.filter((item) => item.isFeatured === true);
+  return (featured.length > 0 ? featured : items).slice(0, limit);
 }
 
 function PremiumDishMedia({ dish, index }: { dish: PremiumDish; index: number }) {

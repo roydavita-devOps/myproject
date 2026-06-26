@@ -366,6 +366,18 @@ test.describe('SaaS smoke test', () => {
         await expect(page.getByText('Private dining presence')).toBeVisible();
         await expect(page.getByRole('heading', { name: 'Chef Story' })).toBeVisible();
         await expect(page.getByRole('heading', { name: 'Signature Dishes' })).toBeVisible();
+        const services = page.locator('#services');
+        await expect(services.getByText('Chef Signature Rice Set')).toBeVisible();
+        await expect(services.getByText('Slow Cooked Beef Plate')).toBeVisible();
+        await expect(services.getByText('Seasonal Family Platter')).toHaveCount(0);
+        await services.getByRole('button', { name: /view full menu/i }).click();
+        const dialog = page.getByRole('dialog', { name: /full restaurant menu/i });
+        await expect(dialog).toBeVisible();
+        await expect(dialog.getByRole('button', { name: /all/i })).toBeVisible();
+        await expect(dialog.getByText('Chef Signature Rice Set')).toBeVisible();
+        await expect(dialog.getByText('Seasonal Family Platter')).toBeVisible();
+        await dialog.getByRole('button', { name: /close full menu/i }).click();
+        await expect(dialog).toBeHidden();
         await expect(page.getByRole('heading', { name: 'Ambience Gallery' })).toBeVisible();
         await expect(page.getByText('Reserve your table tonight')).toBeVisible();
         const hero = page.locator('#home');
@@ -402,6 +414,18 @@ test.describe('SaaS smoke test', () => {
         await expect(page.getByText('Premium business presence')).toBeVisible();
         await expect(page.getByRole('heading', { name: 'Brand Story' })).toBeVisible();
         await expect(page.getByRole('heading', { name: 'Signature Menu' })).toBeVisible();
+        const services = page.locator('#services');
+        await expect(services.getByText('House Reserve Latte')).toBeVisible();
+        await expect(services.getByText('Weekend Brunch Plate')).toBeVisible();
+        await expect(services.getByText('Single Origin Pour Over')).toHaveCount(0);
+        await services.getByRole('button', { name: /view full menu/i }).click();
+        const dialog = page.getByRole('dialog', { name: /full cafe menu/i });
+        await expect(dialog).toBeVisible();
+        await expect(dialog.getByRole('button', { name: /all/i })).toBeVisible();
+        await expect(dialog.getByText('House Reserve Latte')).toBeVisible();
+        await expect(dialog.getByText('Single Origin Pour Over')).toBeVisible();
+        await dialog.getByRole('button', { name: /close full menu/i }).click();
+        await expect(dialog).toBeHidden();
         await expect(page.getByRole('heading', { name: 'Lifestyle Gallery' })).toBeVisible();
         await expect(page.getByText('Plan your next premium cafe visit')).toBeVisible();
         const hero = page.locator('#home');
@@ -541,17 +565,26 @@ function buildPremiumWebsitePayload(templateKey: 'restaurant_premium' | 'cafe_pr
       secondaryColor: isRestaurant ? '#f7c873' : '#f97316',
       accentColor: isRestaurant ? '#0f766e' : '#facc15',
     },
-    menus: isRestaurant
+    categories: isRestaurant
       ? [
-          { id: 'rp-menu-1', websiteId: `${templateKey}-website`, name: 'Chef Signature Rice Set', description: 'House signature rice with curated sides.', price: '58000', sortOrder: 1 },
-          { id: 'rp-menu-2', websiteId: `${templateKey}-website`, name: 'Slow Cooked Beef Plate', description: 'Tender beef with aromatic spices.', price: '68000', sortOrder: 2 },
-          { id: 'rp-menu-3', websiteId: `${templateKey}-website`, name: 'Seasonal Family Platter', description: 'Shareable premium platter.', price: '128000', sortOrder: 3 },
+          { id: 'rp-cat-signature', websiteId: `${templateKey}-website`, name: 'Signature Plates', sortOrder: 1 },
+          { id: 'rp-cat-family', websiteId: `${templateKey}-website`, name: 'Family Menu', sortOrder: 2 },
         ]
       : [
-          { id: 'cp-menu-1', websiteId: `${templateKey}-website`, name: 'House Reserve Latte', description: 'Espresso blend with balanced house syrup.', price: '42000', sortOrder: 1 },
-          { id: 'cp-menu-2', websiteId: `${templateKey}-website`, name: 'Single Origin Pour Over', description: 'Rotating beans brewed by hand.', price: '48000', sortOrder: 2 },
-          { id: 'cp-menu-3', websiteId: `${templateKey}-website`, name: 'Weekend Brunch Plate', description: 'Warm toast with seasonal garnish.', price: '68000', sortOrder: 3 },
-          { id: 'cp-menu-4', websiteId: `${templateKey}-website`, name: 'Craft Mocktail Coffee', description: 'Bright non-alcoholic coffee drink.', price: '46000', sortOrder: 4 },
+          { id: 'cp-cat-drinks', websiteId: `${templateKey}-website`, name: 'Drinks', sortOrder: 1 },
+          { id: 'cp-cat-brunch', websiteId: `${templateKey}-website`, name: 'Brunch', sortOrder: 2 },
+        ],
+    menus: isRestaurant
+      ? [
+          { id: 'rp-menu-1', websiteId: `${templateKey}-website`, categoryId: 'rp-cat-signature', name: 'Chef Signature Rice Set', description: 'House signature rice with curated sides.', price: '58000', isFeatured: true, sortOrder: 1 },
+          { id: 'rp-menu-2', websiteId: `${templateKey}-website`, categoryId: 'rp-cat-signature', name: 'Slow Cooked Beef Plate', description: 'Tender beef with aromatic spices.', price: '68000', isFeatured: true, sortOrder: 2 },
+          { id: 'rp-menu-3', websiteId: `${templateKey}-website`, categoryId: 'rp-cat-family', name: 'Seasonal Family Platter', description: 'Shareable premium platter.', price: '128000', isFeatured: false, sortOrder: 3 },
+        ]
+      : [
+          { id: 'cp-menu-1', websiteId: `${templateKey}-website`, categoryId: 'cp-cat-drinks', name: 'House Reserve Latte', description: 'Espresso blend with balanced house syrup.', price: '42000', isFeatured: true, sortOrder: 1 },
+          { id: 'cp-menu-2', websiteId: `${templateKey}-website`, categoryId: 'cp-cat-drinks', name: 'Single Origin Pour Over', description: 'Rotating beans brewed by hand.', price: '48000', isFeatured: false, sortOrder: 2 },
+          { id: 'cp-menu-3', websiteId: `${templateKey}-website`, categoryId: 'cp-cat-brunch', name: 'Weekend Brunch Plate', description: 'Warm toast with seasonal garnish.', price: '68000', isFeatured: true, sortOrder: 3 },
+          { id: 'cp-menu-4', websiteId: `${templateKey}-website`, categoryId: 'cp-cat-drinks', name: 'Craft Mocktail Coffee', description: 'Bright non-alcoholic coffee drink.', price: '46000', isFeatured: false, sortOrder: 4 },
         ],
     galleries: [],
     reviews: [],

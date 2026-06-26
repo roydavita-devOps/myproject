@@ -1,0 +1,24 @@
+{
+  "stage": "9.8B Featured Menu and Full Menu Modal",
+  "generatedAt": "2026-06-26T12:20:02.522Z",
+  "restaurantSlug": "featured-restaurant-1782476393151",
+  "cafeSlug": "featured-cafe-1782476393151",
+  "screenshots": {
+    "dashboardFeaturedToggle": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\featured-menu-full-menu-modal\\dashboard-featured-toggle-form.png",
+    "dashboardExistingFeaturedStatus": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\featured-menu-full-menu-modal\\dashboard-existing-featured-status.png",
+    "publicFeaturedSignature": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\featured-menu-full-menu-modal\\public-signature-featured-only.png",
+    "fullMenuModalAllItems": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\featured-menu-full-menu-modal\\full-menu-modal-all-items.png",
+    "fullMenuModalCategories": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\featured-menu-full-menu-modal\\full-menu-modal-category-tabs.png",
+    "mobileFullMenuModal": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\featured-menu-full-menu-modal\\mobile-full-menu-modal.png",
+    "noFeaturedFallback": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\featured-menu-full-menu-modal\\public-no-featured-fallback-highlights.png"
+  },
+  "validations": [
+    "Dashboard featured flags persisted after refresh.",
+    "Restaurant Premium Signature section shows only featured items when configured.",
+    "Restaurant full menu modal shows all items, category tabs, and closes with Escape.",
+    "Cafe Premium repeats featured-only Signature behavior and full menu modal.",
+    "Mobile full menu modal opens as a readable full-height sheet without horizontal overflow.",
+    "When no item is featured, premium Signature section safely falls back to real menu highlights.",
+    "When no real menu items exist, Cafe Premium safely renders fallback sample menu cards and modal items."
+  ]
+}

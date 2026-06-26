@@ -62,6 +62,7 @@ export class MenusService {
         description: dto.description,
         price: dto.price === undefined ? undefined : new Prisma.Decimal(dto.price),
         imageUrl: dto.imageUrl,
+        isFeatured: dto.isFeatured ?? false,
         sortOrder: dto.sortOrder ?? 0,
       },
     });
@@ -79,6 +80,7 @@ export class MenusService {
         description: dto.description,
         price: dto.price === undefined ? undefined : new Prisma.Decimal(dto.price),
         imageUrl: dto.imageUrl,
+        isFeatured: dto.isFeatured,
         sortOrder: dto.sortOrder,
       },
     });

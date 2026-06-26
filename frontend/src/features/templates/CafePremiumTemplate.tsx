@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { Armchair, CalendarDays, Coffee, CupSoda, HeartHandshake, MapPin, MessageCircle, Music, Phone, Sandwich, Sparkles, Star, Wifi } from 'lucide-react';
 import { Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
+import { PremiumFullMenuModal } from './PremiumFullMenuModal';
 import { normalizeTemplateAction, resolveContactActions, validateTemplateActions } from './templateActions';
 import {
   TemplateButton,
@@ -19,6 +21,9 @@ type PremiumCafeMenuItem = {
   description?: string | null;
   price?: string | number | null;
   imageUrl?: string | null;
+  categoryId?: string | null;
+  isFeatured?: boolean;
+  sortOrder?: number;
 };
 
 const defaultPremiumMenu: PremiumCafeMenuItem[] = [
@@ -35,7 +40,10 @@ const premiumCafeReviews = [
 ];
 
 export function CafePremiumTemplate({ website }: { website: Website }) {
-  const menu = (website.menus?.length ? website.menus : defaultPremiumMenu) as PremiumCafeMenuItem[];
+  const [isFullMenuOpen, setIsFullMenuOpen] = useState(false);
+  const hasRealMenu = Boolean(website.menus?.length);
+  const allMenu = (hasRealMenu ? website.menus : defaultPremiumMenu) as PremiumCafeMenuItem[];
+  const menu = resolveFeaturedCafeItems(allMenu, hasRealMenu, 4);
   const reviews = website.reviews?.length ? website.reviews : premiumCafeReviews;
 
   return (
@@ -43,7 +51,7 @@ export function CafePremiumTemplate({ website }: { website: Website }) {
       <TemplateNavigation website={website} />
       <PremiumCafeHero website={website} />
       <BrandStory website={website} />
-      <SignatureMenu items={menu} />
+      <SignatureMenu items={menu} onOpenFullMenu={() => setIsFullMenuOpen(true)} />
       <FeaturedExperience />
       <PremiumCafeGallery website={website} />
       <PremiumReviewsSlider
@@ -55,6 +63,14 @@ export function CafePremiumTemplate({ website }: { website: Website }) {
       <ContactCTA website={website} />
       <TemplateContactSection website={website} />
       <TemplateFooter website={website} />
+      <PremiumFullMenuModal
+        website={website}
+        items={allMenu}
+        isOpen={isFullMenuOpen}
+        onClose={() => setIsFullMenuOpen(false)}
+        title="Full Cafe Menu"
+        variant="cafe"
+      />
     </>
   );
 }
@@ -139,12 +155,23 @@ function BrandStory({ website }: { website: Website }) {
   );
 }
 
-function SignatureMenu({ items }: { items: PremiumCafeMenuItem[] }) {
+function SignatureMenu({ items, onOpenFullMenu }: { items: PremiumCafeMenuItem[]; onOpenFullMenu: () => void }) {
   const signatureItems = items.slice(0, 4);
   if (signatureItems.length === 0) return null;
 
   return (
     <TemplateSection id="services" muted eyebrow="Signature menu" title="Signature Menu" description="Premium cards highlight featured items, clear descriptions, and price clarity.">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm text-[var(--tpl-text-secondary)]">Signature section highlights featured items only when they are configured.</p>
+        <button
+          type="button"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[#7a4a24] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#5a3822] focus:outline-none focus:ring-2 focus:ring-[#7a4a24] focus:ring-offset-2"
+          onClick={onOpenFullMenu}
+        >
+          <Coffee className="size-4" />
+          View Full Menu
+        </button>
+      </div>
       <div className="grid gap-4 md:grid-cols-2">
         {signatureItems.map((item, index) => (
           <TemplateCard key={item.id} className="flex min-h-80 flex-col justify-between overflow-hidden bg-[#fffaf2] p-0 shadow-lg">
@@ -167,6 +194,12 @@ function SignatureMenu({ items }: { items: PremiumCafeMenuItem[] }) {
       </div>
     </TemplateSection>
   );
+}
+
+function resolveFeaturedCafeItems(items: PremiumCafeMenuItem[], hasRealMenu: boolean, limit: number) {
+  if (!hasRealMenu) return items.slice(0, limit);
+  const featured = items.filter((item) => item.isFeatured === true);
+  return (featured.length > 0 ? featured : items).slice(0, limit);
 }
 
 function PremiumCafeMenuMedia({ item, index }: { item: PremiumCafeMenuItem; index: number }) {

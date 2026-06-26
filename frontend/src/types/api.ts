@@ -121,6 +121,7 @@ export type MenuItem = {
   description?: string | null;
   price?: string | number | null;
   imageUrl?: string | null;
+  isFeatured?: boolean;
   sortOrder: number;
 };
 

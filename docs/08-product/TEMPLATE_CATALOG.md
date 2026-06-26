@@ -28,6 +28,7 @@ Decision:
 | Cafe Premium template | Implemented through Stage 9.7 Sprint 8. |
 | Premium visual differentiation | Implemented through Stage 9.7C for Restaurant Premium, Cafe Premium, and safe Corporate Executive renderer enhancement. |
 | Menu item image management | Implemented through Stage 9.8A for dashboard upload/change/remove and premium public rendering. |
+| Featured menu and full menu modal | Implemented through Stage 9.8B for featured Signature sections and full menu modal browsing. |
 
 ## Metadata Standard
 
@@ -270,3 +271,27 @@ Not implemented:
 - Preview-before-apply.
 - Template switch history.
 - Prisma schema changes or database migrations.
+
+## Stage 9.8B Featured Menu Notes
+
+Stage 9.8B separates highlighted premium menu items from the complete menu list.
+
+Implemented:
+
+- Dashboard menu editor supports a `Featured item` flag.
+- Persisted menu field is `menu.isFeatured`.
+- Restaurant Premium and Cafe Premium Signature sections use featured items when configured.
+- If no real item is featured, Signature sections fall back to the first real menu items.
+- If no real menu items exist, premium templates use existing fallback sample menu items.
+- `View Full Menu` opens a modal showing all menu items.
+- Full menu modal groups items by category and includes an `All` tab.
+- Mobile modal behaves as a full-height sheet.
+
+Not implemented:
+
+- Template Catalog UI.
+- Marketplace.
+- Billing or subscription enforcement.
+- Entitlement restrictions.
+- Preview-before-apply.
+- Template switch history.
