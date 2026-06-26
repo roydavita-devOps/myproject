@@ -1,7 +1,7 @@
 import { AxiosProgressEvent } from 'axios';
 import { http } from '../../lib/api/http';
 
-export type UploadAssetType = 'logo' | 'hero' | 'gallery';
+export type UploadAssetType = 'logo' | 'hero' | 'menu' | 'gallery';
 
 export type UploadedAsset = {
   tenantId: string;

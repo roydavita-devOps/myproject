@@ -27,6 +27,7 @@ Decision:
 | Restaurant Premium template | Implemented through Stage 9.7 Sprint 7. |
 | Cafe Premium template | Implemented through Stage 9.7 Sprint 8. |
 | Premium visual differentiation | Implemented through Stage 9.7C for Restaurant Premium, Cafe Premium, and safe Corporate Executive renderer enhancement. |
+| Menu item image management | Implemented through Stage 9.8A for dashboard upload/change/remove and premium public rendering. |
 
 ## Metadata Standard
 
@@ -237,6 +238,28 @@ Implemented:
 - Restaurant Premium: near full-screen dark editorial hero, champagne accent, floating reservation card, stronger signature dishes, chef story, ambience gallery, and reservation CTA.
 - Cafe Premium: warm lifestyle hero, layered favorite/open cards, brand story, signature menu cards, lifestyle gallery, and visit CTA.
 - Corporate Executive: safe enhancement to the existing dedicated corporate renderer with executive navy hero, stats row, and consultation card.
+
+Not implemented:
+
+- Template Catalog UI.
+- Marketplace.
+- Billing or subscription enforcement.
+- Entitlement restrictions.
+- Preview-before-apply.
+- Template switch history.
+- Prisma schema changes or database migrations.
+
+## Stage 9.8A Menu Image Notes
+
+Stage 9.8A adds content management support for menu item photos.
+
+Implemented:
+
+- Dashboard menu editor supports upload, preview, change, and remove for menu item images.
+- Existing upload policy is reused with `uploads/menu`.
+- Persisted menu field is `menu.imageUrl`.
+- Restaurant Premium and Cafe Premium continue to render uploaded menu photos when available.
+- Public premium templates continue to render fallback visuals when `menu.imageUrl` is missing.
 
 Not implemented:
 

@@ -1,12 +1,23 @@
 import { FormEvent, useMemo, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Plus, Trash2 } from 'lucide-react';
-import { menusApi } from './menus.api';
+import { UseMutationResult, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Plus, Save, Trash2 } from 'lucide-react';
+import { menusApi, UpdateMenuPayload } from './menus.api';
 import { websitesApi } from '../websites/websites.api';
 import { Button } from '../../components/ui/Button';
 import { Field, TextArea, TextInput } from '../../components/ui/Field';
-import { IconButton } from '../../components/ui/IconButton';
+import { ImageUpload } from '../../components/ui/ImageUpload';
 import { EmptyState, LoadingState } from '../../components/ui/State';
+import { MenuCategory, MenuItem } from '../../types/api';
+
+type MenuItemFormState = {
+  name: string;
+  description: string;
+  price: string;
+  categoryId: string;
+  imageUrl: string | null;
+};
+
+type UpdateMenuMutation = UseMutationResult<MenuItem, Error, { id: string; payload: UpdateMenuPayload }, unknown>;
 
 export function MenuManagementPage() {
   const queryClient = useQueryClient();
@@ -24,10 +35,10 @@ export function MenuManagementPage() {
     enabled: Boolean(selectedWebsiteId),
   });
   const [categoryName, setCategoryName] = useState('');
-  const [item, setItem] = useState({ name: '', description: '', price: '', categoryId: '' });
+  const [item, setItem] = useState<MenuItemFormState>(emptyMenuItemForm());
 
   const categoryMutation = useMutation({
-    mutationFn: () => menusApi.createCategory({ websiteId: selectedWebsiteId, name: categoryName }),
+    mutationFn: () => menusApi.createCategory({ websiteId: selectedWebsiteId, name: categoryName.trim() }),
     onSuccess: () => {
       setCategoryName('');
       queryClient.invalidateQueries({ queryKey: ['menu-categories', selectedWebsiteId] });
@@ -37,19 +48,31 @@ export function MenuManagementPage() {
     mutationFn: () =>
       menusApi.createMenu({
         websiteId: selectedWebsiteId,
-        name: item.name,
-        description: item.description,
-        categoryId: item.categoryId || undefined,
-        price: item.price ? Number(item.price) : undefined,
+        name: item.name.trim(),
+        description: optionalValue(item.description),
+        categoryId: optionalValue(item.categoryId),
+        price: optionalPrice(item.price),
+        imageUrl: item.imageUrl || undefined,
       }),
     onSuccess: () => {
-      setItem({ name: '', description: '', price: '', categoryId: '' });
+      setItem(emptyMenuItemForm());
       queryClient.invalidateQueries({ queryKey: ['menus', selectedWebsiteId] });
+      queryClient.invalidateQueries({ queryKey: ['websites'] });
+    },
+  });
+  const updateMutation = useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: UpdateMenuPayload }) => menusApi.updateMenu(id, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['menus', selectedWebsiteId] });
+      queryClient.invalidateQueries({ queryKey: ['websites'] });
     },
   });
   const deleteMutation = useMutation({
     mutationFn: menusApi.deleteMenu,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['menus', selectedWebsiteId] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['menus', selectedWebsiteId] });
+      queryClient.invalidateQueries({ queryKey: ['websites'] });
+    },
   });
 
   const categoryMap = useMemo(() => new Map(categories.map((category) => [category.id, category.name])), [categories]);
@@ -71,7 +94,7 @@ export function MenuManagementPage() {
     <section className="grid gap-6">
       <div>
         <h1 className="text-2xl font-semibold text-slate-950">Menu & Services</h1>
-        <p className="mt-1 text-sm text-slate-500">Manage menu items, service offerings, prices, and ordering.</p>
+        <p className="mt-1 text-sm text-slate-500">Manage menu items, service offerings, prices, photos, and ordering.</p>
       </div>
       <div className="panel p-5">
         <Field label="Website">
@@ -80,7 +103,7 @@ export function MenuManagementPage() {
           </select>
         </Field>
       </div>
-      <div className="grid gap-6 xl:grid-cols-[360px_1fr]">
+      <div className="grid gap-6 xl:grid-cols-[380px_1fr]">
         <div className="grid gap-4">
           <form className="panel grid gap-4 p-5" onSubmit={submitCategory}>
             <h2 className="font-semibold">Categories</h2>
@@ -114,9 +137,18 @@ export function MenuManagementPage() {
             <Field label="Description">
               <TextArea value={item.description} onChange={(event) => setItem({ ...item, description: event.target.value })} />
             </Field>
-            <Button type="submit" disabled={itemMutation.isPending}>
+            <ImageUpload
+              assetType="menu"
+              label="Menu photo"
+              description="Foto produk atau layanan yang tampil di template premium."
+              currentUrl={item.imageUrl}
+              maxSizeMb={4}
+              onUploaded={(imageUrl) => setItem((current) => ({ ...current, imageUrl }))}
+              onDelete={() => setItem((current) => ({ ...current, imageUrl: null }))}
+            />
+            <Button type="submit" disabled={itemMutation.isPending || !item.name.trim()}>
               <Plus className="size-4" />
-              Add item
+              {itemMutation.isPending ? 'Adding item' : 'Add item'}
             </Button>
           </form>
         </div>
@@ -128,18 +160,15 @@ export function MenuManagementPage() {
           ) : (
             <div className="divide-y divide-slate-100">
               {menus.map((menu) => (
-                <div key={menu.id} className="flex items-start justify-between gap-4 p-4">
-                  <div>
-                    <p className="font-medium text-slate-950">{menu.name}</p>
-                    <p className="mt-1 text-sm text-slate-500">{menu.description || categoryMap.get(menu.categoryId ?? '') || 'No description'}</p>
-                    <p className="mt-2 text-sm font-medium text-teal-800">
-                      {menu.price ? `Rp ${Number(menu.price).toLocaleString('id-ID')}` : 'No price'}
-                    </p>
-                  </div>
-                  <IconButton label="Delete menu item" onClick={() => deleteMutation.mutate(menu.id)}>
-                    <Trash2 className="size-4" />
-                  </IconButton>
-                </div>
+                <MenuItemEditor
+                  key={menu.id}
+                  menu={menu}
+                  categories={categories}
+                  categoryMap={categoryMap}
+                  updateMutation={updateMutation}
+                  onDelete={() => deleteMutation.mutate(menu.id)}
+                  isDeleting={deleteMutation.isPending}
+                />
               ))}
             </div>
           )}
@@ -147,4 +176,109 @@ export function MenuManagementPage() {
       </div>
     </section>
   );
+}
+
+function MenuItemEditor({
+  menu,
+  categories,
+  categoryMap,
+  updateMutation,
+  onDelete,
+  isDeleting,
+}: {
+  menu: MenuItem;
+  categories: MenuCategory[];
+  categoryMap: Map<string, string>;
+  updateMutation: UpdateMenuMutation;
+  onDelete: () => void;
+  isDeleting: boolean;
+}) {
+  const [form, setForm] = useState<MenuItemFormState>(() => menuToForm(menu));
+  const isSaving = updateMutation.isPending && updateMutation.variables?.id === menu.id;
+
+  function submitItem(event: FormEvent) {
+    event.preventDefault();
+    if (!form.name.trim()) return;
+    updateMutation.mutate({
+      id: menu.id,
+      payload: {
+        name: form.name.trim(),
+        description: optionalValue(form.description),
+        categoryId: optionalValue(form.categoryId) ?? null,
+        price: optionalPrice(form.price),
+        imageUrl: form.imageUrl,
+      },
+    });
+  }
+
+  return (
+    <form className="grid gap-4 p-4" onSubmit={submitItem}>
+      <ImageUpload
+        assetType="menu"
+        label="Item photo"
+        description="Upload, change, or remove this item photo."
+        currentUrl={form.imageUrl}
+        maxSizeMb={4}
+        onUploaded={(imageUrl) => setForm((current) => ({ ...current, imageUrl }))}
+        onDelete={() => setForm((current) => ({ ...current, imageUrl: null }))}
+      />
+      <div className="grid min-w-0 gap-3">
+        <div className="grid gap-3 md:grid-cols-2">
+          <Field label="Name">
+            <TextInput value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} />
+          </Field>
+          <Field label="Category">
+            <select className="field-input" value={form.categoryId} onChange={(event) => setForm({ ...form, categoryId: event.target.value })}>
+              <option value="">No category</option>
+              {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
+            </select>
+          </Field>
+        </div>
+        <Field label="Price">
+          <TextInput value={form.price} onChange={(event) => setForm({ ...form, price: event.target.value })} inputMode="decimal" />
+        </Field>
+        <Field label="Description">
+          <TextArea value={form.description} onChange={(event) => setForm({ ...form, description: event.target.value })} />
+        </Field>
+        <div className="flex flex-col gap-1 text-xs text-slate-500">
+          <span>{categoryMap.get(form.categoryId) ?? 'No category selected'}</span>
+          <span>{form.imageUrl ? 'Photo selected. Save changes to publish it.' : 'No item photo. Premium templates will use the fallback visual.'}</span>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Button type="submit" disabled={isSaving || !form.name.trim()}>
+            <Save className="size-4" />
+            {isSaving ? 'Saving' : 'Save changes'}
+          </Button>
+          <Button variant="danger" onClick={onDelete} disabled={isDeleting}>
+            <Trash2 className="size-4" />
+            Delete
+          </Button>
+        </div>
+      </div>
+    </form>
+  );
+}
+
+function emptyMenuItemForm(): MenuItemFormState {
+  return { name: '', description: '', price: '', categoryId: '', imageUrl: null };
+}
+
+function menuToForm(menu: MenuItem): MenuItemFormState {
+  return {
+    name: menu.name ?? '',
+    description: menu.description ?? '',
+    price: menu.price === undefined || menu.price === null ? '' : String(menu.price),
+    categoryId: menu.categoryId ?? '',
+    imageUrl: menu.imageUrl ?? null,
+  };
+}
+
+function optionalValue(value: string) {
+  const trimmed = value.trim();
+  return trimmed === '' ? undefined : trimmed;
+}
+
+function optionalPrice(value: string) {
+  const trimmed = value.trim();
+  return trimmed === '' ? undefined : Number(trimmed);
 }

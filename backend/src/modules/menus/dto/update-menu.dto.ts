@@ -22,7 +22,7 @@ export class UpdateMenuDto {
 
   @IsOptional()
   @IsString()
-  imageUrl?: string;
+  imageUrl?: string | null;
 
   @IsOptional()
   @IsInt()

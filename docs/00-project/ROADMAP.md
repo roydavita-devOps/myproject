@@ -35,11 +35,12 @@ Last updated: 2026-06-26
 - Stage 9.7A Template Selection & Assignment Audit.
 - Stage 9.7B Template Selection Foundation.
 - Stage 9.7C Premium Template Visual Differentiation.
+- Stage 9.8A Menu Item Image Management.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.7C implementation review and approval checkpoint.
+- Stage 9.8A implementation review and approval checkpoint.
 
 ## Planned
 

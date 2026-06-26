@@ -3,13 +3,15 @@ import { http } from '../../lib/api/http';
 
 export type MenuPayload = {
   websiteId: string;
-  categoryId?: string;
+  categoryId?: string | null;
   name: string;
-  description?: string;
+  description?: string | null;
   price?: number;
-  imageUrl?: string;
+  imageUrl?: string | null;
   sortOrder?: number;
 };
+
+export type UpdateMenuPayload = Partial<MenuPayload>;
 
 export const menusApi = {
   async listCategories(websiteId?: string) {
@@ -26,6 +28,10 @@ export const menusApi = {
   },
   async createMenu(payload: MenuPayload) {
     const { data } = await http.post<MenuItem>('/menus', payload);
+    return data;
+  },
+  async updateMenu(id: string, payload: UpdateMenuPayload) {
+    const { data } = await http.put<MenuItem>(`/menus/${id}`, payload);
     return data;
   },
   async deleteMenu(id: string) {

@@ -1,0 +1,22 @@
+{
+  "stage": "9.8A Menu Item Image Management",
+  "generatedAt": "2026-06-26T10:54:01.979Z",
+  "slug": "menu-image-1782471190041",
+  "screenshots": {
+    "dashboardNewForm": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\menu-item-image-management\\dashboard-new-menu-form.png",
+    "dashboardPreviewAfterUpload": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\menu-item-image-management\\dashboard-image-preview-after-upload.png",
+    "dashboardExistingThumbnail": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\menu-item-image-management\\dashboard-existing-item-thumbnail.png",
+    "publicRestaurantPremium": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\menu-item-image-management\\public-restaurant-premium-menu-image.png",
+    "publicCafePremium": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\menu-item-image-management\\public-cafe-premium-menu-image.png",
+    "publicFallbackAfterRemoval": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\menu-item-image-management\\public-fallback-after-image-removal.png"
+  },
+  "validations": [
+    "Dashboard new item form has menu image upload controls and no horizontal scroll.",
+    "Dashboard image preview appears after selecting/uploading a local file.",
+    "Existing menu item renders current uploaded image preview and editable fields.",
+    "Restaurant Premium displays uploaded menu.imageUrl with CTA visible and no broken images.",
+    "Menu image change persisted through PUT /api/v1/menus/:id.",
+    "Cafe Premium displays changed uploaded menu.imageUrl with CTA visible and no broken images.",
+    "Removing imageUrl persists null and Cafe Premium renders fallback visual without broken image."
+  ]
+}
