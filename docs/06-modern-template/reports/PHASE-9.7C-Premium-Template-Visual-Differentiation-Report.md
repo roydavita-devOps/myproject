@@ -148,6 +148,86 @@ Validation run during implementation:
 | Remote fallback images depend on external availability | Low | Uploaded tenant images still take priority; fallback panels exist for gallery sections. |
 | Bundle size warning remains | Low | Vite reports a non-blocking chunk-size warning already present in the app build profile. |
 
+## R1 Polish - Corporate Executive Mobile Hero
+
+### Issue Found
+
+Stage 9.7C visual validation found that `corporate_executive-mobile.png` showed a large diagonal white area in the hero background.
+
+The issue did not cause:
+
+- Horizontal scroll.
+- Broken image.
+- Blank section.
+- CTA failure.
+- Test failure.
+
+However, it weakened the premium executive feel on mobile.
+
+### Root Cause
+
+The Corporate Executive hero background used a single diagonal desktop-oriented gradient:
+
+```text
+linear-gradient(135deg, #07111f, #0f2338 55%, #f8fafc 55%)
+```
+
+On narrow mobile viewports, the `#f8fafc` portion occupied too much of the hero and appeared as a distracting white diagonal band.
+
+### Fix Summary
+
+The hero background is now responsive:
+
+- Mobile uses a full dark navy executive gradient with subtle radial highlights.
+- Tablet and desktop keep the diagonal editorial treatment.
+- The hero container now uses `isolate` with `overflow-hidden` to keep decorative layers contained.
+
+### Files Modified
+
+- `frontend/src/features/templates/CorporateTemplate.tsx`
+- `docs/06-modern-template/reports/PHASE-9.7C-Premium-Template-Visual-Differentiation-Report.md`
+
+Restaurant Premium and Cafe Premium were not modified in R1.
+
+### Screenshot Evidence Path
+
+Regenerated R1 evidence:
+
+```text
+docs/evidence/premium-template-visual-validation/corporate_executive/corporate_executive-desktop.png
+docs/evidence/premium-template-visual-validation/corporate_executive/corporate_executive-tablet.png
+docs/evidence/premium-template-visual-validation/corporate_executive/corporate_executive-mobile.png
+docs/evidence/premium-template-visual-validation/corporate-executive-r1-validation-results.json
+```
+
+### R1 Test Results
+
+| Check | Result |
+| --- | --- |
+| Frontend lint | Passed. |
+| Frontend production build | Passed with non-blocking Vite chunk-size warning. |
+| Frontend registry tests | Passed: 25/25. |
+| Docker rebuild for frontend/nginx | Passed. |
+| Existing smoke tests | Passed: 10/10. |
+| Corporate Executive screenshot regeneration | Passed for desktop, tablet, and mobile. |
+| Corporate Executive automated visual checks | Passed: no horizontal overflow, no broken image, no blank section, CTA visible/clickable, correct `data-template-key`. |
+
+### R1 Scope Confirmation
+
+R1 did not introduce:
+
+- New product features.
+- Backend changes.
+- Prisma schema changes.
+- Database migrations.
+- Billing.
+- Subscription.
+- Entitlement enforcement.
+- Marketplace.
+- Catalog UI.
+- Template registry changes.
+- Template resolver changes.
+
 ## Rollback Strategy
 
 1. Revert visual changes in Premium renderer files.

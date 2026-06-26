@@ -89,8 +89,8 @@ function CorporateHero({ website }: { website: Website }) {
   const actions = resolveCorporateHeroActions(website);
 
   return (
-    <section id="home" className="relative overflow-hidden bg-[#07111f] text-white">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(59,130,246,.2),transparent_30%),linear-gradient(135deg,#07111f,#0f2338_55%,#f8fafc_55%)]" />
+    <section id="home" className="relative isolate overflow-hidden bg-[#07111f] text-white">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(59,130,246,.22),transparent_34%),radial-gradient(circle_at_88%_10%,rgba(148,163,184,.14),transparent_28%),linear-gradient(180deg,#07111f,#0f2338)] md:bg-[radial-gradient(circle_at_20%_15%,rgba(59,130,246,.2),transparent_30%),linear-gradient(135deg,#07111f,#0f2338_58%,#f8fafc_58%)]" />
       <div className="relative mx-auto grid min-h-[88vh] max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-[1fr_0.92fr] md:py-20">
         <div className="relative z-10">
           <p className="tpl-caption mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 font-semibold uppercase text-[#93c5fd] shadow-sm backdrop-blur">

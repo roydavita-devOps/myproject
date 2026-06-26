@@ -1,0 +1,47 @@
+[
+  {
+    "viewportName": "desktop",
+    "screenshotPath": "X:/PROJECT MANDIRI/product_SaaS/docs/evidence/premium-template-visual-validation/corporate_executive/corporate_executive-desktop.png",
+    "templateKey": "corporate_executive",
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "blankSections": [],
+    "ctaCount": 12,
+    "badCtas": [],
+    "heroHeight": 968,
+    "viewport": {
+      "width": 1440,
+      "height": 1100
+    }
+  },
+  {
+    "viewportName": "tablet",
+    "screenshotPath": "X:/PROJECT MANDIRI/product_SaaS/docs/evidence/premium-template-visual-validation/corporate_executive/corporate_executive-tablet.png",
+    "templateKey": "corporate_executive",
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "blankSections": [],
+    "ctaCount": 12,
+    "badCtas": [],
+    "heroHeight": 901.109375,
+    "viewport": {
+      "width": 768,
+      "height": 1024
+    }
+  },
+  {
+    "viewportName": "mobile",
+    "screenshotPath": "X:/PROJECT MANDIRI/product_SaaS/docs/evidence/premium-template-visual-validation/corporate_executive/corporate_executive-mobile.png",
+    "templateKey": "corporate_executive",
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "blankSections": [],
+    "ctaCount": 12,
+    "badCtas": [],
+    "heroHeight": 1302.28125,
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  }
+]
