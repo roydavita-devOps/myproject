@@ -1,0 +1,74 @@
+{
+  "generatedAt": "2026-06-27T16:50:40.278Z",
+  "baseURL": "http://127.0.0.1",
+  "screenshots": {
+    "restaurant": {
+      "mobile": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-contrast-readability/restaurant-premium/restaurant-premium-mobile.png",
+      "tablet": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-contrast-readability/restaurant-premium/restaurant-premium-tablet.png",
+      "desktop": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-contrast-readability/restaurant-premium/restaurant-premium-desktop.png"
+    },
+    "cafe": {
+      "mobile": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-contrast-readability/cafe-premium/cafe-premium-mobile.png",
+      "tablet": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-contrast-readability/cafe-premium/cafe-premium-tablet.png",
+      "desktop": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-contrast-readability/cafe-premium/cafe-premium-desktop.png"
+    },
+    "color": {
+      "mobile": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-contrast-readability/color-customization/color-customization-mobile.png",
+      "desktop": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-contrast-readability/color-customization/color-customization-desktop.png"
+    }
+  },
+  "results": [
+    {
+      "target": "restaurant_premium",
+      "viewport": "mobile",
+      "images": 6,
+      "ctas": 10,
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_premium",
+      "viewport": "tablet",
+      "images": 6,
+      "ctas": 10,
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_premium",
+      "viewport": "desktop",
+      "images": 6,
+      "ctas": 10,
+      "status": "passed"
+    },
+    {
+      "target": "cafe_premium",
+      "viewport": "mobile",
+      "images": 6,
+      "ctas": 10,
+      "status": "passed"
+    },
+    {
+      "target": "cafe_premium",
+      "viewport": "tablet",
+      "images": 6,
+      "ctas": 10,
+      "status": "passed"
+    },
+    {
+      "target": "cafe_premium",
+      "viewport": "desktop",
+      "images": 6,
+      "ctas": 10,
+      "status": "passed"
+    },
+    {
+      "target": "color-customization",
+      "viewport": "mobile",
+      "status": "passed"
+    },
+    {
+      "target": "color-customization",
+      "viewport": "desktop",
+      "status": "passed"
+    }
+  ]
+}

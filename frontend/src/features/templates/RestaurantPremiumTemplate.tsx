@@ -54,7 +54,7 @@ export function RestaurantPremiumTemplate({ website }: { website: Website }) {
       <PremiumReviewsSlider
         reviews={reviews}
         sliderId="restaurant-premium-reviews"
-        description="Premium review cards help customers scan trust signals without a static default grid."
+        description="Guests can quickly see why people return for the food, service, and atmosphere."
       />
       <VisitReservationSection website={website} />
       <TemplateFooter website={website} />
@@ -75,54 +75,55 @@ function PremiumRestaurantHero({ website }: { website: Website }) {
   const actions = resolvePremiumRestaurantActions(website);
 
   return (
-    <section id="home" className="relative min-h-[88vh] overflow-hidden bg-[var(--premium-primary)]">
-      <img className="premium-hero-motion absolute inset-0 size-full object-cover opacity-70" src={heroImage} alt={`${website.businessName} dining room`} />
+    <section id="home" className="relative min-h-[88vh] overflow-hidden bg-[var(--premium-surface-dark)]">
+      <img className="premium-hero-motion absolute inset-0 size-full object-cover opacity-68" src={heroImage} alt={`${website.businessName} dining room`} />
       <div className="absolute inset-0 bg-[var(--premium-hero-overlay)]" />
-      <div className="absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(180deg,transparent,var(--premium-primary))]" />
+      <div className="absolute inset-0 bg-[var(--premium-hero-scrim)]" />
+      <div className="absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(180deg,transparent,var(--premium-surface-dark))]" />
       <div className="relative mx-auto grid min-h-[88vh] max-w-6xl content-end gap-7 px-4 pb-10 pt-24 md:grid-cols-[1fr_0.46fr] md:items-end md:pb-16">
         <div className="max-w-3xl text-white">
-          <p className="tpl-caption mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--premium-accent)]/35 bg-white/10 px-4 py-2 font-semibold uppercase text-[var(--premium-accent)] shadow-[0_18px_70px_rgba(0,0,0,.32)] backdrop-blur">
+          <p className="tpl-caption mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--premium-border-strong)] bg-black/35 px-4 py-2 font-semibold uppercase text-[var(--premium-text-on-dark)] shadow-[0_18px_70px_rgba(0,0,0,.32)] backdrop-blur">
             <Crown className="size-4" />
             Private dining presence
           </p>
-          <h1 className="tenant-heading text-[clamp(3rem,10vw,6.75rem)] font-semibold leading-[.92] text-white">
+          <h1 className="tenant-heading text-[clamp(3rem,10vw,6.75rem)] font-semibold leading-[.92] text-[var(--premium-text-on-dark)]">
             {website.businessName}
           </h1>
-          <p className="mt-6 max-w-2xl text-xl leading-8 text-[#fff7e6] md:text-2xl">
-            {website.tagline ?? 'A polished dining experience for signature dishes, guest trust, and direct reservations.'}
+          <p className="mt-6 max-w-2xl text-xl leading-8 text-[var(--premium-text-on-dark)] md:text-2xl">
+            {website.tagline ?? 'A warm dining experience for family dinners, casual gatherings, and signature plates.'}
           </p>
-          <p className="tpl-body mt-5 max-w-2xl text-[#e8ded0]">
-            {website.description ?? 'Use a richer restaurant layout with chef story, curated menu highlights, social proof, location, and reservation-focused calls to action.'}
+          <p className="tpl-body mt-5 max-w-2xl text-white/90">
+            {website.description ?? "Discover thoughtful dishes, welcoming service, and a simple path to reserve or ask about today's menu."}
           </p>
           {actions.length > 0 && (
             <div className="mt-8 flex flex-wrap gap-3">
               {actions.map((action) => <TemplateButton key={action.href} {...action} />)}
             </div>
           )}
-          <div className="mt-10 grid max-w-2xl gap-3 text-sm text-[#f8ead0] sm:grid-cols-3">
-            {['Chef selected menu', 'Reservation ready', 'Elegant dining cues'].map((item) => (
-              <p key={item} className="flex items-center gap-2 rounded-md border border-white/10 bg-white/8 px-3 py-2 backdrop-blur">
+          <div className="mt-10 grid max-w-2xl gap-3 text-sm text-[var(--premium-text-on-dark)] sm:grid-cols-3">
+            {['Chef selected menu', 'Easy reservations', 'Comfortable dining'].map((item) => (
+              <p key={item} className="flex items-center gap-2 rounded-md border border-white/18 bg-black/30 px-3 py-2 backdrop-blur">
                 <Sparkles className="size-4 text-[var(--premium-accent)]" />
                 {item}
               </p>
             ))}
           </div>
         </div>
-        <div className="relative rounded-lg border border-[var(--premium-accent)]/30 bg-white/12 p-6 text-white shadow-[0_28px_90px_rgba(0,0,0,.45)] backdrop-blur-md">
-          <div className="absolute -top-5 right-6 rounded-full border border-[var(--premium-accent)]/30 bg-[var(--premium-primary)] px-4 py-2 text-sm font-semibold text-[var(--premium-accent)]">
-            5.0 guest intent
+        <div className="relative rounded-lg border border-[var(--premium-border-strong)] bg-[var(--premium-surface-glass)] p-6 text-[var(--premium-text-on-dark)] shadow-[0_28px_90px_rgba(0,0,0,.45)] backdrop-blur-md">
+          <div className="absolute -top-5 right-6 rounded-full border border-[var(--premium-border-strong)] bg-[var(--premium-surface-dark)] px-4 py-2 text-sm font-semibold text-[var(--premium-text-on-dark)]">
+            Open for guests
           </div>
-          <p className="tpl-caption font-semibold uppercase text-[var(--premium-accent)]">Dining signal</p>
-          <h2 className="tenant-heading mt-3 text-3xl font-semibold leading-tight">Premium cues before guests arrive.</h2>
+          <p className="tpl-caption font-semibold uppercase text-[var(--premium-text-on-dark)]">Tonight’s visit</p>
+          <h2 className="tenant-heading mt-3 text-3xl font-semibold leading-tight">Settle in for a memorable meal.</h2>
           <div className="mt-6 grid gap-4">
             {[
               ['Opening cue', formatOpeningHours(website.openingHours)],
-              ['Best for', 'Dinner, family tables, and group reservations'],
-              ['Signature path', 'Menu story, location, and WhatsApp in one flow'],
+              ['Best for', 'Dinner, family tables, and small celebrations'],
+              ['Easy next step', 'Ask about menu availability or reserve by WhatsApp'],
             ].map(([label, value]) => (
               <div key={label} className="border-t border-white/15 pt-4">
-                <p className="text-xs font-semibold uppercase text-[var(--premium-accent)]">{label}</p>
-                <p className="mt-1 text-sm leading-6 text-[#fff7e6]">{value}</p>
+                <p className="text-xs font-semibold uppercase text-[var(--premium-text-on-dark)]">{label}</p>
+                <p className="mt-1 text-sm leading-6 text-white/90">{value}</p>
               </div>
             ))}
           </div>
@@ -138,26 +139,26 @@ function ChefStory({ website }: { website: Website }) {
       id="about"
       eyebrow="Chef story"
       title="Chef Story"
-      description={website.description ?? 'A premium restaurant needs a stronger reason to believe: origin, craft, quality control, and hospitality standards.'}
+      description={website.description ?? 'A thoughtful kitchen story helps guests understand the care behind every plate.'}
     >
       <div className="grid gap-5 md:grid-cols-[0.9fr_1.1fr]">
-        <TemplateCard className="bg-[var(--premium-primary)] p-7 text-white shadow-xl">
+        <TemplateCard className="bg-[var(--premium-surface-dark)] p-7 text-[var(--premium-text-on-dark)] shadow-xl">
           <ChefHat className="mb-5 size-8 text-[var(--premium-accent)]" />
           <h3 className="tenant-heading text-3xl font-semibold leading-tight">Craft behind every plate</h3>
-          <p className="tpl-body mt-4 text-[#f3e8d2]">
-            Premium storytelling helps customers understand the kitchen point of view before choosing a dish or making a reservation.
+          <p className="tpl-body mt-4 text-white/90">
+            From ingredients to plating, every detail is arranged so guests can choose with confidence.
           </p>
-          <div className="mt-8 rounded-md border border-[var(--premium-accent)]/25 bg-white/10 p-4">
-            <p className="text-sm font-semibold text-[var(--premium-accent)]">Chef note</p>
-            <p className="mt-2 text-sm leading-6 text-[#fff7e6]">A refined page should sell atmosphere, confidence, and intent before a guest opens WhatsApp.</p>
+          <div className="mt-8 rounded-md border border-white/20 bg-black/24 p-4">
+            <p className="text-sm font-semibold text-[var(--premium-text-on-dark)]">Chef note</p>
+            <p className="mt-2 text-sm leading-6 text-white/90">Good food starts with a clear point of view and ends with a table guests want to revisit.</p>
           </div>
         </TemplateCard>
         <div className="grid gap-4 sm:grid-cols-2">
           {[
-            ['Curated ingredients', 'Menu cards focus on ingredients, preparation, and confidence.'],
-            ['Hospitality details', 'Location, hours, and direct contact stay visible for visit planning.'],
-            ['Trust signals', 'Reviews and quality notes support higher perceived value.'],
-            ['Conversion ready', 'Reservation CTA is repeated without creating blank actions.'],
+            ['Curated ingredients', 'Seasonal choices and house favorites are easy to compare.'],
+            ['Hospitality details', 'Location, hours, and direct contact stay close to the visit plan.'],
+            ['Guest confidence', 'Reviews and quality notes help new customers decide faster.'],
+            ['Reservation ready', 'WhatsApp and phone actions stay clear without crowding the page.'],
           ].map(([title, description]) => (
             <TemplateCard key={title} className="bg-[var(--premium-surface)] shadow-md">
               <Sparkles className="mb-4 size-5 text-[var(--premium-accent)]" />
@@ -181,9 +182,9 @@ function SignatureDishes({ dishes, onOpenFullMenu }: { dishes: PremiumDish[]; on
       : 'grid gap-5 md:grid-cols-3';
 
   return (
-    <TemplateSection id="services" muted eyebrow="Signature dishes" title="Signature Dishes" description="Premium cards emphasize curated dishes, story, price clarity, and ordering confidence.">
+    <TemplateSection id="services" muted eyebrow="Signature dishes" title="Signature Dishes" description="Explore the dishes guests ask for most.">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-[var(--tpl-text-secondary)]">Signature section highlights featured items only when they are configured.</p>
+        <p className="text-sm text-[var(--tpl-text-secondary)]">Choose a favorite now or open the full menu for more options.</p>
         <button
           type="button"
           className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[var(--premium-button-primary)] px-5 py-2.5 text-sm font-semibold text-[var(--premium-button-primary-text)] transition hover:brightness-95 focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2"
@@ -203,14 +204,14 @@ function SignatureDishes({ dishes, onOpenFullMenu }: { dishes: PremiumDish[]; on
                 <div className="flex size-12 items-center justify-center rounded-md bg-[var(--premium-primary)] text-[var(--premium-accent)]">
                   <Utensils className="size-5" />
                 </div>
-                <span className="rounded-full border border-[var(--premium-border)] bg-white px-3 py-1 text-xs font-semibold text-[var(--premium-primary)]">Signature {index + 1}</span>
+                <span className="rounded-full border border-[var(--premium-border-subtle)] bg-[var(--premium-accent-soft)] px-3 py-1 text-xs font-semibold text-[var(--premium-text-primary)]">Signature {index + 1}</span>
               </div>
               <div className="px-6">
                 <h3 className="tpl-h3 tenant-heading">{dish.name}</h3>
                 {dish.description && <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{dish.description}</p>}
               </div>
             </div>
-            {dish.price && <p className="px-6 pb-6 pt-8 text-2xl font-semibold text-[var(--premium-primary)]">Rp {Number(dish.price).toLocaleString('id-ID')}</p>}
+            {dish.price && <p className="px-6 pb-6 pt-8 text-2xl font-semibold text-[var(--premium-text-primary)]">Rp {Number(dish.price).toLocaleString('id-ID')}</p>}
           </TemplateCard>
         ))}
       </div>
@@ -241,7 +242,7 @@ function PremiumDishMedia({ dish, index }: { dish: PremiumDish; index: number })
   return (
     <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_35%_25%,color-mix(in_srgb,var(--premium-accent)_46%,transparent),transparent_30%),linear-gradient(135deg,var(--premium-primary),#120f0b)] text-[var(--premium-accent)]">
       <Utensils className="size-10" />
-      <span className="absolute left-4 top-4 rounded-full border border-[var(--premium-accent)]/30 bg-[var(--premium-primary)]/80 px-3 py-1 text-xs font-semibold text-[var(--premium-accent)] backdrop-blur">
+      <span className="absolute left-4 top-4 rounded-full border border-white/25 bg-black/55 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
         {labels[index % labels.length]}
       </span>
     </div>
@@ -250,15 +251,15 @@ function PremiumDishMedia({ dish, index }: { dish: PremiumDish; index: number })
 
 function GuestExperience() {
   return (
-    <TemplateSection title="Dining Experience" description="Restaurant Premium differentiates from Classic with stronger story, more polished menu hierarchy, and reservation intent.">
+    <TemplateSection title="Dining Experience" description="Everything is arranged to help guests move from browsing to booking.">
       <div className="grid gap-5 md:grid-cols-3">
         {[
           ['Occasion-ready', 'Designed for dinner plans, family meals, and group bookings.'],
           ['Menu confidence', 'Signature cards help guests choose without scanning a long list.'],
-          ['Reservation path', 'CTA hierarchy keeps WhatsApp, menu, and directions clear.'],
+          ['Reservation path', 'WhatsApp, menu, and directions are easy to find.'],
         ].map(([title, description]) => (
-          <TemplateCard key={title} className="border-[#ead8b8] bg-white shadow-md">
-            <Award className="mb-4 size-5 text-[#b47a18]" />
+          <TemplateCard key={title} className="border-[var(--premium-border-subtle)] bg-[var(--premium-surface-elevated)] shadow-md">
+            <Award className="mb-4 size-5 text-[var(--premium-primary)]" />
             <h3 className="tpl-h3 tenant-heading">{title}</h3>
             <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{description}</p>
           </TemplateCard>
@@ -274,7 +275,7 @@ function PremiumGallery({ website }: { website: Website }) {
     const galleries = website.galleries;
     const layoutClass = galleries.length === 1 ? 'grid' : galleries.length === 2 ? 'grid gap-5 md:grid-cols-2' : 'grid gap-5 md:grid-cols-[1.2fr_.8fr_.8fr]';
     return (
-      <TemplateSection id="gallery" muted eyebrow="Dining visuals" title="Ambience Gallery" description="Food, room, and service visuals scaled to the amount of media available.">
+      <TemplateSection id="gallery" muted eyebrow="Dining visuals" title="Ambience Gallery" description="Show the room, the dishes, and the details guests will remember.">
         <div className={layoutClass}>
           {galleries.map((item, index) => (
             <figure key={item.id} className={index === 0 && galleries.length >= 3 ? 'overflow-hidden rounded-lg border border-[var(--premium-border)] bg-[var(--premium-surface)] md:row-span-2' : 'overflow-hidden rounded-lg border border-[var(--premium-border)] bg-[var(--premium-surface)]'}>
@@ -289,16 +290,16 @@ function PremiumGallery({ website }: { website: Website }) {
 
   const action = normalizeTemplateAction(cta);
   return (
-    <TemplateSection id="gallery" muted eyebrow="Dining visuals" title="Ambience Gallery" description="Premium fallback gallery keeps the page complete before tenant photos are uploaded.">
+    <TemplateSection id="gallery" muted eyebrow="Dining visuals" title="Ambience Gallery" description="A visual glimpse of the dining mood and signature service.">
       <div className="grid gap-5 md:grid-cols-[1.1fr_.9fr_.9fr]">
         {['Dining room', 'Plated signature', 'Kitchen detail'].map((title) => (
-          <TemplateCard key={title} className="overflow-hidden bg-[var(--premium-primary)] p-0 text-white shadow-lg">
+          <TemplateCard key={title} className="overflow-hidden bg-[var(--premium-surface-dark)] p-0 text-[var(--premium-text-on-dark)] shadow-lg">
             <div className="flex aspect-[4/3] items-center justify-center bg-[radial-gradient(circle_at_35%_30%,color-mix(in_srgb,var(--premium-accent)_35%,transparent),transparent_32%),linear-gradient(135deg,var(--premium-primary),#120f0b)] text-[var(--premium-accent)]">
               {title === 'Dining room' ? <Wine className="size-10" /> : <ChefHat className="size-10" />}
             </div>
             <div className="p-5">
               <h3 className="tpl-h3 tenant-heading">{title}</h3>
-              <p className="tpl-body mt-2 text-[#f3e8d2]">Upload a real restaurant photo to replace this premium visual placeholder.</p>
+              <p className="tpl-body mt-2 text-white/90">Share a sense of the table, the plating, and the atmosphere.</p>
             </div>
           </TemplateCard>
         ))}
@@ -311,22 +312,22 @@ function PremiumGallery({ website }: { website: Website }) {
 function VisitReservationSection({ website }: { website: Website }) {
   const actions = resolvePremiumContactActions(website);
   return (
-    <TemplateSection title="Visit & Reservation" description="Address, opening cue, and reservation actions are consolidated so customers do not see the same message repeated.">
+    <TemplateSection title="Visit & Reservation" description="Plan the visit, check the hours, and contact the restaurant from one clear place.">
       <div className="grid gap-4 md:grid-cols-[1fr_1fr_.9fr]">
         <TemplateCard className="bg-[var(--premium-surface)]">
-          <MapPin className="mb-4 size-5 text-[var(--tpl-primary)]" />
+          <MapPin className="mb-4 size-5 text-[var(--premium-primary)]" />
           <h3 className="tpl-h3 tenant-heading">Address</h3>
           <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{website.address ?? 'Restaurant address can be shown here.'}</p>
         </TemplateCard>
         <TemplateCard className="bg-[var(--premium-surface)]">
-          <Clock className="mb-4 size-5 text-[var(--tpl-primary)]" />
+          <Clock className="mb-4 size-5 text-[var(--premium-primary)]" />
           <h3 className="tpl-h3 tenant-heading">Opening hours</h3>
           <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{formatOpeningHours(website.openingHours)}</p>
         </TemplateCard>
-        <TemplateCard className="bg-[var(--premium-primary)] text-white">
-          <CalendarCheck className="mb-4 size-5 text-[var(--tpl-primary)]" />
+        <TemplateCard className="bg-[var(--premium-surface-dark)] text-[var(--premium-text-on-dark)]">
+          <CalendarCheck className="mb-4 size-5 text-[var(--premium-accent)]" />
           <h3 className="tpl-h3 tenant-heading">Reserve your table tonight</h3>
-          <p className="tpl-body mt-3 text-white/80">Guests can reserve or ask about menus from one clear action area.</p>
+          <p className="tpl-body mt-3 text-white/90">Reserve a table or ask what is available today.</p>
           {actions.length > 0 && (
             <div className="mt-5 flex flex-wrap gap-3">
               {actions.map((action) => <TemplateButton key={action.href} {...action} />)}

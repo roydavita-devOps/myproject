@@ -55,7 +55,7 @@ export function CafePremiumTemplate({ website }: { website: Website }) {
       <PremiumReviewsSlider
         reviews={reviews}
         sliderId="cafe-premium-reviews"
-        description="Premium review cards create a richer trust section while keeping customer feedback easy to browse."
+        description="Guests can browse real impressions before choosing their next coffee stop."
       />
       <CafeVisitContact website={website} />
       <TemplateFooter website={website} />
@@ -78,46 +78,47 @@ function PremiumCafeHero({ website }: { website: Website }) {
   return (
     <section id="home" className="relative overflow-hidden bg-[var(--premium-background)]">
       <div className="absolute inset-x-0 top-0 h-72 bg-[var(--premium-hero-overlay)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,.88),rgba(255,255,255,.70),rgba(255,255,255,.92))]" />
       <div className="mx-auto grid min-h-[86vh] max-w-6xl items-center gap-9 px-4 py-14 md:grid-cols-[0.9fr_1.1fr] md:py-18">
-        <div className="relative z-10">
+        <div className="relative z-10 rounded-lg border border-[var(--premium-border-subtle)] bg-[var(--premium-surface-elevated)]/86 p-5 shadow-sm backdrop-blur md:bg-transparent md:p-0 md:shadow-none">
           <p className="tpl-caption mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--premium-border)] bg-white/80 px-4 py-2 font-semibold uppercase text-[var(--premium-primary)] shadow-sm backdrop-blur">
             <Coffee className="size-4" />
-            Premium business presence
+            Specialty cafe experience
           </p>
-          <h1 className="tenant-heading text-[clamp(3rem,9vw,6.25rem)] font-semibold leading-[.94] text-[var(--premium-text)]">{website.businessName}</h1>
-          <p className="mt-6 max-w-2xl text-xl leading-8 text-[var(--premium-primary)] md:text-2xl">
-            {website.tagline ?? 'A refined premium experience for featured menus, daily visits, and memorable customer moments.'}
+          <h1 className="tenant-heading text-[clamp(3rem,9vw,6.25rem)] font-semibold leading-[.94] text-[var(--premium-text-primary)]">{website.businessName}</h1>
+          <p className="mt-6 max-w-2xl text-xl leading-8 text-[var(--premium-text-primary)] md:text-2xl">
+            {website.tagline ?? 'A warm place for specialty coffee, brunch, and unhurried everyday visits.'}
           </p>
-          <p className="tpl-body mt-5 max-w-2xl text-[var(--premium-muted)]">
-            {website.description ?? 'Cafe Premium adds stronger brand storytelling, signature menu cards, experience highlights, and contact-focused conversion sections.'}
+          <p className="tpl-body mt-5 max-w-2xl text-[var(--premium-text-secondary)]">
+            {website.description ?? 'Find the featured menu, check the atmosphere, and plan your next visit with clear contact options.'}
           </p>
           {actions.length > 0 && (
             <div className="mt-8 flex flex-wrap gap-3">
               {actions.map((action) => <TemplateButton key={action.href} {...action} />)}
             </div>
           )}
-          <div className="mt-10 flex flex-wrap gap-3 text-sm text-[var(--premium-primary)]">
-            {['Signature selection', 'Featured menu', 'Open today'].map((item) => (
-            <span key={item} className="rounded-full border border-[var(--premium-border)] bg-white/70 px-4 py-2 font-semibold shadow-sm">{item}</span>
+          <div className="mt-10 flex flex-wrap gap-3 text-sm text-[var(--premium-text-primary)]">
+            {['Signature drinks', 'Fresh brunch', 'Open today'].map((item) => (
+            <span key={item} className="rounded-full border border-[var(--premium-border-subtle)] bg-[var(--premium-surface-elevated)] px-4 py-2 font-semibold shadow-sm">{item}</span>
             ))}
           </div>
         </div>
         <div className="relative">
-          <div className="absolute -left-4 top-8 z-10 max-w-48 rounded-lg border border-white/70 bg-white/85 p-4 shadow-xl backdrop-blur md:-left-8">
-            <p className="text-xs font-semibold uppercase text-[var(--premium-primary)]">Featured menu</p>
-            <p className="mt-2 text-lg font-semibold leading-snug text-[var(--premium-text)]">Signature Selection</p>
-            <p className="mt-2 text-sm leading-5 text-[var(--premium-muted)]">A warm cue for the item customers should notice first.</p>
+          <div className="absolute -left-4 top-8 z-10 max-w-48 rounded-lg border border-[var(--premium-border-subtle)] bg-[var(--premium-surface-elevated)] p-4 shadow-xl backdrop-blur md:-left-8">
+            <p className="text-xs font-semibold uppercase text-[var(--premium-text-primary)]">Featured menu</p>
+            <p className="mt-2 text-lg font-semibold leading-snug text-[var(--premium-text-primary)]">Signature Selection</p>
+            <p className="mt-2 text-sm leading-5 text-[var(--premium-text-secondary)]">A favorite worth noticing first.</p>
           </div>
           <div className="overflow-hidden rounded-lg border border-white/70 bg-white shadow-[0_28px_80px_rgba(88,54,28,.22)]">
             <img className="premium-hero-motion aspect-[4/3] w-full object-cover" src={heroImage} alt={`${website.businessName} premium atmosphere`} />
-            <div className="grid gap-3 bg-[var(--premium-surface)] p-5 text-sm text-[var(--premium-muted)] sm:grid-cols-3">
+            <div className="grid gap-3 bg-[var(--premium-surface)] p-5 text-sm text-[var(--premium-text-secondary)] sm:grid-cols-3">
               <p className="flex items-center gap-2"><CupSoda className="size-4 text-[var(--premium-primary)]" />Signature</p>
               <p className="flex items-center gap-2"><Music className="size-4 text-[var(--premium-accent)]" />Atmosphere</p>
               <p className="flex items-center gap-2"><Wifi className="size-4 text-[var(--premium-primary)]" />Stay awhile</p>
             </div>
           </div>
-          <div className="absolute -bottom-5 right-4 rounded-lg bg-[var(--premium-primary)] px-5 py-4 text-white shadow-xl">
-            <p className="text-xs font-semibold uppercase text-[var(--premium-accent)]">Open today</p>
+          <div className="absolute -bottom-5 right-4 rounded-lg bg-[var(--premium-surface-dark)] px-5 py-4 text-[var(--premium-text-on-dark)] shadow-xl">
+            <p className="text-xs font-semibold uppercase text-[var(--premium-text-on-dark)]">Open today</p>
             <p className="mt-1 text-sm">{formatOpeningHours(website.openingHours)}</p>
           </div>
         </div>
@@ -132,7 +133,7 @@ function BrandStory({ website }: { website: Website }) {
       id="about"
       eyebrow="Brand story"
       title="Brand Story"
-      description={website.description ?? 'Cafe Premium gives customers a clearer sense of atmosphere, craft, and the type of visit they can expect.'}
+      description={website.description ?? 'A clear story helps guests imagine the drink, the table, and the pace of their visit.'}
     >
       <div className="grid gap-5 md:grid-cols-[1.15fr_.85fr_.85fr]">
         {[
@@ -140,10 +141,10 @@ function BrandStory({ website }: { website: Website }) {
           ['Atmosphere first', 'Support customers who choose a cafe based on space, mood, and comfort.'],
           ['Visit planning', 'Menu, contact, maps, and hours are arranged for quick decisions.'],
         ].map(([title, description], index) => (
-          <TemplateCard key={title} className={index === 0 ? 'bg-[var(--premium-primary)] p-7 text-white shadow-xl' : 'bg-[var(--premium-surface)] shadow-md'}>
+          <TemplateCard key={title} className={index === 0 ? 'bg-[var(--premium-surface-dark)] p-7 text-[var(--premium-text-on-dark)] shadow-xl' : 'bg-[var(--premium-surface)] shadow-md'}>
             <Sparkles className={index === 0 ? 'mb-4 size-6 text-[var(--premium-accent)]' : 'mb-4 size-5 text-[var(--premium-primary)]'} />
             <h3 className="tpl-h3 tenant-heading">{title}</h3>
-            <p className={index === 0 ? 'tpl-body mt-3 text-[#f4dcc0]' : 'tpl-body mt-3 text-[var(--tpl-text-secondary)]'}>{description}</p>
+            <p className={index === 0 ? 'tpl-body mt-3 text-white/90' : 'tpl-body mt-3 text-[var(--tpl-text-secondary)]'}>{description}</p>
           </TemplateCard>
         ))}
       </div>
@@ -161,9 +162,9 @@ function SignatureMenu({ items, onOpenFullMenu }: { items: PremiumCafeMenuItem[]
       : 'grid gap-4 md:grid-cols-2';
 
   return (
-    <TemplateSection id="services" muted eyebrow="Signature menu" title="Signature Menu" description="Premium cards highlight featured items, clear descriptions, and price clarity.">
+    <TemplateSection id="services" muted eyebrow="Signature menu" title="Signature Menu" description="Explore the drinks and plates guests come back for.">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-[var(--tpl-text-secondary)]">Signature section highlights featured items only when they are configured.</p>
+        <p className="text-sm text-[var(--tpl-text-secondary)]">Open the full menu when you want more choices.</p>
         <button
           type="button"
           className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[var(--premium-button-primary)] px-5 py-2.5 text-sm font-semibold text-[var(--premium-button-primary-text)] transition hover:brightness-95 focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2"
@@ -182,14 +183,14 @@ function SignatureMenu({ items, onOpenFullMenu }: { items: PremiumCafeMenuItem[]
                 <div className="flex size-12 items-center justify-center rounded-md bg-[var(--premium-primary)] text-[var(--premium-button-primary-text)]">
                   <Sandwich className="size-5" />
                 </div>
-                <span className="rounded-full bg-[var(--premium-border)] px-3 py-1 text-xs font-semibold text-[var(--premium-primary)]">Signature {index + 1}</span>
+                <span className="rounded-full border border-[var(--premium-border-subtle)] bg-[var(--premium-accent-soft)] px-3 py-1 text-xs font-semibold text-[var(--premium-text-primary)]">Signature {index + 1}</span>
               </div>
               <div className="px-6">
                 <h3 className="tpl-h3 tenant-heading">{item.name}</h3>
                 {item.description && <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{item.description}</p>}
               </div>
             </div>
-            {item.price && <p className="px-6 pb-6 pt-6 text-2xl font-semibold text-[var(--premium-primary)]">Rp {Number(item.price).toLocaleString('id-ID')}</p>}
+            {item.price && <p className="px-6 pb-6 pt-6 text-2xl font-semibold text-[var(--premium-text-primary)]">Rp {Number(item.price).toLocaleString('id-ID')}</p>}
           </TemplateCard>
         ))}
       </div>
@@ -220,7 +221,7 @@ function PremiumCafeMenuMedia({ item, index }: { item: PremiumCafeMenuItem; inde
   return (
     <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_38%_28%,rgba(255,255,255,.58),transparent_30%),linear-gradient(135deg,var(--premium-accent),var(--premium-primary))] text-white">
       <Coffee className="size-10" />
-      <span className="absolute left-4 top-4 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-[var(--premium-primary)] backdrop-blur">
+      <span className="absolute left-4 top-4 rounded-full bg-black/55 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
         {labels[index % labels.length]}
       </span>
     </div>
@@ -229,15 +230,15 @@ function PremiumCafeMenuMedia({ item, index }: { item: PremiumCafeMenuItem; inde
 
 function FeaturedExperience() {
   return (
-    <TemplateSection title="Lifestyle Experience" description="Cafe Premium differentiates from Cafe Modern with a stronger brand layer and richer visit signals.">
+    <TemplateSection title="Lifestyle Experience" description="Designed for work breaks, weekend plans, and coffee dates that last longer.">
       <div className="grid gap-4 md:grid-cols-3">
         {[
           ['Work friendly', 'Comfort, Wi-Fi, and seating cues for everyday visitors.'],
           ['Community ready', 'Useful for events, casual meetings, and weekend visits.'],
           ['Specialty driven', 'Signature drinks and brunch items are easier to promote.'],
         ].map(([title, description]) => (
-          <TemplateCard key={title} className="border-[#ead3b5] bg-white shadow-md">
-            <HeartHandshake className="mb-4 size-5 text-[#8b5e34]" />
+          <TemplateCard key={title} className="border-[var(--premium-border-subtle)] bg-[var(--premium-surface-elevated)] shadow-md">
+            <HeartHandshake className="mb-4 size-5 text-[var(--premium-primary)]" />
             <h3 className="tpl-h3 tenant-heading">{title}</h3>
             <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{description}</p>
           </TemplateCard>
@@ -253,7 +254,7 @@ function PremiumCafeGallery({ website }: { website: Website }) {
     const galleries = website.galleries;
     const layoutClass = galleries.length === 1 ? 'grid' : galleries.length === 2 ? 'grid gap-5 md:grid-cols-2' : 'grid gap-5 md:grid-cols-[.9fr_1.1fr_.9fr]';
     return (
-      <TemplateSection id="gallery" muted eyebrow="Cafe visuals" title="Lifestyle Gallery" description="Premium gallery density adapts to the media available.">
+      <TemplateSection id="gallery" muted eyebrow="Cafe visuals" title="Lifestyle Gallery" description="Show the bar, the seating, and the moments guests can expect.">
         <div className={layoutClass}>
           {galleries.map((item, index) => (
             <figure key={item.id} className={index === 1 && galleries.length >= 3 ? 'overflow-hidden rounded-lg border border-[var(--premium-border)] bg-[var(--premium-surface)] md:row-span-2' : 'overflow-hidden rounded-lg border border-[var(--premium-border)] bg-[var(--premium-surface)]'}>
@@ -268,7 +269,7 @@ function PremiumCafeGallery({ website }: { website: Website }) {
 
   const action = normalizeTemplateAction(cta);
   return (
-    <TemplateSection id="gallery" muted eyebrow="Cafe visuals" title="Lifestyle Gallery" description="Premium fallback visuals keep the cafe page complete before tenant media upload.">
+    <TemplateSection id="gallery" muted eyebrow="Cafe visuals" title="Lifestyle Gallery" description="A quick look at the atmosphere before guests decide to visit.">
       <div className="grid gap-5 md:grid-cols-[.9fr_1.1fr_.9fr]">
         {['Coffee bar', 'Brunch table', 'Cozy seating'].map((title) => (
           <TemplateCard key={title} className="overflow-hidden bg-[var(--premium-surface)] p-0 shadow-lg">
@@ -277,7 +278,7 @@ function PremiumCafeGallery({ website }: { website: Website }) {
             </div>
             <div className="p-5">
               <h3 className="tpl-h3 tenant-heading">{title}</h3>
-              <p className="tpl-body mt-2 text-[var(--tpl-text-secondary)]">Upload real cafe photography to replace this premium placeholder.</p>
+              <p className="tpl-body mt-2 text-[var(--tpl-text-secondary)]">Share the corner, the counter, and the table guests will remember.</p>
             </div>
           </TemplateCard>
         ))}
@@ -290,22 +291,22 @@ function PremiumCafeGallery({ website }: { website: Website }) {
 function CafeVisitContact({ website }: { website: Website }) {
   const actions = resolvePremiumCafeContactActions(website);
   return (
-    <TemplateSection title="Visit & Contact" description="Location, hours, and direct contact live in one compact premium section.">
+    <TemplateSection title="Visit & Contact" description="Check the location, opening hours, and contact options in one compact section.">
       <div className="grid gap-4 md:grid-cols-[1fr_1fr_.9fr]">
         <TemplateCard>
-          <MapPin className="mb-4 size-5 text-[var(--tpl-primary)]" />
+          <MapPin className="mb-4 size-5 text-[var(--premium-primary)]" />
           <h3 className="tpl-h3 tenant-heading">Location</h3>
           <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{website.address ?? 'Cafe address can be displayed here.'}</p>
         </TemplateCard>
         <TemplateCard className="bg-[var(--premium-surface)]">
-          <CalendarDays className="mb-4 size-5 text-[var(--tpl-primary)]" />
+          <CalendarDays className="mb-4 size-5 text-[var(--premium-primary)]" />
           <h3 className="tpl-h3 tenant-heading">Opening hours</h3>
           <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{formatOpeningHours(website.openingHours)}</p>
         </TemplateCard>
-        <TemplateCard className="bg-[var(--premium-primary)] text-white">
-          <Star className="mb-4 size-5 text-[var(--tpl-primary)]" />
-          <h3 className="tpl-h3 tenant-heading">Plan your next premium cafe visit</h3>
-          <p className="tpl-body mt-3 text-white/80">Featured menu browsing, customer visits, and quick contact in one place.</p>
+        <TemplateCard className="bg-[var(--premium-surface-dark)] text-[var(--premium-text-on-dark)]">
+          <Star className="mb-4 size-5 text-[var(--premium-accent)]" />
+          <h3 className="tpl-h3 tenant-heading">Plan your next cafe visit</h3>
+          <p className="tpl-body mt-3 text-white/90">Ask about today's menu or call before you arrive.</p>
           {actions.length > 0 && (
             <div className="mt-5 flex flex-wrap gap-3">
               {actions.map((action) => <TemplateButton key={action.href} {...action} />)}

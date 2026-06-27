@@ -39,11 +39,12 @@ Last updated: 2026-06-27
 - Stage 9.8A-R1 Public Premium Menu Item Count Fix.
 - Stage 9.8B Featured Menu and Full Menu Modal.
 - Stage 9.8C Premium Template Color Customization and Density Redesign.
+- Stage 9.8D Premium Contrast and Readability Remediation.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.8C approval checkpoint.
+- Stage 9.8D approval checkpoint.
 
 ## Planned
 
@@ -118,6 +119,7 @@ Stage 9.8C adds the next premium maturity layer:
 - Brand Color = user customization.
 - Restaurant Premium and Cafe Premium can use approved presets plus user primary/accent colors without changing template identity.
 - Section density adapts to available content so one, two, and many items do not create repetitive or sparse premium layouts.
+- Semantic premium tokens protect readability, so brand colors influence identity, CTA, badges, and accents without being used directly for long body copy.
 
 Potential categories:
 

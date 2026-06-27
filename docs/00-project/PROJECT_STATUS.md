@@ -4,7 +4,7 @@ Last updated: 2026-06-27
 
 ## Current Stage
 
-Stage 9.8C - Premium Template Color Customization and Density Redesign.
+Stage 9.8D - Premium Contrast and Readability Remediation.
 
 Status: implemented, validated, and ready for approval.
 
@@ -46,6 +46,7 @@ Status: implemented, validated, and ready for approval.
 | Stage 9.8A-R1 Public Premium Menu Item Count Fix | Completed. |
 | Stage 9.8B Featured Menu and Full Menu Modal | Completed. |
 | Stage 9.8C Premium Template Color Customization and Density Redesign | Completed; awaiting approval. |
+| Stage 9.8D Premium Contrast and Readability Remediation | Completed; awaiting approval. |
 
 ## Current Blockers
 
@@ -58,13 +59,14 @@ Status: implemented, validated, and ready for approval.
 | Menu item image management | Resolved for Stage 9.8A | Dashboard users can upload, preview, change, remove, and persist menu item photos. Premium public templates render `menu.imageUrl` and fallback safely when missing. |
 | Featured menu and full menu modal | Resolved for Stage 9.8B | Dashboard users can mark featured menu items. Premium public Signature sections show featured items, with a full menu modal for all items grouped by category. |
 | Premium color and density customization | Resolved for Stage 9.8C | Restaurant Premium and Cafe Premium now use premium color presets, user primary/accent colors, adaptive Signature/Gallery density, and reduced repeated contact/reservation sections. |
+| Premium contrast and readability | Resolved for Stage 9.8D | Brand colors customize identity, while semantic tokens protect readable text, surfaces, CTA contrast, and hero/card readability. |
 | Luxury templates | Paused | No Luxury template implementation until separately approved. |
 | Template Catalog UI | Paused | No marketplace, comparison page, entitlement, or subscription access logic in Stage 9.7B. |
 
 ## Next Actions
 
-1. Review Stage 9.8C Premium Template Color Customization and Density Redesign.
-2. Approve or request corrections to premium color customization, Brand Colors dashboard, and density redesign.
+1. Review Stage 9.8D Premium Contrast and Readability Remediation.
+2. Approve or request corrections to premium contrast, readability, and customer-facing copy cleanup.
 3. Keep Luxury, Catalog UI, marketplace, subscription, entitlement, preview-before-apply, and switch history paused until separately approved.
 4. After approval, proceed only to the next approved stage.
 5. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
@@ -96,5 +98,6 @@ Status: implemented, validated, and ready for approval.
 - Menu item image management report: [../06-modern-template/reports/PHASE-9.8A-Menu-Item-Image-Management-Report.md](../06-modern-template/reports/PHASE-9.8A-Menu-Item-Image-Management-Report.md)
 - Featured menu and full menu modal report: [../06-modern-template/reports/PHASE-9.8B-Featured-Menu-and-Full-Menu-Modal-Report.md](../06-modern-template/reports/PHASE-9.8B-Featured-Menu-and-Full-Menu-Modal-Report.md)
 - Premium color customization and density redesign report: [../06-modern-template/reports/PHASE-9.8C-Premium-Color-Customization-And-Density-Redesign-Report.md](../06-modern-template/reports/PHASE-9.8C-Premium-Color-Customization-And-Density-Redesign-Report.md)
+- Premium contrast and readability remediation report: [../06-modern-template/reports/PHASE-9.8D-Premium-Contrast-And-Readability-Remediation-Report.md](../06-modern-template/reports/PHASE-9.8D-Premium-Contrast-And-Readability-Remediation-Report.md)
 - Template Catalog readiness audit: [../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md](../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md)
 - Template consistency audit: [../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md](../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md)

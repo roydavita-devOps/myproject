@@ -11,11 +11,29 @@ export type PremiumColorTokens = {
   text: string;
   mutedText: string;
   border: string;
+  textPrimary?: string;
+  textSecondary?: string;
+  textMuted?: string;
+  textOnDark?: string;
+  textOnLight?: string;
+  textOnAccent?: string;
+  surfacePrimary?: string;
+  surfaceSecondary?: string;
+  surfaceElevated?: string;
+  surfaceDark?: string;
+  surfaceGlass?: string;
+  borderSubtle?: string;
+  borderStrong?: string;
+  accentSoft?: string;
+  accentContrast?: string;
   buttonPrimary: string;
   buttonPrimaryText: string;
   buttonSecondary: string;
   buttonSecondaryText: string;
   heroOverlay: string;
+  heroScrim?: string;
+  cardOverlay?: string;
+  cardOverlayText?: string;
 };
 
 export type PremiumColorPreset = {
@@ -190,15 +208,35 @@ export function resolvePremiumColorTokens(website: Website): PremiumColorTokens 
   if (!preset) return fallbackPremiumTokens;
   const primary = safeColor(website.theme?.primaryColor, preset.tokens.primary);
   const accent = safeColor(website.theme?.accentColor, preset.tokens.accent);
+  const textPrimary = ensureContrastColor(preset.tokens.textPrimary ?? preset.tokens.text, preset.tokens.background, '#111827');
+  const textSecondary = ensureContrastColor(preset.tokens.textSecondary ?? preset.tokens.mutedText, preset.tokens.surface, '#334155');
+  const surfaceDark = primary;
+  const accentContrast = getReadableTextColor(accent);
 
   return {
     ...preset.tokens,
     primary,
     accent,
+    text: textPrimary,
+    mutedText: textSecondary,
+    textPrimary,
+    textSecondary,
+    textMuted: ensureContrastColor(preset.tokens.textMuted ?? preset.tokens.mutedText, preset.tokens.surface, '#475569'),
+    textOnDark: '#ffffff',
+    textOnLight: '#111827',
+    textOnAccent: accentContrast,
+    surfaceDark,
+    surfaceGlass: isLightColor(primary) ? 'rgba(17,24,39,.90)' : 'rgba(17,24,39,.82)',
+    borderStrong: accent,
+    accentSoft: withAlpha(accent, 0.18),
+    accentContrast,
     buttonPrimary: primary,
-    buttonPrimaryText: readableTextFor(primary),
+    buttonPrimaryText: getReadableTextColor(primary),
     buttonSecondary: preset.tokens.surface,
-    buttonSecondaryText: readableTextFor(preset.tokens.surface),
+    buttonSecondaryText: getReadableTextColor(preset.tokens.surface),
+    heroScrim: 'linear-gradient(90deg,rgba(10,10,10,.72),rgba(10,10,10,.48),rgba(10,10,10,.28))',
+    cardOverlay: isLightColor(primary) ? 'rgba(17,24,39,.92)' : 'rgba(255,255,255,.94)',
+    cardOverlayText: isLightColor(primary) ? '#ffffff' : '#111827',
   };
 }
 
@@ -211,11 +249,29 @@ export function premiumTokenStyles(tokens: PremiumColorTokens): CSSProperties {
     '--premium-text': tokens.text,
     '--premium-muted': tokens.mutedText,
     '--premium-border': tokens.border,
+    '--premium-text-primary': tokens.textPrimary,
+    '--premium-text-secondary': tokens.textSecondary,
+    '--premium-text-muted': tokens.textMuted,
+    '--premium-text-on-dark': tokens.textOnDark,
+    '--premium-text-on-light': tokens.textOnLight,
+    '--premium-text-on-accent': tokens.textOnAccent,
+    '--premium-surface-primary': tokens.surfacePrimary,
+    '--premium-surface-secondary': tokens.surfaceSecondary,
+    '--premium-surface-elevated': tokens.surfaceElevated,
+    '--premium-surface-dark': tokens.surfaceDark,
+    '--premium-surface-glass': tokens.surfaceGlass,
+    '--premium-border-subtle': tokens.borderSubtle,
+    '--premium-border-strong': tokens.borderStrong,
+    '--premium-accent-soft': tokens.accentSoft,
+    '--premium-accent-contrast': tokens.accentContrast,
     '--premium-button-primary': tokens.buttonPrimary,
     '--premium-button-primary-text': tokens.buttonPrimaryText,
     '--premium-button-secondary': tokens.buttonSecondary,
     '--premium-button-secondary-text': tokens.buttonSecondaryText,
     '--premium-hero-overlay': tokens.heroOverlay,
+    '--premium-hero-scrim': tokens.heroScrim,
+    '--premium-card-overlay': tokens.cardOverlay,
+    '--premium-card-overlay-text': tokens.cardOverlayText,
   } as CSSProperties;
 }
 
@@ -223,25 +279,74 @@ export function isValidHexColor(value?: string | null) {
   return Boolean(value && /^#[0-9a-fA-F]{6}$/.test(value));
 }
 
+export function normalizeHexColor(value: string | null | undefined, fallback = '#111827'): string {
+  return isValidHexColor(value) ? value as string : fallback;
+}
+
+export function isLightColor(hex: string) {
+  const normalized = normalizeHexColor(hex).slice(1);
+  const r = parseInt(normalized.slice(0, 2), 16);
+  const g = parseInt(normalized.slice(2, 4), 16);
+  const b = parseInt(normalized.slice(4, 6), 16);
+  return ((0.2126 * r + 0.7152 * g + 0.0722 * b) / 255) > 0.58;
+}
+
+export function getReadableTextColor(background: string) {
+  return isLightColor(background) ? '#111827' : '#ffffff';
+}
+
+export function ensureContrastColor(candidate: string | null | undefined, background: string, fallback = '#111827') {
+  const color = normalizeHexColor(candidate, fallback);
+  return isLightColor(color) === isLightColor(background) ? getReadableTextColor(background) : color;
+}
+
 function safeColor(value: string | null | undefined, fallback: string): string {
   return isValidHexColor(value) ? value as string : fallback;
 }
 
-function readableTextFor(hex: string) {
-  const normalized = safeColor(hex, '#111827').slice(1);
-  const r = parseInt(normalized.slice(0, 2), 16);
-  const g = parseInt(normalized.slice(2, 4), 16);
-  const b = parseInt(normalized.slice(4, 6), 16);
-  const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
-  return luminance > 0.58 ? '#111827' : '#ffffff';
-}
-
 function restaurantPreset(key: string, label: string, tokens: PremiumColorTokens): PremiumColorPreset {
-  return { key, label, variant: 'restaurant', tokens };
+  return { key, label, variant: 'restaurant', tokens: enrichTokens(tokens) };
 }
 
 function cafePreset(key: string, label: string, tokens: PremiumColorTokens): PremiumColorPreset {
-  return { key, label, variant: 'cafe', tokens };
+  return { key, label, variant: 'cafe', tokens: enrichTokens(tokens) };
+}
+
+function enrichTokens(tokens: PremiumColorTokens): PremiumColorTokens {
+  const textPrimary = ensureContrastColor(tokens.textPrimary ?? tokens.text, tokens.background, '#111827');
+  const textSecondary = ensureContrastColor(tokens.textSecondary ?? tokens.mutedText, tokens.surface, '#334155');
+  const textMuted = ensureContrastColor(tokens.textMuted ?? tokens.mutedText, tokens.surface, '#475569');
+  return {
+    ...tokens,
+    text: textPrimary,
+    mutedText: textSecondary,
+    textPrimary,
+    textSecondary,
+    textMuted,
+    textOnDark: tokens.textOnDark ?? '#ffffff',
+    textOnLight: tokens.textOnLight ?? '#111827',
+    textOnAccent: tokens.textOnAccent ?? getReadableTextColor(tokens.accent),
+    surfacePrimary: tokens.surfacePrimary ?? tokens.background,
+    surfaceSecondary: tokens.surfaceSecondary ?? tokens.surface,
+    surfaceElevated: tokens.surfaceElevated ?? '#ffffff',
+    surfaceDark: tokens.surfaceDark ?? tokens.primary,
+    surfaceGlass: tokens.surfaceGlass ?? 'rgba(17,24,39,.88)',
+    borderSubtle: tokens.borderSubtle ?? tokens.border,
+    borderStrong: tokens.borderStrong ?? tokens.accent,
+    accentSoft: tokens.accentSoft ?? withAlpha(tokens.accent, 0.18),
+    accentContrast: tokens.accentContrast ?? getReadableTextColor(tokens.accent),
+    heroScrim: tokens.heroScrim ?? 'linear-gradient(90deg,rgba(10,10,10,.72),rgba(10,10,10,.48),rgba(10,10,10,.28))',
+    cardOverlay: tokens.cardOverlay ?? 'rgba(255,255,255,.94)',
+    cardOverlayText: tokens.cardOverlayText ?? '#111827',
+  };
+}
+
+function withAlpha(hex: string, alpha: number) {
+  const normalized = normalizeHexColor(hex).slice(1);
+  const r = parseInt(normalized.slice(0, 2), 16);
+  const g = parseInt(normalized.slice(2, 4), 16);
+  const b = parseInt(normalized.slice(4, 6), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
 }
 
 const fallbackPremiumTokens: PremiumColorTokens = {
@@ -252,9 +357,27 @@ const fallbackPremiumTokens: PremiumColorTokens = {
   text: '#1f1710',
   mutedText: '#6b5741',
   border: '#ead8b8',
+  textPrimary: '#1f1710',
+  textSecondary: '#514231',
+  textMuted: '#5f4e3b',
+  textOnDark: '#ffffff',
+  textOnLight: '#111827',
+  textOnAccent: '#111827',
+  surfacePrimary: '#fff8ed',
+  surfaceSecondary: '#fffaf1',
+  surfaceElevated: '#ffffff',
+  surfaceDark: '#17120c',
+  surfaceGlass: 'rgba(17,24,39,.90)',
+  borderSubtle: '#ead8b8',
+  borderStrong: '#f7c873',
+  accentSoft: 'rgba(247,200,115,.20)',
+  accentContrast: '#111827',
   buttonPrimary: '#17120c',
   buttonPrimaryText: '#f7c873',
   buttonSecondary: '#fffaf1',
   buttonSecondaryText: '#17120c',
   heroOverlay: 'linear-gradient(90deg,rgba(18,15,11,.97),rgba(18,15,11,.72),rgba(18,15,11,.26))',
+  heroScrim: 'linear-gradient(90deg,rgba(10,10,10,.78),rgba(10,10,10,.48),rgba(10,10,10,.30))',
+  cardOverlay: 'rgba(255,255,255,.94)',
+  cardOverlayText: '#111827',
 };

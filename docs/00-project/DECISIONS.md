@@ -242,6 +242,24 @@ Reason:
 - Brand color customization is a low-risk customization layer already supported by the Theme model.
 - Keeping brand customization separate from template selection preserves the approved registry architecture.
 
+## Premium Semantic Contrast Protection
+
+Status: Approved for Stage 9.8D remediation.
+
+Decision:
+
+- Brand colors customize visual identity, but semantic color tokens protect readability.
+- Brand primary and accent colors should influence CTA, badges, icons, borders, active states, and decorative highlights.
+- Long body copy, card text, hero support text, and reservation/contact details must use readable semantic text tokens.
+- Custom colors must be normalized and paired with readable foreground colors.
+- Stage 9.8D does not introduce new templates, marketplace, billing, subscription enforcement, entitlement logic, database schema changes, or Prisma migrations.
+
+Reason:
+
+- Premium design must remain clear and readable across presets and custom colors.
+- Directly applying pale accent colors to paragraphs can create low-contrast text on light surfaces.
+- Semantic tokens keep user customization flexible without sacrificing usability.
+
 ## Template Selection And Assignment Audit
 
 Status: Completed for Stage 9.7A.

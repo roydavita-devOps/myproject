@@ -3,7 +3,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 
 const baseURL = process.env.EVIDENCE_BASE_URL ?? 'http://127.0.0.1';
-const outputRoot = resolve('docs/evidence/premium-density-redesign');
+const outputRoot = resolve(process.env.EVIDENCE_OUTPUT_ROOT ?? 'docs/evidence/premium-density-redesign');
 const password = 'Password12345';
 
 const viewports = {
