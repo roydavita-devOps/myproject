@@ -98,6 +98,10 @@ export class WebsitesService {
     const data = {
       ...(dto.logoUrl !== undefined ? { logoUrl: dto.logoUrl } : {}),
       ...(dto.heroImageUrl !== undefined ? { heroImageUrl: dto.heroImageUrl } : {}),
+      ...(dto.primaryColor !== undefined ? { primaryColor: dto.primaryColor } : {}),
+      ...(dto.secondaryColor !== undefined ? { secondaryColor: dto.secondaryColor } : {}),
+      ...(dto.accentColor !== undefined ? { accentColor: dto.accentColor } : {}),
+      ...(dto.premiumColorPreset !== undefined ? { typography: themeTypographyWithPreset(website.theme?.typography, dto.premiumColorPreset) } : {}),
     };
     if (Object.keys(data).length === 0) throw new BadRequestException('At least one theme asset is required');
 
@@ -114,7 +118,7 @@ export class WebsitesService {
           primaryColor: '#0f766e',
           secondaryColor: '#f59e0b',
           accentColor: '#2563eb',
-          typography: { heading: 'Inter', body: 'Inter' },
+          typography: dto.premiumColorPreset ? themeTypographyWithPreset(undefined, dto.premiumColorPreset) : { heading: 'Inter', body: 'Inter' },
           ...data,
         },
       });
@@ -237,4 +241,17 @@ export class WebsitesService {
 
 function stripUndefined<T extends Record<string, unknown>>(data: T) {
   return Object.fromEntries(Object.entries(data).filter(([, value]) => value !== undefined)) as Partial<T>;
+}
+
+function themeTypographyWithPreset(current: unknown, premiumColorPreset: string) {
+  const base = current && typeof current === 'object' && !Array.isArray(current)
+    ? current as Record<string, unknown>
+    : { heading: 'Inter', body: 'Inter' };
+
+  return {
+    ...base,
+    heading: typeof base.heading === 'string' ? base.heading : 'Inter',
+    body: typeof base.body === 'string' ? base.body : 'Inter',
+    premiumColorPreset,
+  } as Prisma.InputJsonValue;
 }

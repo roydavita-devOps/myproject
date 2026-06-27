@@ -220,6 +220,28 @@ Reason:
 - Visual differentiation can improve perceived value without changing template assignment architecture.
 - Keeping the work renderer-only preserves the approved `template_key -> templateRegistry -> renderer` flow.
 
+## Premium Brand Color Customization
+
+Status: Approved for Stage 9.8C implementation.
+
+Decision:
+
+- Premium templates support user-controlled brand color customization.
+- Restaurant Premium and Cafe Premium use approved preset palettes plus custom primary and accent colors.
+- Theme tokens are resolved from existing Theme data and do not require a Prisma migration.
+- Template identity remains unchanged: Template = layout and experience.
+- Brand identity is composed from Brand = color, logo, content, and images.
+- Business Type remains a recommendation signal.
+- Template remains user choice.
+- Brand Color is user customization.
+- Stage 9.8C does not introduce new templates, marketplace, billing, subscription enforcement, entitlement logic, database schema changes, or Prisma migrations.
+
+Reason:
+
+- Premium templates must feel commercially personalized after selection.
+- Brand color customization is a low-risk customization layer already supported by the Theme model.
+- Keeping brand customization separate from template selection preserves the approved registry architecture.
+
 ## Template Selection And Assignment Audit
 
 Status: Completed for Stage 9.7A.

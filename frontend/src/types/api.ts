@@ -76,7 +76,7 @@ export type Theme = {
   primaryColor: string;
   secondaryColor: string;
   accentColor?: string | null;
-  typography?: { heading?: string; body?: string };
+  typography?: { heading?: string; body?: string; premiumColorPreset?: string };
   logoUrl?: string | null;
   heroImageUrl?: string | null;
 };

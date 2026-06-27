@@ -1,5 +1,6 @@
 import { CSSProperties } from 'react';
 import { Website } from '../../types/api';
+import { premiumTokenStyles, resolvePremiumColorTokens, resolvePremiumVariant } from './premiumTheme';
 
 export const templateTypography = {
   display: 'tpl-display',
@@ -22,7 +23,7 @@ export const templateSpacing = {
 };
 
 export function resolveTemplateTheme(website: Website): CSSProperties {
-  return {
+  const baseTheme = {
     '--tenant-primary': website.theme?.primaryColor ?? '#0f766e',
     '--tenant-secondary': website.theme?.secondaryColor ?? '#f59e0b',
     '--tenant-accent': website.theme?.accentColor ?? '#2563eb',
@@ -31,5 +32,18 @@ export function resolveTemplateTheme(website: Website): CSSProperties {
     '--tpl-primary': website.theme?.primaryColor ?? '#0f766e',
     '--tpl-secondary': website.theme?.secondaryColor ?? '#f59e0b',
     '--tpl-accent': website.theme?.accentColor ?? '#2563eb',
+  } as CSSProperties;
+
+  if (!resolvePremiumVariant(website)) return baseTheme;
+
+  const premiumTokens = resolvePremiumColorTokens(website);
+  return {
+    ...baseTheme,
+    '--tpl-background': premiumTokens.background,
+    '--tpl-surface': premiumTokens.surface,
+    '--tpl-border': premiumTokens.border,
+    '--tpl-text-primary': premiumTokens.text,
+    '--tpl-text-secondary': premiumTokens.mutedText,
+    ...premiumTokenStyles(premiumTokens),
   } as CSSProperties;
 }

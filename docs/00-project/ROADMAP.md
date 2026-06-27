@@ -1,6 +1,6 @@
 # Roadmap
 
-Last updated: 2026-06-26
+Last updated: 2026-06-27
 
 ## Completed
 
@@ -38,11 +38,12 @@ Last updated: 2026-06-26
 - Stage 9.8A Menu Item Image Management.
 - Stage 9.8A-R1 Public Premium Menu Item Count Fix.
 - Stage 9.8B Featured Menu and Full Menu Modal.
+- Stage 9.8C Premium Template Color Customization and Density Redesign.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.8B implementation review and approval checkpoint.
+- Stage 9.8C approval checkpoint.
 
 ## Planned
 
@@ -109,6 +110,14 @@ Stage 9.7C clarified the current visual standard:
 - Luxury template = high-end editorial experience.
 
 Premium visual differentiation is implemented for Restaurant Premium and Cafe Premium, with safe enhancement to the existing Corporate Executive renderer. Premium tier remains metadata only until subscription enforcement is approved separately.
+
+Stage 9.8C adds the next premium maturity layer:
+
+- Template = layout and experience.
+- Brand = color, logo, content, and images.
+- Brand Color = user customization.
+- Restaurant Premium and Cafe Premium can use approved presets plus user primary/accent colors without changing template identity.
+- Section density adapts to available content so one, two, and many items do not create repetitive or sparse premium layouts.
 
 Potential categories:
 

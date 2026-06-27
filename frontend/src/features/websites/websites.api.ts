@@ -8,6 +8,10 @@ export type UpdateWebsitePayload = Partial<
 export type UpdateThemeAssetsPayload = {
   logoUrl?: string;
   heroImageUrl?: string;
+  primaryColor?: string;
+  secondaryColor?: string;
+  accentColor?: string;
+  premiumColorPreset?: string;
 };
 
 export type ThemeAssetType = 'logo' | 'hero';
