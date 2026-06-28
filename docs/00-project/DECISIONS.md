@@ -260,6 +260,25 @@ Reason:
 - Directly applying pale accent colors to paragraphs can create low-contrast text on light surfaces.
 - Semantic tokens keep user customization flexible without sacrificing usability.
 
+## Restaurant Premium Editorial CTA Strategy
+
+Status: Approved for Stage 9.8D editorial refinement.
+
+Decision:
+
+- Restaurant Premium must use reservation-first CTA language.
+- Header and hero primary actions should read as restaurant booking actions, such as `Reserve a Table`.
+- Generic `Chat WhatsApp` CTAs must not be repeated through Restaurant Premium Gallery or Footer.
+- Signature Dishes is the primary commercial section and must focus on dish hierarchy, price, image, and full-menu access instead of per-card contact actions.
+- Editorial restaurant typography is implemented inside the existing Restaurant Premium renderer using local CSS variables and system/fallback fonts.
+- Stage 9.8D editorial refinement does not introduce Cafe Premium redesign, new templates, marketplace, billing, subscription enforcement, entitlement logic, backend changes, Prisma schema changes, or database migrations.
+
+Reason:
+
+- Premium Restaurant must feel commercially sellable within the first screen.
+- Too many generic WhatsApp buttons weaken the premium restaurant flow.
+- Restaurant visitors need a clear reservation path, menu confidence, and visit details without internal product copy.
+
 ## Template Selection And Assignment Audit
 
 Status: Completed for Stage 9.7A.

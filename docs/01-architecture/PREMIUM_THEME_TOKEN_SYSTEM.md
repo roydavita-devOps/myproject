@@ -1,12 +1,14 @@
 # Premium Theme Token System
 
-Last updated: 2026-06-27
+Last updated: 2026-06-28
 
 ## Purpose
 
 Stage 9.8C introduced a premium theme token layer for `restaurant_premium` and `cafe_premium`.
 
 Stage 9.8D strengthens the token layer with semantic contrast protection.
+
+The Restaurant Premium editorial refinement also adds renderer-local typography variables for restaurant presentation without changing the shared theme schema.
 
 The system separates:
 
@@ -28,6 +30,7 @@ Included:
 - Token-based premium CSS variables.
 - Adaptive Signature and Gallery density in premium renderers.
 - Contrast-safe semantic text, surface, border, hero, CTA, and card overlay variables.
+- Restaurant Premium renderer-local typography variables for heading, body, eyebrow, hero title, section title, line height, letter spacing, and font weights.
 
 Excluded:
 
@@ -88,6 +91,21 @@ Premium templates consume:
 - `--premium-card-overlay`
 - `--premium-card-overlay-text`
 
+Restaurant Premium also defines local renderer variables:
+
+- `--restaurant-heading-font`
+- `--restaurant-body-font`
+- `--restaurant-eyebrow-font`
+- `--restaurant-hero-title-size`
+- `--restaurant-section-title-size`
+- `--restaurant-body-text-size`
+- `--restaurant-line-height`
+- `--restaurant-letter-spacing`
+- `--restaurant-heading-weight`
+- `--restaurant-body-weight`
+
+These variables are scoped inside `RestaurantPremiumTemplate.tsx` and do not change the shared theme API.
+
 ## Contrast Guard
 
 Stage 9.8D adds small utility functions in `premiumTheme.ts`:
@@ -107,6 +125,7 @@ Design rule:
 ## Migration Decision
 
 No Prisma migration is required for Stage 9.8C.
+No Prisma migration is required for Stage 9.8D editorial refinement.
 
 Reason:
 

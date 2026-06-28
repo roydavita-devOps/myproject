@@ -363,14 +363,14 @@ test.describe('SaaS smoke test', () => {
         await page.goto(`${baseURL}/site/restaurant-premium-demo`);
 
         await expect(page.locator('main')).toHaveAttribute('data-template-key', 'restaurant_premium');
-        await expect(page.getByText('Private dining presence')).toBeVisible();
-        await expect(page.getByRole('heading', { name: 'Chef Story' })).toBeVisible();
-        await expect(page.getByRole('heading', { name: 'Signature Dishes' })).toBeVisible();
+        await expect(page.getByText('Restaurant reservations')).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Dishes Worth Reserving For' })).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'From the Kitchen to the Table' })).toBeVisible();
         const services = page.locator('#services');
         await expect(services.getByText('Chef Signature Rice Set')).toBeVisible();
         await expect(services.getByText('Slow Cooked Beef Plate')).toBeVisible();
         await expect(services.getByText('Seasonal Family Platter')).toHaveCount(0);
-        await services.getByRole('button', { name: /view full menu/i }).click();
+        await services.getByRole('button', { name: /explore full menu/i }).click();
         const dialog = page.getByRole('dialog', { name: /full restaurant menu/i });
         await expect(dialog).toBeVisible();
         await expect(dialog.getByRole('button', { name: /all/i })).toBeVisible();
@@ -468,7 +468,7 @@ test.describe('SaaS smoke test', () => {
 
     await page.goto(`/site/${slug}`);
     await expect(page.locator('main')).toHaveAttribute('data-template-key', 'restaurant_premium');
-    await expect(page.getByText('Private dining presence')).toBeVisible();
+    await expect(page.getByText('Restaurant reservations')).toBeVisible();
 
     await api.dispose();
   });

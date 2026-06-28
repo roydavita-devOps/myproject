@@ -1,6 +1,6 @@
 # Roadmap
 
-Last updated: 2026-06-27
+Last updated: 2026-06-28
 
 ## Completed
 
@@ -40,11 +40,12 @@ Last updated: 2026-06-27
 - Stage 9.8B Featured Menu and Full Menu Modal.
 - Stage 9.8C Premium Template Color Customization and Density Redesign.
 - Stage 9.8D Premium Contrast and Readability Remediation.
+- Stage 9.8D Restaurant Premium Editorial Redesign, CTA Strategy, Contrast & Typography Refinement.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.8D approval checkpoint.
+- Stage 9.8D Restaurant Premium editorial validation checkpoint.
 
 ## Planned
 
@@ -120,6 +121,13 @@ Stage 9.8C adds the next premium maturity layer:
 - Restaurant Premium and Cafe Premium can use approved presets plus user primary/accent colors without changing template identity.
 - Section density adapts to available content so one, two, and many items do not create repetitive or sparse premium layouts.
 - Semantic premium tokens protect readability, so brand colors influence identity, CTA, badges, and accents without being used directly for long body copy.
+
+Stage 9.8D adds restaurant-specific commercial polish:
+
+- Restaurant Premium uses reservation-first CTA language instead of generic WhatsApp-first copy.
+- Signature Dishes is the strongest conversion section and links to the full menu without per-card WhatsApp buttons.
+- Gallery and Footer no longer repeat generic contact CTAs.
+- Editorial restaurant typography is applied inside the existing renderer without adding a dependency, schema change, or new template key.
 
 Potential categories:
 

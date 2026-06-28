@@ -22,4 +22,25 @@ describe('premium template source readability rules', () => {
       expect(source).not.toMatch(/tpl-body[^"']*text-\[var\(--premium-accent\)\]/);
     }
   });
+
+  it('keeps restaurant premium CTA language reservation-first and avoids generic repeated WhatsApp CTAs', () => {
+    const source = readFileSync(resolve('src/features/templates/RestaurantPremiumTemplate.tsx'), 'utf8');
+
+    expect(source).toContain('Reserve a Table');
+    expect(source).toContain('Reserve via WhatsApp');
+    expect(source).toContain('Explore Signature Dishes');
+    expect(source).toContain('Explore Full Menu');
+    expect(source).not.toContain('Chat WhatsApp');
+    expect(source).not.toContain('TemplateNavigation');
+    expect(source).not.toContain('TemplateFooter');
+  });
+
+  it('keeps restaurant premium typography tokens local to the renderer', () => {
+    const source = readFileSync(resolve('src/features/templates/RestaurantPremiumTemplate.tsx'), 'utf8');
+
+    expect(source).toContain('--restaurant-heading-font');
+    expect(source).toContain('--restaurant-body-font');
+    expect(source).toContain('--restaurant-hero-title-size');
+    expect(source).toContain('font-[var(--restaurant-heading-font)]');
+  });
 });

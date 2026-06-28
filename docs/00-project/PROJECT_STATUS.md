@@ -1,12 +1,12 @@
 # Project Status
 
-Last updated: 2026-06-27
+Last updated: 2026-06-28
 
 ## Current Stage
 
-Stage 9.8D - Premium Contrast and Readability Remediation.
+Stage 9.8D - Restaurant Premium Editorial Redesign, CTA Strategy, Contrast & Typography Refinement.
 
-Status: implemented, validated, and ready for approval.
+Status: implemented, locally validated, and ready for approval.
 
 ## Completed Stages
 
@@ -47,6 +47,7 @@ Status: implemented, validated, and ready for approval.
 | Stage 9.8B Featured Menu and Full Menu Modal | Completed. |
 | Stage 9.8C Premium Template Color Customization and Density Redesign | Completed; awaiting approval. |
 | Stage 9.8D Premium Contrast and Readability Remediation | Completed; awaiting approval. |
+| Stage 9.8D Restaurant Premium Editorial Redesign | Completed; awaiting approval. |
 
 ## Current Blockers
 
@@ -60,13 +61,14 @@ Status: implemented, validated, and ready for approval.
 | Featured menu and full menu modal | Resolved for Stage 9.8B | Dashboard users can mark featured menu items. Premium public Signature sections show featured items, with a full menu modal for all items grouped by category. |
 | Premium color and density customization | Resolved for Stage 9.8C | Restaurant Premium and Cafe Premium now use premium color presets, user primary/accent colors, adaptive Signature/Gallery density, and reduced repeated contact/reservation sections. |
 | Premium contrast and readability | Resolved for Stage 9.8D | Brand colors customize identity, while semantic tokens protect readable text, surfaces, CTA contrast, and hero/card readability. |
+| Restaurant Premium commercial polish | Resolved for Stage 9.8D editorial refinement | Restaurant Premium now uses reservation-first CTA language, editorial typography, stronger Signature Dishes hierarchy, consolidated visit/reservation actions, and no repeated generic Gallery/Footer WhatsApp CTA. |
 | Luxury templates | Paused | No Luxury template implementation until separately approved. |
 | Template Catalog UI | Paused | No marketplace, comparison page, entitlement, or subscription access logic in Stage 9.7B. |
 
 ## Next Actions
 
-1. Review Stage 9.8D Premium Contrast and Readability Remediation.
-2. Approve or request corrections to premium contrast, readability, and customer-facing copy cleanup.
+1. Review Stage 9.8D Restaurant Premium Editorial Redesign evidence.
+2. Approve or request corrections.
 3. Keep Luxury, Catalog UI, marketplace, subscription, entitlement, preview-before-apply, and switch history paused until separately approved.
 4. After approval, proceed only to the next approved stage.
 5. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
@@ -99,5 +101,6 @@ Status: implemented, validated, and ready for approval.
 - Featured menu and full menu modal report: [../06-modern-template/reports/PHASE-9.8B-Featured-Menu-and-Full-Menu-Modal-Report.md](../06-modern-template/reports/PHASE-9.8B-Featured-Menu-and-Full-Menu-Modal-Report.md)
 - Premium color customization and density redesign report: [../06-modern-template/reports/PHASE-9.8C-Premium-Color-Customization-And-Density-Redesign-Report.md](../06-modern-template/reports/PHASE-9.8C-Premium-Color-Customization-And-Density-Redesign-Report.md)
 - Premium contrast and readability remediation report: [../06-modern-template/reports/PHASE-9.8D-Premium-Contrast-And-Readability-Remediation-Report.md](../06-modern-template/reports/PHASE-9.8D-Premium-Contrast-And-Readability-Remediation-Report.md)
+- Restaurant Premium editorial redesign report: [../06-modern-template/reports/PHASE-9.8D-Restaurant-Premium-Editorial-Redesign-Report.md](../06-modern-template/reports/PHASE-9.8D-Restaurant-Premium-Editorial-Redesign-Report.md)
 - Template Catalog readiness audit: [../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md](../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md)
 - Template consistency audit: [../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md](../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md)

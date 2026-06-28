@@ -1,0 +1,30 @@
+{
+  "generatedAt": "2026-06-28T16:06:09.897Z",
+  "baseURL": "http://127.0.0.1",
+  "screenshots": {
+    "mobile": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-editorial-redesign/restaurant-premium-mobile.png",
+    "tablet": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-editorial-redesign/restaurant-premium-tablet.png",
+    "desktop": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-editorial-redesign/restaurant-premium-desktop.png",
+    "headerCta": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-editorial-redesign/restaurant-premium-header-cta.png"
+  },
+  "results": [
+    {
+      "viewport": "mobile",
+      "images": 8,
+      "ctas": 8,
+      "status": "passed"
+    },
+    {
+      "viewport": "tablet",
+      "images": 8,
+      "ctas": 8,
+      "status": "passed"
+    },
+    {
+      "viewport": "desktop",
+      "images": 8,
+      "ctas": 8,
+      "status": "passed"
+    }
+  ]
+}
