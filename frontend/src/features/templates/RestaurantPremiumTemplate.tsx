@@ -170,7 +170,7 @@ function PremiumRestaurantHero({ website }: { website: Website }) {
           <h2 className="tenant-heading mt-3 text-3xl font-semibold leading-tight">Settle in for a memorable meal.</h2>
           <div className="mt-6 grid gap-4">
             {[
-              ['Opening cue', formatOpeningHours(website.openingHours)],
+              ['Opening Hours', formatOpeningHours(website.openingHours)],
               ['Best for', 'Dinner, family tables, and small celebrations'],
               ['Easy next step', 'Reserve a table or explore signature dishes'],
             ].map(([label, value]) => (
@@ -397,16 +397,16 @@ function VisitReservationSection({ website }: { website: Website }) {
           <h3 className="tpl-h3 tenant-heading">Opening hours</h3>
           <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{formatOpeningHours(website.openingHours)}</p>
         </TemplateCard>
-        <TemplateCard className="bg-[var(--premium-surface-dark)] text-[var(--premium-text-on-dark)]">
+        <article className="rounded-lg border border-[var(--premium-border-strong)] bg-[var(--premium-surface-dark)] p-5 text-white shadow-xl">
           <CalendarCheck className="mb-4 size-5 text-[var(--premium-accent)]" />
-          <h3 className="tpl-h3 tenant-heading">Reserve your table tonight</h3>
-          <p className="tpl-body mt-3 text-white/90">Reserve a table or ask what is available today.</p>
+          <h3 className="font-[var(--restaurant-heading-font)] text-2xl font-semibold leading-tight tracking-normal text-white">Reserve your table tonight</h3>
+          <p className="mt-3 text-sm leading-6 text-white/90">Reserve a table or ask what is available today.</p>
           {actions.length > 0 && (
             <div className="mt-5 flex flex-wrap gap-3">
               {actions.map((action) => <TemplateButton key={action.href} {...action} />)}
             </div>
           )}
-        </TemplateCard>
+        </article>
       </div>
     </TemplateSection>
   );
@@ -446,11 +446,9 @@ function resolveRestaurantNavigationAction(website: Website) {
 
 function resolvePremiumRestaurantActions(website: Website) {
   const contactActions = resolveContactActions(website);
-  const whatsapp = contactActions.find((item) => item.action === 'whatsapp');
   const directions = contactActions.find((item) => item.action === 'directions');
 
   return validateTemplateActions([
-    whatsapp ? { ...whatsapp, label: 'Reserve a Table', icon: <MessageCircle className="size-4" />, variant: 'primary' } : null,
     { action: 'menu', label: 'Explore Signature Dishes', href: '#services', icon: <Utensils className="size-4" />, variant: 'secondary' },
     directions ? { ...directions, label: 'Get Directions', icon: <MapPin className="size-4" />, variant: 'tertiary' } : null,
   ]);
@@ -471,8 +469,10 @@ function resolvePremiumContactActions(website: Website) {
 
 function formatOpeningHours(openingHours?: Record<string, unknown> | null) {
   if (!openingHours || Object.keys(openingHours).length === 0) return 'Daily, 11.00 - 22.00';
+  if (typeof openingHours.display === 'string' && openingHours.display.trim()) return openingHours.display.trim();
 
   return Object.entries(openingHours)
+    .filter(([key]) => key !== 'display')
     .map(([day, value]) => `${day}: ${String(value)}`)
     .join(', ');
 }

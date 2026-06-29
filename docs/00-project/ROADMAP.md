@@ -1,6 +1,6 @@
 # Roadmap
 
-Last updated: 2026-06-28
+Last updated: 2026-06-29
 
 ## Completed
 
@@ -41,11 +41,12 @@ Last updated: 2026-06-28
 - Stage 9.8C Premium Template Color Customization and Density Redesign.
 - Stage 9.8D Premium Contrast and Readability Remediation.
 - Stage 9.8D Restaurant Premium Editorial Redesign, CTA Strategy, Contrast & Typography Refinement.
+- Stage 9.8D-R1 Restaurant Premium CTA, Readability & Opening Hours Remediation.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.8D Restaurant Premium editorial validation checkpoint.
+- Stage 9.8D-R1 Restaurant Premium remediation approval checkpoint.
 
 ## Planned
 
@@ -128,6 +129,13 @@ Stage 9.8D adds restaurant-specific commercial polish:
 - Signature Dishes is the strongest conversion section and links to the full menu without per-card WhatsApp buttons.
 - Gallery and Footer no longer repeat generic contact CTAs.
 - Editorial restaurant typography is applied inside the existing renderer without adding a dependency, schema change, or new template key.
+
+Stage 9.8D-R1 resolves final Restaurant Premium review findings:
+
+- Global reservation CTA is concentrated in the header.
+- Hero focuses on content/navigation CTAs instead of repeating `Reserve a Table`.
+- Visit & Reservation uses a dark readable final-action card.
+- Opening Hours is tenant-editable from the dashboard and rendered from existing `Website.openingHours` data.
 
 Potential categories:
 

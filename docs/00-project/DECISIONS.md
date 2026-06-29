@@ -279,6 +279,26 @@ Reason:
 - Too many generic WhatsApp buttons weaken the premium restaurant flow.
 - Restaurant visitors need a clear reservation path, menu confidence, and visit details without internal product copy.
 
+## Restaurant Premium CTA Concentration And Opening Hours Editability
+
+Status: Approved for Stage 9.8D-R1 remediation.
+
+Decision:
+
+- Restaurant Premium concentrates the global reservation CTA in the header.
+- Hero must not repeat `Reserve a Table`; it should focus on `Explore Signature Dishes` and optional `Get Directions`.
+- Visit & Reservation remains the final contact section with `Reserve via WhatsApp`, `Call Restaurant`, and `Get Directions`.
+- Footer must not repeat a generic WhatsApp CTA.
+- Opening hours must be tenant-editable and rendered from tenant/website data.
+- Existing `Website.openingHours` JSON persistence is used with a simple `display` value for dashboard-edited hours.
+- No database migration, backend schema change, new template, marketplace, billing, subscription enforcement, or entitlement logic is introduced by Stage 9.8D-R1.
+
+Reason:
+
+- Repeating reservation CTA in the hero competed with the header CTA and weakened the premium flow.
+- Opening hours are business content and must not remain hardcoded template copy.
+- The existing `openingHours` field already supports safe persistence, so a migration is unnecessary.
+
 ## Template Selection And Assignment Audit
 
 Status: Completed for Stage 9.7A.

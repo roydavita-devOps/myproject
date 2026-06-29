@@ -2,7 +2,7 @@ import { Website } from '../../types/api';
 import { http } from '../../lib/api/http';
 
 export type UpdateWebsitePayload = Partial<
-  Pick<Website, 'businessName' | 'tagline' | 'description' | 'address' | 'phone' | 'whatsapp' | 'email' | 'mapsUrl'>
+  Pick<Website, 'businessName' | 'tagline' | 'description' | 'address' | 'phone' | 'whatsapp' | 'email' | 'mapsUrl' | 'openingHours'>
 >;
 
 export type UpdateThemeAssetsPayload = {

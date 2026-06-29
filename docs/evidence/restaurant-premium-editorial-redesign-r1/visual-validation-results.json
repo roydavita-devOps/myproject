@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-06-29T03:21:23.923Z",
+  "baseURL": "http://127.0.0.1",
+  "screenshots": {
+    "heroDesktop": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-editorial-redesign-r1/restaurant-premium-hero-desktop.png",
+    "visitReservationDesktop": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-editorial-redesign-r1/restaurant-premium-visit-reservation-desktop.png",
+    "mobile": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-editorial-redesign-r1/restaurant-premium-mobile.png",
+    "openingHoursEditor": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-editorial-redesign-r1/restaurant-premium-opening-hours-editor.png"
+  },
+  "results": [
+    {
+      "target": "restaurant_premium_public",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_premium_public",
+      "viewport": "mobile",
+      "status": "passed"
+    },
+    {
+      "target": "opening_hours_editor",
+      "viewport": "desktop",
+      "status": "passed"
+    }
+  ]
+}

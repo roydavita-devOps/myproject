@@ -381,9 +381,12 @@ test.describe('SaaS smoke test', () => {
         await expect(page.getByRole('heading', { name: 'Ambience Gallery' })).toBeVisible();
         await expect(page.getByText('Reserve your table tonight')).toBeVisible();
         const hero = page.locator('#home');
-        await expect(hero.getByRole('link', { name: /reserve a table/i })).toBeVisible();
+        await expect(page.locator('header').getByRole('link', { name: /reserve a table/i })).toBeVisible();
+        await expect(hero.getByRole('link', { name: /reserve a table/i })).toHaveCount(0);
         await expect(hero.getByRole('link', { name: /explore signature dishes/i })).toBeVisible();
         await expect(hero.getByRole('link', { name: /get directions/i })).toBeVisible();
+        await expect(page.getByText('Reserve via WhatsApp')).toBeVisible();
+        await expect(page.getByText('Call Restaurant')).toBeVisible();
 
         await assertTemplateCtas(page);
       });
@@ -451,6 +454,18 @@ test.describe('SaaS smoke test', () => {
     });
 
     await seedSession(page, session);
+    await page.goto(`/app/websites/${session.websiteId}`);
+    await page.getByLabel('Opening Hours').fill('Daily, 12.00 - 21.00');
+    await page.getByRole('button', { name: /save changes/i }).click();
+    await expect(page.getByLabel('Opening Hours')).toHaveValue('Daily, 12.00 - 21.00');
+    await expect.poll(async () => {
+      const response = await api.get(`/api/v1/websites/${session.websiteId}`, {
+        headers: { Authorization: `Bearer ${session.accessToken}` },
+      });
+      const website = await response.json();
+      return website.openingHours?.display;
+    }).toBe('Daily, 12.00 - 21.00');
+
     await page.goto(`/app/websites/${session.websiteId}/templates`);
 
     await expect(page.getByRole('heading', { name: 'Templates' })).toBeVisible();
@@ -469,6 +484,7 @@ test.describe('SaaS smoke test', () => {
     await page.goto(`/site/${slug}`);
     await expect(page.locator('main')).toHaveAttribute('data-template-key', 'restaurant_premium');
     await expect(page.getByText('Restaurant reservations')).toBeVisible();
+    await expect(page.getByText('Daily, 12.00 - 21.00').first()).toBeVisible();
 
     await api.dispose();
   });
@@ -626,6 +642,7 @@ async function createTemplateSelectionTenant(
       whatsapp: '081280010080',
       email: input.email,
       mapsUrl: 'https://maps.google.com',
+      openingHours: { display: 'Daily, 12.00 - 21.00' },
     },
   });
   expect(update.ok()).toBeTruthy();

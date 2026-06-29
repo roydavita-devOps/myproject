@@ -35,6 +35,16 @@ describe('premium template source readability rules', () => {
     expect(source).not.toContain('TemplateFooter');
   });
 
+  it('keeps restaurant premium hero free of repeated reservation CTA', () => {
+    const source = readFileSync(resolve('src/features/templates/RestaurantPremiumTemplate.tsx'), 'utf8');
+    const heroActionResolver = source.match(/function resolvePremiumRestaurantActions[\s\S]*?function resolvePremiumContactActions/);
+
+    expect(heroActionResolver?.[0]).toContain('Explore Signature Dishes');
+    expect(heroActionResolver?.[0]).toContain('Get Directions');
+    expect(heroActionResolver?.[0]).not.toContain('Reserve a Table');
+    expect(heroActionResolver?.[0]).not.toContain('Reserve via WhatsApp');
+  });
+
   it('keeps restaurant premium typography tokens local to the renderer', () => {
     const source = readFileSync(resolve('src/features/templates/RestaurantPremiumTemplate.tsx'), 'utf8');
 

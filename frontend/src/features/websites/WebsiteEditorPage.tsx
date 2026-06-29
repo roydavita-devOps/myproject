@@ -28,6 +28,7 @@ export function WebsiteEditorPage() {
     whatsapp: '',
     email: '',
     mapsUrl: '',
+    openingHours: '',
   });
   const [copied, setCopied] = useState(false);
 
@@ -42,6 +43,7 @@ export function WebsiteEditorPage() {
       whatsapp: website.whatsapp ?? '',
       email: website.email ?? '',
       mapsUrl: website.mapsUrl ?? '',
+      openingHours: openingHoursToText(website.openingHours),
     });
   }, [website]);
 
@@ -204,6 +206,13 @@ export function WebsiteEditorPage() {
           <Field label="Google Maps URL">
             <TextInput value={form.mapsUrl} onChange={(event) => setForm({ ...form, mapsUrl: event.target.value })} />
           </Field>
+          <Field label="Opening Hours">
+            <TextInput
+              value={form.openingHours}
+              onChange={(event) => setForm({ ...form, openingHours: event.target.value })}
+              placeholder="Daily, 11.00 - 22.00"
+            />
+          </Field>
         </div>
         <Field label="Address">
           <TextArea value={form.address} onChange={(event) => setForm({ ...form, address: event.target.value })} />
@@ -308,6 +317,7 @@ function sanitizeWebsiteForm(form: {
   whatsapp: string;
   email: string;
   mapsUrl: string;
+  openingHours: string;
 }) {
   return {
     businessName: form.businessName.trim(),
@@ -318,10 +328,25 @@ function sanitizeWebsiteForm(form: {
     whatsapp: optionalValue(form.whatsapp),
     email: optionalValue(form.email),
     mapsUrl: optionalValue(form.mapsUrl),
+    openingHours: openingHoursValue(form.openingHours),
   };
 }
 
 function optionalValue(value: string) {
   const trimmed = value.trim();
   return trimmed === '' ? undefined : trimmed;
+}
+
+function openingHoursValue(value: string) {
+  const trimmed = value.trim();
+  return trimmed === '' ? undefined : { display: trimmed };
+}
+
+function openingHoursToText(openingHours?: Record<string, unknown> | null) {
+  if (!openingHours || Object.keys(openingHours).length === 0) return '';
+  if (typeof openingHours.display === 'string') return openingHours.display;
+  return Object.entries(openingHours)
+    .filter(([key]) => key !== 'display')
+    .map(([day, value]) => `${day}: ${String(value)}`)
+    .join(', ');
 }
