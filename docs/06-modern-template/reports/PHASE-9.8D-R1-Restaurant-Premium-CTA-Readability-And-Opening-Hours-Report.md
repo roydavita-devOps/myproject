@@ -95,6 +95,7 @@ Decision:
 Dashboard:
 
 - Added `Opening Hours` field in `WebsiteEditorPage`.
+- Positioned `Opening Hours` as a full-width field inside the `Business information` section before `Address`.
 - Placeholder: `Daily, 11.00 - 22.00`.
 - Saves through existing `websitesApi.update()`.
 - API type now includes `openingHours`.

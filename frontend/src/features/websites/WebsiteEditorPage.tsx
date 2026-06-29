@@ -206,14 +206,14 @@ export function WebsiteEditorPage() {
           <Field label="Google Maps URL">
             <TextInput value={form.mapsUrl} onChange={(event) => setForm({ ...form, mapsUrl: event.target.value })} />
           </Field>
-          <Field label="Opening Hours">
-            <TextInput
-              value={form.openingHours}
-              onChange={(event) => setForm({ ...form, openingHours: event.target.value })}
-              placeholder="Daily, 11.00 - 22.00"
-            />
-          </Field>
         </div>
+        <Field label="Opening Hours">
+          <TextInput
+            value={form.openingHours}
+            onChange={(event) => setForm({ ...form, openingHours: event.target.value })}
+            placeholder="Daily, 11.00 - 22.00"
+          />
+        </Field>
         <Field label="Address">
           <TextArea value={form.address} onChange={(event) => setForm({ ...form, address: event.target.value })} />
         </Field>

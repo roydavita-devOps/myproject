@@ -145,7 +145,7 @@ async function captureOpeningHoursEditor(page) {
     throw new Error(`Opening hours were not saved: ${JSON.stringify(savedWebsite.openingHours)}`);
   }
 
-  await field.screenshot({ path: screenshotPaths.openingHoursEditor });
+  await page.locator('form').first().screenshot({ path: screenshotPaths.openingHoursEditor });
   results.push({ target: 'opening_hours_editor', viewport: 'desktop', status: 'passed' });
   await api.dispose();
 }
