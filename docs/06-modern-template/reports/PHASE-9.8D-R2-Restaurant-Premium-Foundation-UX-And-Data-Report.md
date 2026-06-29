@@ -155,7 +155,8 @@ Opening Hours is no longer free-text-only.
 
 Controls:
 
-- Opening mode: `Every day`
+- Opening mode: `Every day`, `Monday - Friday`, `Saturday - Sunday`, or `Specific days`
+- Open days: checkbox selection for custom schedules
 - Open Time: native `time` input
 - Close Time: native `time` input
 
@@ -172,6 +173,7 @@ Stored in existing `Website.openingHours` JSON:
 ```json
 {
   "mode": "daily",
+  "days": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
   "openTime": "12:00",
   "closeTime": "21:00"
 }
@@ -180,6 +182,8 @@ Stored in existing `Website.openingHours` JSON:
 Public display:
 
 `Daily, 12.00 - 21.00`
+
+Other supported displays include `Monday - Friday, 12.00 - 21.00`, `Saturday - Sunday, 12.00 - 21.00`, and selected custom day abbreviations.
 
 Legacy `{ "display": "Daily, 12.00 - 21.00" }` remains supported.
 

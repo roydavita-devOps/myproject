@@ -73,6 +73,9 @@ describe('premium template source readability rules', () => {
     expect(editorSource).toContain('function OpeningHoursPicker');
     expect(editorSource).toContain('type="time"');
     expect(editorSource).toContain("mode: 'daily'");
+    expect(editorSource).toContain('Monday - Friday');
+    expect(editorSource).toContain('Saturday - Sunday');
+    expect(editorSource).toContain('Specific days');
     expect(editorSource).not.toContain('placeholder="Daily, 11.00 - 22.00"');
   });
 });

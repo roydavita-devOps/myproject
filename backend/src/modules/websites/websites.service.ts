@@ -245,7 +245,9 @@ function stripUndefined<T extends Record<string, unknown>>(data: T) {
 }
 
 function validateOpeningHours(openingHours?: Record<string, unknown>) {
-  if (!openingHours || openingHours.mode !== 'daily') return;
+  if (!openingHours) return;
+  const mode = openingHours.mode;
+  if (mode !== 'daily' && mode !== 'weekdays' && mode !== 'weekends' && mode !== 'custom') return;
 
   const openTime = openingHours.openTime;
   const closeTime = openingHours.closeTime;
@@ -254,6 +256,13 @@ function validateOpeningHours(openingHours?: Record<string, unknown>) {
   }
   if (!/^\d{2}:\d{2}$/.test(openTime) || !/^\d{2}:\d{2}$/.test(closeTime) || closeTime <= openTime) {
     throw new BadRequestException('Close time must be after open time');
+  }
+  if (mode === 'custom') {
+    const days = openingHours.days;
+    const allowedDays = new Set(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']);
+    if (!Array.isArray(days) || days.length === 0 || !days.every((day) => typeof day === 'string' && allowedDays.has(day))) {
+      throw new BadRequestException('Select at least one valid opening day');
+    }
   }
 }
 

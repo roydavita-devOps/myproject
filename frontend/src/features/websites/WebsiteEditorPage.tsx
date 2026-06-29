@@ -13,10 +13,26 @@ import { resolveAssetUrl } from '../../lib/api/assets';
 import { Website } from '../../types/api';
 
 type OpeningHoursForm = {
-  mode: 'daily';
+  mode: OpeningHoursMode;
   openTime: string;
   closeTime: string;
+  days: string[];
 };
+
+type OpeningHoursMode = 'daily' | 'weekdays' | 'weekends' | 'custom';
+
+const dayOptions = [
+  { value: 'monday', label: 'Monday', shortLabel: 'Mon' },
+  { value: 'tuesday', label: 'Tuesday', shortLabel: 'Tue' },
+  { value: 'wednesday', label: 'Wednesday', shortLabel: 'Wed' },
+  { value: 'thursday', label: 'Thursday', shortLabel: 'Thu' },
+  { value: 'friday', label: 'Friday', shortLabel: 'Fri' },
+  { value: 'saturday', label: 'Saturday', shortLabel: 'Sat' },
+  { value: 'sunday', label: 'Sunday', shortLabel: 'Sun' },
+];
+const weekdayValues = dayOptions.slice(0, 5).map((day) => day.value);
+const weekendValues = dayOptions.slice(5).map((day) => day.value);
+const defaultOpeningHours: OpeningHoursForm = { mode: 'daily', openTime: '11:00', closeTime: '22:00', days: dayOptions.map((day) => day.value) };
 
 export function WebsiteEditorPage() {
   const { websiteId = '' } = useParams();
@@ -39,7 +55,7 @@ export function WebsiteEditorPage() {
     whatsapp: '',
     email: '',
     mapsUrl: '',
-    openingHours: { mode: 'daily', openTime: '11:00', closeTime: '22:00' } as OpeningHoursForm,
+    openingHours: defaultOpeningHours,
   });
   const [slugDraft, setSlugDraft] = useState('');
   const [formError, setFormError] = useState('');
@@ -138,7 +154,7 @@ export function WebsiteEditorPage() {
     event.preventDefault();
     setFormError('');
     if (!isValidOpeningHours(form.openingHours)) {
-      setFormError('Close time must be after open time.');
+      setFormError(form.openingHours.closeTime <= form.openingHours.openTime ? 'Close time must be after open time.' : 'Select at least one opening day.');
       return;
     }
     saveMutation.mutate();
@@ -410,14 +426,18 @@ function optionalValue(value: string) {
 function openingHoursValue(value: OpeningHoursForm) {
   return {
     mode: value.mode,
+    days: resolveOpeningDays(value.mode, value.days),
     openTime: value.openTime,
     closeTime: value.closeTime,
   };
 }
 
 function openingHoursToForm(openingHours?: Record<string, unknown> | null): OpeningHoursForm {
-  if (openingHours?.mode === 'daily' && typeof openingHours.openTime === 'string' && typeof openingHours.closeTime === 'string') {
-    return { mode: 'daily', openTime: openingHours.openTime, closeTime: openingHours.closeTime };
+  if (isOpeningHoursMode(openingHours?.mode) && typeof openingHours.openTime === 'string' && typeof openingHours.closeTime === 'string') {
+    const days = Array.isArray(openingHours.days)
+      ? openingHours.days.filter((day): day is string => typeof day === 'string' && dayOptions.some((option) => option.value === day))
+      : resolveOpeningDays(openingHours.mode, []);
+    return { mode: openingHours.mode, openTime: openingHours.openTime, closeTime: openingHours.closeTime, days };
   }
 
   const display = typeof openingHours?.display === 'string' ? openingHours.display : '';
@@ -427,20 +447,36 @@ function openingHoursToForm(openingHours?: Record<string, unknown> | null): Open
       mode: 'daily',
       openTime: `${parsed[1].padStart(2, '0')}:${parsed[2]}`,
       closeTime: `${parsed[3].padStart(2, '0')}:${parsed[4]}`,
+      days: dayOptions.map((day) => day.value),
     };
   }
 
-  return { mode: 'daily', openTime: '11:00', closeTime: '22:00' };
+  return defaultOpeningHours;
 }
 
 function OpeningHoursPicker({ value, onChange }: { value: OpeningHoursForm; onChange: (value: OpeningHoursForm) => void }) {
+  const selectedDays = resolveOpeningDays(value.mode, value.days);
+  const displayDays = openingDayLabel(value.mode, selectedDays);
+
+  function updateMode(mode: OpeningHoursMode) {
+    onChange({ ...value, mode, days: resolveOpeningDays(mode, value.days) });
+  }
+
+  function toggleDay(day: string) {
+    const nextDays = selectedDays.includes(day) ? selectedDays.filter((item) => item !== day) : [...selectedDays, day];
+    onChange({ ...value, mode: 'custom', days: dayOptions.map((option) => option.value).filter((item) => nextDays.includes(item)) });
+  }
+
   return (
     <fieldset className="grid gap-3 rounded-md border border-slate-200 bg-slate-50 p-4">
       <legend className="px-1 text-sm font-semibold text-slate-950">Opening Hours</legend>
       <div className="grid gap-4 md:grid-cols-3">
         <Field label="Opening mode">
-          <select className="field-input" value={value.mode} onChange={() => onChange({ ...value, mode: 'daily' })}>
+          <select className="field-input" value={value.mode} onChange={(event) => updateMode(event.target.value as OpeningHoursMode)}>
             <option value="daily">Every day</option>
+            <option value="weekdays">Monday - Friday</option>
+            <option value="weekends">Saturday - Sunday</option>
+            <option value="custom">Specific days</option>
           </select>
         </Field>
         <Field label="Open Time">
@@ -450,15 +486,50 @@ function OpeningHoursPicker({ value, onChange }: { value: OpeningHoursForm; onCh
           <TextInput type="time" value={value.closeTime} onChange={(event) => onChange({ ...value, closeTime: event.target.value })} required />
         </Field>
       </div>
-      <p className="text-sm text-slate-500">Public display: Daily, {value.openTime.replace(':', '.')} - {value.closeTime.replace(':', '.')}</p>
+      <div className="grid gap-2">
+        <p className="text-sm font-medium text-slate-700">Open days</p>
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          {dayOptions.map((day) => (
+            <label key={day.value} className="flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700">
+              <input
+                type="checkbox"
+                className="size-4 rounded border-slate-300 text-teal-700 focus:ring-teal-600"
+                checked={selectedDays.includes(day.value)}
+                onChange={() => toggleDay(day.value)}
+              />
+              {day.label}
+            </label>
+          ))}
+        </div>
+      </div>
+      <p className="text-sm text-slate-500">Public display: {displayDays}, {value.openTime.replace(':', '.')} - {value.closeTime.replace(':', '.')}</p>
     </fieldset>
   );
 }
 
 function isValidOpeningHours(value: OpeningHoursForm) {
-  return Boolean(value.openTime && value.closeTime && value.closeTime > value.openTime);
+  return Boolean(value.openTime && value.closeTime && value.closeTime > value.openTime && resolveOpeningDays(value.mode, value.days).length > 0);
 }
 
 function isValidSlug(value: string) {
   return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value.trim());
+}
+
+function isOpeningHoursMode(value: unknown): value is OpeningHoursMode {
+  return value === 'daily' || value === 'weekdays' || value === 'weekends' || value === 'custom';
+}
+
+function resolveOpeningDays(mode: OpeningHoursMode, days: string[]) {
+  if (mode === 'daily') return dayOptions.map((day) => day.value);
+  if (mode === 'weekdays') return weekdayValues;
+  if (mode === 'weekends') return weekendValues;
+  return dayOptions.map((day) => day.value).filter((day) => days.includes(day));
+}
+
+function openingDayLabel(mode: OpeningHoursMode, days: string[]) {
+  if (mode === 'daily') return 'Daily';
+  if (mode === 'weekdays') return 'Monday - Friday';
+  if (mode === 'weekends') return 'Saturday - Sunday';
+  if (days.length === 0) return 'No opening day selected';
+  return dayOptions.filter((day) => days.includes(day.value)).map((day) => day.shortLabel).join(', ');
 }
