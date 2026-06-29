@@ -34,7 +34,7 @@ test.describe('SaaS smoke test', () => {
       await page.goto('/auth/login');
       await page.getByLabel('Email').fill(email);
       await page.getByLabel('Password').fill(password);
-      await page.getByLabel('Tenant slug').fill(slug);
+      await expect(page.getByLabel('Tenant slug')).toHaveCount(0);
       await page.getByRole('button', { name: /login/i }).click();
       await expect(page).toHaveURL(/\/app\/dashboard/);
       await expect(page.getByText(email)).toBeVisible();
@@ -143,7 +143,7 @@ test.describe('SaaS smoke test', () => {
       await page.goto(`/app/websites/${websiteId}`);
       await expect(page.getByText('Branding assets')).toBeVisible();
       await expect(page.getByText('Publish & share')).toBeVisible();
-      await expect(page.getByText(`/site/${slug}`)).toBeVisible();
+      await expect(page.getByText(`/site/${slug}`).first()).toBeVisible();
       await expect(page.getByRole('link', { name: /share whatsapp/i })).toHaveAttribute('href', /wa\.me/);
     });
 
@@ -455,16 +455,43 @@ test.describe('SaaS smoke test', () => {
 
     await seedSession(page, session);
     await page.goto(`/app/websites/${session.websiteId}`);
-    await page.getByLabel('Opening Hours').fill('Daily, 12.00 - 21.00');
+    await expect(page.getByText('Business slug')).toBeVisible();
+    await expect(page.getByLabel('Public URL slug')).toHaveValue(slug);
+    await page.getByLabel('Open Time').fill('12:00');
+    await page.getByLabel('Close Time').fill('21:00');
     await page.getByRole('button', { name: /save changes/i }).click();
-    await expect(page.getByLabel('Opening Hours')).toHaveValue('Daily, 12.00 - 21.00');
+    await expect(page.getByLabel('Open Time')).toHaveValue('12:00');
+    await expect(page.getByLabel('Close Time')).toHaveValue('21:00');
     await expect.poll(async () => {
       const response = await api.get(`/api/v1/websites/${session.websiteId}`, {
         headers: { Authorization: `Bearer ${session.accessToken}` },
       });
       const website = await response.json();
-      return website.openingHours?.display;
-    }).toBe('Daily, 12.00 - 21.00');
+      return `${website.openingHours?.openTime}-${website.openingHours?.closeTime}`;
+    }).toBe('12:00-21:00');
+
+    const category = await api.post('/api/v1/menu-categories', {
+      headers: { Authorization: `Bearer ${session.accessToken}` },
+      data: { websiteId: session.websiteId, name: 'asdasda' },
+    });
+    expect(category.ok()).toBeTruthy();
+    const categoryBody = await category.json();
+    const menuItem = await api.post('/api/v1/menus', {
+      headers: { Authorization: `Bearer ${session.accessToken}` },
+      data: { websiteId: session.websiteId, categoryId: categoryBody.id, name: 'Safe Category Delete Dish', price: 42000 },
+    });
+    expect(menuItem.ok()).toBeTruthy();
+
+    await page.goto('/app/menu');
+    const typoCategoryRow = page.locator('span').filter({ hasText: /^asdasda$/ }).first();
+    await expect(typoCategoryRow).toBeVisible();
+    page.once('dialog', async (dialog) => {
+      expect(dialog.message()).toContain('Menu items in this category will be moved to No category.');
+      await dialog.accept();
+    });
+    await typoCategoryRow.locator('..').getByRole('button', { name: /delete/i }).click();
+    await expect(page.locator('span').filter({ hasText: /^asdasda$/ })).toHaveCount(0);
+    await expect(page.locator('input[value="Safe Category Delete Dish"]')).toBeVisible();
 
     await page.goto(`/app/websites/${session.websiteId}/templates`);
 

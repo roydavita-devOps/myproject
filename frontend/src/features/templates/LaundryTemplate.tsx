@@ -1,6 +1,7 @@
 import { CheckCircle2, Clock, Images, MapPin, MessageCircle, PackageCheck, Phone, ShieldCheck, Sparkles, Truck, WashingMachine } from 'lucide-react';
 import { Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
+import { formatOpeningHours as formatTemplateOpeningHours } from './openingHours';
 import { normalizeTemplateAction, resolveContactActions, TemplateAction, validateTemplateActions } from './templateActions';
 import {
   SectionHeading,
@@ -358,9 +359,5 @@ function resolveLaundryHeroActions(website: Website) {
 }
 
 function formatOpeningHours(openingHours?: Record<string, unknown> | null) {
-  if (!openingHours || Object.keys(openingHours).length === 0) return 'Monday - Saturday, 08.00 - 20.00';
-
-  return Object.entries(openingHours)
-    .map(([day, value]) => `${day}: ${String(value)}`)
-    .join(', ');
+  return formatTemplateOpeningHours(openingHours, 'Monday - Saturday, 08.00 - 20.00');
 }

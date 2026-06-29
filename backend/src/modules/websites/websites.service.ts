@@ -61,6 +61,7 @@ export class WebsitesService {
 
   async update(tenantId: string, id: string, dto: UpdateWebsiteDto) {
     await this.findOne(tenantId, id);
+    validateOpeningHours(dto.openingHours);
     const data = stripUndefined({
       businessName: dto.businessName,
       tagline: dto.tagline,
@@ -241,6 +242,19 @@ export class WebsitesService {
 
 function stripUndefined<T extends Record<string, unknown>>(data: T) {
   return Object.fromEntries(Object.entries(data).filter(([, value]) => value !== undefined)) as Partial<T>;
+}
+
+function validateOpeningHours(openingHours?: Record<string, unknown>) {
+  if (!openingHours || openingHours.mode !== 'daily') return;
+
+  const openTime = openingHours.openTime;
+  const closeTime = openingHours.closeTime;
+  if (typeof openTime !== 'string' || typeof closeTime !== 'string') {
+    throw new BadRequestException('Opening hours require open and close time');
+  }
+  if (!/^\d{2}:\d{2}$/.test(openTime) || !/^\d{2}:\d{2}$/.test(closeTime) || closeTime <= openTime) {
+    throw new BadRequestException('Close time must be after open time');
+  }
 }
 
 function themeTypographyWithPreset(current: unknown, premiumColorPreset: string) {

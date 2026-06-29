@@ -125,9 +125,11 @@ async function captureOpeningHoursEditor(page) {
 
   await page.setViewportSize({ width: 1440, height: 1100 });
   await page.goto(`${baseURL}/app/websites/${website.id}`, { waitUntil: 'networkidle' });
-  const field = page.getByLabel('Opening Hours');
-  await field.waitFor({ state: 'visible' });
-  await field.fill('Daily, 12.00 - 21.00');
+  const openTime = page.getByLabel('Open Time');
+  const closeTime = page.getByLabel('Close Time');
+  await openTime.waitFor({ state: 'visible' });
+  await openTime.fill('12:00');
+  await closeTime.fill('21:00');
   const saveResponse = page.waitForResponse((response) =>
     response.url().includes(`/api/v1/websites/${website.id}`) &&
     response.request().method() === 'PUT' &&
@@ -141,7 +143,7 @@ async function captureOpeningHoursEditor(page) {
   });
   if (!saved.ok()) throw new Error(`Website fetch failed: ${saved.status()} ${await saved.text()}`);
   const savedWebsite = await saved.json();
-  if (savedWebsite.openingHours?.display !== 'Daily, 12.00 - 21.00') {
+  if (savedWebsite.openingHours?.openTime !== '12:00' || savedWebsite.openingHours?.closeTime !== '21:00') {
     throw new Error(`Opening hours were not saved: ${JSON.stringify(savedWebsite.openingHours)}`);
   }
 

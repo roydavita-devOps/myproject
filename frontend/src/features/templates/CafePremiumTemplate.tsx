@@ -3,6 +3,7 @@ import { Armchair, CalendarDays, Coffee, CupSoda, HeartHandshake, MapPin, Messag
 import { Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
 import { PremiumFullMenuModal } from './PremiumFullMenuModal';
+import { formatOpeningHours as formatTemplateOpeningHours } from './openingHours';
 import { normalizeTemplateAction, resolveContactActions, validateTemplateActions } from './templateActions';
 import {
   TemplateButton,
@@ -344,9 +345,5 @@ function resolvePremiumCafeContactActions(website: Website) {
 }
 
 function formatOpeningHours(openingHours?: Record<string, unknown> | null) {
-  if (!openingHours || Object.keys(openingHours).length === 0) return 'Daily, 08.00 - 23.00';
-
-  return Object.entries(openingHours)
-    .map(([day, value]) => `${day}: ${String(value)}`)
-    .join(', ');
+  return formatTemplateOpeningHours(openingHours, 'Daily, 08.00 - 23.00');
 }

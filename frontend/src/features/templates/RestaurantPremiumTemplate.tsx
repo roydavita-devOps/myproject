@@ -3,6 +3,7 @@ import { Award, CalendarCheck, ChefHat, Clock, Crown, MapPin, MessageCircle, Pho
 import { Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
 import { PremiumFullMenuModal } from './PremiumFullMenuModal';
+import { formatOpeningHours } from './openingHours';
 import { normalizeTemplateAction, resolveContactActions, TemplateAction, validateTemplateActions } from './templateActions';
 import {
   TemplateButton,
@@ -465,14 +466,4 @@ function resolvePremiumContactActions(website: Website) {
     phone ? { ...phone, label: 'Call Restaurant', icon: <Phone className="size-4" />, variant: 'secondary' } : null,
     directions ? { ...directions, label: 'Get Directions', icon: <MapPin className="size-4" />, variant: 'tertiary' } : null,
   ]);
-}
-
-function formatOpeningHours(openingHours?: Record<string, unknown> | null) {
-  if (!openingHours || Object.keys(openingHours).length === 0) return 'Daily, 11.00 - 22.00';
-  if (typeof openingHours.display === 'string' && openingHours.display.trim()) return openingHours.display.trim();
-
-  return Object.entries(openingHours)
-    .filter(([key]) => key !== 'display')
-    .map(([day, value]) => `${day}: ${String(value)}`)
-    .join(', ');
 }

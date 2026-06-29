@@ -124,17 +124,25 @@ export class AuthService {
   }
 
   async login(dto: LoginDto, ipAddress?: string, userAgent?: string) {
-    const user = await this.prisma.user.findFirst({
+    const users = await this.prisma.user.findMany({
       where: {
         email: dto.email.toLowerCase(),
         ...(dto.tenantSlug ? { tenant: { slug: dto.tenantSlug } } : {}),
       },
       include: { role: true, tenant: true },
     });
+    const validUsers = [];
+    for (const candidate of users) {
+      if (await compare(dto.password, candidate.passwordHash)) validUsers.push(candidate);
+    }
 
-    if (!user || !(await compare(dto.password, user.passwordHash))) {
+    if (validUsers.length === 0) {
       throw new UnauthorizedException('Invalid credentials');
     }
+    if (!dto.tenantSlug && validUsers.length > 1) {
+      throw new BadRequestException('Multiple tenants found for this account. Tenant selection is required.');
+    }
+    const [user] = validUsers;
     if (user.status !== UserStatus.ACTIVE || user.tenant?.status === TenantStatus.SUSPENDED) {
       throw new UnauthorizedException('Account is not active');
     }
@@ -149,13 +157,17 @@ export class AuthService {
 
   async googleLogin(dto: GoogleLoginDto, ipAddress?: string, userAgent?: string) {
     const profile = await this.verifyGoogleIdToken(dto.idToken);
-    let user = await this.prisma.user.findFirst({
+    const users = await this.prisma.user.findMany({
       where: {
         ...(dto.tenantSlug ? { tenant: { slug: dto.tenantSlug } } : {}),
         OR: [{ googleSubject: profile.subject }, { email: profile.email }],
       },
       include: { role: true, tenant: true },
     });
+    if (!dto.tenantSlug && users.length > 1) {
+      throw new BadRequestException('Multiple tenants found for this Google account. Tenant selection is required.');
+    }
+    let user = users[0];
 
     if (!user) {
       if (dto.tenantSlug) throw new UnauthorizedException('Google account is not registered for this tenant');

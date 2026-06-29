@@ -4,9 +4,9 @@ Last updated: 2026-06-29
 
 ## Current Stage
 
-Stage 9.8D-R1 - Restaurant Premium CTA, Readability & Opening Hours Remediation.
+Stage 9.8D-R2 - Restaurant Premium Foundation UX and Data Remediation.
 
-Status: implemented, locally validated, and ready for approval.
+Status: implemented, locally validated, evidence captured, and ready for approval.
 
 ## Completed Stages
 
@@ -49,6 +49,7 @@ Status: implemented, locally validated, and ready for approval.
 | Stage 9.8D Premium Contrast and Readability Remediation | Completed; awaiting approval. |
 | Stage 9.8D Restaurant Premium Editorial Redesign | Completed; awaiting approval. |
 | Stage 9.8D-R1 Restaurant Premium CTA, Readability & Opening Hours Remediation | Completed; awaiting approval. |
+| Stage 9.8D-R2 Restaurant Premium Foundation UX and Data Remediation | Completed; awaiting approval. |
 
 ## Current Blockers
 
@@ -64,12 +65,13 @@ Status: implemented, locally validated, and ready for approval.
 | Premium contrast and readability | Resolved for Stage 9.8D | Brand colors customize identity, while semantic tokens protect readable text, surfaces, CTA contrast, and hero/card readability. |
 | Restaurant Premium commercial polish | Resolved for Stage 9.8D editorial refinement | Restaurant Premium now uses reservation-first CTA language, editorial typography, stronger Signature Dishes hierarchy, consolidated visit/reservation actions, and no repeated generic Gallery/Footer WhatsApp CTA. |
 | Restaurant Premium R1 review findings | Resolved for Stage 9.8D-R1 | Hero no longer repeats `Reserve a Table`, Visit & Reservation card is readable, and Opening Hours can be edited from the dashboard using existing `Website.openingHours` persistence. |
+| Restaurant Premium R2 foundation findings | Resolved for Stage 9.8D-R2 | Full Menu modal now matches Restaurant Premium and excludes generic modal WhatsApp CTA, category delete is exposed safely, tenant slug moved out of login into Business Information, and Opening Hours uses a structured picker. |
 | Luxury templates | Paused | No Luxury template implementation until separately approved. |
 | Template Catalog UI | Paused | No marketplace, comparison page, entitlement, or subscription access logic in Stage 9.7B. |
 
 ## Next Actions
 
-1. Review Stage 9.8D-R1 Restaurant Premium remediation evidence.
+1. Review Stage 9.8D-R2 Restaurant Premium foundation remediation evidence.
 2. Approve or request corrections.
 3. Keep Luxury, Catalog UI, marketplace, subscription, entitlement, preview-before-apply, and switch history paused until separately approved.
 4. After approval, proceed only to the next approved stage.
@@ -105,5 +107,6 @@ Status: implemented, locally validated, and ready for approval.
 - Premium contrast and readability remediation report: [../06-modern-template/reports/PHASE-9.8D-Premium-Contrast-And-Readability-Remediation-Report.md](../06-modern-template/reports/PHASE-9.8D-Premium-Contrast-And-Readability-Remediation-Report.md)
 - Restaurant Premium editorial redesign report: [../06-modern-template/reports/PHASE-9.8D-Restaurant-Premium-Editorial-Redesign-Report.md](../06-modern-template/reports/PHASE-9.8D-Restaurant-Premium-Editorial-Redesign-Report.md)
 - Restaurant Premium R1 remediation report: [../06-modern-template/reports/PHASE-9.8D-R1-Restaurant-Premium-CTA-Readability-And-Opening-Hours-Report.md](../06-modern-template/reports/PHASE-9.8D-R1-Restaurant-Premium-CTA-Readability-And-Opening-Hours-Report.md)
+- Restaurant Premium R2 foundation remediation report: [../06-modern-template/reports/PHASE-9.8D-R2-Restaurant-Premium-Foundation-UX-And-Data-Report.md](../06-modern-template/reports/PHASE-9.8D-R2-Restaurant-Premium-Foundation-UX-And-Data-Report.md)
 - Template Catalog readiness audit: [../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md](../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md)
 - Template consistency audit: [../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md](../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md)

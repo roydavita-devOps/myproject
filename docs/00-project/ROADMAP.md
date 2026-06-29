@@ -42,11 +42,12 @@ Last updated: 2026-06-29
 - Stage 9.8D Premium Contrast and Readability Remediation.
 - Stage 9.8D Restaurant Premium Editorial Redesign, CTA Strategy, Contrast & Typography Refinement.
 - Stage 9.8D-R1 Restaurant Premium CTA, Readability & Opening Hours Remediation.
+- Stage 9.8D-R2 Restaurant Premium Foundation UX and Data Remediation.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.8D-R1 Restaurant Premium remediation approval checkpoint.
+- Stage 9.8D-R2 Restaurant Premium foundation remediation approval checkpoint.
 
 ## Planned
 
@@ -136,6 +137,15 @@ Stage 9.8D-R1 resolves final Restaurant Premium review findings:
 - Hero focuses on content/navigation CTAs instead of repeating `Reserve a Table`.
 - Visit & Reservation uses a dark readable final-action card.
 - Opening Hours is tenant-editable from the dashboard and rendered from existing `Website.openingHours` data.
+
+Stage 9.8D-R2 establishes Restaurant Premium as the first Premium Experience Foundation reference:
+
+- Future premium templates should share foundation principles and reusable patterns, not inherit directly from `RestaurantPremiumTemplate`.
+- Restaurant Premium Full Menu modal follows premium restaurant theme and does not repeat generic WhatsApp CTA.
+- Menu categories are user-correctable through safe delete behavior that preserves menu items.
+- Tenant slug belongs in Business Information and is removed from the initial login form for the current one-tenant-per-user model.
+- Opening Hours uses structured picker controls and stores daily hours in existing JSON persistence.
+- Safe additive migrations remain allowed when future premium data contracts require them, but no migration was required for this remediation.
 
 Potential categories:
 

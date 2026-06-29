@@ -6,6 +6,14 @@ export const tenantsApi = {
     const { data } = await http.get<Tenant[]>('/tenants');
     return data;
   },
+  async current() {
+    const { data } = await http.get<Tenant>('/tenants/me');
+    return data;
+  },
+  async updateCurrent(payload: Pick<Tenant, 'name' | 'slug'>) {
+    const { data } = await http.put<Tenant>('/tenants/me', payload);
+    return data;
+  },
   async suspend(id: string) {
     const { data } = await http.patch<Tenant>(`/tenants/${id}/suspend`);
     return data;

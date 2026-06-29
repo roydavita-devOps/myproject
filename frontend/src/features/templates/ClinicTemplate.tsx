@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
+import { formatOpeningHours as formatTemplateOpeningHours } from './openingHours';
 import { normalizeTemplateAction, resolveContactActions, TemplateAction, validateTemplateActions } from './templateActions';
 import {
   TemplateButton,
@@ -385,9 +386,5 @@ function resolveClinicContactActions(website: Website) {
 }
 
 function formatOpeningHours(openingHours?: Record<string, unknown> | null) {
-  if (!openingHours || Object.keys(openingHours).length === 0) return 'Senin - Sabtu, 08.00 - 20.00';
-
-  return Object.entries(openingHours)
-    .map(([day, value]) => `${day}: ${String(value)}`)
-    .join(', ');
+  return formatTemplateOpeningHours(openingHours, 'Senin - Sabtu, 08.00 - 20.00');
 }

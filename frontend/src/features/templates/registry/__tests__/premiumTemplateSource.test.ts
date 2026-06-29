@@ -25,12 +25,15 @@ describe('premium template source readability rules', () => {
 
   it('keeps restaurant premium CTA language reservation-first and avoids generic repeated WhatsApp CTAs', () => {
     const source = readFileSync(resolve('src/features/templates/RestaurantPremiumTemplate.tsx'), 'utf8');
+    const modalSource = readFileSync(resolve('src/features/templates/PremiumFullMenuModal.tsx'), 'utf8');
 
     expect(source).toContain('Reserve a Table');
     expect(source).toContain('Reserve via WhatsApp');
     expect(source).toContain('Explore Signature Dishes');
     expect(source).toContain('Explore Full Menu');
     expect(source).not.toContain('Chat WhatsApp');
+    expect(modalSource).toContain("variant === 'restaurant' ? undefined");
+    expect(modalSource).toContain('Browse signature dishes, favorites, and menu selections.');
     expect(source).not.toContain('TemplateNavigation');
     expect(source).not.toContain('TemplateFooter');
   });
@@ -52,5 +55,24 @@ describe('premium template source readability rules', () => {
     expect(source).toContain('--restaurant-body-font');
     expect(source).toContain('--restaurant-hero-title-size');
     expect(source).toContain('font-[var(--restaurant-heading-font)]');
+  });
+
+  it('keeps login free from tenant slug and moves slug editing into business information', () => {
+    const loginSource = readFileSync(resolve('src/features/auth/LoginPage.tsx'), 'utf8');
+    const editorSource = readFileSync(resolve('src/features/websites/WebsiteEditorPage.tsx'), 'utf8');
+
+    expect(loginSource).not.toContain('Tenant slug');
+    expect(loginSource).not.toContain('setTenantSlug');
+    expect(editorSource).toContain('Business slug');
+    expect(editorSource).toContain('Changing the slug may change your public website URL.');
+  });
+
+  it('uses a structured opening hours picker instead of free-text opening hours input', () => {
+    const editorSource = readFileSync(resolve('src/features/websites/WebsiteEditorPage.tsx'), 'utf8');
+
+    expect(editorSource).toContain('function OpeningHoursPicker');
+    expect(editorSource).toContain('type="time"');
+    expect(editorSource).toContain("mode: 'daily'");
+    expect(editorSource).not.toContain('placeholder="Daily, 11.00 - 22.00"');
   });
 });

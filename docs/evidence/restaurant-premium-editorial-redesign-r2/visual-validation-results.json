@@ -1,0 +1,45 @@
+{
+  "generatedAt": "2026-06-29T04:38:19.450Z",
+  "baseURL": "http://127.0.0.1",
+  "screenshots": {
+    "fullMenuModal": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-editorial-redesign-r2/restaurant-premium-full-menu-modal.png",
+    "fullMenuModalMobile": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-editorial-redesign-r2/restaurant-premium-full-menu-modal-mobile.png",
+    "categoryDeleteUi": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-editorial-redesign-r2/menu-category-delete-ui.png",
+    "businessInfoSlugEditor": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-editorial-redesign-r2/business-info-slug-editor.png",
+    "loginWithoutTenantSlug": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-editorial-redesign-r2/login-without-tenant-slug.png",
+    "openingHoursPicker": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-editorial-redesign-r2/opening-hours-picker.png",
+    "publicOpeningHours": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-editorial-redesign-r2/restaurant-premium-opening-hours-public.png"
+  },
+  "results": [
+    {
+      "target": "login_without_tenant_slug",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "business_info_slug_and_opening_hours",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "menu_category_delete_ui",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_premium_full_menu_modal",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_premium_public_opening_hours",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_premium_full_menu_modal",
+      "viewport": "mobile",
+      "status": "passed"
+    }
+  ]
+}

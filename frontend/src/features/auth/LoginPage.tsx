@@ -19,7 +19,6 @@ export function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [tenantSlug, setTenantSlug] = useState('');
   const [isSubmitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -28,16 +27,16 @@ export function LoginPage() {
       setSubmitting(true);
       setError('');
       try {
-        const session = await authApi.googleLogin({ idToken, tenantSlug: tenantSlug || undefined });
+        const session = await authApi.googleLogin({ idToken });
         setSession(session);
         navigate(resolvePostAuthPath(session));
       } catch {
-        setError('Akun Google belum terdaftar untuk tenant ini.');
+        setError('Akun Google belum terdaftar.');
       } finally {
         setSubmitting(false);
       }
     },
-    [navigate, setSession, tenantSlug],
+    [navigate, setSession],
   );
 
   async function handleSubmit(event: FormEvent) {
@@ -45,7 +44,7 @@ export function LoginPage() {
     setSubmitting(true);
     setError('');
     try {
-      const session = await authApi.login({ email, password, tenantSlug: tenantSlug || undefined });
+      const session = await authApi.login({ email, password });
       setSession(session);
       navigate(resolvePostAuthPath(session));
     } catch {
@@ -68,9 +67,6 @@ export function LoginPage() {
             type="password"
             required
           />
-        </Field>
-        <Field label="Tenant slug">
-          <TextInput value={tenantSlug} onChange={(event) => setTenantSlug(event.target.value)} placeholder="warteg-moncer" />
         </Field>
         {error && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
         <Button type="submit" disabled={isSubmitting}>

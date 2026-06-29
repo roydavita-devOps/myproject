@@ -137,6 +137,26 @@ Reason:
 - Legacy mappings must not regress.
 - Unknown template records must resolve safely through fallback behavior.
 
+## Restaurant Premium Foundation Reference
+
+Status: Approved for implementation pending product sign-off.
+
+Decision:
+
+- Restaurant Premium is the first Premium Experience Foundation reference.
+- Premium templates should share foundation principles and reusable patterns, not inherit directly from `RestaurantPremiumTemplate`.
+- Restaurant Premium Full Menu modal must follow the premium restaurant theme and must not repeat a generic WhatsApp CTA inside the browsing modal.
+- Menu categories must be user-correctable with safe delete behavior that preserves menu items.
+- Tenant slug belongs to Business Information, not the initial Login form, when backend tenant resolution safely supports login without slug.
+- Opening hours should use structured picker controls, not free-text sentences.
+- Safe additive database migration is allowed when it supports premium foundation data quality; no migration was needed for Stage 9.8D-R2 because `Website.openingHours` already supports JSON data.
+
+Reason:
+
+- Restaurant Premium is becoming the benchmark for future premium templates.
+- The foundation must improve product quality without creating marketplace, subscription, entitlement, or new template scope.
+- User-correctable business identity and structured hours reduce support friction and inconsistent public rendering.
+
 ## Template Metadata Standard
 
 Status: Approved.

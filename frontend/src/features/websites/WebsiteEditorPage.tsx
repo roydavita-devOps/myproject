@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router';
 import { CheckCircle2, Copy, Eye, ExternalLink, Images, Layers3, MessageCircle, Save, Send, Trash2, XCircle } from 'lucide-react';
 import { websitesApi } from './websites.api';
+import { tenantsApi } from '../tenants/tenants.api';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { Field, TextArea, TextInput } from '../../components/ui/Field';
@@ -11,6 +12,12 @@ import { LoadingState } from '../../components/ui/State';
 import { resolveAssetUrl } from '../../lib/api/assets';
 import { Website } from '../../types/api';
 
+type OpeningHoursForm = {
+  mode: 'daily';
+  openTime: string;
+  closeTime: string;
+};
+
 export function WebsiteEditorPage() {
   const { websiteId = '' } = useParams();
   const queryClient = useQueryClient();
@@ -18,6 +25,10 @@ export function WebsiteEditorPage() {
     queryKey: ['websites', websiteId],
     queryFn: () => websitesApi.get(websiteId),
     enabled: Boolean(websiteId),
+  });
+  const { data: tenant } = useQuery({
+    queryKey: ['tenant-current'],
+    queryFn: tenantsApi.current,
   });
   const [form, setForm] = useState({
     businessName: '',
@@ -28,8 +39,11 @@ export function WebsiteEditorPage() {
     whatsapp: '',
     email: '',
     mapsUrl: '',
-    openingHours: '',
+    openingHours: { mode: 'daily', openTime: '11:00', closeTime: '22:00' } as OpeningHoursForm,
   });
+  const [slugDraft, setSlugDraft] = useState('');
+  const [formError, setFormError] = useState('');
+  const [slugMessage, setSlugMessage] = useState('');
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -43,9 +57,13 @@ export function WebsiteEditorPage() {
       whatsapp: website.whatsapp ?? '',
       email: website.email ?? '',
       mapsUrl: website.mapsUrl ?? '',
-      openingHours: openingHoursToText(website.openingHours),
+      openingHours: openingHoursToForm(website.openingHours),
     });
   }, [website]);
+
+  useEffect(() => {
+    setSlugDraft(tenant?.slug ?? website?.tenant?.slug ?? '');
+  }, [tenant?.slug, website?.tenant?.slug]);
 
   const publicUrl = useMemo(() => {
     if (!website?.tenant?.slug) return '';
@@ -56,6 +74,20 @@ export function WebsiteEditorPage() {
     mutationFn: () => websitesApi.update(websiteId, sanitizeWebsiteForm(form)),
     onSuccess: (updatedWebsite) => {
       syncWebsiteQueries(updatedWebsite);
+    },
+  });
+  const tenantMutation = useMutation({
+    mutationFn: () => tenantsApi.updateCurrent({ name: tenant?.name ?? form.businessName.trim(), slug: slugDraft.trim().toLowerCase() }),
+    onSuccess: (updatedTenant) => {
+      setSlugMessage('Business slug saved.');
+      setSlugDraft(updatedTenant.slug);
+      queryClient.setQueryData(['tenant-current'], updatedTenant);
+      queryClient.invalidateQueries({ queryKey: ['websites'] });
+      queryClient.invalidateQueries({ queryKey: ['websites', websiteId] });
+    },
+    onError: () => {
+      setSlugMessage('');
+      setFormError('Business slug tidak valid atau sudah digunakan.');
     },
   });
   const publishMutation = useMutation({
@@ -104,7 +136,23 @@ export function WebsiteEditorPage() {
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
+    setFormError('');
+    if (!isValidOpeningHours(form.openingHours)) {
+      setFormError('Close time must be after open time.');
+      return;
+    }
     saveMutation.mutate();
+  }
+
+  function handleSlugSubmit(event: FormEvent) {
+    event.preventDefault();
+    setFormError('');
+    setSlugMessage('');
+    if (!isValidSlug(slugDraft)) {
+      setFormError('Slug hanya boleh huruf kecil, angka, dan tanda hubung.');
+      return;
+    }
+    tenantMutation.mutate();
   }
 
   async function copyPublicUrl() {
@@ -207,20 +255,42 @@ export function WebsiteEditorPage() {
             <TextInput value={form.mapsUrl} onChange={(event) => setForm({ ...form, mapsUrl: event.target.value })} />
           </Field>
         </div>
-        <Field label="Opening Hours">
-          <TextInput
-            value={form.openingHours}
-            onChange={(event) => setForm({ ...form, openingHours: event.target.value })}
-            placeholder="Daily, 11.00 - 22.00"
-          />
-        </Field>
+        <OpeningHoursPicker
+          value={form.openingHours}
+          onChange={(openingHours) => setForm({ ...form, openingHours })}
+        />
         <Field label="Address">
           <TextArea value={form.address} onChange={(event) => setForm({ ...form, address: event.target.value })} />
         </Field>
+        {formError && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{formError}</p>}
         <div>
           <Button type="submit" disabled={saveMutation.isPending}>
             <Save className="size-4" />
             {saveMutation.isPending ? 'Saving' : 'Save changes'}
+          </Button>
+        </div>
+      </form>
+
+      <form className="panel grid gap-4 p-5" onSubmit={handleSlugSubmit}>
+        <div>
+          <h2 className="font-semibold text-slate-950">Business slug</h2>
+          <p className="mt-1 text-sm text-slate-500">Changing the slug may change your public website URL.</p>
+        </div>
+        <Field label="Public URL slug">
+          <TextInput
+            value={slugDraft}
+            onChange={(event) => setSlugDraft(event.target.value.toLowerCase())}
+            placeholder="warteg-moncer"
+            pattern="[a-z0-9]+(-[a-z0-9]+)*"
+            required
+          />
+        </Field>
+        <p className="break-all text-sm text-slate-500">{slugDraft ? `${window.location.origin}/site/${slugDraft}` : 'Slug belum diisi.'}</p>
+        {slugMessage && <p className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{slugMessage}</p>}
+        <div>
+          <Button type="submit" disabled={tenantMutation.isPending || !slugDraft.trim()}>
+            <Save className="size-4" />
+            {tenantMutation.isPending ? 'Saving slug' : 'Save slug'}
           </Button>
         </div>
       </form>
@@ -317,7 +387,7 @@ function sanitizeWebsiteForm(form: {
   whatsapp: string;
   email: string;
   mapsUrl: string;
-  openingHours: string;
+  openingHours: OpeningHoursForm;
 }) {
   return {
     businessName: form.businessName.trim(),
@@ -337,16 +407,58 @@ function optionalValue(value: string) {
   return trimmed === '' ? undefined : trimmed;
 }
 
-function openingHoursValue(value: string) {
-  const trimmed = value.trim();
-  return trimmed === '' ? undefined : { display: trimmed };
+function openingHoursValue(value: OpeningHoursForm) {
+  return {
+    mode: value.mode,
+    openTime: value.openTime,
+    closeTime: value.closeTime,
+  };
 }
 
-function openingHoursToText(openingHours?: Record<string, unknown> | null) {
-  if (!openingHours || Object.keys(openingHours).length === 0) return '';
-  if (typeof openingHours.display === 'string') return openingHours.display;
-  return Object.entries(openingHours)
-    .filter(([key]) => key !== 'display')
-    .map(([day, value]) => `${day}: ${String(value)}`)
-    .join(', ');
+function openingHoursToForm(openingHours?: Record<string, unknown> | null): OpeningHoursForm {
+  if (openingHours?.mode === 'daily' && typeof openingHours.openTime === 'string' && typeof openingHours.closeTime === 'string') {
+    return { mode: 'daily', openTime: openingHours.openTime, closeTime: openingHours.closeTime };
+  }
+
+  const display = typeof openingHours?.display === 'string' ? openingHours.display : '';
+  const parsed = display.match(/(\d{1,2})[.:](\d{2})\s*-\s*(\d{1,2})[.:](\d{2})/);
+  if (parsed) {
+    return {
+      mode: 'daily',
+      openTime: `${parsed[1].padStart(2, '0')}:${parsed[2]}`,
+      closeTime: `${parsed[3].padStart(2, '0')}:${parsed[4]}`,
+    };
+  }
+
+  return { mode: 'daily', openTime: '11:00', closeTime: '22:00' };
+}
+
+function OpeningHoursPicker({ value, onChange }: { value: OpeningHoursForm; onChange: (value: OpeningHoursForm) => void }) {
+  return (
+    <fieldset className="grid gap-3 rounded-md border border-slate-200 bg-slate-50 p-4">
+      <legend className="px-1 text-sm font-semibold text-slate-950">Opening Hours</legend>
+      <div className="grid gap-4 md:grid-cols-3">
+        <Field label="Opening mode">
+          <select className="field-input" value={value.mode} onChange={() => onChange({ ...value, mode: 'daily' })}>
+            <option value="daily">Every day</option>
+          </select>
+        </Field>
+        <Field label="Open Time">
+          <TextInput type="time" value={value.openTime} onChange={(event) => onChange({ ...value, openTime: event.target.value })} required />
+        </Field>
+        <Field label="Close Time">
+          <TextInput type="time" value={value.closeTime} onChange={(event) => onChange({ ...value, closeTime: event.target.value })} required />
+        </Field>
+      </div>
+      <p className="text-sm text-slate-500">Public display: Daily, {value.openTime.replace(':', '.')} - {value.closeTime.replace(':', '.')}</p>
+    </fieldset>
+  );
+}
+
+function isValidOpeningHours(value: OpeningHoursForm) {
+  return Boolean(value.openTime && value.closeTime && value.closeTime > value.openTime);
+}
+
+function isValidSlug(value: string) {
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value.trim());
 }

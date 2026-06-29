@@ -23,6 +23,10 @@ export const menusApi = {
     const { data } = await http.post<MenuCategory>('/menu-categories', payload);
     return data;
   },
+  async deleteCategory(id: string) {
+    const { data } = await http.delete<MenuCategory>(`/menu-categories/${id}`);
+    return data;
+  },
   async listMenus(websiteId?: string) {
     const { data } = await http.get<MenuItem[]>('/menus', { params: { websiteId } });
     return data;

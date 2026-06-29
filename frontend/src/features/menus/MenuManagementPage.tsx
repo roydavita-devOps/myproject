@@ -45,6 +45,14 @@ export function MenuManagementPage() {
       queryClient.invalidateQueries({ queryKey: ['menu-categories', selectedWebsiteId] });
     },
   });
+  const deleteCategoryMutation = useMutation({
+    mutationFn: menusApi.deleteCategory,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['menu-categories', selectedWebsiteId] });
+      queryClient.invalidateQueries({ queryKey: ['menus', selectedWebsiteId] });
+      queryClient.invalidateQueries({ queryKey: ['websites'] });
+    },
+  });
   const itemMutation = useMutation({
     mutationFn: () =>
       menusApi.createMenu({
@@ -118,7 +126,22 @@ export function MenuManagementPage() {
             </Button>
             <div className="grid gap-2">
               {categories.map((category) => (
-                <div key={category.id} className="rounded-md bg-slate-50 px-3 py-2 text-sm text-slate-700">{category.name}</div>
+                <div key={category.id} className="flex items-center justify-between gap-3 rounded-md bg-slate-50 px-3 py-2 text-sm text-slate-700">
+                  <span className="min-w-0 truncate">{category.name}</span>
+                  <Button
+                    className="min-h-8 px-2 py-1 text-xs"
+                    variant="danger"
+                    onClick={() => {
+                      if (window.confirm('Delete this category? Menu items in this category will be moved to No category.')) {
+                        deleteCategoryMutation.mutate(category.id);
+                      }
+                    }}
+                    disabled={deleteCategoryMutation.isPending}
+                  >
+                    <Trash2 className="size-3.5" />
+                    Delete
+                  </Button>
+                </div>
               ))}
             </div>
           </form>

@@ -42,7 +42,8 @@ export function PremiumFullMenuModal({ website, items, isOpen, onClose, title, v
     () => groupMenuItems(items, website.categories ?? [], activeCategoryId),
     [activeCategoryId, items, website.categories],
   );
-  const whatsappAction = resolveContactActions(website).find((action) => action.action === 'whatsapp');
+  const whatsappAction = variant === 'restaurant' ? undefined : resolveContactActions(website).find((action) => action.action === 'whatsapp');
+  const isRestaurant = variant === 'restaurant';
 
   useEffect(() => {
     if (!isOpen) return;
@@ -99,13 +100,15 @@ export function PremiumFullMenuModal({ website, items, isOpen, onClose, title, v
         role="dialog"
         aria-modal="true"
         aria-labelledby="premium-full-menu-title"
-        className="flex max-h-[100dvh] w-full max-w-5xl flex-col overflow-hidden rounded-t-xl border border-white/20 bg-white shadow-2xl md:max-h-[88vh] md:rounded-xl"
+        className={isRestaurant
+          ? 'flex max-h-[100dvh] w-full max-w-5xl flex-col overflow-hidden rounded-t-xl border border-[#f7c873]/25 bg-[#120f0b] text-white shadow-2xl md:max-h-[88vh] md:rounded-xl'
+          : 'flex max-h-[100dvh] w-full max-w-5xl flex-col overflow-hidden rounded-t-xl border border-white/20 bg-white shadow-2xl md:max-h-[88vh] md:rounded-xl'}
       >
         <header className={modalHeaderClass(variant)}>
           <div className="min-w-0">
             <p className="text-xs font-semibold uppercase tracking-wide opacity-80">Full menu</p>
             <h2 id="premium-full-menu-title" className="tenant-heading mt-1 text-2xl font-semibold md:text-3xl">{title}</h2>
-            <p className="mt-2 text-sm opacity-80">Browse all menu items, including regular and featured selections.</p>
+            <p className="mt-2 text-sm opacity-80">{isRestaurant ? 'Browse signature dishes, favorites, and menu selections.' : 'Browse all menu items, including regular and featured selections.'}</p>
           </div>
           <button
             ref={closeButtonRef}
@@ -118,15 +121,13 @@ export function PremiumFullMenuModal({ website, items, isOpen, onClose, title, v
           </button>
         </header>
 
-        <div className="border-b border-slate-200 bg-slate-50 px-4 py-3 md:px-6">
+        <div className={isRestaurant ? 'border-b border-[#f7c873]/15 bg-[#1b140d] px-4 py-3 md:px-6' : 'border-b border-slate-200 bg-slate-50 px-4 py-3 md:px-6'}>
           <div className="flex gap-2 overflow-x-auto pb-1" aria-label="Menu categories">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 type="button"
-                className={activeCategoryId === tab.id
-                  ? 'shrink-0 rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white'
-                  : 'shrink-0 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100'}
+                className={categoryTabClass(variant, activeCategoryId === tab.id)}
                 onClick={() => setActiveCategoryId(tab.id)}
               >
                 {tab.label} <span className="opacity-70">({tab.count})</span>
@@ -135,27 +136,27 @@ export function PremiumFullMenuModal({ website, items, isOpen, onClose, title, v
           </div>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5 md:px-6">
+        <div className={isRestaurant ? 'min-h-0 flex-1 overflow-y-auto bg-[#17110b] px-4 py-5 md:px-6' : 'min-h-0 flex-1 overflow-y-auto px-4 py-5 md:px-6'}>
           <div className="grid gap-6">
             {visibleGroups.map((group) => (
               <section key={group.id} className="grid gap-3">
                 <div>
-                  <h3 className="tenant-heading text-xl font-semibold text-slate-950">{group.label}</h3>
-                  <p className="mt-1 text-sm text-slate-500">{group.items.length} item tersedia.</p>
+                  <h3 className={isRestaurant ? 'tenant-heading font-[Georgia,serif] text-xl font-semibold text-[#fff7e8]' : 'tenant-heading text-xl font-semibold text-slate-950'}>{group.label}</h3>
+                  <p className={isRestaurant ? 'mt-1 text-sm text-white/70' : 'mt-1 text-sm text-slate-500'}>{group.items.length} item tersedia.</p>
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {group.items.map((item, index) => (
-                    <article key={item.id} className="grid grid-cols-[5rem_1fr] gap-3 rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
+                    <article key={item.id} className={isRestaurant ? 'grid grid-cols-[5rem_1fr] gap-3 rounded-lg border border-[#f7c873]/18 bg-[#21170e] p-3 shadow-[0_18px_60px_rgba(0,0,0,.28)]' : 'grid grid-cols-[5rem_1fr] gap-3 rounded-lg border border-slate-200 bg-white p-3 shadow-sm'}>
                       <MenuItemMedia item={item} index={index} variant={variant} />
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-start justify-between gap-2">
-                          <h4 className="font-semibold text-slate-950">{item.name}</h4>
+                          <h4 className={isRestaurant ? 'font-[Georgia,serif] text-lg font-semibold leading-tight text-[#fff7e8]' : 'font-semibold text-slate-950'}>{item.name}</h4>
                           {item.isFeatured && <span className={featuredBadgeClass(variant)}>Featured</span>}
                         </div>
-                        {item.description && <p className="mt-1 text-sm leading-5 text-slate-600">{item.description}</p>}
+                        {item.description && <p className={isRestaurant ? 'mt-1 text-sm leading-5 text-white/76' : 'mt-1 text-sm leading-5 text-slate-600'}>{item.description}</p>}
                         <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-                          <p className="text-sm font-semibold text-slate-950">{item.price ? `Rp ${Number(item.price).toLocaleString('id-ID')}` : 'No price'}</p>
-                          <p className="text-xs text-slate-500">{categoryMap.get(item.categoryId ?? '') ?? 'No category'}</p>
+                          <p className={isRestaurant ? 'text-sm font-semibold text-[#f7c873]' : 'text-sm font-semibold text-slate-950'}>{item.price ? `Rp ${Number(item.price).toLocaleString('id-ID')}` : 'No price'}</p>
+                          <p className={isRestaurant ? 'text-xs text-white/60' : 'text-xs text-slate-500'}>{categoryMap.get(item.categoryId ?? '') ?? 'No category'}</p>
                         </div>
                       </div>
                     </article>
@@ -224,8 +225,20 @@ function MenuItemMedia({ item, index, variant }: { item: PremiumFullMenuItem; in
 
 function modalHeaderClass(variant: PremiumMenuVariant) {
   return variant === 'restaurant'
-    ? 'flex items-start justify-between gap-4 bg-[#120f0b] px-4 py-5 text-white md:px-6'
+    ? 'flex items-start justify-between gap-4 border-b border-[#f7c873]/20 bg-[radial-gradient(circle_at_18%_12%,rgba(247,200,115,.22),transparent_28%),linear-gradient(135deg,#2b1b0e,#120f0b)] px-4 py-5 text-white md:px-6'
     : 'flex items-start justify-between gap-4 bg-[#2f1f16] px-4 py-5 text-white md:px-6';
+}
+
+function categoryTabClass(variant: PremiumMenuVariant, active: boolean) {
+  if (variant !== 'restaurant') {
+    return active
+      ? 'shrink-0 rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white'
+      : 'shrink-0 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100';
+  }
+
+  return active
+    ? 'shrink-0 rounded-full border border-[#f7c873] bg-[#f7c873] px-4 py-2 text-sm font-semibold text-[#120f0b]'
+    : 'shrink-0 rounded-full border border-[#f7c873]/20 bg-white/5 px-4 py-2 text-sm font-semibold text-white/82 hover:bg-white/10';
 }
 
 function featuredBadgeClass(variant: PremiumMenuVariant) {
