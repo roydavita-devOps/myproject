@@ -4,7 +4,15 @@ import { createReadStream } from 'fs';
 import { constants } from 'fs';
 import { access, mkdir, stat, unlink, writeFile } from 'fs/promises';
 import { basename, extname, join, resolve } from 'path';
-import { DeleteObjectInput, PutObjectInput, ReadObjectInput, ReadObject, StoredObject, UploadStorageAdapter } from './upload-storage-adapter';
+import {
+  DeleteObjectInput,
+  ParsedStoredObject,
+  PutObjectInput,
+  ReadObjectInput,
+  ReadObject,
+  StoredObject,
+  UploadStorageAdapter,
+} from './upload-storage-adapter';
 
 @Injectable()
 export class LocalUploadStorageAdapter implements UploadStorageAdapter {
@@ -69,6 +77,15 @@ export class LocalUploadStorageAdapter implements UploadStorageAdapter {
     return { driver: this.driver, path };
   }
 
+  parseUrl(url: string): ParsedStoredObject | null {
+    const path = this.extractPath(url);
+    const match = path.match(/^\/api\/v1\/uploads\/([^/]+)\/([^/]+)\/([^/]+)$/);
+    if (!match) return null;
+
+    const [, tenantId, assetType, fileName] = match;
+    return { tenantId, assetType, fileName };
+  }
+
   private publicUrl(tenantId: string, assetType: string, fileName: string) {
     const baseUrl = this.config.get<string>('UPLOAD_PUBLIC_BASE_URL', '');
     const path = `/api/v1/uploads/${tenantId}/${assetType}/${fileName}`;
@@ -82,6 +99,15 @@ export class LocalUploadStorageAdapter implements UploadStorageAdapter {
   private validatePathSegment(value: string, label: string) {
     if (value !== basename(value) || value.includes('..') || !/^[a-zA-Z0-9._-]+$/.test(value)) {
       throw new BadRequestException(`Invalid ${label}`);
+    }
+  }
+
+  private extractPath(url: string) {
+    if (url.startsWith('/')) return url;
+    try {
+      return new URL(url).pathname;
+    } catch {
+      return '';
     }
   }
 

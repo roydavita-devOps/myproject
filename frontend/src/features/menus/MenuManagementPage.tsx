@@ -168,6 +168,7 @@ export function MenuManagementPage() {
             />
             <ImageUpload
               assetType="menu"
+              websiteId={selectedWebsiteId}
               label="Menu photo"
               description="Foto produk atau layanan yang tampil di template premium."
               currentUrl={item.imageUrl}
@@ -192,6 +193,7 @@ export function MenuManagementPage() {
                 <MenuItemEditor
                   key={menu.id}
                   menu={menu}
+                  websiteId={selectedWebsiteId}
                   categories={categories}
                   categoryMap={categoryMap}
                   updateMutation={updateMutation}
@@ -209,6 +211,7 @@ export function MenuManagementPage() {
 
 function MenuItemEditor({
   menu,
+  websiteId,
   categories,
   categoryMap,
   updateMutation,
@@ -216,6 +219,7 @@ function MenuItemEditor({
   isDeleting,
 }: {
   menu: MenuItem;
+  websiteId: string;
   categories: MenuCategory[];
   categoryMap: Map<string, string>;
   updateMutation: UpdateMenuMutation;
@@ -245,6 +249,7 @@ function MenuItemEditor({
     <form className="grid gap-4 p-4" onSubmit={submitItem}>
       <ImageUpload
         assetType="menu"
+        websiteId={websiteId}
         label="Item photo"
         description="Upload, change, or remove this item photo."
         currentUrl={form.imageUrl}

@@ -9,6 +9,7 @@ const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
 
 type ImageUploadProps = {
   assetType: UploadAssetType;
+  websiteId?: string;
   label: string;
   description: string;
   currentUrl?: string | null;
@@ -17,7 +18,7 @@ type ImageUploadProps = {
   onDelete?: () => Promise<void> | void;
 };
 
-export function ImageUpload({ assetType, label, description, currentUrl, maxSizeMb, onUploaded, onDelete }: ImageUploadProps) {
+export function ImageUpload({ assetType, websiteId, label, description, currentUrl, maxSizeMb, onUploaded, onDelete }: ImageUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
@@ -44,7 +45,7 @@ export function ImageUpload({ assetType, label, description, currentUrl, maxSize
     setPreviewUrl(URL.createObjectURL(file));
     setIsUploading(true);
     try {
-      const uploaded = await uploadsApi.upload(assetType, file, setProgress);
+      const uploaded = await uploadsApi.upload(assetType, file, setProgress, websiteId);
       await onUploaded(uploaded.url);
       setProgress(100);
     } catch {

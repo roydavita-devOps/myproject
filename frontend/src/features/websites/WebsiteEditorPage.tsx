@@ -318,6 +318,7 @@ export function WebsiteEditorPage() {
         </div>
         <ImageUpload
           assetType="logo"
+          websiteId={website.id}
           label="Logo"
           description="Logo tampil di header website publik."
           currentUrl={website.theme?.logoUrl}
@@ -331,6 +332,7 @@ export function WebsiteEditorPage() {
         />
         <ImageUpload
           assetType="hero"
+          websiteId={website.id}
           label="Hero image"
           description="Foto besar yang tampil pertama kali saat pelanggan membuka website."
           currentUrl={website.theme?.heroImageUrl}
@@ -357,6 +359,7 @@ export function WebsiteEditorPage() {
         </div>
         <ImageUpload
           assetType="gallery"
+          websiteId={website.id}
           label="Gallery image"
           description="Tambahkan foto produk, tempat, atau suasana bisnis."
           maxSizeMb={4}

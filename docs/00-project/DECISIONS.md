@@ -176,6 +176,26 @@ Reason:
 - Existing logo, hero, gallery, and menu image fields must keep working without a schema migration.
 - Durable storage is a deployment concern and should be made explicit instead of hidden behind local container behavior.
 
+## Durable Upload Storage
+
+Status: Approved for implementation pending product sign-off.
+
+Decision:
+
+- User-uploaded assets must use durable object storage before production launch.
+- Local filesystem upload storage is allowed only for local development, local Docker validation, and tests.
+- Production upload storage uses Supabase Storage through a backend storage adapter selected by `STORAGE_DRIVER=supabase`.
+- The image processing pipeline remains independent from the storage adapter.
+- Public website images use a public Supabase Storage bucket named `tenant-assets`.
+- The Supabase service role key is backend-only and must never be exposed to frontend/Vercel.
+- Existing `/api/v1/uploads/...` local URLs remain supported for backward compatibility.
+
+Reason:
+
+- Railway/container filesystem storage is not durable across redeploys, restarts, or instance replacement.
+- Website builder customers expect uploaded menu, gallery, logo, and hero images to survive deployments.
+- A storage adapter keeps local development simple while making production durable.
+
 ## Template Metadata Standard
 
 Status: Approved.

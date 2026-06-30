@@ -44,11 +44,12 @@ Last updated: 2026-06-30
 - Stage 9.8D-R1 Restaurant Premium CTA, Readability & Opening Hours Remediation.
 - Stage 9.8D-R2 Restaurant Premium Foundation UX and Data Remediation.
 - Stage 9.8D-R3 Image Upload Optimization and WebP Processing Pipeline.
+- Stage 9.8D-R4 Supabase Storage Adapter for Durable User Uploads.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.8D-R3 Image Upload Optimization and WebP Processing Pipeline approval checkpoint.
+- Stage 9.8D-R4 Supabase Storage Adapter approval checkpoint.
 
 ## Planned
 
@@ -155,6 +156,15 @@ Stage 9.8D-R3 establishes the upload media quality baseline:
 - Menu, gallery, logo, and hero uploads keep the existing single `imageUrl`/asset URL contract while the upload response exposes variant URLs for future metadata.
 - Broken image fallback behavior is required in dashboard previews and public premium rendering.
 - Local filesystem upload storage is acceptable for local Docker validation only; production must use durable object storage before relying on user-generated uploads in stateless deployment.
+
+Stage 9.8D-R4 resolves the durable upload storage blocker:
+
+- Image processing remains independent from storage destination.
+- `STORAGE_DRIVER=local` is retained for local development and tests.
+- `STORAGE_DRIVER=supabase` stores original and WebP variants in Supabase Storage bucket `tenant-assets`.
+- Public website assets use public bucket URLs returned by the backend.
+- Supabase service role key is backend-only and must never be exposed to Vercel/frontend.
+- Existing local upload URLs remain backward compatible through the backend local upload route.
 
 Potential categories:
 

@@ -14,7 +14,7 @@ export class UploadsService {
     private readonly scanner: MalwareScannerService,
   ) {}
 
-  async store(tenantId: string, assetType: UploadAssetType, file?: UploadedFile): Promise<StoredUpload> {
+  async store(tenantId: string, assetType: UploadAssetType, file?: UploadedFile, websiteId?: string): Promise<StoredUpload> {
     if (!file) throw new BadRequestException('File is required');
 
     const policy = UPLOAD_POLICIES[assetType];
@@ -33,30 +33,42 @@ export class UploadsService {
 
     const original = await this.storage.adapter().putObject({
       tenantId,
+      websiteId,
       assetType,
+      assetId: imageId,
       directory: policy.directory,
       fileName: originalFileName,
+      contentType: file.mimetype,
       buffer: file.buffer,
     });
     const thumbnail = await this.storage.adapter().putObject({
       tenantId,
+      websiteId,
       assetType,
+      assetId: imageId,
       directory: policy.directory,
       fileName: thumbnailFileName,
+      contentType: 'image/webp',
       buffer: processed.thumbnail,
     });
     const medium = await this.storage.adapter().putObject({
       tenantId,
+      websiteId,
       assetType,
+      assetId: imageId,
       directory: policy.directory,
       fileName: mediumFileName,
+      contentType: 'image/webp',
       buffer: processed.medium,
     });
     const large = await this.storage.adapter().putObject({
       tenantId,
+      websiteId,
       assetType,
+      assetId: imageId,
       directory: policy.directory,
       fileName: largeFileName,
+      contentType: 'image/webp',
       buffer: processed.large,
     });
     const primary = this.primaryUploadForAssetType(assetType, { thumbnail, medium, large });
@@ -82,19 +94,20 @@ export class UploadsService {
   async readPublicFile(tenantId: string, assetType: string, fileName: string) {
     if (!isUploadAssetType(assetType)) throw new NotFoundException('Asset not found');
     const policy = UPLOAD_POLICIES[assetType];
-    return this.storage.adapter().readObject({ tenantId, assetType, directory: policy.directory, fileName });
+    return this.storage.localAdapter().readObject({ tenantId, assetType, directory: policy.directory, fileName });
   }
 
   async deleteTenantAssetByUrl(tenantId: string, url?: string | null, expectedAssetType?: UploadAssetType) {
     if (!url) return { deleted: false, reason: 'empty_url' };
 
-    const parsed = this.parseUploadedAssetUrl(url);
+    const parsed = this.storage.parseUrl(url);
     if (!parsed) return { deleted: false, reason: 'external_url' };
+    if (!isUploadAssetType(parsed.assetType)) return { deleted: false, reason: 'external_url' };
     if (parsed.tenantId !== tenantId) throw new ForbiddenException('Asset does not belong to tenant');
     if (expectedAssetType && parsed.assetType !== expectedAssetType) throw new BadRequestException('Asset type does not match');
 
     const policy = UPLOAD_POLICIES[parsed.assetType];
-    await this.deleteKnownVariants(parsed.tenantId, parsed.assetType, policy.directory, parsed.fileName);
+    await this.deleteKnownVariants(parsed.tenantId, parsed.assetType, policy.directory, parsed.fileName, parsed.objectKey);
 
     return { deleted: true, reason: 'deleted' };
   }
@@ -134,22 +147,25 @@ export class UploadsService {
     return uploads.large;
   }
 
-  private async deleteKnownVariants(tenantId: string, assetType: UploadAssetType, directory: string, fileName: string) {
+  private async deleteKnownVariants(tenantId: string, assetType: UploadAssetType, directory: string, fileName: string, objectKey?: string) {
     const imageId = fileName.replace(/-(original|thumb|medium|large)\.(jpg|png|webp)$/i, '');
-    const candidates = [
-      fileName,
-      `${imageId}-thumb.webp`,
-      `${imageId}-medium.webp`,
-      `${imageId}-large.webp`,
-      `${imageId}-original.jpg`,
-      `${imageId}-original.png`,
-      `${imageId}-original.webp`,
-    ];
+    const candidates = objectKey
+      ? this.supabaseVariantCandidates(objectKey)
+      : [
+          { fileName, objectKey: undefined },
+          { fileName: `${imageId}-thumb.webp`, objectKey: undefined },
+          { fileName: `${imageId}-medium.webp`, objectKey: undefined },
+          { fileName: `${imageId}-large.webp`, objectKey: undefined },
+          { fileName: `${imageId}-original.jpg`, objectKey: undefined },
+          { fileName: `${imageId}-original.png`, objectKey: undefined },
+          { fileName: `${imageId}-original.webp`, objectKey: undefined },
+        ];
 
     let deleted = false;
-    for (const candidate of [...new Set(candidates)]) {
+    const uniqueCandidates = [...new Map(candidates.map((candidate) => [candidate.objectKey ?? candidate.fileName, candidate])).values()];
+    for (const candidate of uniqueCandidates) {
       try {
-        await this.storage.adapter().deleteObject({ tenantId, assetType, directory, fileName: candidate });
+        await this.storage.adapter().deleteObject({ tenantId, assetType, directory, fileName: candidate.fileName, objectKey: candidate.objectKey });
         deleted = true;
       } catch (error) {
         if (error instanceof NotFoundException) continue;
@@ -157,6 +173,14 @@ export class UploadsService {
       }
     }
     if (!deleted) throw new NotFoundException('Asset not found');
+  }
+
+  private supabaseVariantCandidates(objectKey: string) {
+    const directory = objectKey.slice(0, objectKey.lastIndexOf('/') + 1);
+    return ['thumb.webp', 'medium.webp', 'large.webp', 'original.jpg', 'original.png', 'original.webp'].map((fileName) => ({
+      fileName,
+      objectKey: `${directory}${fileName}`,
+    }));
   }
 
   private validateFile(file: UploadedFile, maxSize: number) {
@@ -213,23 +237,4 @@ export class UploadsService {
     return false;
   }
 
-  private parseUploadedAssetUrl(url: string) {
-    const path = this.extractPath(url);
-    const match = path.match(/^\/api\/v1\/uploads\/([^/]+)\/([^/]+)\/([^/]+)$/);
-    if (!match) return null;
-
-    const [, tenantId, assetType, fileName] = match;
-    if (!isUploadAssetType(assetType)) return null;
-
-    return { tenantId, assetType, fileName };
-  }
-
-  private extractPath(url: string) {
-    if (url.startsWith('/')) return url;
-    try {
-      return new URL(url).pathname;
-    } catch {
-      return '';
-    }
-  }
 }

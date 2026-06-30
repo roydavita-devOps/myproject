@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   Get,
   Header,
@@ -44,10 +45,11 @@ export class UploadsController {
   upload(
     @TenantContextDecorator() tenant: TenantContext,
     @Param('assetType') assetType: string,
+    @Body('websiteId') websiteId?: string,
     @NestUploadedFile() file?: UploadedFile,
   ) {
     if (!isUploadAssetType(assetType)) throw new BadRequestException('Unsupported upload asset type');
-    return this.uploads.store(tenant.tenantId, assetType, file);
+    return this.uploads.store(tenant.tenantId, assetType, file, websiteId);
   }
 
   @Public()

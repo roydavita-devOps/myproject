@@ -1,0 +1,33 @@
+{
+  "generatedAt": "2026-06-30T04:35:18.200Z",
+  "baseURL": "http://127.0.0.1",
+  "screenshots": {
+    "localDriverUploadResult": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\supabase-storage-adapter/local-driver-upload-result.png",
+    "supabaseDriverUploadContract": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\supabase-storage-adapter/supabase-driver-upload-contract.png",
+    "dashboardPreviewOptimizedUrl": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\supabase-storage-adapter/dashboard-preview-optimized-url.png",
+    "restaurantPremiumPublicOptimizedUrl": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\supabase-storage-adapter/restaurant-premium-public-optimized-url.png",
+    "deleteVariantValidation": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\supabase-storage-adapter/delete-variant-validation.png"
+  },
+  "results": [
+    {
+      "target": "local_driver_upload_result",
+      "status": "passed"
+    },
+    {
+      "target": "supabase_driver_upload_contract_mock",
+      "status": "passed"
+    },
+    {
+      "target": "dashboard_preview_optimized_url",
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_premium_public_optimized_url",
+      "status": "passed"
+    },
+    {
+      "target": "delete_variant_validation_mock",
+      "status": "passed"
+    }
+  ]
+}

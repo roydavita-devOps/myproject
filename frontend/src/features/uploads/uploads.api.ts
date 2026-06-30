@@ -24,9 +24,10 @@ export type UploadedAsset = {
 };
 
 export const uploadsApi = {
-  async upload(assetType: UploadAssetType, file: File, onProgress?: (progress: number) => void) {
+  async upload(assetType: UploadAssetType, file: File, onProgress?: (progress: number) => void, websiteId?: string) {
     const formData = new FormData();
     formData.append('file', file);
+    if (websiteId) formData.append('websiteId', websiteId);
     const { data } = await http.post<UploadedAsset>(`/uploads/${assetType}`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
       onUploadProgress: (event: AxiosProgressEvent) => {

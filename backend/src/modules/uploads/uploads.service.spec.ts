@@ -5,6 +5,7 @@ import { join } from 'path';
 import sharp from 'sharp';
 import { MalwareScannerService } from './malware-scanner.service';
 import { LocalUploadStorageAdapter } from './storage/local-upload-storage.adapter';
+import { SupabaseUploadStorageAdapter } from './storage/supabase-upload-storage.adapter';
 import { UploadStorageService } from './storage/upload-storage.service';
 import { UploadsService } from './uploads.service';
 
@@ -34,7 +35,7 @@ describe('UploadsService', () => {
     } as unknown as ConfigService;
 
     service = new UploadsService(
-      new UploadStorageService(config, new LocalUploadStorageAdapter(config)),
+      new UploadStorageService(config, new LocalUploadStorageAdapter(config), new SupabaseUploadStorageAdapter(config)),
       new MalwareScannerService(config),
     );
   });
@@ -119,6 +120,33 @@ describe('UploadsService', () => {
     });
 
     await expect(service.deleteTenantAssetByUrl('tenant-2', result.url, 'logo')).rejects.toThrow('Asset does not belong to tenant');
+  });
+
+  it('deletes all Supabase variants parsed from a public object URL', async () => {
+    const deleteObject = jest.fn().mockResolvedValue(undefined);
+    const storage = {
+      parseUrl: jest.fn().mockReturnValue({
+        tenantId: 'tenant-1',
+        assetType: 'gallery',
+        fileName: 'large.webp',
+        objectKey: 'tenants/tenant-1/websites/website-1/gallery/asset-1/large.webp',
+      }),
+      adapter: jest.fn().mockReturnValue({ deleteObject }),
+    } as unknown as UploadStorageService;
+    const supabaseDeleteService = new UploadsService(storage, { scan: jest.fn() } as unknown as MalwareScannerService);
+
+    await expect(supabaseDeleteService.deleteTenantAssetByUrl('tenant-1', 'https://cdn.example.com/large.webp', 'gallery')).resolves.toMatchObject({
+      deleted: true,
+      reason: 'deleted',
+    });
+
+    expect(deleteObject).toHaveBeenCalledTimes(6);
+    expect(deleteObject).toHaveBeenCalledWith(expect.objectContaining({
+      objectKey: 'tenants/tenant-1/websites/website-1/gallery/asset-1/thumb.webp',
+    }));
+    expect(deleteObject).toHaveBeenCalledWith(expect.objectContaining({
+      objectKey: 'tenants/tenant-1/websites/website-1/gallery/asset-1/original.jpg',
+    }));
   });
 
   it('rejects content that does not match the declared MIME type', async () => {

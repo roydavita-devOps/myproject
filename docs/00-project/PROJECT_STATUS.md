@@ -4,7 +4,7 @@ Last updated: 2026-06-30
 
 ## Current Stage
 
-Stage 9.8D-R3 - Image Upload Optimization and WebP Processing Pipeline.
+Stage 9.8D-R4 - Supabase Storage Adapter for Durable User Uploads.
 
 Status: implemented, locally validated, evidence captured, pushed through Docker localhost checks, and ready for approval.
 
@@ -51,6 +51,7 @@ Status: implemented, locally validated, evidence captured, pushed through Docker
 | Stage 9.8D-R1 Restaurant Premium CTA, Readability & Opening Hours Remediation | Completed; awaiting approval. |
 | Stage 9.8D-R2 Restaurant Premium Foundation UX and Data Remediation | Completed; awaiting approval. |
 | Stage 9.8D-R3 Image Upload Optimization and WebP Processing Pipeline | Completed; awaiting approval. |
+| Stage 9.8D-R4 Supabase Storage Adapter for Durable User Uploads | Completed; awaiting approval. |
 
 ## Current Blockers
 
@@ -68,12 +69,13 @@ Status: implemented, locally validated, evidence captured, pushed through Docker
 | Restaurant Premium R1 review findings | Resolved for Stage 9.8D-R1 | Hero no longer repeats `Reserve a Table`, Visit & Reservation card is readable, and Opening Hours can be edited from the dashboard using existing `Website.openingHours` persistence. |
 | Restaurant Premium R2 foundation findings | Resolved for Stage 9.8D-R2 | Full Menu modal now matches Restaurant Premium and excludes generic modal WhatsApp CTA, category delete is exposed safely, tenant slug moved out of login into Business Information, and Opening Hours uses a structured picker. |
 | Image upload optimization | Resolved for Stage 9.8D-R3 | JPG, PNG, and WEBP uploads are validated, reprocessed to optimized WebP variants, previewed safely, and served through the existing upload URL contract. Production durable object storage remains a required deployment decision before relying on user uploads in stateless containers. |
+| Production upload durability | Resolved for Stage 9.8D-R4 implementation | `STORAGE_DRIVER=supabase` is supported through a backend-only Supabase Storage adapter. Railway production must set Supabase storage env vars and use public bucket `tenant-assets` before relying on durable user uploads. |
 | Luxury templates | Paused | No Luxury template implementation until separately approved. |
 | Template Catalog UI | Paused | No marketplace, comparison page, entitlement, or subscription access logic in Stage 9.7B. |
 
 ## Next Actions
 
-1. Review Stage 9.8D-R3 Image Upload Optimization and WebP Processing Pipeline evidence.
+1. Review Stage 9.8D-R4 Supabase Storage Adapter evidence.
 2. Approve or request corrections.
 3. Keep Luxury, Catalog UI, marketplace, subscription, entitlement, preview-before-apply, and switch history paused until separately approved.
 4. After approval, proceed only to the next approved stage.
@@ -83,11 +85,11 @@ Status: implemented, locally validated, evidence captured, pushed through Docker
 
 | System | Current Status |
 | --- | --- |
-| Local Docker | Running and validated during Stage 9.8D-R3. |
+| Local Docker | Running and validated during Stage 9.8D-R4. |
 | GitHub | Latest code and documentation branch strategy uses `main`, `staging`, and `pilot`. |
 | Vercel | Production frontend active. |
 | Railway | Backend health endpoints active. |
-| Supabase | Production database integration confirmed externally by project owner. |
+| Supabase | Production database integration confirmed externally by project owner; Storage adapter is implemented and requires production bucket/env configuration. |
 
 ## Canonical References
 
@@ -111,5 +113,7 @@ Status: implemented, locally validated, evidence captured, pushed through Docker
 - Restaurant Premium R1 remediation report: [../06-modern-template/reports/PHASE-9.8D-R1-Restaurant-Premium-CTA-Readability-And-Opening-Hours-Report.md](../06-modern-template/reports/PHASE-9.8D-R1-Restaurant-Premium-CTA-Readability-And-Opening-Hours-Report.md)
 - Restaurant Premium R2 foundation remediation report: [../06-modern-template/reports/PHASE-9.8D-R2-Restaurant-Premium-Foundation-UX-And-Data-Report.md](../06-modern-template/reports/PHASE-9.8D-R2-Restaurant-Premium-Foundation-UX-And-Data-Report.md)
 - Image upload optimization and WebP pipeline report: [../06-modern-template/reports/PHASE-9.8D-R3-Image-Upload-Optimization-And-WebP-Pipeline-Report.md](../06-modern-template/reports/PHASE-9.8D-R3-Image-Upload-Optimization-And-WebP-Pipeline-Report.md)
+- Asset storage architecture: [../01-architecture/ASSET_STORAGE_ARCHITECTURE.md](../01-architecture/ASSET_STORAGE_ARCHITECTURE.md)
+- Supabase storage adapter report: [../06-modern-template/reports/PHASE-9.8D-R4-Supabase-Storage-Adapter-For-User-Uploads-Report.md](../06-modern-template/reports/PHASE-9.8D-R4-Supabase-Storage-Adapter-For-User-Uploads-Report.md)
 - Template Catalog readiness audit: [../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md](../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md)
 - Template consistency audit: [../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md](../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md)
