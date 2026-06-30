@@ -196,6 +196,24 @@ Reason:
 - Website builder customers expect uploaded menu, gallery, logo, and hero images to survive deployments.
 - A storage adapter keeps local development simple while making production durable.
 
+## Image Delete and Legacy Cleanup
+
+Status: Approved for implementation pending product sign-off.
+
+Decision:
+
+- Image deletion must clear database references even if legacy local files no longer exist.
+- Deleting an image must never delete the parent menu item, website, tenant, or other business data unless explicitly requested.
+- Gallery image deletion archives only the gallery record and removes it from active/public rendering.
+- Supabase Storage delete should remove known image variants when available.
+- Supabase cleanup failures should be logged and should not block database reference cleanup when the user is removing the image.
+
+Reason:
+
+- Public sites must stop rendering deleted images immediately.
+- Legacy local upload paths may point to files that disappeared during previous deployment changes.
+- Storage cleanup is important, but stale storage cannot be allowed to keep broken image references in customer websites.
+
 ## Template Metadata Standard
 
 Status: Approved.

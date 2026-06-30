@@ -149,6 +149,25 @@ describe('UploadsService', () => {
     }));
   });
 
+  it('does not block callers when Supabase variant cleanup partially fails', async () => {
+    const deleteObject = jest.fn().mockRejectedValue(new Error('Supabase remove failed'));
+    const storage = {
+      parseUrl: jest.fn().mockReturnValue({
+        tenantId: 'tenant-1',
+        assetType: 'gallery',
+        fileName: 'large.webp',
+        objectKey: 'tenants/tenant-1/websites/website-1/gallery/asset-1/large.webp',
+      }),
+      adapter: jest.fn().mockReturnValue({ deleteObject }),
+    } as unknown as UploadStorageService;
+    const supabaseDeleteService = new UploadsService(storage, { scan: jest.fn() } as unknown as MalwareScannerService);
+
+    await expect(supabaseDeleteService.deleteTenantAssetByUrl('tenant-1', 'https://cdn.example.com/large.webp', 'gallery')).resolves.toMatchObject({
+      deleted: true,
+      reason: 'deleted',
+    });
+  });
+
   it('rejects content that does not match the declared MIME type', async () => {
     await expect(
       service.store('tenant-1', 'gallery', {

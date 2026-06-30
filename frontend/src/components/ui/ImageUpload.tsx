@@ -23,6 +23,7 @@ export function ImageUpload({ assetType, websiteId, label, description, currentU
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const imageUrl = previewUrl ?? resolveAssetUrl(currentUrl);
@@ -31,6 +32,7 @@ export function ImageUpload({ assetType, websiteId, label, description, currentU
 
   async function upload(file: File) {
     setError('');
+    setMessage('');
     setProgress(0);
 
     if (!allowedTypes.includes(file.type)) {
@@ -48,6 +50,7 @@ export function ImageUpload({ assetType, websiteId, label, description, currentU
       const uploaded = await uploadsApi.upload(assetType, file, setProgress, websiteId);
       await onUploaded(uploaded.url);
       setProgress(100);
+      setMessage('Gambar berhasil diupload.');
     } catch {
       setError('The uploaded image could not be processed.');
       setPreviewUrl(null);
@@ -71,11 +74,13 @@ export function ImageUpload({ assetType, websiteId, label, description, currentU
   async function handleDelete() {
     if (!onDelete) return;
     setError('');
+    setMessage('');
     setIsDeleting(true);
     try {
       await onDelete();
       setPreviewUrl(null);
       setProgress(0);
+      setMessage('Gambar berhasil dihapus.');
     } catch {
       setError('Hapus gambar gagal. Coba ulangi beberapa saat lagi.');
     } finally {
@@ -134,6 +139,7 @@ export function ImageUpload({ assetType, websiteId, label, description, currentU
             </div>
           )}
           {error && <p className="text-sm text-red-600">{error}</p>}
+          {message && !error && <p className="text-sm text-emerald-700">{message}</p>}
         </div>
       </div>
     </div>

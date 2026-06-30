@@ -39,6 +39,10 @@ export const menusApi = {
     const { data } = await http.put<MenuItem>(`/menus/${id}`, payload);
     return data;
   },
+  async deleteMenuImage(id: string) {
+    const { data } = await http.delete<MenuItem>(`/menus/${id}/image`);
+    return data;
+  },
   async deleteMenu(id: string) {
     const { data } = await http.delete<MenuItem>(`/menus/${id}`);
     return data;

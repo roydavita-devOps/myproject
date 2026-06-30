@@ -1,0 +1,35 @@
+{
+  "generatedAt": "2026-06-30T05:20:28.196Z",
+  "baseURL": "http://127.0.0.1",
+  "screenshots": {
+    "menuImageDeleteBefore": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\image-delete-remediation/menu-image-delete-before.png",
+    "menuImageDeleteAfter": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\image-delete-remediation/menu-image-delete-after.png",
+    "galleryImageDeleteBefore": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\image-delete-remediation/gallery-image-delete-before.png",
+    "galleryImageDeleteAfter": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\image-delete-remediation/gallery-image-delete-after.png",
+    "legacyLocalImageRemove": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\image-delete-remediation/legacy-local-image-remove.png",
+    "restaurantPremiumPublicAfterImageDelete": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\image-delete-remediation/restaurant-premium-public-after-image-delete.png",
+    "supabaseStorageAfterDelete": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\image-delete-remediation/supabase-storage-after-delete.png"
+  },
+  "results": [
+    {
+      "target": "menu_image_delete_ui",
+      "status": "passed"
+    },
+    {
+      "target": "gallery_image_delete_ui",
+      "status": "passed"
+    },
+    {
+      "target": "legacy_local_image_remove",
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_premium_public_after_image_delete",
+      "status": "passed"
+    },
+    {
+      "target": "supabase_storage_after_delete_contract",
+      "status": "passed"
+    }
+  ]
+}

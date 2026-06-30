@@ -59,6 +59,11 @@ export class MenusController {
     return this.menus.updateMenu(tenant.tenantId, id, dto);
   }
 
+  @Delete('menus/:id/image')
+  deleteMenuImage(@TenantContextDecorator() tenant: TenantContext, @Param('id') id: string) {
+    return this.menus.deleteMenuImage(tenant.tenantId, id);
+  }
+
   @Patch('menus/reorder')
   reorderMenus(@TenantContextDecorator() tenant: TenantContext, @Body() dto: ReorderMenuDto) {
     return this.menus.reorderMenus(tenant.tenantId, dto);

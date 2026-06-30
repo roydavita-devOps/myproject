@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ContentStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { UploadsService } from '../uploads/uploads.service';
 import { CreateMenuCategoryDto } from './dto/create-menu-category.dto';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { ReorderMenuDto } from './dto/reorder-menu.dto';
@@ -9,7 +10,10 @@ import { UpdateMenuDto } from './dto/update-menu.dto';
 
 @Injectable()
 export class MenusService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly uploads: UploadsService,
+  ) {}
 
   findCategories(tenantId: string, websiteId?: string) {
     return this.prisma.menuCategory.findMany({
@@ -106,6 +110,16 @@ export class MenusService {
     });
   }
 
+  async deleteMenuImage(tenantId: string, id: string) {
+    const menu = await this.assertMenuOwnership(tenantId, id);
+    if (menu.imageUrl) await this.deleteUploadIfPresent(tenantId, menu.imageUrl);
+
+    return this.prisma.menu.update({
+      where: { id },
+      data: { imageUrl: null },
+    });
+  }
+
   private async assertWebsiteOwnership(tenantId: string, websiteId: string) {
     const website = await this.prisma.website.findFirst({ where: { id: websiteId, tenantId } });
     if (!website) throw new NotFoundException('Website not found');
@@ -119,5 +133,15 @@ export class MenusService {
   private async assertMenuOwnership(tenantId: string, id: string) {
     const menu = await this.prisma.menu.findFirst({ where: { id, tenantId } });
     if (!menu) throw new NotFoundException('Menu not found');
+    return menu;
+  }
+
+  private async deleteUploadIfPresent(tenantId: string, url: string) {
+    try {
+      await this.uploads.deleteTenantAssetByUrl(tenantId, url, 'menu');
+    } catch (error) {
+      if (error instanceof NotFoundException) return;
+      throw error;
+    }
   }
 }

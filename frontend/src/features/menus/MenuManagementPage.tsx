@@ -84,6 +84,13 @@ export function MenuManagementPage() {
       queryClient.invalidateQueries({ queryKey: ['websites'] });
     },
   });
+  const deleteImageMutation = useMutation({
+    mutationFn: menusApi.deleteMenuImage,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['menus', selectedWebsiteId] });
+      queryClient.invalidateQueries({ queryKey: ['websites'] });
+    },
+  });
 
   const categoryMap = useMemo(() => new Map(categories.map((category) => [category.id, category.name])), [categories]);
 
@@ -197,6 +204,7 @@ export function MenuManagementPage() {
                   categories={categories}
                   categoryMap={categoryMap}
                   updateMutation={updateMutation}
+                  onRemoveImage={(id) => deleteImageMutation.mutateAsync(id)}
                   onDelete={() => deleteMutation.mutate(menu.id)}
                   isDeleting={deleteMutation.isPending}
                 />
@@ -215,6 +223,7 @@ function MenuItemEditor({
   categories,
   categoryMap,
   updateMutation,
+  onRemoveImage,
   onDelete,
   isDeleting,
 }: {
@@ -223,6 +232,7 @@ function MenuItemEditor({
   categories: MenuCategory[];
   categoryMap: Map<string, string>;
   updateMutation: UpdateMenuMutation;
+  onRemoveImage: (id: string) => Promise<MenuItem>;
   onDelete: () => void;
   isDeleting: boolean;
 }) {
@@ -255,7 +265,10 @@ function MenuItemEditor({
         currentUrl={form.imageUrl}
         maxSizeMb={4}
         onUploaded={(imageUrl) => setForm((current) => ({ ...current, imageUrl }))}
-        onDelete={() => setForm((current) => ({ ...current, imageUrl: null }))}
+        onDelete={async () => {
+          const updated = await onRemoveImage(menu.id);
+          setForm(menuToForm(updated));
+        }}
       />
       <div className="grid min-w-0 gap-3">
         <div className="grid gap-3 md:grid-cols-2">

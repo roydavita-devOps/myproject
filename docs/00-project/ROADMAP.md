@@ -45,11 +45,12 @@ Last updated: 2026-06-30
 - Stage 9.8D-R2 Restaurant Premium Foundation UX and Data Remediation.
 - Stage 9.8D-R3 Image Upload Optimization and WebP Processing Pipeline.
 - Stage 9.8D-R4 Supabase Storage Adapter for Durable User Uploads.
+- Stage 9.8D-R5 Image Delete and Legacy Local Upload Cleanup Remediation.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.8D-R4 Supabase Storage Adapter approval checkpoint.
+- Stage 9.8D-R5 Image Delete and Legacy Local Upload Cleanup approval checkpoint.
 
 ## Planned
 
@@ -165,6 +166,14 @@ Stage 9.8D-R4 resolves the durable upload storage blocker:
 - Public website assets use public bucket URLs returned by the backend.
 - Supabase service role key is backend-only and must never be exposed to Vercel/frontend.
 - Existing local upload URLs remain backward compatible through the backend local upload route.
+
+Stage 9.8D-R5 resolves image delete reliability:
+
+- Menu image delete clears `menu.imageUrl` without deleting the menu item.
+- Logo and hero delete clear theme image fields even if old local files are missing.
+- Gallery delete archives only the gallery record and removes it from public rendering.
+- Legacy `/uploads` records can be removed without requiring the physical file to still exist.
+- Supabase cleanup attempts known variants and logs cleanup failures without blocking database cleanup.
 
 Potential categories:
 

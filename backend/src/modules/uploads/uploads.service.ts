@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { extname } from 'path';
 import sharp from 'sharp';
@@ -9,6 +9,8 @@ import { UploadStorageService } from './storage/upload-storage.service';
 
 @Injectable()
 export class UploadsService {
+  private readonly logger = new Logger(UploadsService.name);
+
   constructor(
     private readonly storage: UploadStorageService,
     private readonly scanner: MalwareScannerService,
@@ -162,6 +164,7 @@ export class UploadsService {
         ];
 
     let deleted = false;
+    let cleanupFailed = false;
     const uniqueCandidates = [...new Map(candidates.map((candidate) => [candidate.objectKey ?? candidate.fileName, candidate])).values()];
     for (const candidate of uniqueCandidates) {
       try {
@@ -169,9 +172,11 @@ export class UploadsService {
         deleted = true;
       } catch (error) {
         if (error instanceof NotFoundException) continue;
-        throw error;
+        cleanupFailed = true;
+        this.logger.warn(`Upload cleanup failed for ${candidate.objectKey ?? candidate.fileName}: ${error instanceof Error ? error.message : 'unknown error'}`);
       }
     }
+    if (cleanupFailed) return;
     if (!deleted) throw new NotFoundException('Asset not found');
   }
 

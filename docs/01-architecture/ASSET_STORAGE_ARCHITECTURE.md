@@ -120,6 +120,31 @@ For local URLs, the backend deletes files from the local upload directory.
 
 For Supabase URLs, the backend deletes object keys from the bucket.
 
+Database cleanup rule:
+
+```text
+Clear the database reference even if storage cleanup cannot find or remove the physical file.
+```
+
+Parent record rule:
+
+```text
+Deleting an image must not delete the parent menu item, website, tenant, or business data.
+```
+
+Current image removal behavior:
+
+| Asset | Database behavior |
+| --- | --- |
+| logo | Clears `Theme.logoUrl`. |
+| hero | Clears `Theme.heroImageUrl`. |
+| menu image | Clears `Menu.imageUrl`; keeps the menu item active. |
+| gallery image | Archives the gallery record; keeps website and other gallery data intact. |
+
+Legacy local URLs such as `/uploads/...` are treated as removable references even when the original file no longer exists.
+
+Supabase cleanup failures are logged as warnings and should not block the user flow when the database reference can be cleared safely.
+
 ## Backward Compatibility
 
 Existing local URLs remain supported:
