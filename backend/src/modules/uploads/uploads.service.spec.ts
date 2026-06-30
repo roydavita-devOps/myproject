@@ -2,20 +2,26 @@ import { ConfigService } from '@nestjs/config';
 import { mkdtemp, rm } from 'fs/promises';
 import { tmpdir } from 'os';
 import { join } from 'path';
+import sharp from 'sharp';
 import { MalwareScannerService } from './malware-scanner.service';
 import { LocalUploadStorageAdapter } from './storage/local-upload-storage.adapter';
 import { UploadStorageService } from './storage/upload-storage.service';
 import { UploadsService } from './uploads.service';
 
-const pngBuffer = Buffer.from(
-  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=',
-  'base64',
-);
 const truncatedPngBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00]);
 
 describe('UploadsService', () => {
   let storagePath: string;
   let service: UploadsService;
+  let pngBuffer: Buffer;
+  let jpegBuffer: Buffer;
+  let webpBuffer: Buffer;
+
+  beforeAll(async () => {
+    pngBuffer = await sharp({ create: { width: 24, height: 24, channels: 4, background: '#2563eb' } }).png().toBuffer();
+    jpegBuffer = await sharp({ create: { width: 24, height: 24, channels: 3, background: '#0f766e' } }).jpeg().toBuffer();
+    webpBuffer = await sharp({ create: { width: 24, height: 24, channels: 4, background: '#f97316' } }).webp().toBuffer();
+  });
 
   beforeEach(async () => {
     storagePath = await mkdtemp(join(tmpdir(), 'umkm-upload-test-'));
@@ -37,7 +43,7 @@ describe('UploadsService', () => {
     await rm(storagePath, { recursive: true, force: true });
   });
 
-  it('stores a valid image with a tenant scoped URL', async () => {
+  it('processes a PNG upload to WebP variants with a tenant scoped URL', async () => {
     const result = await service.store('tenant-1', 'logo', {
       originalname: 'logo.png',
       mimetype: 'image/png',
@@ -48,10 +54,44 @@ describe('UploadsService', () => {
     expect(result).toMatchObject({
       tenantId: 'tenant-1',
       assetType: 'logo',
-      mimeType: 'image/png',
+      mimeType: 'image/webp',
       url: expect.stringContaining('/api/v1/uploads/tenant-1/logo/'),
+      originalUrl: expect.stringContaining('-original.png'),
+      thumbnailUrl: expect.stringContaining('-thumb.webp'),
+      mediumUrl: expect.stringContaining('-medium.webp'),
+      largeUrl: expect.stringContaining('-large.webp'),
       scan: { status: 'skipped', provider: 'disabled' },
     });
+    expect(result.url).toBe(result.mediumUrl);
+
+    const stored = await service.readPublicFile('tenant-1', 'logo', result.fileName);
+    expect(stored.contentType).toBe('image/webp');
+  });
+
+  it('processes JPG uploads to WebP', async () => {
+    const result = await service.store('tenant-1', 'menu', {
+      originalname: 'menu.jpg',
+      mimetype: 'image/jpeg',
+      size: jpegBuffer.length,
+      buffer: jpegBuffer,
+    });
+
+    expect(result.mimeType).toBe('image/webp');
+    expect(result.url).toBe(result.mediumUrl);
+    expect(result.fileName).toContain('-medium.webp');
+  });
+
+  it('re-optimizes WEBP uploads to WebP variants', async () => {
+    const result = await service.store('tenant-1', 'gallery', {
+      originalname: 'gallery.webp',
+      mimetype: 'image/webp',
+      size: webpBuffer.length,
+      buffer: webpBuffer,
+    });
+
+    expect(result.mimeType).toBe('image/webp');
+    expect(result.url).toBe(result.largeUrl);
+    expect(result.thumbnailUrl).toContain('-thumb.webp');
   });
 
   it('deletes a tenant scoped uploaded asset from storage', async () => {
@@ -67,6 +107,7 @@ describe('UploadsService', () => {
       reason: 'deleted',
     });
     await expect(service.readPublicFile('tenant-1', 'logo', result.fileName)).rejects.toThrow('Asset not found');
+    await expect(service.readPublicFile('tenant-1', 'logo', result.originalUrl.split('/').pop() ?? '')).rejects.toThrow('Asset not found');
   });
 
   it('rejects deletion when the asset URL belongs to another tenant', async () => {
@@ -89,6 +130,17 @@ describe('UploadsService', () => {
         buffer: Buffer.from('hello'),
       }),
     ).rejects.toThrow('File content does not match MIME type');
+  });
+
+  it('rejects unsupported image formats', async () => {
+    await expect(
+      service.store('tenant-1', 'gallery', {
+        originalname: 'image.gif',
+        mimetype: 'image/gif',
+        size: 10,
+        buffer: Buffer.from('GIF89a----'),
+      }),
+    ).rejects.toThrow('Unsupported file type');
   });
 
   it('rejects truncated images that cannot be rendered by browsers', async () => {

@@ -2,7 +2,7 @@ import { APIRequestContext, Page, expect, request, test } from '@playwright/test
 
 const password = 'Password12345';
 const pngBytes = Buffer.from(
-  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=',
+  'iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAPoAAAD6AG1e1JrAAAAMUlEQVRIiWNQTX79n5aYYdQC1dEgUh1NRaqjGS15tKhIHi1Nk0crnNejVebrwd2qAABNdoDM/L94YAAAAABJRU5ErkJggg==',
   'base64',
 );
 
@@ -100,6 +100,8 @@ test.describe('SaaS smoke test', () => {
       const body = await upload.json();
       expect(body.assetType).toBe('logo');
       expect(body.url).toContain('/api/v1/uploads/');
+      expect(body.url).toContain('-medium.webp');
+      expect(body.mimeType).toBe('image/webp');
 
       const attachLogo = await api.patch(`/api/v1/websites/${websiteId}/theme-assets`, {
         headers: { Authorization: `Bearer ${accessToken}` },
@@ -111,7 +113,7 @@ test.describe('SaaS smoke test', () => {
 
       const publicFile = await api.get(body.url);
       expect(publicFile.ok()).toBeTruthy();
-      expect(publicFile.headers()['content-type']).toContain('image/png');
+      expect(publicFile.headers()['content-type']).toContain('image/webp');
 
       const galleryUpload = await api.post('/api/v1/uploads/gallery', {
         headers: { Authorization: `Bearer ${accessToken}` },
@@ -125,6 +127,8 @@ test.describe('SaaS smoke test', () => {
       });
       expect(galleryUpload.ok()).toBeTruthy();
       const galleryBody = await galleryUpload.json();
+      expect(galleryBody.url).toContain('-large.webp');
+      expect(galleryBody.mimeType).toBe('image/webp');
       const attachGallery = await api.post(`/api/v1/websites/${websiteId}/gallery`, {
         headers: { Authorization: `Bearer ${accessToken}` },
         data: { imageUrl: galleryBody.url, altText: 'Smoke gallery' },

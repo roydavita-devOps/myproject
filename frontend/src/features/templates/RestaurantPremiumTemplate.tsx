@@ -304,14 +304,16 @@ function resolveFeaturedItems(items: PremiumDish[], hasRealMenu: boolean, limit:
 }
 
 function PremiumDishMedia({ dish, index }: { dish: PremiumDish; index: number }) {
+  const [hasImageError, setHasImageError] = useState(false);
   const imageUrl = resolveAssetUrl(dish.imageUrl);
-  if (imageUrl) {
+  if (imageUrl && !hasImageError) {
     return (
       <img
         className="aspect-[4/3] w-full object-cover"
         src={imageUrl}
         alt={`${dish.name} menu photo`}
         loading="lazy"
+        onError={() => setHasImageError(true)}
       />
     );
   }
@@ -356,7 +358,14 @@ function PremiumGallery({ website }: { website: Website }) {
         <div className={layoutClass}>
           {galleries.map((item, index) => (
             <figure key={item.id} className={index === 0 && galleries.length >= 3 ? 'overflow-hidden rounded-lg border border-[var(--premium-border)] bg-[var(--premium-surface)] md:row-span-2' : 'overflow-hidden rounded-lg border border-[var(--premium-border)] bg-[var(--premium-surface)]'}>
-              <img className={galleries.length === 1 ? 'aspect-[16/7] w-full object-cover' : 'aspect-[4/3] w-full object-cover'} src={resolveAssetUrl(item.imageUrl) ?? ''} alt={item.altText ?? website.businessName} />
+              <img
+                className={galleries.length === 1 ? 'aspect-[16/7] w-full object-cover' : 'aspect-[4/3] w-full object-cover'}
+                src={resolveAssetUrl(item.imageUrl) ?? ''}
+                alt={item.altText ?? website.businessName}
+                onError={(event) => {
+                  event.currentTarget.style.display = 'none';
+                }}
+              />
             </figure>
           ))}
         </div>

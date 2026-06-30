@@ -1,6 +1,7 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { extname } from 'path';
+import sharp from 'sharp';
 import { extensionForMimeType, isUploadAssetType, StoredUpload, UploadAssetType, UPLOAD_POLICIES } from './upload-policy';
 import { UploadedFile } from './uploaded-file.type';
 import { MalwareScannerService } from './malware-scanner.service';
@@ -23,23 +24,57 @@ export class UploadsService {
     const extension = extensionForMimeType(file.mimetype);
     if (!extension) throw new BadRequestException('Unsupported file type');
 
-    const fileName = `${Date.now()}-${randomUUID()}.${extension}`;
-    const stored = await this.storage.adapter().putObject({
+    const processed = await this.processImage(file);
+    const imageId = `${Date.now()}-${randomUUID()}`;
+    const originalFileName = `${imageId}-original.${extension}`;
+    const thumbnailFileName = `${imageId}-thumb.webp`;
+    const mediumFileName = `${imageId}-medium.webp`;
+    const largeFileName = `${imageId}-large.webp`;
+
+    const original = await this.storage.adapter().putObject({
       tenantId,
       assetType,
       directory: policy.directory,
-      fileName,
+      fileName: originalFileName,
       buffer: file.buffer,
     });
+    const thumbnail = await this.storage.adapter().putObject({
+      tenantId,
+      assetType,
+      directory: policy.directory,
+      fileName: thumbnailFileName,
+      buffer: processed.thumbnail,
+    });
+    const medium = await this.storage.adapter().putObject({
+      tenantId,
+      assetType,
+      directory: policy.directory,
+      fileName: mediumFileName,
+      buffer: processed.medium,
+    });
+    const large = await this.storage.adapter().putObject({
+      tenantId,
+      assetType,
+      directory: policy.directory,
+      fileName: largeFileName,
+      buffer: processed.large,
+    });
+    const primary = this.primaryUploadForAssetType(assetType, { thumbnail, medium, large });
 
     return {
       tenantId,
       assetType,
       originalName: file.originalname,
-      fileName: stored.fileName,
-      mimeType: file.mimetype,
-      size: file.size,
-      url: stored.url,
+      fileName: primary.fileName,
+      mimeType: 'image/webp',
+      size: primary.fileName === medium.fileName ? processed.medium.length : processed.large.length,
+      url: primary.url,
+      originalUrl: original.url,
+      thumbnailUrl: thumbnail.url,
+      mediumUrl: medium.url,
+      largeUrl: large.url,
+      width: processed.width,
+      height: processed.height,
       scan,
     };
   }
@@ -59,14 +94,69 @@ export class UploadsService {
     if (expectedAssetType && parsed.assetType !== expectedAssetType) throw new BadRequestException('Asset type does not match');
 
     const policy = UPLOAD_POLICIES[parsed.assetType];
-    await this.storage.adapter().deleteObject({
-      tenantId: parsed.tenantId,
-      assetType: parsed.assetType,
-      directory: policy.directory,
-      fileName: parsed.fileName,
-    });
+    await this.deleteKnownVariants(parsed.tenantId, parsed.assetType, policy.directory, parsed.fileName);
 
     return { deleted: true, reason: 'deleted' };
+  }
+
+  private async processImage(file: UploadedFile) {
+    try {
+      const image = sharp(file.buffer, { failOn: 'error' }).rotate();
+      const metadata = await image.metadata();
+      if (!metadata.width || !metadata.height) throw new Error('Missing image dimensions');
+
+      const toWebp = (width: number) =>
+        sharp(file.buffer, { failOn: 'error' })
+          .rotate()
+          .resize({ width, withoutEnlargement: true })
+          .webp({ quality: 82 })
+          .toBuffer();
+
+      const [thumbnail, medium, large] = await Promise.all([toWebp(320), toWebp(800), toWebp(1400)]);
+      return {
+        thumbnail,
+        medium,
+        large,
+        width: metadata.width,
+        height: metadata.height,
+      };
+    } catch {
+      throw new BadRequestException('The uploaded image could not be processed.');
+    }
+  }
+
+  private primaryUploadForAssetType<T extends { fileName: string; url: string }>(
+    assetType: UploadAssetType,
+    uploads: { thumbnail: T; medium: T; large: T },
+  ) {
+    if (assetType === 'logo') return uploads.medium;
+    if (assetType === 'menu') return uploads.medium;
+    return uploads.large;
+  }
+
+  private async deleteKnownVariants(tenantId: string, assetType: UploadAssetType, directory: string, fileName: string) {
+    const imageId = fileName.replace(/-(original|thumb|medium|large)\.(jpg|png|webp)$/i, '');
+    const candidates = [
+      fileName,
+      `${imageId}-thumb.webp`,
+      `${imageId}-medium.webp`,
+      `${imageId}-large.webp`,
+      `${imageId}-original.jpg`,
+      `${imageId}-original.png`,
+      `${imageId}-original.webp`,
+    ];
+
+    let deleted = false;
+    for (const candidate of [...new Set(candidates)]) {
+      try {
+        await this.storage.adapter().deleteObject({ tenantId, assetType, directory, fileName: candidate });
+        deleted = true;
+      } catch (error) {
+        if (error instanceof NotFoundException) continue;
+        throw error;
+      }
+    }
+    if (!deleted) throw new NotFoundException('Asset not found');
   }
 
   private validateFile(file: UploadedFile, maxSize: number) {
@@ -112,9 +202,9 @@ export class UploadsService {
       );
     }
     if (mimeType === 'image/webp') {
+      if (buffer.length <= 12) return false;
       const declaredSize = buffer.readUInt32LE(4) + 8;
       return (
-        buffer.length > 12 &&
         buffer.toString('ascii', 0, 4) === 'RIFF' &&
         buffer.toString('ascii', 8, 12) === 'WEBP' &&
         declaredSize <= buffer.length

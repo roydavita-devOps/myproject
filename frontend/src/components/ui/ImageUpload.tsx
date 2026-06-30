@@ -26,18 +26,18 @@ export function ImageUpload({ assetType, label, description, currentUrl, maxSize
   const [isDeleting, setIsDeleting] = useState(false);
   const imageUrl = previewUrl ?? resolveAssetUrl(currentUrl);
 
-  const acceptedLabel = useMemo(() => `JPG, PNG, WEBP up to ${maxSizeMb}MB`, [maxSizeMb]);
+  const acceptedLabel = useMemo(() => `Upload JPG, PNG, atau WEBP hingga ${maxSizeMb}MB. Gambar akan otomatis dioptimalkan agar website lebih cepat.`, [maxSizeMb]);
 
   async function upload(file: File) {
     setError('');
     setProgress(0);
 
     if (!allowedTypes.includes(file.type)) {
-      setError('Gunakan file JPG, PNG, atau WEBP.');
+      setError('Only JPG, PNG, or WEBP images are supported.');
       return;
     }
     if (file.size > maxSizeMb * 1024 * 1024) {
-      setError(`Ukuran file maksimal ${maxSizeMb}MB.`);
+      setError(`Image size must be ${maxSizeMb}MB or less.`);
       return;
     }
 
@@ -48,7 +48,7 @@ export function ImageUpload({ assetType, label, description, currentUrl, maxSize
       await onUploaded(uploaded.url);
       setProgress(100);
     } catch {
-      setError('Upload gagal. Coba pilih file lain atau ulangi beberapa saat lagi.');
+      setError('The uploaded image could not be processed.');
       setPreviewUrl(null);
     } finally {
       setIsUploading(false);
@@ -94,7 +94,15 @@ export function ImageUpload({ assetType, label, description, currentUrl, maxSize
       >
         <div className="flex aspect-video items-center justify-center overflow-hidden rounded-md border border-slate-200 bg-white md:aspect-square">
           {imageUrl ? (
-            <img src={imageUrl} alt={label} className="size-full object-cover" />
+            <img
+              src={imageUrl}
+              alt={label}
+              className="size-full object-cover"
+              onError={(event) => {
+                event.currentTarget.style.display = 'none';
+                setError('Preview gambar tidak bisa ditampilkan. Upload ulang gambar.');
+              }}
+            />
           ) : (
             <ImagePlus className="size-8 text-slate-400" />
           )}

@@ -209,9 +209,10 @@ function groupMenuItems(items: PremiumFullMenuItem[], categories: MenuCategory[]
 }
 
 function MenuItemMedia({ item, index, variant }: { item: PremiumFullMenuItem; index: number; variant: PremiumMenuVariant }) {
+  const [hasImageError, setHasImageError] = useState(false);
   const imageUrl = resolveAssetUrl(item.imageUrl);
-  if (imageUrl) {
-    return <img className="size-20 rounded-md object-cover" src={imageUrl} alt={`${item.name} menu photo`} loading="lazy" />;
+  if (imageUrl && !hasImageError) {
+    return <img className="size-20 rounded-md object-cover" src={imageUrl} alt={`${item.name} menu photo`} loading="lazy" onError={() => setHasImageError(true)} />;
   }
 
   const icon = variant === 'restaurant' ? <Utensils className="size-6" /> : <Coffee className="size-6" />;

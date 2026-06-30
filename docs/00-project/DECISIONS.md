@@ -157,6 +157,25 @@ Reason:
 - The foundation must improve product quality without creating marketplace, subscription, entitlement, or new template scope.
 - User-correctable business identity and structured hours reduce support friction and inconsistent public rendering.
 
+## Upload Image Processing Baseline
+
+Status: Approved for implementation pending product sign-off.
+
+Decision:
+
+- Owner uploads accept JPG, PNG, and WEBP only.
+- Accepted raster uploads are validated, auto-rotated, stripped of metadata through re-encoding, resized without upscale, and emitted as WebP variants.
+- Generated variants are thumbnail 320px, medium 800px, and large 1400px at WebP quality 82.
+- The existing persisted `imageUrl` contract remains the primary processed WebP URL for compatibility.
+- Upload responses may expose `originalUrl`, `thumbnailUrl`, `mediumUrl`, `largeUrl`, width, and height for future metadata use.
+- Local filesystem upload storage remains a local/development adapter. Production user uploads require durable object storage before stateless deployment can be considered complete.
+
+Reason:
+
+- Public template performance and image reliability must not depend on unoptimized owner uploads.
+- Existing logo, hero, gallery, and menu image fields must keep working without a schema migration.
+- Durable storage is a deployment concern and should be made explicit instead of hidden behind local container behavior.
+
 ## Template Metadata Standard
 
 Status: Approved.

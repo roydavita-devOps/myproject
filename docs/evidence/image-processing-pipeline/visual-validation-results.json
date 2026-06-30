@@ -1,0 +1,38 @@
+{
+  "generatedAt": "2026-06-30T04:05:58.033Z",
+  "baseURL": "http://127.0.0.1",
+  "screenshots": {
+    "uploadUiCopy": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\image-processing-pipeline/upload-ui-copy.png",
+    "menuImageUploadWebpResult": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\image-processing-pipeline/menu-image-upload-webp-result.png",
+    "galleryImageUploadWebpResult": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\image-processing-pipeline/gallery-image-upload-webp-result.png",
+    "dashboardThumbnailPreview": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\image-processing-pipeline/dashboard-thumbnail-preview.png",
+    "restaurantPremiumPublicOptimizedImage": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\image-processing-pipeline/restaurant-premium-public-optimized-image.png",
+    "brokenImageFallback": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\image-processing-pipeline/broken-image-fallback.png"
+  },
+  "results": [
+    {
+      "target": "upload_ui_copy",
+      "status": "passed"
+    },
+    {
+      "target": "dashboard_processed_webp_preview",
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_premium_public_processed_webp",
+      "status": "passed"
+    },
+    {
+      "target": "menu_public_processed_webp",
+      "status": "passed"
+    },
+    {
+      "target": "gallery_public_processed_webp",
+      "status": "passed"
+    },
+    {
+      "target": "broken_image_fallback",
+      "status": "passed"
+    }
+  ]
+}

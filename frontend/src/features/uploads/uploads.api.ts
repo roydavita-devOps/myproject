@@ -11,6 +11,12 @@ export type UploadedAsset = {
   mimeType: string;
   size: number;
   url: string;
+  originalUrl: string;
+  thumbnailUrl: string;
+  mediumUrl: string;
+  largeUrl: string;
+  width: number;
+  height: number;
   scan: {
     status: 'skipped' | 'passed';
     provider: string;
