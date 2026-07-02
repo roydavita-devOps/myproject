@@ -7,10 +7,14 @@ export type PremiumColorTokens = {
   primary: string;
   accent: string;
   background: string;
+  backgroundAlt?: string;
   surface: string;
+  surfaceMuted?: string;
   text: string;
   mutedText: string;
   border: string;
+  heading?: string;
+  eyebrow?: string;
   textPrimary?: string;
   textSecondary?: string;
   textMuted?: string;
@@ -25,13 +29,31 @@ export type PremiumColorTokens = {
   borderSubtle?: string;
   borderStrong?: string;
   accentSoft?: string;
+  accentMuted?: string;
   accentContrast?: string;
+  cta?: string;
+  ctaHover?: string;
+  ctaText?: string;
+  secondaryCta?: string;
+  secondaryCtaText?: string;
   buttonPrimary: string;
   buttonPrimaryText: string;
   buttonSecondary: string;
   buttonSecondaryText: string;
   heroOverlay: string;
   heroScrim?: string;
+  heroText?: string;
+  heroMutedText?: string;
+  heroCardBackground?: string;
+  heroCardText?: string;
+  modalBackground?: string;
+  modalSurface?: string;
+  modalText?: string;
+  modalMutedText?: string;
+  modalBorder?: string;
+  priceText?: string;
+  badgeBackground?: string;
+  badgeText?: string;
   cardOverlay?: string;
   cardOverlayText?: string;
 };
@@ -44,75 +66,101 @@ export type PremiumColorPreset = {
 };
 
 export const premiumColorPresets: PremiumColorPreset[] = [
-  restaurantPreset('classic_black_gold', 'Classic Black Gold', {
-    primary: '#17120c',
-    accent: '#f7c873',
-    background: '#fff8ed',
-    surface: '#fffaf1',
-    text: '#1f1710',
-    mutedText: '#6b5741',
-    border: '#ead8b8',
-    buttonPrimary: '#17120c',
-    buttonPrimaryText: '#f7c873',
-    buttonSecondary: '#fffaf1',
-    buttonSecondaryText: '#17120c',
-    heroOverlay: 'linear-gradient(90deg,rgba(18,15,11,.97),rgba(18,15,11,.72),rgba(18,15,11,.26))',
+  restaurantPreset('editorial_umber', 'Editorial Umber', {
+    primary: '#6B3F24',
+    accent: '#B88746',
+    background: '#F7F0E6',
+    backgroundAlt: '#FFF8EF',
+    surface: '#FFF9F0',
+    surfaceElevated: '#FDF3E6',
+    surfaceDark: '#211A14',
+    text: '#1E1712',
+    mutedText: '#5A4A3D',
+    textMuted: '#7A6A5A',
+    textOnDark: '#FFF7EA',
+    accentSoft: '#E9D3B0',
+    border: '#D8C2A3',
+    buttonPrimary: '#6B3F24',
+    buttonPrimaryText: '#FFF8EF',
+    buttonSecondary: '#FFF9F0',
+    buttonSecondaryText: '#1E1712',
+    heroOverlay: 'linear-gradient(90deg,rgba(22,16,11,.94),rgba(33,26,20,.74),rgba(33,26,20,.32))',
   }),
-  restaurantPreset('warm_brown', 'Warm Brown', {
-    primary: '#4a2f1f',
-    accent: '#d99a45',
-    background: '#fff6ea',
-    surface: '#fffaf2',
-    text: '#2c1b12',
-    mutedText: '#74523c',
-    border: '#e5c8a5',
-    buttonPrimary: '#4a2f1f',
-    buttonPrimaryText: '#fff8ed',
-    buttonSecondary: '#fff1dc',
-    buttonSecondaryText: '#3a2418',
-    heroOverlay: 'linear-gradient(90deg,rgba(52,32,19,.95),rgba(74,47,31,.68),rgba(74,47,31,.18))',
+  restaurantPreset('charcoal_gold', 'Charcoal Gold', {
+    primary: '#191919',
+    accent: '#C9A15A',
+    background: '#F8F4EC',
+    backgroundAlt: '#FFFDF7',
+    surface: '#FFFDF7',
+    surfaceElevated: '#F4EBDD',
+    surfaceDark: '#151515',
+    text: '#17120E',
+    mutedText: '#4D4438',
+    textOnDark: '#FFF8EA',
+    accentSoft: '#E9D8B3',
+    border: '#D6C5AA',
+    buttonPrimary: '#191919',
+    buttonPrimaryText: '#FFF8EA',
+    buttonSecondary: '#FFFDF7',
+    buttonSecondaryText: '#17120E',
+    heroOverlay: 'linear-gradient(90deg,rgba(12,12,12,.96),rgba(21,21,21,.76),rgba(21,21,21,.34))',
   }),
-  restaurantPreset('elegant_maroon', 'Elegant Maroon', {
-    primary: '#561c24',
-    accent: '#d6a650',
-    background: '#fff7f1',
-    surface: '#fffaf5',
-    text: '#271417',
-    mutedText: '#704f52',
-    border: '#e7c5bd',
-    buttonPrimary: '#561c24',
-    buttonPrimaryText: '#fff6e8',
-    buttonSecondary: '#fff5ec',
-    buttonSecondaryText: '#561c24',
-    heroOverlay: 'linear-gradient(90deg,rgba(50,13,19,.96),rgba(86,28,36,.70),rgba(86,28,36,.22))',
+  restaurantPreset('olive_cream', 'Olive Cream', {
+    primary: '#2F5B49',
+    accent: '#B99B5B',
+    background: '#F5F0E4',
+    backgroundAlt: '#FFF9ED',
+    surface: '#FFF9ED',
+    surfaceElevated: '#F1E8D6',
+    surfaceDark: '#1D2A21',
+    text: '#132018',
+    mutedText: '#4A5A4B',
+    textOnDark: '#F9F3E7',
+    accentSoft: '#E2D2AA',
+    border: '#CDBF9D',
+    buttonPrimary: '#2F5B49',
+    buttonPrimaryText: '#FFF9ED',
+    buttonSecondary: '#FFF9ED',
+    buttonSecondaryText: '#132018',
+    heroOverlay: 'linear-gradient(90deg,rgba(12,24,17,.95),rgba(29,42,33,.76),rgba(29,42,33,.34))',
   }),
-  restaurantPreset('deep_green', 'Deep Green', {
-    primary: '#163b2f',
-    accent: '#c7a45a',
-    background: '#f6fbf4',
-    surface: '#ffffff',
-    text: '#10221c',
-    mutedText: '#53665e',
-    border: '#c8d8cf',
-    buttonPrimary: '#163b2f',
-    buttonPrimaryText: '#fff7df',
-    buttonSecondary: '#f4f8ef',
-    buttonSecondaryText: '#163b2f',
-    heroOverlay: 'linear-gradient(90deg,rgba(12,33,27,.96),rgba(22,59,47,.72),rgba(22,59,47,.22))',
+  restaurantPreset('burgundy_linen', 'Burgundy Linen', {
+    primary: '#6B1F2B',
+    accent: '#B56A45',
+    background: '#F8EFE5',
+    backgroundAlt: '#FFF7EF',
+    surface: '#FFF7EF',
+    surfaceElevated: '#F2E0D2',
+    surfaceDark: '#311116',
+    text: '#24130F',
+    mutedText: '#5C4038',
+    textOnDark: '#FFF3E8',
+    accentSoft: '#E6C3AF',
+    border: '#D9B9A4',
+    buttonPrimary: '#6B1F2B',
+    buttonPrimaryText: '#FFF3E8',
+    buttonSecondary: '#FFF7EF',
+    buttonSecondaryText: '#24130F',
+    heroOverlay: 'linear-gradient(90deg,rgba(37,10,14,.96),rgba(49,17,22,.76),rgba(49,17,22,.34))',
   }),
-  restaurantPreset('modern_charcoal', 'Modern Charcoal', {
-    primary: '#1f2937',
-    accent: '#e0b15c',
-    background: '#f7f4ef',
-    surface: '#ffffff',
-    text: '#111827',
-    mutedText: '#5b6472',
-    border: '#d9d3c9',
-    buttonPrimary: '#1f2937',
-    buttonPrimaryText: '#fff7e6',
-    buttonSecondary: '#ffffff',
-    buttonSecondaryText: '#1f2937',
-    heroOverlay: 'linear-gradient(90deg,rgba(17,24,39,.96),rgba(31,41,55,.72),rgba(31,41,55,.20))',
+  restaurantPreset('espresso_copper', 'Espresso Copper', {
+    primary: '#3C2215',
+    accent: '#B66D3C',
+    background: '#F4EBDD',
+    backgroundAlt: '#FFF8EC',
+    surface: '#FFF8EC',
+    surfaceElevated: '#EBDCC7',
+    surfaceDark: '#1F130D',
+    text: '#1B120D',
+    mutedText: '#574238',
+    textOnDark: '#FFF5E7',
+    accentSoft: '#E4B98D',
+    border: '#D4B99D',
+    buttonPrimary: '#3C2215',
+    buttonPrimaryText: '#FFF5E7',
+    buttonSecondary: '#FFF8EC',
+    buttonSecondaryText: '#1B120D',
+    heroOverlay: 'linear-gradient(90deg,rgba(28,15,9,.96),rgba(31,19,13,.76),rgba(31,19,13,.34))',
   }),
   cafePreset('cream_latte', 'Cream Latte', {
     primary: '#7a4a24',
@@ -208,9 +256,11 @@ export function resolvePremiumColorTokens(website: Website): PremiumColorTokens 
   if (!preset) return fallbackPremiumTokens;
   const primary = safeColor(website.theme?.primaryColor, preset.tokens.primary);
   const accent = safeColor(website.theme?.accentColor, preset.tokens.accent);
+  const safeCta = ensureCtaColor(primary, preset.tokens.cta ?? preset.tokens.buttonPrimary);
+  const safeCtaText = getReadableTextColor(safeCta);
   const textPrimary = ensureContrastColor(preset.tokens.textPrimary ?? preset.tokens.text, preset.tokens.background, '#111827');
   const textSecondary = ensureContrastColor(preset.tokens.textSecondary ?? preset.tokens.mutedText, preset.tokens.surface, '#334155');
-  const surfaceDark = primary;
+  const surfaceDark = preset.tokens.surfaceDark ?? (isLightColor(primary) ? '#171717' : primary);
   const accentContrast = getReadableTextColor(accent);
 
   return {
@@ -222,21 +272,39 @@ export function resolvePremiumColorTokens(website: Website): PremiumColorTokens 
     textPrimary,
     textSecondary,
     textMuted: ensureContrastColor(preset.tokens.textMuted ?? preset.tokens.mutedText, preset.tokens.surface, '#475569'),
-    textOnDark: '#ffffff',
+    textOnDark: preset.tokens.textOnDark ?? '#ffffff',
     textOnLight: '#111827',
     textOnAccent: accentContrast,
     surfaceDark,
-    surfaceGlass: isLightColor(primary) ? 'rgba(17,24,39,.90)' : 'rgba(17,24,39,.82)',
+    surfaceGlass: preset.tokens.surfaceGlass ?? 'rgba(18,15,12,.84)',
     borderStrong: accent,
     accentSoft: withAlpha(accent, 0.18),
+    accentMuted: preset.tokens.accentMuted ?? mixColor(accent, preset.tokens.surface, 0.36),
     accentContrast,
-    buttonPrimary: primary,
-    buttonPrimaryText: getReadableTextColor(primary),
+    cta: safeCta,
+    ctaHover: darkenColor(safeCta, 0.2),
+    ctaText: safeCtaText,
+    secondaryCta: preset.tokens.secondaryCta ?? preset.tokens.surface,
+    secondaryCtaText: preset.tokens.secondaryCtaText ?? getReadableTextColor(preset.tokens.surface),
+    buttonPrimary: safeCta,
+    buttonPrimaryText: safeCtaText,
     buttonSecondary: preset.tokens.surface,
     buttonSecondaryText: getReadableTextColor(preset.tokens.surface),
-    heroScrim: 'linear-gradient(90deg,rgba(10,10,10,.72),rgba(10,10,10,.48),rgba(10,10,10,.28))',
-    cardOverlay: isLightColor(primary) ? 'rgba(17,24,39,.92)' : 'rgba(255,255,255,.94)',
-    cardOverlayText: isLightColor(primary) ? '#ffffff' : '#111827',
+    heroScrim: 'linear-gradient(90deg,rgba(8,6,5,.84),rgba(8,6,5,.60),rgba(8,6,5,.34))',
+    heroText: preset.tokens.heroText ?? preset.tokens.textOnDark ?? '#ffffff',
+    heroMutedText: preset.tokens.heroMutedText ?? 'rgba(255,248,234,.90)',
+    heroCardBackground: preset.tokens.heroCardBackground ?? 'rgba(20,15,11,.88)',
+    heroCardText: preset.tokens.heroCardText ?? preset.tokens.textOnDark ?? '#ffffff',
+    modalBackground: preset.tokens.modalBackground ?? surfaceDark,
+    modalSurface: preset.tokens.modalSurface ?? mixColor(surfaceDark, '#ffffff', 0.08),
+    modalText: preset.tokens.modalText ?? preset.tokens.textOnDark ?? '#ffffff',
+    modalMutedText: preset.tokens.modalMutedText ?? 'rgba(255,248,234,.74)',
+    modalBorder: preset.tokens.modalBorder ?? withAlpha(accent, 0.28),
+    priceText: preset.tokens.priceText ?? safeCta,
+    badgeBackground: preset.tokens.badgeBackground ?? withAlpha(accent, 0.22),
+    badgeText: preset.tokens.badgeText ?? textPrimary,
+    cardOverlay: 'rgba(255,255,255,.95)',
+    cardOverlayText: '#111827',
   };
 }
 
@@ -245,10 +313,14 @@ export function premiumTokenStyles(tokens: PremiumColorTokens): CSSProperties {
     '--premium-primary': tokens.primary,
     '--premium-accent': tokens.accent,
     '--premium-background': tokens.background,
+    '--premium-background-alt': tokens.backgroundAlt,
     '--premium-surface': tokens.surface,
+    '--premium-surface-muted': tokens.surfaceMuted,
     '--premium-text': tokens.text,
     '--premium-muted': tokens.mutedText,
     '--premium-border': tokens.border,
+    '--premium-heading': tokens.heading,
+    '--premium-eyebrow': tokens.eyebrow,
     '--premium-text-primary': tokens.textPrimary,
     '--premium-text-secondary': tokens.textSecondary,
     '--premium-text-muted': tokens.textMuted,
@@ -263,13 +335,31 @@ export function premiumTokenStyles(tokens: PremiumColorTokens): CSSProperties {
     '--premium-border-subtle': tokens.borderSubtle,
     '--premium-border-strong': tokens.borderStrong,
     '--premium-accent-soft': tokens.accentSoft,
+    '--premium-accent-muted': tokens.accentMuted,
     '--premium-accent-contrast': tokens.accentContrast,
+    '--premium-cta': tokens.cta,
+    '--premium-cta-hover': tokens.ctaHover,
+    '--premium-cta-text': tokens.ctaText,
+    '--premium-secondary-cta': tokens.secondaryCta,
+    '--premium-secondary-cta-text': tokens.secondaryCtaText,
     '--premium-button-primary': tokens.buttonPrimary,
     '--premium-button-primary-text': tokens.buttonPrimaryText,
     '--premium-button-secondary': tokens.buttonSecondary,
     '--premium-button-secondary-text': tokens.buttonSecondaryText,
     '--premium-hero-overlay': tokens.heroOverlay,
     '--premium-hero-scrim': tokens.heroScrim,
+    '--premium-hero-text': tokens.heroText,
+    '--premium-hero-muted-text': tokens.heroMutedText,
+    '--premium-hero-card-background': tokens.heroCardBackground,
+    '--premium-hero-card-text': tokens.heroCardText,
+    '--premium-modal-background': tokens.modalBackground,
+    '--premium-modal-surface': tokens.modalSurface,
+    '--premium-modal-text': tokens.modalText,
+    '--premium-modal-muted-text': tokens.modalMutedText,
+    '--premium-modal-border': tokens.modalBorder,
+    '--premium-price-text': tokens.priceText,
+    '--premium-badge-background': tokens.badgeBackground,
+    '--premium-badge-text': tokens.badgeText,
     '--premium-card-overlay': tokens.cardOverlay,
     '--premium-card-overlay-text': tokens.cardOverlayText,
   } as CSSProperties;
@@ -316,10 +406,16 @@ function enrichTokens(tokens: PremiumColorTokens): PremiumColorTokens {
   const textPrimary = ensureContrastColor(tokens.textPrimary ?? tokens.text, tokens.background, '#111827');
   const textSecondary = ensureContrastColor(tokens.textSecondary ?? tokens.mutedText, tokens.surface, '#334155');
   const textMuted = ensureContrastColor(tokens.textMuted ?? tokens.mutedText, tokens.surface, '#475569');
+  const cta = ensureCtaColor(tokens.buttonPrimary, tokens.buttonPrimary);
+  const ctaText = tokens.buttonPrimaryText ?? getReadableTextColor(cta);
+  const surfaceDark = tokens.surfaceDark ?? tokens.primary;
   return {
     ...tokens,
+    backgroundAlt: tokens.backgroundAlt ?? tokens.background,
     text: textPrimary,
     mutedText: textSecondary,
+    heading: tokens.heading ?? textPrimary,
+    eyebrow: tokens.eyebrow ?? tokens.primary,
     textPrimary,
     textSecondary,
     textMuted,
@@ -329,16 +425,63 @@ function enrichTokens(tokens: PremiumColorTokens): PremiumColorTokens {
     surfacePrimary: tokens.surfacePrimary ?? tokens.background,
     surfaceSecondary: tokens.surfaceSecondary ?? tokens.surface,
     surfaceElevated: tokens.surfaceElevated ?? '#ffffff',
-    surfaceDark: tokens.surfaceDark ?? tokens.primary,
-    surfaceGlass: tokens.surfaceGlass ?? 'rgba(17,24,39,.88)',
+    surfaceMuted: tokens.surfaceMuted ?? tokens.surfaceElevated ?? tokens.surface,
+    surfaceDark,
+    surfaceGlass: tokens.surfaceGlass ?? 'rgba(18,15,12,.86)',
     borderSubtle: tokens.borderSubtle ?? tokens.border,
     borderStrong: tokens.borderStrong ?? tokens.accent,
     accentSoft: tokens.accentSoft ?? withAlpha(tokens.accent, 0.18),
+    accentMuted: tokens.accentMuted ?? mixColor(tokens.accent, tokens.surface, 0.36),
     accentContrast: tokens.accentContrast ?? getReadableTextColor(tokens.accent),
-    heroScrim: tokens.heroScrim ?? 'linear-gradient(90deg,rgba(10,10,10,.72),rgba(10,10,10,.48),rgba(10,10,10,.28))',
+    cta,
+    ctaHover: tokens.ctaHover ?? darkenColor(cta, 0.2),
+    ctaText,
+    secondaryCta: tokens.secondaryCta ?? tokens.buttonSecondary,
+    secondaryCtaText: tokens.secondaryCtaText ?? tokens.buttonSecondaryText,
+    buttonPrimary: cta,
+    buttonPrimaryText: ctaText,
+    heroScrim: tokens.heroScrim ?? 'linear-gradient(90deg,rgba(8,6,5,.84),rgba(8,6,5,.60),rgba(8,6,5,.34))',
+    heroText: tokens.heroText ?? tokens.textOnDark ?? '#ffffff',
+    heroMutedText: tokens.heroMutedText ?? 'rgba(255,248,234,.90)',
+    heroCardBackground: tokens.heroCardBackground ?? 'rgba(20,15,11,.88)',
+    heroCardText: tokens.heroCardText ?? tokens.textOnDark ?? '#ffffff',
+    modalBackground: tokens.modalBackground ?? surfaceDark,
+    modalSurface: tokens.modalSurface ?? mixColor(surfaceDark, '#ffffff', 0.08),
+    modalText: tokens.modalText ?? tokens.textOnDark ?? '#ffffff',
+    modalMutedText: tokens.modalMutedText ?? 'rgba(255,248,234,.74)',
+    modalBorder: tokens.modalBorder ?? withAlpha(tokens.accent, 0.28),
+    priceText: tokens.priceText ?? cta,
+    badgeBackground: tokens.badgeBackground ?? withAlpha(tokens.accent, 0.22),
+    badgeText: tokens.badgeText ?? textPrimary,
     cardOverlay: tokens.cardOverlay ?? 'rgba(255,255,255,.94)',
     cardOverlayText: tokens.cardOverlayText ?? '#111827',
   };
+}
+
+function ensureCtaColor(candidate: string | null | undefined, fallback: string) {
+  const color = normalizeHexColor(candidate, fallback);
+  return isLightColor(color) ? darkenColor(color, 0.44) : color;
+}
+
+export function darkenColor(hex: string, amount: number) {
+  const normalized = normalizeHexColor(hex).slice(1);
+  const r = Math.max(0, Math.round(parseInt(normalized.slice(0, 2), 16) * (1 - amount)));
+  const g = Math.max(0, Math.round(parseInt(normalized.slice(2, 4), 16) * (1 - amount)));
+  const b = Math.max(0, Math.round(parseInt(normalized.slice(4, 6), 16) * (1 - amount)));
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+export function mixColor(hex: string, targetHex: string, amount: number) {
+  const source = normalizeHexColor(hex).slice(1);
+  const target = normalizeHexColor(targetHex).slice(1);
+  const r = Math.round(parseInt(source.slice(0, 2), 16) * (1 - amount) + parseInt(target.slice(0, 2), 16) * amount);
+  const g = Math.round(parseInt(source.slice(2, 4), 16) * (1 - amount) + parseInt(target.slice(2, 4), 16) * amount);
+  const b = Math.round(parseInt(source.slice(4, 6), 16) * (1 - amount) + parseInt(target.slice(4, 6), 16) * amount);
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+function toHex(value: number) {
+  return value.toString(16).padStart(2, '0');
 }
 
 function withAlpha(hex: string, alpha: number) {
@@ -350,34 +493,54 @@ function withAlpha(hex: string, alpha: number) {
 }
 
 const fallbackPremiumTokens: PremiumColorTokens = {
-  primary: '#17120c',
-  accent: '#f7c873',
-  background: '#fff8ed',
-  surface: '#fffaf1',
-  text: '#1f1710',
-  mutedText: '#6b5741',
-  border: '#ead8b8',
-  textPrimary: '#1f1710',
-  textSecondary: '#514231',
-  textMuted: '#5f4e3b',
-  textOnDark: '#ffffff',
+  primary: '#6B3F24',
+  accent: '#B88746',
+  background: '#F7F0E6',
+  backgroundAlt: '#FFF8EF',
+  surface: '#FFF9F0',
+  surfaceElevated: '#FDF3E6',
+  surfaceDark: '#211A14',
+  text: '#1E1712',
+  mutedText: '#5A4A3D',
+  border: '#D8C2A3',
+  textPrimary: '#1E1712',
+  textSecondary: '#5A4A3D',
+  textMuted: '#7A6A5A',
+  textOnDark: '#FFF7EA',
   textOnLight: '#111827',
   textOnAccent: '#111827',
-  surfacePrimary: '#fff8ed',
-  surfaceSecondary: '#fffaf1',
-  surfaceElevated: '#ffffff',
-  surfaceDark: '#17120c',
-  surfaceGlass: 'rgba(17,24,39,.90)',
-  borderSubtle: '#ead8b8',
-  borderStrong: '#f7c873',
-  accentSoft: 'rgba(247,200,115,.20)',
+  surfacePrimary: '#F7F0E6',
+  surfaceSecondary: '#FFF9F0',
+  surfaceMuted: '#FDF3E6',
+  surfaceGlass: 'rgba(20,15,11,.88)',
+  borderSubtle: '#D8C2A3',
+  borderStrong: '#B88746',
+  accentSoft: '#E9D3B0',
+  accentMuted: '#D8BE98',
   accentContrast: '#111827',
-  buttonPrimary: '#17120c',
-  buttonPrimaryText: '#f7c873',
-  buttonSecondary: '#fffaf1',
-  buttonSecondaryText: '#17120c',
-  heroOverlay: 'linear-gradient(90deg,rgba(18,15,11,.97),rgba(18,15,11,.72),rgba(18,15,11,.26))',
-  heroScrim: 'linear-gradient(90deg,rgba(10,10,10,.78),rgba(10,10,10,.48),rgba(10,10,10,.30))',
+  cta: '#6B3F24',
+  ctaHover: '#4F2D19',
+  ctaText: '#FFF8EF',
+  secondaryCta: '#FFF9F0',
+  secondaryCtaText: '#1E1712',
+  buttonPrimary: '#6B3F24',
+  buttonPrimaryText: '#FFF8EF',
+  buttonSecondary: '#FFF9F0',
+  buttonSecondaryText: '#1E1712',
+  heroOverlay: 'linear-gradient(90deg,rgba(22,16,11,.94),rgba(33,26,20,.74),rgba(33,26,20,.32))',
+  heroScrim: 'linear-gradient(90deg,rgba(8,6,5,.84),rgba(8,6,5,.60),rgba(8,6,5,.34))',
+  heroText: '#FFF7EA',
+  heroMutedText: 'rgba(255,248,234,.90)',
+  heroCardBackground: 'rgba(20,15,11,.88)',
+  heroCardText: '#FFF7EA',
+  modalBackground: '#211A14',
+  modalSurface: '#35281F',
+  modalText: '#FFF7EA',
+  modalMutedText: 'rgba(255,248,234,.74)',
+  modalBorder: 'rgba(184,135,70,.28)',
+  priceText: '#6B3F24',
+  badgeBackground: 'rgba(184,135,70,.22)',
+  badgeText: '#1E1712',
   cardOverlay: 'rgba(255,255,255,.94)',
   cardOverlayText: '#111827',
 };

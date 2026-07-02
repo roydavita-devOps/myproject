@@ -1,6 +1,6 @@
 # Premium Theme Token System
 
-Last updated: 2026-06-28
+Last updated: 2026-07-02
 
 ## Purpose
 
@@ -9,6 +9,8 @@ Stage 9.8C introduced a premium theme token layer for `restaurant_premium` and `
 Stage 9.8D strengthens the token layer with semantic contrast protection.
 
 The Restaurant Premium editorial refinement also adds renderer-local typography variables for restaurant presentation without changing the shared theme schema.
+
+Stage 9.8D-R6 refines Restaurant Premium into the first Premium Experience Foundation reference for semantic color behavior.
 
 The system separates:
 
@@ -31,6 +33,7 @@ Included:
 - Adaptive Signature and Gallery density in premium renderers.
 - Contrast-safe semantic text, surface, border, hero, CTA, and card overlay variables.
 - Restaurant Premium renderer-local typography variables for heading, body, eyebrow, hero title, section title, line height, letter spacing, and font weights.
+- Restaurant Premium semantic color tokens for image-safe hero overlays, CTA contrast, modal alignment, price text, and badge treatment.
 
 Excluded:
 
@@ -71,6 +74,11 @@ Premium templates consume:
 - `--premium-button-primary-text`
 - `--premium-button-secondary`
 - `--premium-button-secondary-text`
+- `--premium-cta`
+- `--premium-cta-hover`
+- `--premium-cta-text`
+- `--premium-secondary-cta`
+- `--premium-secondary-cta-text`
 - `--premium-hero-overlay`
 - `--premium-text-primary`
 - `--premium-text-secondary`
@@ -86,10 +94,31 @@ Premium templates consume:
 - `--premium-border-subtle`
 - `--premium-border-strong`
 - `--premium-accent-soft`
+- `--premium-accent-muted`
 - `--premium-accent-contrast`
 - `--premium-hero-scrim`
+- `--premium-hero-text`
+- `--premium-hero-muted-text`
+- `--premium-hero-card-background`
+- `--premium-hero-card-text`
+- `--premium-modal-background`
+- `--premium-modal-surface`
+- `--premium-modal-text`
+- `--premium-modal-muted-text`
+- `--premium-modal-border`
+- `--premium-price-text`
+- `--premium-badge-background`
+- `--premium-badge-text`
 - `--premium-card-overlay`
 - `--premium-card-overlay-text`
+
+Restaurant Premium presets:
+
+- `editorial_umber` (default)
+- `charcoal_gold`
+- `olive_cream`
+- `burgundy_linen`
+- `espresso_copper`
 
 Restaurant Premium also defines local renderer variables:
 
@@ -114,6 +143,8 @@ Stage 9.8D adds small utility functions in `premiumTheme.ts`:
 - `isLightColor()`
 - `getReadableTextColor()`
 - `ensureContrastColor()`
+- `darkenColor()`
+- `mixColor()`
 
 These utilities prevent invalid custom colors and avoid low-contrast text pairings.
 
@@ -121,11 +152,14 @@ Design rule:
 
 - Brand color = identity, CTA, badge, icon, border, highlight.
 - Semantic UI color = body text, card text, hero support text, reservation/contact details.
+- Custom brand colors are guarded before becoming CTA colors; very light brand colors are darkened for active, readable CTAs.
+- Hero headline and support text use near-white hero tokens plus overlay/scrim protection instead of relying on raw uploaded image contrast.
 
 ## Migration Decision
 
 No Prisma migration is required for Stage 9.8C.
 No Prisma migration is required for Stage 9.8D editorial refinement.
+No Prisma migration is required for Stage 9.8D-R6 color system remediation.
 
 Reason:
 

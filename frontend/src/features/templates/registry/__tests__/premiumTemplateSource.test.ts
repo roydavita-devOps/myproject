@@ -15,6 +15,17 @@ describe('premium template source readability rules', () => {
     }
   });
 
+  it('keeps Restaurant Premium modal aligned to semantic premium tokens', () => {
+    const modalSource = readFileSync(resolve('src/features/templates/PremiumFullMenuModal.tsx'), 'utf8');
+
+    expect(modalSource).toContain('var(--premium-modal-background)');
+    expect(modalSource).toContain('var(--premium-modal-surface)');
+    expect(modalSource).toContain('var(--premium-modal-text)');
+    expect(modalSource).toContain('var(--premium-price-text)');
+    expect(modalSource).not.toContain('#f7c873');
+    expect(modalSource).not.toContain('#120f0b');
+  });
+
   it('does not apply accent color directly to paragraph-level text classes', () => {
     for (const file of premiumTemplateFiles) {
       const source = readFileSync(resolve(file), 'utf8');

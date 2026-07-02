@@ -53,6 +53,7 @@ Status: implemented, locally validated, evidence captured, pushed through Docker
 | Stage 9.8D-R3 Image Upload Optimization and WebP Processing Pipeline | Completed; awaiting approval. |
 | Stage 9.8D-R4 Supabase Storage Adapter for Durable User Uploads | Completed; awaiting approval. |
 | Stage 9.8D-R5 Image Delete and Legacy Local Upload Cleanup Remediation | Completed; awaiting approval. |
+| Stage 9.8D-R6 Restaurant Premium Color System Remediation | Completed; awaiting approval. |
 
 ## Current Blockers
 
@@ -72,12 +73,13 @@ Status: implemented, locally validated, evidence captured, pushed through Docker
 | Image upload optimization | Resolved for Stage 9.8D-R3 | JPG, PNG, and WEBP uploads are validated, reprocessed to optimized WebP variants, previewed safely, and served through the existing upload URL contract. Production durable object storage remains a required deployment decision before relying on user uploads in stateless containers. |
 | Production upload durability | Resolved for Stage 9.8D-R4 implementation | `STORAGE_DRIVER=supabase` is supported through a backend-only Supabase Storage adapter. Railway production must set Supabase storage env vars and use public bucket `tenant-assets` before relying on durable user uploads. |
 | Image delete reliability | Resolved for Stage 9.8D-R5 | Logo, hero, gallery, and menu image delete flows clear database references, preserve parent business records, tolerate legacy local missing files, and continue user flow when Supabase cleanup partially fails. |
+| Restaurant Premium color safety | Resolved for Stage 9.8D-R6 | Restaurant Premium now uses Editorial Umber as default, semantic premium tokens for CTA/hero/modal/price/badges, and image-safe hero overlays for bright, dark, and busy tenant images. |
 | Luxury templates | Paused | No Luxury template implementation until separately approved. |
 | Template Catalog UI | Paused | No marketplace, comparison page, entitlement, or subscription access logic in Stage 9.7B. |
 
 ## Next Actions
 
-1. Review Stage 9.8D-R5 Image Delete and Legacy Local Upload Cleanup evidence.
+1. Review Stage 9.8D-R6 Restaurant Premium Color System Remediation evidence.
 2. Approve or request corrections.
 3. Keep Luxury, Catalog UI, marketplace, subscription, entitlement, preview-before-apply, and switch history paused until separately approved.
 4. After approval, proceed only to the next approved stage.
@@ -87,7 +89,7 @@ Status: implemented, locally validated, evidence captured, pushed through Docker
 
 | System | Current Status |
 | --- | --- |
-| Local Docker | Running and validated during Stage 9.8D-R5. |
+| Local Docker | Running and validated during Stage 9.8D-R6. |
 | GitHub | Latest code and documentation branch strategy uses `main`, `staging`, and `pilot`. |
 | Vercel | Production frontend active. |
 | Railway | Backend health endpoints active. |
@@ -118,5 +120,6 @@ Status: implemented, locally validated, evidence captured, pushed through Docker
 - Asset storage architecture: [../01-architecture/ASSET_STORAGE_ARCHITECTURE.md](../01-architecture/ASSET_STORAGE_ARCHITECTURE.md)
 - Supabase storage adapter report: [../06-modern-template/reports/PHASE-9.8D-R4-Supabase-Storage-Adapter-For-User-Uploads-Report.md](../06-modern-template/reports/PHASE-9.8D-R4-Supabase-Storage-Adapter-For-User-Uploads-Report.md)
 - Image delete remediation report: [../06-modern-template/reports/PHASE-9.8D-R5-Image-Delete-And-Legacy-Upload-Cleanup-Report.md](../06-modern-template/reports/PHASE-9.8D-R5-Image-Delete-And-Legacy-Upload-Cleanup-Report.md)
+- Restaurant Premium color system remediation report: [../06-modern-template/reports/PHASE-9.8D-R6-Restaurant-Premium-Color-System-Remediation-Report.md](../06-modern-template/reports/PHASE-9.8D-R6-Restaurant-Premium-Color-System-Remediation-Report.md)
 - Template Catalog readiness audit: [../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md](../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md)
 - Template consistency audit: [../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md](../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md)

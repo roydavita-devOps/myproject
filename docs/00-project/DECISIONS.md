@@ -376,6 +376,27 @@ Reason:
 - Opening hours are business content and must not remain hardcoded template copy.
 - The existing `openingHours` field already supports safe persistence, so a migration is unnecessary.
 
+## Restaurant Premium Color System 2.0
+
+Status: Approved for Stage 9.8D-R6 remediation.
+
+Decision:
+
+- Restaurant Premium uses semantic color tokens, not raw brand colors, for readable UI.
+- Brand colors are identity accents; semantic tokens protect readability.
+- Restaurant Premium default preset is `editorial_umber`.
+- Hero sections must use image-safe overlays because tenants upload unpredictable images.
+- Premium preset colors must be validated against bright, dark, and busy images.
+- Custom brand colors may influence CTA, badges, icons, borders, active states, and small decorative elements.
+- Custom brand colors must not directly control long paragraph text, important body copy, modal body copy, hero headline, or card body copy.
+- Stage 9.8D-R6 does not introduce new templates, marketplace, billing, subscription enforcement, entitlement logic, backend changes, Prisma schema changes, or database migrations.
+
+Reason:
+
+- Restaurant Premium is a paid-template foundation and must remain elegant and readable across user-uploaded food/interior images.
+- Tenant brand colors can be too light, too dark, or visually noisy when used directly as UI colors.
+- Semantic token mapping keeps customization useful while protecting commercial readability and conversion.
+
 ## Template Selection And Assignment Audit
 
 Status: Completed for Stage 9.7A.

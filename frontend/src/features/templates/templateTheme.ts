@@ -39,6 +39,9 @@ export function resolveTemplateTheme(website: Website): CSSProperties {
   const premiumTokens = resolvePremiumColorTokens(website);
   return {
     ...baseTheme,
+    '--tpl-primary': premiumTokens.cta ?? premiumTokens.buttonPrimary,
+    '--tpl-secondary': premiumTokens.accent,
+    '--tpl-accent': premiumTokens.accent,
     '--tpl-background': premiumTokens.background,
     '--tpl-surface': premiumTokens.surface,
     '--tpl-border': premiumTokens.border,

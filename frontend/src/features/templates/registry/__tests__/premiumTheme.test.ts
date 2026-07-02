@@ -33,11 +33,11 @@ function premiumWebsite(templateKey: string, theme?: Website['theme']) {
 describe('premium theme tokens', () => {
   it('defines the approved restaurant and cafe color presets', () => {
     expect(presetsForVariant('restaurant').map((preset) => preset.key)).toEqual([
-      'classic_black_gold',
-      'warm_brown',
-      'elegant_maroon',
-      'deep_green',
-      'modern_charcoal',
+      'editorial_umber',
+      'charcoal_gold',
+      'olive_cream',
+      'burgundy_linen',
+      'espresso_copper',
     ]);
     expect(presetsForVariant('cafe').map((preset) => preset.key)).toEqual([
       'cream_latte',
@@ -84,12 +84,12 @@ describe('premium theme tokens', () => {
         primaryColor: 'not-a-color',
         secondaryColor: '#f59e0b',
         accentColor: '#123',
-        typography: { premiumColorPreset: 'warm_brown' },
+        typography: { premiumColorPreset: 'editorial_umber' },
       }),
     );
 
-    expect(tokens.primary).toBe('#4a2f1f');
-    expect(tokens.accent).toBe('#d99a45');
+    expect(tokens.primary).toBe('#6B3F24');
+    expect(tokens.accent).toBe('#B88746');
     expect(tokens.buttonPrimaryText).toBe('#ffffff');
   });
 
@@ -128,18 +128,20 @@ describe('premium theme tokens', () => {
     const style = resolveTemplateTheme(premiumWebsite('restaurant_premium', {
       id: 'theme-test',
       name: 'Brand Theme',
-      primaryColor: '#561c24',
+      primaryColor: '#6B1F2B',
       secondaryColor: '#f59e0b',
-      accentColor: '#d6a650',
-      typography: { premiumColorPreset: 'elegant_maroon' },
+      accentColor: '#B56A45',
+      typography: { premiumColorPreset: 'burgundy_linen' },
     }));
 
-    expect(style['--premium-primary' as keyof typeof style]).toBe('#561c24');
-    expect(style['--premium-accent' as keyof typeof style]).toBe('#d6a650');
-    expect(style['--tpl-background' as keyof typeof style]).toBe('#fff7f1');
+    expect(style['--premium-primary' as keyof typeof style]).toBe('#6B1F2B');
+    expect(style['--premium-accent' as keyof typeof style]).toBe('#B56A45');
+    expect(style['--tpl-background' as keyof typeof style]).toBe('#F8EFE5');
     expect(style['--premium-text-primary' as keyof typeof style]).toBeTruthy();
-    expect(style['--premium-surface-dark' as keyof typeof style]).toBe('#561c24');
+    expect(style['--premium-surface-dark' as keyof typeof style]).toBe('#311116');
     expect(style['--premium-hero-scrim' as keyof typeof style]).toBeTruthy();
+    expect(style['--premium-modal-background' as keyof typeof style]).toBeTruthy();
+    expect(style['--premium-price-text' as keyof typeof style]).toBeTruthy();
   });
 
   it('does not apply premium-only CSS variables to standard templates', () => {
@@ -157,5 +159,99 @@ describe('premium theme tokens', () => {
     expect(style['--premium-button-primary-text' as keyof typeof style]).toBe(tokens.buttonPrimaryText);
     expect(style['--premium-hero-overlay' as keyof typeof style]).toBe(tokens.heroOverlay);
     expect(style['--premium-card-overlay' as keyof typeof style]).toBe(tokens.cardOverlay);
+  });
+
+  it('uses Editorial Umber as the Restaurant Premium default preset', () => {
+    const tokens = resolvePremiumColorTokens(premiumWebsite('restaurant_premium'));
+
+    expect(presetsForVariant('restaurant')[0]?.key).toBe('editorial_umber');
+    expect(tokens.background).toBe('#F7F0E6');
+    expect(tokens.cta).toBe('#6B3F24');
+    expect(tokens.surfaceDark).toBe('#211A14');
+  });
+
+  it('exposes required Restaurant Premium semantic tokens for every restaurant preset', () => {
+    const requiredTokens = [
+      'background',
+      'backgroundAlt',
+      'surface',
+      'surfaceElevated',
+      'surfaceMuted',
+      'surfaceDark',
+      'surfaceGlass',
+      'textPrimary',
+      'textSecondary',
+      'textMuted',
+      'textOnDark',
+      'textOnAccent',
+      'heading',
+      'eyebrow',
+      'border',
+      'borderStrong',
+      'accent',
+      'accentSoft',
+      'accentMuted',
+      'accentContrast',
+      'cta',
+      'ctaHover',
+      'ctaText',
+      'secondaryCta',
+      'secondaryCtaText',
+      'heroOverlay',
+      'heroScrim',
+      'heroText',
+      'heroMutedText',
+      'heroCardBackground',
+      'heroCardText',
+      'modalBackground',
+      'modalSurface',
+      'modalText',
+      'modalMutedText',
+      'modalBorder',
+      'priceText',
+      'badgeBackground',
+      'badgeText',
+    ] as const;
+
+    for (const preset of presetsForVariant('restaurant')) {
+      const tokens = resolvePremiumColorTokens(
+        premiumWebsite('restaurant_premium', {
+          id: `theme-${preset.key}`,
+          name: preset.label,
+          primaryColor: preset.tokens.primary,
+          secondaryColor: '#f59e0b',
+          accentColor: preset.tokens.accent,
+          typography: { premiumColorPreset: preset.key },
+        }),
+      );
+
+      for (const key of requiredTokens) {
+        expect(tokens[key]).toBeTruthy();
+      }
+      expect(tokens.cta).not.toBe(tokens.ctaText);
+      expect(tokens.buttonPrimaryText).not.toBe(tokens.buttonPrimary);
+      expect(tokens.heroOverlay).toContain('linear-gradient');
+      expect(tokens.heroScrim).toContain('linear-gradient');
+      expect(tokens.textPrimary).not.toBe(tokens.accent);
+      expect(tokens.textSecondary).not.toBe(tokens.accent);
+    }
+  });
+
+  it('guards custom light brand colors from becoming weak CTA colors', () => {
+    const tokens = resolvePremiumColorTokens(
+      premiumWebsite('restaurant_premium', {
+        id: 'light-brand-theme',
+        name: 'Light Brand',
+        primaryColor: '#F7E8C8',
+        secondaryColor: '#f59e0b',
+        accentColor: '#F2DFA3',
+        typography: { premiumColorPreset: 'editorial_umber' },
+      }),
+    );
+
+    expect(tokens.primary).toBe('#F7E8C8');
+    expect(tokens.cta).not.toBe('#F7E8C8');
+    expect(tokens.buttonPrimaryText).toBe('#ffffff');
+    expect(tokens.textPrimary).not.toBe(tokens.primary);
   });
 });

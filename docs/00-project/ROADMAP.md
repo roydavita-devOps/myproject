@@ -175,6 +175,15 @@ Stage 9.8D-R5 resolves image delete reliability:
 - Legacy `/uploads` records can be removed without requiring the physical file to still exist.
 - Supabase cleanup attempts known variants and logs cleanup failures without blocking database cleanup.
 
+Stage 9.8D-R6 establishes Restaurant Premium color-system quality:
+
+- Restaurant Premium default preset is Editorial Umber.
+- Brand colors are identity accents for CTA, badges, icons, borders, and small highlights.
+- Semantic color tokens protect body text, headings, hero text, modal copy, cards, and visit details.
+- Hero sections use dark image-safe overlays because tenants can upload bright, dark, or busy images.
+- Premium preset colors must be validated against bright, dark, and busy image scenarios before approval.
+- No marketplace, billing, subscription, entitlement, backend, Prisma, or database change is included.
+
 Potential categories:
 
 - Standard templates.

@@ -114,8 +114,8 @@ function RestaurantPremiumNavigation({ website }: { website: Website }) {
             href={action.href}
             target={action.href.startsWith('http') ? '_blank' : undefined}
             rel={action.href.startsWith('http') ? 'noreferrer' : undefined}
-            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-md bg-[var(--premium-button-primary)] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-95 focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2"
-            style={{ color: '#ffffff' }}
+            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-md bg-[var(--premium-cta)] px-4 py-2.5 text-sm font-semibold text-[var(--premium-cta-text)] shadow-sm transition hover:bg-[var(--premium-cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2"
+            style={{ color: 'var(--premium-cta-text)' }}
           >
             {action.icon}
             <span>{action.label}</span>
@@ -137,18 +137,18 @@ function PremiumRestaurantHero({ website }: { website: Website }) {
       <div className="absolute inset-0 bg-[var(--premium-hero-scrim)]" />
       <div className="absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(180deg,transparent,var(--premium-surface-dark))]" />
       <div className="relative mx-auto grid min-h-[88vh] max-w-6xl content-end gap-7 px-4 pb-10 pt-24 md:grid-cols-[1fr_0.46fr] md:items-end md:pb-16">
-        <div className="max-w-3xl text-white">
-          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--premium-border-strong)] bg-black/35 px-4 py-2 font-[var(--restaurant-eyebrow-font)] text-xs font-semibold uppercase text-[var(--premium-text-on-dark)] shadow-[0_18px_70px_rgba(0,0,0,.32)] backdrop-blur">
+        <div className="max-w-3xl text-[var(--premium-hero-text)]">
+          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--premium-border-strong)] bg-black/45 px-4 py-2 font-[var(--restaurant-eyebrow-font)] text-xs font-semibold uppercase text-[var(--premium-hero-text)] shadow-[0_18px_70px_rgba(0,0,0,.32)] backdrop-blur">
             <Crown className="size-4" />
             Restaurant reservations
           </p>
           <h1 className="font-[var(--restaurant-heading-font)] text-[length:var(--restaurant-hero-title-size)] font-[var(--restaurant-heading-weight)] leading-[.92] tracking-normal text-[var(--premium-text-on-dark)]">
             {website.businessName}
           </h1>
-          <p className="mt-6 max-w-2xl text-xl leading-8 text-[var(--premium-text-on-dark)] md:text-2xl">
+          <p className="mt-6 max-w-2xl text-xl leading-8 text-[var(--premium-hero-text)] md:text-2xl">
             {website.tagline ?? 'An intimate dining room for signature plates, family dinners, and memorable evening tables.'}
           </p>
-          <p className="mt-5 max-w-2xl text-[length:var(--restaurant-body-text-size)] font-[var(--restaurant-body-weight)] leading-[var(--restaurant-line-height)] text-white/90">
+          <p className="mt-5 max-w-2xl text-[length:var(--restaurant-body-text-size)] font-[var(--restaurant-body-weight)] leading-[var(--restaurant-line-height)] text-[var(--premium-hero-muted-text)]">
             {website.description ?? "Explore house favorites, plan your visit, and reserve a table with a clear restaurant-first experience."}
           </p>
           {actions.length > 0 && (
@@ -158,15 +158,15 @@ function PremiumRestaurantHero({ website }: { website: Website }) {
           )}
           <div className="mt-10 grid max-w-2xl gap-3 text-sm text-[var(--premium-text-on-dark)] sm:grid-cols-3">
             {['Chef selected menu', 'Easy reservations', 'Comfortable dining'].map((item) => (
-              <p key={item} className="flex items-center gap-2 rounded-md border border-white/18 bg-black/30 px-3 py-2 backdrop-blur">
+              <p key={item} className="flex items-center gap-2 rounded-md border border-white/20 bg-black/38 px-3 py-2 backdrop-blur">
                 <Sparkles className="size-4 text-[var(--premium-accent)]" />
                 {item}
               </p>
             ))}
           </div>
         </div>
-        <div className="relative rounded-lg border border-[var(--premium-border-strong)] bg-[var(--premium-surface-glass)] p-6 text-[var(--premium-text-on-dark)] shadow-[0_28px_90px_rgba(0,0,0,.45)] backdrop-blur-md">
-          <div className="absolute -top-5 right-6 rounded-full border border-[var(--premium-border-strong)] bg-[var(--premium-surface-dark)] px-4 py-2 text-sm font-semibold text-[var(--premium-text-on-dark)]">
+        <div className="relative rounded-lg border border-[var(--premium-border-strong)] bg-[var(--premium-hero-card-background)] p-6 text-[var(--premium-hero-card-text)] shadow-[0_28px_90px_rgba(0,0,0,.45)] backdrop-blur-md">
+          <div className="absolute -top-5 right-6 rounded-full border border-[var(--premium-border-strong)] bg-[var(--premium-surface-dark)] px-4 py-2 text-sm font-semibold text-[var(--premium-hero-card-text)]">
             Open for guests
           </div>
           <p className="tpl-caption font-semibold uppercase text-[var(--premium-text-on-dark)]">Tonight’s visit</p>
@@ -179,7 +179,7 @@ function PremiumRestaurantHero({ website }: { website: Website }) {
             ].map(([label, value]) => (
               <div key={label} className="border-t border-white/15 pt-4">
                 <p className="text-xs font-semibold uppercase text-[var(--premium-text-on-dark)]">{label}</p>
-                <p className="mt-1 text-sm leading-6 text-white/90">{value}</p>
+                <p className="mt-1 text-sm leading-6 text-[var(--premium-hero-muted-text)]">{value}</p>
               </div>
             ))}
           </div>
@@ -203,7 +203,7 @@ function ChefStory({ website }: { website: Website }) {
           {storyImage ? (
             <img src={storyImage} alt={`${website.businessName} dining atmosphere`} className="absolute inset-0 size-full object-cover opacity-80" />
           ) : (
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_32%_24%,color-mix(in_srgb,var(--premium-accent)_32%,transparent),transparent_33%),linear-gradient(135deg,var(--premium-primary),#120f0b)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_32%_24%,color-mix(in_srgb,var(--premium-accent)_32%,transparent),transparent_33%),linear-gradient(135deg,var(--premium-surface-dark),var(--premium-modal-background))]" />
           )}
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.76))]" />
           <figcaption className="absolute inset-x-0 bottom-0 p-7 text-[var(--premium-text-on-dark)]">
@@ -265,8 +265,8 @@ function SignatureDishes({ dishes, onOpenFullMenu }: { dishes: PremiumDish[]; on
           />
           <button
             type="button"
-            className="mb-8 inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[var(--premium-button-primary)] px-5 py-2.5 text-sm font-semibold text-white transition hover:brightness-95 focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2"
-            style={{ color: '#ffffff' }}
+            className="mb-8 inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[var(--premium-cta)] px-5 py-2.5 text-sm font-semibold text-[var(--premium-cta-text)] transition hover:bg-[var(--premium-cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2"
+            style={{ color: 'var(--premium-cta-text)' }}
             onClick={onOpenFullMenu}
           >
             <Utensils className="size-4" />
@@ -280,17 +280,17 @@ function SignatureDishes({ dishes, onOpenFullMenu }: { dishes: PremiumDish[]; on
               <PremiumDishMedia dish={dish} index={index} />
               <div>
                 <div className="mb-5 flex items-center justify-between px-6 pt-6">
-                  <div className="flex size-12 items-center justify-center rounded-md bg-[var(--premium-primary)] text-[var(--premium-accent)]">
+                  <div className="flex size-12 items-center justify-center rounded-md bg-[var(--premium-cta)] text-[var(--premium-cta-text)]">
                     <Utensils className="size-5" />
                   </div>
-                  <span className="rounded-full border border-[var(--premium-border-subtle)] bg-[var(--premium-accent-soft)] px-3 py-1 text-xs font-semibold text-[var(--premium-text-primary)]">Signature {index + 1}</span>
+                  <span className="rounded-full border border-[var(--premium-border-subtle)] bg-[var(--premium-badge-background)] px-3 py-1 text-xs font-semibold text-[var(--premium-badge-text)]">Signature {index + 1}</span>
                 </div>
                 <div className="px-6">
                   <h3 className="font-[var(--restaurant-heading-font)] text-2xl font-semibold leading-tight tracking-normal text-[var(--premium-text-primary)]">{dish.name}</h3>
                   {dish.description && <p className="mt-3 text-sm leading-6 text-[var(--premium-text-secondary)]">{dish.description}</p>}
                 </div>
               </div>
-              {hasMenuPrice(dish) && <p className="px-6 pb-6 pt-8 text-2xl font-semibold text-[var(--premium-text-primary)]">{formatMenuPrice(dish)}</p>}
+              {hasMenuPrice(dish) && <p className="px-6 pb-6 pt-8 text-2xl font-semibold text-[var(--premium-price-text)]">{formatMenuPrice(dish)}</p>}
             </TemplateCard>
           ))}
         </div>
@@ -322,7 +322,7 @@ function PremiumDishMedia({ dish, index }: { dish: PremiumDish; index: number })
 
   const labels = ['Chef Pick', 'House Favorite', 'Popular'];
   return (
-    <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_35%_25%,color-mix(in_srgb,var(--premium-accent)_46%,transparent),transparent_30%),linear-gradient(135deg,var(--premium-primary),#120f0b)] text-[var(--premium-accent)]">
+    <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_35%_25%,color-mix(in_srgb,var(--premium-accent)_46%,transparent),transparent_30%),linear-gradient(135deg,var(--premium-surface-dark),var(--premium-modal-background))] text-[var(--premium-accent)]">
       <Utensils className="size-10" />
       <span className="absolute left-4 top-4 rounded-full border border-white/25 bg-black/55 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
         {labels[index % labels.length]}
@@ -380,7 +380,7 @@ function PremiumGallery({ website }: { website: Website }) {
       <div className="grid gap-5 md:grid-cols-[1.1fr_.9fr_.9fr]">
         {['Dining room', 'Plated signature', 'Kitchen detail'].map((title) => (
           <TemplateCard key={title} className="overflow-hidden bg-[var(--premium-surface-dark)] p-0 text-[var(--premium-text-on-dark)] shadow-lg">
-            <div className="flex aspect-[4/3] items-center justify-center bg-[radial-gradient(circle_at_35%_30%,color-mix(in_srgb,var(--premium-accent)_35%,transparent),transparent_32%),linear-gradient(135deg,var(--premium-primary),#120f0b)] text-[var(--premium-accent)]">
+            <div className="flex aspect-[4/3] items-center justify-center bg-[radial-gradient(circle_at_35%_30%,color-mix(in_srgb,var(--premium-accent)_35%,transparent),transparent_32%),linear-gradient(135deg,var(--premium-surface-dark),var(--premium-modal-background))] text-[var(--premium-accent)]">
               {title === 'Dining room' ? <Wine className="size-10" /> : <ChefHat className="size-10" />}
             </div>
             <div className="p-5">
@@ -409,10 +409,10 @@ function VisitReservationSection({ website }: { website: Website }) {
           <h3 className="tpl-h3 tenant-heading">Opening hours</h3>
           <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{formatOpeningHours(website.openingHours)}</p>
         </TemplateCard>
-        <article className="rounded-lg border border-[var(--premium-border-strong)] bg-[var(--premium-surface-dark)] p-5 text-white shadow-xl">
+        <article className="rounded-lg border border-[var(--premium-border-strong)] bg-[var(--premium-surface-dark)] p-5 text-[var(--premium-text-on-dark)] shadow-xl">
           <CalendarCheck className="mb-4 size-5 text-[var(--premium-accent)]" />
-          <h3 className="font-[var(--restaurant-heading-font)] text-2xl font-semibold leading-tight tracking-normal text-white">Reserve your table tonight</h3>
-          <p className="mt-3 text-sm leading-6 text-white/90">Reserve a table or ask what is available today.</p>
+          <h3 className="font-[var(--restaurant-heading-font)] text-2xl font-semibold leading-tight tracking-normal text-[var(--premium-text-on-dark)]">Reserve your table tonight</h3>
+          <p className="mt-3 text-sm leading-6 text-[var(--premium-hero-muted-text)]">Reserve a table or ask what is available today.</p>
           {actions.length > 0 && (
             <div className="mt-5 flex flex-wrap gap-3">
               {actions.map((action) => <TemplateButton key={action.href} {...action} />)}
@@ -430,11 +430,11 @@ function RestaurantPremiumFooter({ website }: { website: Website }) {
       <div className="mx-auto grid max-w-6xl gap-6 px-4 text-sm md:grid-cols-[1fr_auto] md:items-end">
         <div>
           <p className="font-[var(--restaurant-heading-font)] text-2xl font-semibold tracking-normal">{website.businessName}</p>
-          <p className="mt-3 max-w-2xl leading-6 text-white/80">
+          <p className="mt-3 max-w-2xl leading-6 text-[var(--premium-modal-muted-text)]">
             Signature dishes, dining atmosphere, and visit details in one polished restaurant experience.
           </p>
         </div>
-        <div className="grid gap-2 text-white/80 md:text-right">
+        <div className="grid gap-2 text-[var(--premium-modal-muted-text)] md:text-right">
           {website.address && <p>{website.address}</p>}
           <p>{formatOpeningHours(website.openingHours)}</p>
         </div>
