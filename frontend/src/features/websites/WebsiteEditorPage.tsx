@@ -1,7 +1,7 @@
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, DragEvent, FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router';
-import { CheckCircle2, Copy, Eye, ExternalLink, Images, Layers3, MessageCircle, Save, Send, Trash2, XCircle } from 'lucide-react';
+import { CheckCircle2, Copy, Eye, ExternalLink, Images, Layers3, MessageCircle, Save, Send, Trash2, UploadCloud, XCircle } from 'lucide-react';
 import { websitesApi } from './websites.api';
 import { tenantsApi } from '../tenants/tenants.api';
 import { Badge } from '../../components/ui/Badge';
@@ -10,7 +10,9 @@ import { Field, TextArea, TextInput } from '../../components/ui/Field';
 import { ImageUpload } from '../../components/ui/ImageUpload';
 import { LoadingState } from '../../components/ui/State';
 import { resolveAssetUrl } from '../../lib/api/assets';
-import { Website } from '../../types/api';
+import { GalleryItem, Website } from '../../types/api';
+import { uploadsApi } from '../uploads/uploads.api';
+import { validateUploadImageFile } from '../uploads/imageValidation';
 
 type OpeningHoursForm = {
   mode: OpeningHoursMode;
@@ -20,6 +22,14 @@ type OpeningHoursForm = {
 };
 
 type OpeningHoursMode = 'daily' | 'weekdays' | 'weekends' | 'custom';
+type GalleryUploadStatus = 'Ready' | 'Uploading' | 'Processing' | 'Uploaded' | 'Failed';
+type GalleryUploadQueueItem = {
+  id: string;
+  fileName: string;
+  status: GalleryUploadStatus;
+  progress: number;
+  error?: string;
+};
 
 const dayOptions = [
   { value: 'monday', label: 'Monday', shortLabel: 'Mon' },
@@ -33,6 +43,9 @@ const dayOptions = [
 const weekdayValues = dayOptions.slice(0, 5).map((day) => day.value);
 const weekendValues = dayOptions.slice(5).map((day) => day.value);
 const defaultOpeningHours: OpeningHoursForm = { mode: 'daily', openTime: '11:00', closeTime: '22:00', days: dayOptions.map((day) => day.value) };
+const maxGalleryBatchFiles = 10;
+const maxGalleryImages = 20;
+const galleryMaxSizeMb = 4;
 
 export function WebsiteEditorPage() {
   const { websiteId = '' } = useParams();
@@ -357,36 +370,18 @@ export function WebsiteEditorPage() {
             JPG, PNG, WEBP
           </div>
         </div>
-        <ImageUpload
-          assetType="gallery"
+        <GalleryManager
           websiteId={website.id}
-          label="Gallery image"
-          description="Tambahkan foto produk, tempat, atau suasana bisnis."
-          maxSizeMb={4}
-          onUploaded={async (imageUrl) => {
+          businessName={website.businessName}
+          galleries={website.galleries ?? []}
+          onUploadImage={async (imageUrl) => {
             await galleryMutation.mutateAsync(imageUrl);
           }}
+          onDeleteImage={async (galleryId) => {
+            await deleteGalleryMutation.mutateAsync(galleryId);
+          }}
+          isDeleting={deleteGalleryMutation.isPending}
         />
-        {Boolean(website.galleries?.length) && (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {website.galleries?.map((item) => (
-              <figure key={item.id} className="overflow-hidden rounded-md border border-slate-200 bg-slate-50">
-                <img src={resolveAssetUrl(item.imageUrl) ?? ''} alt={item.altText ?? 'Gallery'} className="aspect-video w-full object-cover" />
-                <figcaption className="flex items-center justify-end p-2">
-                  <Button
-                    variant="danger"
-                    className="min-h-9 px-3 py-1.5"
-                    onClick={() => deleteGalleryMutation.mutate(item.id)}
-                    disabled={deleteGalleryMutation.isPending}
-                  >
-                    <Trash2 className="size-4" />
-                    Delete
-                  </Button>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        )}
       </section>
 
       <section className="panel flex items-center gap-3 p-5 text-sm text-slate-600">
@@ -395,6 +390,247 @@ export function WebsiteEditorPage() {
       </section>
     </section>
   );
+}
+
+function GalleryManager({
+  websiteId,
+  businessName,
+  galleries,
+  onUploadImage,
+  onDeleteImage,
+  isDeleting,
+}: {
+  websiteId: string;
+  businessName: string;
+  galleries: GalleryItem[];
+  onUploadImage: (imageUrl: string) => Promise<void>;
+  onDeleteImage: (galleryId: string) => Promise<void>;
+  isDeleting: boolean;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [queue, setQueue] = useState<GalleryUploadQueueItem[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [selectMode, setSelectMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [bulkDeleting, setBulkDeleting] = useState(false);
+  const uploadedCount = queue.filter((item) => item.status === 'Uploaded').length;
+  const uploadableCount = queue.filter((item) => item.status !== 'Failed').length;
+
+  async function handleFiles(fileList: FileList | File[]) {
+    const incomingFiles = Array.from(fileList).slice(0, maxGalleryBatchFiles);
+    const rejectedByBatchLimit = Array.from(fileList).slice(maxGalleryBatchFiles);
+    const remainingSlots = Math.max(0, maxGalleryImages - galleries.length);
+    const filesToUpload = incomingFiles.slice(0, remainingSlots);
+    const rejectedByGalleryLimit = incomingFiles.slice(remainingSlots);
+    const initialQueue = [
+      ...filesToUpload.map((file) => queueItem(file.name, 'Ready')),
+      ...rejectedByBatchLimit.map((file) => queueItem(file.name, 'Failed', 'Maksimal 10 gambar per upload batch.')),
+      ...rejectedByGalleryLimit.map((file) => queueItem(file.name, 'Failed', 'Maksimal 20 gambar galeri per website.')),
+    ];
+
+    setQueue(initialQueue);
+    setIsUploading(true);
+
+    try {
+      for (let index = 0; index < filesToUpload.length; index += 1) {
+        const file = filesToUpload[index];
+        const queueId = initialQueue[index].id;
+        const validation = await validateUploadImageFile(file, galleryMaxSizeMb);
+        if (!validation.valid) {
+          updateQueueItem(queueId, { status: 'Failed', error: validation.error ?? 'Only JPG, PNG, or WEBP images are supported.' });
+          continue;
+        }
+
+        updateQueueItem(queueId, { status: 'Uploading', progress: 1 });
+        try {
+          const uploaded = await uploadsApi.upload('gallery', file, (progress) => {
+            updateQueueItem(queueId, { progress: Math.max(1, Math.min(progress, 95)) });
+          }, websiteId);
+          updateQueueItem(queueId, { status: 'Processing', progress: 96 });
+          await onUploadImage(uploaded.url);
+          updateQueueItem(queueId, { status: 'Uploaded', progress: 100 });
+        } catch {
+          updateQueueItem(queueId, { status: 'Failed', error: 'The uploaded image could not be processed.' });
+        }
+      }
+    } finally {
+      setIsUploading(false);
+    }
+  }
+
+  function updateQueueItem(id: string, patch: Partial<GalleryUploadQueueItem>) {
+    setQueue((current) => current.map((item) => (item.id === id ? { ...item, ...patch } : item)));
+  }
+
+  function handleDrop(event: DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    if (event.dataTransfer.files.length > 0) void handleFiles(event.dataTransfer.files);
+  }
+
+  function handleSelect(event: ChangeEvent<HTMLInputElement>) {
+    const files = event.target.files;
+    if (files?.length) void handleFiles(files);
+    event.target.value = '';
+  }
+
+  async function deleteSingleGalleryImage(galleryId: string) {
+    if (!window.confirm('Hapus gambar galeri ini?')) return;
+    await onDeleteImage(galleryId);
+    setSelectedIds((current) => current.filter((id) => id !== galleryId));
+  }
+
+  async function deleteSelectedGalleryImages() {
+    if (selectedIds.length === 0) return;
+    if (!window.confirm('Hapus gambar yang dipilih?\nGambar yang dipilih akan dihapus dari galeri.')) return;
+    setBulkDeleting(true);
+    try {
+      for (const galleryId of selectedIds) {
+        await onDeleteImage(galleryId);
+      }
+      setSelectedIds([]);
+      setSelectMode(false);
+    } finally {
+      setBulkDeleting(false);
+    }
+  }
+
+  function toggleSelected(galleryId: string) {
+    setSelectedIds((current) => current.includes(galleryId)
+      ? current.filter((id) => id !== galleryId)
+      : [...current, galleryId]);
+  }
+
+  function cancelSelection() {
+    setSelectMode(false);
+    setSelectedIds([]);
+  }
+
+  return (
+    <div className="grid gap-4">
+      <div
+        className="grid gap-4 rounded-lg border border-dashed border-slate-300 bg-slate-50 p-4 transition hover:border-teal-500 hover:bg-white"
+        onDragOver={(event) => event.preventDefault()}
+        onDrop={handleDrop}
+      >
+        <div className="grid gap-3 md:grid-cols-[168px_1fr]">
+          <div className="flex aspect-video items-center justify-center rounded-md border border-slate-200 bg-white md:aspect-square">
+            <Images className="size-8 text-slate-400" />
+          </div>
+          <div className="flex min-w-0 flex-col justify-center gap-3">
+            <div>
+              <p className="font-medium text-slate-950">Upload gallery images</p>
+              <p className="mt-1 text-sm text-slate-500">Upload gambar JPG, PNG, atau WEBP hingga 4MB per gambar.</p>
+              <p className="mt-1 text-xs text-slate-400">Gambar akan otomatis dioptimalkan agar website lebih cepat. Anda bisa memilih beberapa gambar sekaligus.</p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <Button variant="secondary" onClick={() => inputRef.current?.click()} disabled={isUploading || galleries.length >= maxGalleryImages}>
+                <UploadCloud className="size-4" />
+                {isUploading ? 'Uploading' : 'Choose images'}
+              </Button>
+              <input
+                ref={inputRef}
+                className="hidden"
+                type="file"
+                accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+                multiple
+                onChange={handleSelect}
+              />
+              <span className="text-xs text-slate-500">atau tarik beberapa file ke area ini</span>
+            </div>
+            {galleries.length >= maxGalleryImages && <p className="text-sm text-amber-700">Maksimal 20 gambar galeri per website.</p>}
+          </div>
+        </div>
+        {queue.length > 0 && (
+          <div className="grid gap-2 rounded-md border border-slate-200 bg-white p-3">
+            <p className="text-sm font-medium text-slate-700">
+              {isUploading ? `Uploading ${uploadedCount} of ${uploadableCount} images...` : `Uploaded ${uploadedCount} of ${uploadableCount} images.`}
+            </p>
+            {queue.map((item) => (
+              <div key={item.id} className="grid gap-1 rounded-md bg-slate-50 px-3 py-2 text-sm text-slate-700">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="min-w-0 truncate">{item.fileName}</span>
+                  <span className={item.status === 'Failed' ? 'text-red-600' : item.status === 'Uploaded' ? 'text-emerald-700' : 'text-slate-500'}>{item.status}</span>
+                </div>
+                {item.status === 'Uploading' && (
+                  <div className="h-1.5 overflow-hidden rounded-full bg-slate-200">
+                    <div className="h-full rounded-full bg-teal-700 transition-all" style={{ width: `${item.progress}%` }} />
+                  </div>
+                )}
+                {item.error && <p className="text-xs text-red-600">{item.error}</p>}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {galleries.length > 0 && (
+        <div className="grid gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-wrap gap-2">
+              {!selectMode ? (
+                <Button variant="secondary" onClick={() => setSelectMode(true)}>
+                  Select images
+                </Button>
+              ) : (
+                <>
+                  <Button variant="secondary" onClick={cancelSelection}>Cancel selection</Button>
+                  {selectedIds.length > 0 && (
+                    <Button variant="danger" onClick={deleteSelectedGalleryImages} disabled={bulkDeleting || isDeleting}>
+                      <Trash2 className="size-4" />
+                      {bulkDeleting ? 'Deleting selected' : `Delete selected (${selectedIds.length})`}
+                    </Button>
+                  )}
+                </>
+              )}
+            </div>
+            <p className="text-sm text-slate-500">{selectedIds.length} selected</p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {galleries.map((item) => (
+              <figure key={item.id} className="overflow-hidden rounded-md border border-slate-200 bg-slate-50">
+                <div className="relative">
+                  {selectMode && (
+                    <label className="absolute left-2 top-2 z-10 rounded-md bg-white/90 px-2 py-1 text-xs font-medium text-slate-700 shadow-sm">
+                      <input
+                        type="checkbox"
+                        className="mr-1 size-3.5 rounded border-slate-300 text-teal-700 focus:ring-teal-600"
+                        checked={selectedIds.includes(item.id)}
+                        onChange={() => toggleSelected(item.id)}
+                      />
+                      Select
+                    </label>
+                  )}
+                  <img
+                    src={resolveAssetUrl(item.imageUrl) ?? ''}
+                    alt={item.altText ?? businessName}
+                    className="aspect-video w-full object-cover"
+                    onError={(event) => {
+                      event.currentTarget.style.display = 'none';
+                    }}
+                  />
+                </div>
+                <figcaption className="flex items-center justify-end p-2">
+                  <Button
+                    variant="danger"
+                    className="min-h-9 px-3 py-1.5"
+                    onClick={() => void deleteSingleGalleryImage(item.id)}
+                    disabled={isDeleting || bulkDeleting}
+                  >
+                    <Trash2 className="size-4" />
+                    Delete
+                  </Button>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function queueItem(fileName: string, status: GalleryUploadStatus, error?: string): GalleryUploadQueueItem {
+  return { id: `${fileName}-${crypto.randomUUID()}`, fileName, status, progress: 0, error };
 }
 
 function sanitizeWebsiteForm(form: {

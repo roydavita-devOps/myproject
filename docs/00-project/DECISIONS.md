@@ -434,6 +434,25 @@ Reason:
 - Flat buttons and dark blocks can make a premium template feel generic even when the overall color direction is correct.
 - A tokenized depth layer keeps preset compatibility and prevents one-off hardcoded button styling.
 
+## Gallery Batch Upload And Bulk Delete
+
+Status: Approved for Stage 9.8D-R9 implementation.
+
+Decision:
+
+- Gallery images support multiple upload because Gallery is a batch-based content area.
+- Allowed upload image formats for MVP are JPG, JPEG, PNG, and WEBP only.
+- Gallery upload validation must check extension, MIME type, and image signature where possible before upload.
+- Gallery bulk delete must remove selected gallery references without deleting unrelated business data.
+- Unsupported formats such as HEIC, SVG, GIF, TIFF, BMP, and AVIF are out of scope for MVP.
+- Stage 9.8D-R9 keeps the existing upload processing and storage pipeline.
+
+Reason:
+
+- Uploading gallery images one by one creates unnecessary friction.
+- Strict format policy prevents unsupported browser/device formats from becoming broken public images.
+- Bulk delete must prioritize public gallery cleanup while preserving the parent website and other content.
+
 ## Template Selection And Assignment Audit
 
 Status: Completed for Stage 9.7A.

@@ -49,11 +49,12 @@ Last updated: 2026-07-02
 - Stage 9.8D-R6 Restaurant Premium Color System Remediation.
 - Stage 9.8D-R7 Restaurant Premium Final Polish.
 - Stage 9.8D-R8 Restaurant Premium Button and Surface Depth Polish.
+- Stage 9.8D-R9 Gallery Multiple Upload, Bulk Delete and Image Type Guard.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.8D-R8 Restaurant Premium Button and Surface Depth Polish approval checkpoint.
+- Stage 9.8D-R9 Gallery Multiple Upload, Bulk Delete and Image Type Guard approval checkpoint.
 
 ## Planned
 
@@ -201,6 +202,14 @@ Stage 9.8D-R8 adds Restaurant Premium button and surface depth polish:
 - Visit & Reservation actions keep a clear hierarchy: primary reservation, secondary call, tertiary directions.
 - Dark surfaces, footer, and full menu modal tabs use quiet layered depth without glossy, neon, or gimmick effects.
 - The polish is frontend token/CSS only and does not change backend, Prisma, database, marketplace, billing, subscription, entitlement, or template registry behavior.
+
+Stage 9.8D-R9 improves Gallery management:
+
+- Gallery is treated as a batch-based content area, so users can select or drag multiple images at once.
+- Each selected file is validated independently and valid files continue uploading even when another file fails.
+- Gallery supports single image delete plus selected bulk delete without removing unrelated website, menu, tenant, or business data.
+- MVP upload formats are JPG, JPEG, PNG, and WEBP only; HEIC, HEIF, GIF, SVG, BMP, TIFF, and AVIF remain out of scope.
+- The existing upload processing/storage pipeline remains unchanged.
 
 Potential categories:
 

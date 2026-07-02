@@ -2,10 +2,9 @@ import { ChangeEvent, DragEvent, useMemo, useRef, useState } from 'react';
 import { ImagePlus, Trash2, UploadCloud } from 'lucide-react';
 import { clsx } from 'clsx';
 import { uploadsApi, UploadAssetType } from '../../features/uploads/uploads.api';
+import { validateUploadImageFile } from '../../features/uploads/imageValidation';
 import { resolveAssetUrl } from '../../lib/api/assets';
 import { Button } from './Button';
-
-const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
 
 type ImageUploadProps = {
   assetType: UploadAssetType;
@@ -35,12 +34,9 @@ export function ImageUpload({ assetType, websiteId, label, description, currentU
     setMessage('');
     setProgress(0);
 
-    if (!allowedTypes.includes(file.type)) {
-      setError('Only JPG, PNG, or WEBP images are supported.');
-      return;
-    }
-    if (file.size > maxSizeMb * 1024 * 1024) {
-      setError(`Image size must be ${maxSizeMb}MB or less.`);
+    const validation = await validateUploadImageFile(file, maxSizeMb);
+    if (!validation.valid) {
+      setError(validation.error ?? 'Only JPG, PNG, or WEBP images are supported.');
       return;
     }
 

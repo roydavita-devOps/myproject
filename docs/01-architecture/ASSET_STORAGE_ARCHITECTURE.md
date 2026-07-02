@@ -94,6 +94,23 @@ Backend returns URL contract
 Frontend persists primary processed WebP URL
 ```
 
+Stage 9.8D-R9 adds Gallery batch UX on top of the same single-upload pipeline. The frontend uploads selected gallery files one by one through the existing `/uploads/gallery` endpoint, then appends each successful returned URL to the existing Gallery records.
+
+Batch upload rule:
+
+```text
+One invalid file must not block valid files in the same selection.
+```
+
+Format policy:
+
+```text
+Allowed: JPG, JPEG, PNG, WEBP
+Rejected: HEIC, HEIF, GIF, SVG, BMP, TIFF, AVIF, PDF
+```
+
+Frontend validates extension, MIME type, file size, and image signature before upload. Backend validation and Sharp processing remain the final authority.
+
 Primary URL behavior remains:
 
 | Asset Type | Primary URL |
@@ -144,6 +161,8 @@ Current image removal behavior:
 Legacy local URLs such as `/uploads/...` are treated as removable references even when the original file no longer exists.
 
 Supabase cleanup failures are logged as warnings and should not block the user flow when the database reference can be cleared safely.
+
+Gallery bulk delete uses the existing single gallery delete behavior repeatedly for selected records. Each selected gallery record is archived independently, and storage cleanup attempts known variants for each selected image.
 
 ## Backward Compatibility
 
