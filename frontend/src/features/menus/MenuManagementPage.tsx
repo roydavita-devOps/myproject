@@ -138,9 +138,9 @@ export function MenuManagementPage() {
           </select>
         </Field>
       </div>
-      <div className="grid gap-6 xl:grid-cols-[380px_1fr]">
-        <div className="grid gap-4">
-          <form className="panel grid gap-4 p-5" onSubmit={submitCategory}>
+      <div className="grid items-start gap-6 xl:grid-cols-[380px_minmax(0,1fr)]">
+        <div className="grid h-fit self-start gap-4">
+          <form className="panel grid h-fit gap-4 self-start p-5" onSubmit={submitCategory}>
             <h2 className="font-semibold">Categories</h2>
             <Field label="Category name">
               <TextInput value={categoryName} onChange={(event) => setCategoryName(event.target.value)} placeholder="Makanan utama" />
@@ -170,7 +170,7 @@ export function MenuManagementPage() {
               ))}
             </div>
           </form>
-          <form className="panel grid gap-4 p-5" onSubmit={submitItem}>
+          <form className="panel grid h-fit gap-4 self-start p-5" onSubmit={submitItem}>
             <h2 className="font-semibold">New item</h2>
             <Field label="Name">
               <TextInput value={item.name} onChange={(event) => setItem({ ...item, name: event.target.value })} placeholder="Nasi Goreng" />
@@ -216,7 +216,7 @@ export function MenuManagementPage() {
             {itemError && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{itemError}</p>}
           </form>
         </div>
-        <div className="panel overflow-hidden">
+        <div className="panel min-w-0 overflow-hidden">
           {menusLoading ? (
             <LoadingState label="Loading items" />
           ) : menus.length === 0 ? (
