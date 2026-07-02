@@ -103,10 +103,10 @@ function RestaurantPremiumNavigation({ website }: { website: Website }) {
           </span>
         </a>
         <nav className="hidden items-center gap-6 text-sm font-semibold text-[var(--premium-text-secondary)] md:flex">
-          <a className="transition hover:text-[var(--premium-primary)]" href="#services">Menu</a>
-          <a className="transition hover:text-[var(--premium-primary)]" href="#about">Story</a>
-          <a className="transition hover:text-[var(--premium-primary)]" href="#gallery">Gallery</a>
-          <a className="transition hover:text-[var(--premium-primary)]" href="#contact">Visit</a>
+          <a className="transition hover:text-[var(--premium-primary)]" href="#signature-dishes">Menu</a>
+          <a className="transition hover:text-[var(--premium-primary)]" href="#restaurant-story">Story</a>
+          <a className="transition hover:text-[var(--premium-primary)]" href="#ambience-gallery">Gallery</a>
+          <a className="transition hover:text-[var(--premium-primary)]" href="#visit-reservation">Visit</a>
         </nav>
         {action && (
           <a
@@ -193,7 +193,7 @@ function ChefStory({ website }: { website: Website }) {
   const storyImage = resolveAssetUrl(website.theme?.heroImageUrl);
   return (
     <TemplateSection
-      id="about"
+      id="restaurant-story"
       eyebrow="Restaurant story"
       title="From the Kitchen to the Table"
       description={website.description ?? 'A focused restaurant story gives guests a reason to trust the table before they arrive.'}
@@ -255,13 +255,13 @@ function SignatureDishes({ dishes, onOpenFullMenu }: { dishes: PremiumDish[]; on
       : 'grid gap-5 md:grid-cols-3';
 
   return (
-    <section id="services" className="bg-[var(--tpl-background)] py-16 md:py-20">
+    <section id="signature-dishes" className="bg-[var(--tpl-background)] py-16 md:py-20">
       <div className="mx-auto max-w-6xl px-4">
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <PremiumSectionTitle
             eyebrow="Signature dishes"
-            title="Dishes Worth Reserving For"
-            description="A concise showcase of the plates that help guests decide quickly, with price, image, and flavor cues in one premium view."
+            title="Dishes Worth the Visit"
+            description="A focused look at the dishes guests come back for."
           />
           <button
             type="button"
@@ -356,7 +356,7 @@ function PremiumGallery({ website }: { website: Website }) {
     const galleries = website.galleries;
     const layoutClass = galleries.length === 1 ? 'grid' : galleries.length === 2 ? 'grid gap-5 md:grid-cols-2' : 'grid gap-5 md:grid-cols-[1.2fr_.8fr_.8fr]';
     return (
-      <TemplateSection id="gallery" muted eyebrow="Dining visuals" title="Ambience Gallery" description="Show the room, the dishes, and the details guests will remember.">
+      <TemplateSection id="ambience-gallery" muted eyebrow="Dining visuals" title="Ambience Gallery" description="Show the room, the dishes, and the details guests will remember.">
         <div className={layoutClass}>
           {galleries.map((item, index) => (
             <figure key={item.id} className={index === 0 && galleries.length >= 3 ? 'overflow-hidden rounded-lg border border-[var(--premium-border)] bg-[var(--premium-surface)] md:row-span-2' : 'overflow-hidden rounded-lg border border-[var(--premium-border)] bg-[var(--premium-surface)]'}>
@@ -376,7 +376,7 @@ function PremiumGallery({ website }: { website: Website }) {
   }
 
   return (
-    <TemplateSection id="gallery" muted eyebrow="Dining visuals" title="Ambience Gallery" description="A visual glimpse of the dining mood and signature service.">
+    <TemplateSection id="ambience-gallery" muted eyebrow="Dining visuals" title="Ambience Gallery" description="A visual glimpse of the dining mood and signature service.">
       <div className="grid gap-5 md:grid-cols-[1.1fr_.9fr_.9fr]">
         {['Dining room', 'Plated signature', 'Kitchen detail'].map((title) => (
           <TemplateCard key={title} className="overflow-hidden bg-[var(--premium-surface-dark)] p-0 text-[var(--premium-text-on-dark)] shadow-lg">
@@ -384,8 +384,8 @@ function PremiumGallery({ website }: { website: Website }) {
               {title === 'Dining room' ? <Wine className="size-10" /> : <ChefHat className="size-10" />}
             </div>
             <div className="p-5">
-              <h3 className="tpl-h3 tenant-heading">{title}</h3>
-              <p className="tpl-body mt-2 text-white/90">Share a sense of the table, the plating, and the atmosphere.</p>
+              <h3 className="tpl-h3 tenant-heading text-[var(--premium-text-on-dark)]">{title}</h3>
+              <p className="tpl-body mt-2 text-[var(--premium-modal-muted-text)]">Share a sense of the table, the plating, and the atmosphere.</p>
             </div>
           </TemplateCard>
         ))}
@@ -397,7 +397,7 @@ function PremiumGallery({ website }: { website: Website }) {
 function VisitReservationSection({ website }: { website: Website }) {
   const actions = resolvePremiumContactActions(website);
   return (
-    <TemplateSection title="Visit & Reservation" description="Plan the visit, check the hours, and contact the restaurant from one clear place.">
+    <TemplateSection id="visit-reservation" title="Visit & Reservation" description="Plan the visit, check the hours, and contact the restaurant from one clear place.">
       <div className="grid gap-4 md:grid-cols-[1fr_1fr_.9fr]">
         <TemplateCard className="bg-[var(--premium-surface)]">
           <MapPin className="mb-4 size-5 text-[var(--premium-primary)]" />
@@ -461,8 +461,10 @@ function resolvePremiumRestaurantActions(website: Website) {
   const directions = contactActions.find((item) => item.action === 'directions');
 
   return validateTemplateActions([
-    { action: 'menu', label: 'Explore Signature Dishes', href: '#services', icon: <Utensils className="size-4" />, variant: 'secondary' },
-    directions ? { ...directions, label: 'Get Directions', icon: <MapPin className="size-4" />, variant: 'tertiary' } : null,
+    { action: 'menu', label: 'Explore Signature Dishes', href: '#signature-dishes', icon: <Utensils className="size-4" />, variant: 'secondary' },
+    directions
+      ? { ...directions, label: 'Get Directions', icon: <MapPin className="size-4" />, variant: 'tertiary' }
+      : { action: 'directions', label: 'Get Directions', href: '#visit-reservation', icon: <MapPin className="size-4" />, variant: 'tertiary' },
   ]);
 }
 

@@ -397,6 +397,25 @@ Reason:
 - Tenant brand colors can be too light, too dark, or visually noisy when used directly as UI colors.
 - Semantic token mapping keeps customization useful while protecting commercial readability and conversion.
 
+## Restaurant Premium Public Content Formatting And Stable Anchors
+
+Status: Approved for Stage 9.8D-R7 final polish.
+
+Decision:
+
+- Opening hours must be rendered as customer-facing text on public templates, never as raw structured data.
+- Public opening hours display must not expose internal keys such as `mode`, `days`, `openTime`, or `closeTime`.
+- Restaurant Premium section navigation must use stable anchors for Menu, Story, Gallery, and Visit.
+- Restaurant Premium uses `#signature-dishes`, `#restaurant-story`, `#ambience-gallery`, and `#visit-reservation`.
+- Placeholder visual states in premium templates must remain readable and intentional when tenant content is missing.
+- Stage 9.8D-R7 does not introduce new templates, marketplace, billing, subscription enforcement, entitlement logic, backend changes, Prisma schema changes, or database migrations.
+
+Reason:
+
+- Public customer websites must never show implementation-shaped data.
+- Stable anchors make header navigation and CTA scroll behavior predictable.
+- Premium templates must look intentional even before every tenant has uploaded gallery content.
+
 ## Template Selection And Assignment Audit
 
 Status: Completed for Stage 9.7A.

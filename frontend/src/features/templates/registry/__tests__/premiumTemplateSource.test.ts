@@ -42,7 +42,10 @@ describe('premium template source readability rules', () => {
     expect(source).toContain('Reserve via WhatsApp');
     expect(source).toContain('Explore Signature Dishes');
     expect(source).toContain('Explore Full Menu');
+    expect(source).toContain('Dishes Worth the Visit');
     expect(source).not.toContain('Chat WhatsApp');
+    expect(source).not.toContain('Dishes Worth Reserving For');
+    expect(source).not.toContain('A concise showcase of the plates that help guests decide quickly');
     expect(modalSource).toContain("variant === 'restaurant' ? undefined");
     expect(modalSource).toContain('Browse signature dishes, favorites, and menu selections.');
     expect(source).not.toContain('TemplateNavigation');
@@ -54,9 +57,33 @@ describe('premium template source readability rules', () => {
     const heroActionResolver = source.match(/function resolvePremiumRestaurantActions[\s\S]*?function resolvePremiumContactActions/);
 
     expect(heroActionResolver?.[0]).toContain('Explore Signature Dishes');
+    expect(heroActionResolver?.[0]).toContain('#signature-dishes');
     expect(heroActionResolver?.[0]).toContain('Get Directions');
+    expect(heroActionResolver?.[0]).toContain('#visit-reservation');
     expect(heroActionResolver?.[0]).not.toContain('Reserve a Table');
     expect(heroActionResolver?.[0]).not.toContain('Reserve via WhatsApp');
+  });
+
+  it('uses stable restaurant premium section anchors for navigation', () => {
+    const source = readFileSync(resolve('src/features/templates/RestaurantPremiumTemplate.tsx'), 'utf8');
+
+    expect(source).toContain('href="#signature-dishes"');
+    expect(source).toContain('href="#restaurant-story"');
+    expect(source).toContain('href="#ambience-gallery"');
+    expect(source).toContain('href="#visit-reservation"');
+    expect(source).toContain('id="signature-dishes"');
+    expect(source).toContain('id="restaurant-story"');
+    expect(source).toContain('id="ambience-gallery"');
+    expect(source).toContain('id="visit-reservation"');
+    expect(source).not.toContain('href="#contact">Visit');
+  });
+
+  it('keeps restaurant premium gallery placeholders readable with semantic tokens', () => {
+    const source = readFileSync(resolve('src/features/templates/RestaurantPremiumTemplate.tsx'), 'utf8');
+
+    expect(source).toContain('text-[var(--premium-text-on-dark)]">{title}</h3>');
+    expect(source).toContain('text-[var(--premium-modal-muted-text)]');
+    expect(source).not.toContain('text-white/90">Share a sense of the table');
   });
 
   it('keeps restaurant premium typography tokens local to the renderer', () => {

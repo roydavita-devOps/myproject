@@ -1,6 +1,6 @@
 # Roadmap
 
-Last updated: 2026-06-30
+Last updated: 2026-07-02
 
 ## Completed
 
@@ -46,11 +46,13 @@ Last updated: 2026-06-30
 - Stage 9.8D-R3 Image Upload Optimization and WebP Processing Pipeline.
 - Stage 9.8D-R4 Supabase Storage Adapter for Durable User Uploads.
 - Stage 9.8D-R5 Image Delete and Legacy Local Upload Cleanup Remediation.
+- Stage 9.8D-R6 Restaurant Premium Color System Remediation.
+- Stage 9.8D-R7 Restaurant Premium Final Polish.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.8D-R5 Image Delete and Legacy Local Upload Cleanup approval checkpoint.
+- Stage 9.8D-R7 Restaurant Premium Final Polish approval checkpoint.
 
 ## Planned
 
@@ -183,6 +185,14 @@ Stage 9.8D-R6 establishes Restaurant Premium color-system quality:
 - Hero sections use dark image-safe overlays because tenants can upload bright, dark, or busy images.
 - Premium preset colors must be validated against bright, dark, and busy image scenarios before approval.
 - No marketplace, billing, subscription, entitlement, backend, Prisma, or database change is included.
+
+Stage 9.8D-R7 completes Restaurant Premium final polish:
+
+- Public opening hours must render as customer-facing text, never raw structured keys.
+- Restaurant Premium navigation uses stable anchors for Menu, Story, Gallery, and Visit.
+- Gallery placeholder states must remain readable and intentional when tenant images are missing.
+- Signature Dishes copy is restaurant-facing and natural.
+- No backend, Prisma, database, marketplace, billing, subscription, entitlement, or new template change is included.
 
 Potential categories:
 

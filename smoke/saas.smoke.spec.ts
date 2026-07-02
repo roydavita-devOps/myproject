@@ -368,9 +368,9 @@ test.describe('SaaS smoke test', () => {
 
         await expect(page.locator('main')).toHaveAttribute('data-template-key', 'restaurant_premium');
         await expect(page.getByText('Restaurant reservations')).toBeVisible();
-        await expect(page.getByRole('heading', { name: 'Dishes Worth Reserving For' })).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Dishes Worth the Visit' })).toBeVisible();
         await expect(page.getByRole('heading', { name: 'From the Kitchen to the Table' })).toBeVisible();
-        const services = page.locator('#services');
+        const services = page.locator('#signature-dishes');
         await expect(services.getByText('Chef Signature Rice Set')).toBeVisible();
         await expect(services.getByText('Slow Cooked Beef Plate')).toBeVisible();
         await expect(services.getByText('Seasonal Family Platter')).toHaveCount(0);
@@ -386,9 +386,15 @@ test.describe('SaaS smoke test', () => {
         await expect(page.getByText('Reserve your table tonight')).toBeVisible();
         const hero = page.locator('#home');
         await expect(page.locator('header').getByRole('link', { name: /reserve a table/i })).toBeVisible();
+        if (viewport.width >= 768) {
+          await expect(page.locator('header').getByRole('link', { name: 'Visit' })).toHaveAttribute('href', '#visit-reservation');
+        }
         await expect(hero.getByRole('link', { name: /reserve a table/i })).toHaveCount(0);
         await expect(hero.getByRole('link', { name: /explore signature dishes/i })).toBeVisible();
         await expect(hero.getByRole('link', { name: /get directions/i })).toBeVisible();
+        await expect(hero.getByText('Tue - Sat, 11.00 - 22.00')).toBeVisible();
+        await expect(page.locator('#visit-reservation').getByText('Tue - Sat, 11.00 - 22.00')).toBeVisible();
+        await expect(page.getByText(/mode:|openTime:|closeTime:|specific/)).toHaveCount(0);
         await expect(page.getByText('Reserve via WhatsApp')).toBeVisible();
         await expect(page.getByText('Call Restaurant')).toBeVisible();
 
@@ -590,15 +596,18 @@ function buildPremiumWebsitePayload(templateKey: 'restaurant_premium' | 'cafe_pr
     whatsapp: isRestaurant ? '081260010060' : '081270010070',
     email: isRestaurant ? 'reserve@restaurant-premium.demo' : 'hello@cafe-premium.demo',
     mapsUrl: 'https://maps.google.com',
-    openingHours: {
-      Monday: isRestaurant ? '11.00 - 22.00' : '08.00 - 23.00',
-      Tuesday: isRestaurant ? '11.00 - 22.00' : '08.00 - 23.00',
-      Wednesday: isRestaurant ? '11.00 - 22.00' : '08.00 - 23.00',
-      Thursday: isRestaurant ? '11.00 - 22.00' : '08.00 - 23.00',
-      Friday: isRestaurant ? '11.00 - 23.00' : '08.00 - 24.00',
-      Saturday: isRestaurant ? '10.00 - 23.00' : '08.00 - 24.00',
-      Sunday: isRestaurant ? '10.00 - 22.00' : '09.00 - 23.00',
-    },
+    openingHours: isRestaurant
+      ? {
+          mode: 'specific',
+          days: ['tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
+          openTime: '11:00',
+          closeTime: '22:00',
+        }
+      : {
+          mode: 'daily',
+          openTime: '08:00',
+          closeTime: '23:00',
+        },
     template: {
       id: `${templateKey}-template`,
       name: templateKey,

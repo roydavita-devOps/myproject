@@ -88,7 +88,7 @@ function isValidHrefForAction(action: TemplateAction['action'], href: string) {
   if (action === 'whatsapp') return /^https:\/\/wa\.me\/\d+/.test(href);
   if (action === 'phone') return /^tel:\+\d+/.test(href);
   if (action === 'menu') return href.startsWith('#') && href.length > 1;
-  if (action === 'directions') return href.startsWith('http://') || href.startsWith('https://');
+  if (action === 'directions') return href.startsWith('http://') || href.startsWith('https://') || href.startsWith('#');
   return href.startsWith('http://') || href.startsWith('https://') || href.startsWith('#');
 }
 
