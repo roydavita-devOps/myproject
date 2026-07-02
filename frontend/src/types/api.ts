@@ -120,6 +120,7 @@ export type MenuItem = {
   name: string;
   description?: string | null;
   price?: string | number | null;
+  priceCurrency?: 'IDR' | 'USD' | null;
   imageUrl?: string | null;
   isFeatured?: boolean;
   sortOrder: number;

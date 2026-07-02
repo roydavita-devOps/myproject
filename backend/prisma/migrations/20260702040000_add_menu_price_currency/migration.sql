@@ -1,0 +1,1 @@
+ALTER TABLE "menus" ADD COLUMN "price_currency" TEXT NOT NULL DEFAULT 'IDR';

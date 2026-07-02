@@ -13,6 +13,7 @@ type MenuItemFormState = {
   name: string;
   description: string;
   price: string;
+  priceCurrency: 'IDR' | 'USD';
   categoryId: string;
   imageUrl: string | null;
   isFeatured: boolean;
@@ -63,6 +64,7 @@ export function MenuManagementPage() {
         description: optionalValue(item.description),
         categoryId: optionalValue(item.categoryId),
         price: parseOptionalPrice(item.price).value,
+        priceCurrency: item.priceCurrency,
         imageUrl: item.imageUrl || undefined,
         isFeatured: item.isFeatured,
       }),
@@ -179,9 +181,17 @@ export function MenuManagementPage() {
                 {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
               </select>
             </Field>
-            <Field label="Price">
-              <TextInput value={item.price} onChange={(event) => setItem({ ...item, price: event.target.value })} inputMode="decimal" placeholder="18000" />
-            </Field>
+            <div className="grid gap-3 sm:grid-cols-[120px_1fr]">
+              <Field label="Currency">
+                <select className="field-input" value={item.priceCurrency} onChange={(event) => setItem({ ...item, priceCurrency: event.target.value as MenuItemFormState['priceCurrency'] })}>
+                  <option value="IDR">Rp</option>
+                  <option value="USD">$</option>
+                </select>
+              </Field>
+              <Field label="Price">
+                <TextInput value={item.price} onChange={(event) => setItem({ ...item, price: event.target.value })} inputMode="decimal" placeholder={item.priceCurrency === 'USD' ? '12.50' : '18000'} />
+              </Field>
+            </div>
             <Field label="Description">
               <TextArea value={item.description} onChange={(event) => setItem({ ...item, description: event.target.value })} />
             </Field>
@@ -276,6 +286,7 @@ function MenuItemEditor({
         description: optionalValue(form.description),
         categoryId: optionalValue(form.categoryId) ?? null,
         price: price.value,
+        priceCurrency: form.priceCurrency,
         imageUrl: form.imageUrl,
         isFeatured: form.isFeatured,
       },
@@ -313,9 +324,17 @@ function MenuItemEditor({
             </select>
           </Field>
         </div>
-        <Field label="Price">
-          <TextInput value={form.price} onChange={(event) => setForm({ ...form, price: event.target.value })} inputMode="decimal" />
-        </Field>
+        <div className="grid gap-3 sm:grid-cols-[120px_1fr]">
+          <Field label="Currency">
+            <select className="field-input" value={form.priceCurrency} onChange={(event) => setForm({ ...form, priceCurrency: event.target.value as MenuItemFormState['priceCurrency'] })}>
+              <option value="IDR">Rp</option>
+              <option value="USD">$</option>
+            </select>
+          </Field>
+          <Field label="Price">
+            <TextInput value={form.price} onChange={(event) => setForm({ ...form, price: event.target.value })} inputMode="decimal" />
+          </Field>
+        </div>
         <Field label="Description">
           <TextArea value={form.description} onChange={(event) => setForm({ ...form, description: event.target.value })} />
         </Field>
@@ -365,7 +384,7 @@ function FeaturedToggle({ checked, onChange }: { checked: boolean; onChange: (ch
 }
 
 function emptyMenuItemForm(): MenuItemFormState {
-  return { name: '', description: '', price: '', categoryId: '', imageUrl: null, isFeatured: false };
+  return { name: '', description: '', price: '', priceCurrency: 'IDR', categoryId: '', imageUrl: null, isFeatured: false };
 }
 
 function menuToForm(menu: MenuItem): MenuItemFormState {
@@ -373,6 +392,7 @@ function menuToForm(menu: MenuItem): MenuItemFormState {
     name: menu.name ?? '',
     description: menu.description ?? '',
     price: menu.price === undefined || menu.price === null ? '' : String(menu.price),
+    priceCurrency: menu.priceCurrency === 'USD' ? 'USD' : 'IDR',
     categoryId: menu.categoryId ?? '',
     imageUrl: menu.imageUrl ?? null,
     isFeatured: Boolean(menu.isFeatured),
@@ -390,7 +410,7 @@ function parseOptionalPrice(value: string): PriceParseResult {
 
   const normalized = normalizePriceInput(trimmed);
   if (!/^\d+(\.\d{1,2})?$/.test(normalized)) {
-    return { error: 'Harga harus berupa angka, contoh: 18000 atau 25.000.' };
+    return { error: 'Harga harus berupa angka, contoh: 18000, Rp 25.000, atau $12.50.' };
   }
 
   const parsed = Number(normalized);
@@ -402,7 +422,7 @@ function parseOptionalPrice(value: string): PriceParseResult {
 }
 
 function normalizePriceInput(value: string) {
-  const withoutCurrency = value.replace(/^rp\.?\s*/i, '').replace(/\s/g, '');
+  const withoutCurrency = value.replace(/^(rp\.?|\$)\s*/i, '').replace(/\s/g, '');
   const hasDot = withoutCurrency.includes('.');
   const hasComma = withoutCurrency.includes(',');
 

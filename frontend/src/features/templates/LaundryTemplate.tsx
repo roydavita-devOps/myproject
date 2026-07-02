@@ -2,6 +2,7 @@ import { CheckCircle2, Clock, Images, MapPin, MessageCircle, PackageCheck, Phone
 import { Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
 import { formatOpeningHours as formatTemplateOpeningHours } from './openingHours';
+import { formatMenuPrice, hasMenuPrice } from './priceFormat';
 import { normalizeTemplateAction, resolveContactActions, TemplateAction, validateTemplateActions } from './templateActions';
 import {
   SectionHeading,
@@ -20,6 +21,7 @@ type LaundryDisplayItem = {
   name: string;
   description?: string | null;
   price?: string | number | null;
+  priceCurrency?: string | null;
 };
 
 const defaultLaundryItems: LaundryDisplayItem[] = [
@@ -159,7 +161,7 @@ function LaundryServices({ items, cta }: { items: LaundryDisplayItem[]; cta?: Te
               <h3 className="tpl-h3 tenant-heading">{item.name}</h3>
               {item.description && <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{item.description}</p>}
             </div>
-            {item.price && <p className="mt-5 text-xl font-semibold text-[var(--tpl-primary)]">Mulai Rp {Number(item.price).toLocaleString('id-ID')}</p>}
+            {hasMenuPrice(item) && <p className="mt-5 text-xl font-semibold text-[var(--tpl-primary)]">Mulai {formatMenuPrice(item)}</p>}
           </TemplateCard>
         ))}
       </div>
@@ -173,7 +175,7 @@ function LaundryServices({ items, cta }: { items: LaundryDisplayItem[]; cta?: Te
 }
 
 function LaundryPricing({ items }: { items: LaundryDisplayItem[] }) {
-  const pricedItems = items.filter((item) => item.price).slice(0, 3);
+  const pricedItems = items.filter(hasMenuPrice).slice(0, 3);
   if (pricedItems.length === 0) return null;
 
   return (
@@ -186,7 +188,7 @@ function LaundryPricing({ items }: { items: LaundryDisplayItem[] }) {
               <h3 className="tpl-h3 tenant-heading mt-2">{item.name}</h3>
               {item.description && <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{item.description}</p>}
             </div>
-            <p className="mt-5 text-2xl font-semibold text-[var(--tpl-primary)]">Rp {Number(item.price).toLocaleString('id-ID')}</p>
+            <p className="mt-5 text-2xl font-semibold text-[var(--tpl-primary)]">{formatMenuPrice(item)}</p>
           </TemplateCard>
         ))}
       </div>

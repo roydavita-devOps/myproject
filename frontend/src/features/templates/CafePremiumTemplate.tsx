@@ -4,6 +4,7 @@ import { Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
 import { PremiumFullMenuModal } from './PremiumFullMenuModal';
 import { formatOpeningHours as formatTemplateOpeningHours } from './openingHours';
+import { formatMenuPrice, hasMenuPrice } from './priceFormat';
 import { normalizeTemplateAction, resolveContactActions, validateTemplateActions } from './templateActions';
 import {
   TemplateButton,
@@ -19,6 +20,7 @@ type PremiumCafeMenuItem = {
   name: string;
   description?: string | null;
   price?: string | number | null;
+  priceCurrency?: string | null;
   imageUrl?: string | null;
   categoryId?: string | null;
   isFeatured?: boolean;
@@ -191,7 +193,7 @@ function SignatureMenu({ items, onOpenFullMenu }: { items: PremiumCafeMenuItem[]
                 {item.description && <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{item.description}</p>}
               </div>
             </div>
-            {item.price && <p className="px-6 pb-6 pt-6 text-2xl font-semibold text-[var(--premium-text-primary)]">Rp {Number(item.price).toLocaleString('id-ID')}</p>}
+            {hasMenuPrice(item) && <p className="px-6 pb-6 pt-6 text-2xl font-semibold text-[var(--premium-text-primary)]">{formatMenuPrice(item)}</p>}
           </TemplateCard>
         ))}
       </div>

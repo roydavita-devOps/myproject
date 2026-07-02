@@ -2,6 +2,7 @@ import { ChefHat, CheckCircle2, Clock, Images, MapPin, MessageCircle, Sparkles, 
 import { Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
 import { formatOpeningHours as formatTemplateOpeningHours } from './openingHours';
+import { formatMenuPrice, hasMenuPrice } from './priceFormat';
 import { normalizeTemplateAction } from './templateActions';
 import {
   SectionHeading,
@@ -21,6 +22,7 @@ type RestaurantDisplayItem = {
   name: string;
   description?: string | null;
   price?: string | number | null;
+  priceCurrency?: string | null;
 };
 
 const defaultRestaurantItems: RestaurantDisplayItem[] = [
@@ -124,7 +126,7 @@ function FeaturedMenu({ items, cta }: { items: RestaurantDisplayItem[]; cta?: Re
               <h3 className="tpl-h3 tenant-heading">{item.name}</h3>
               {item.description && <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{item.description}</p>}
             </div>
-            {item.price && <p className="mt-5 text-xl font-semibold text-[var(--tpl-primary)]">Rp {Number(item.price).toLocaleString('id-ID')}</p>}
+            {hasMenuPrice(item) && <p className="mt-5 text-xl font-semibold text-[var(--tpl-primary)]">{formatMenuPrice(item)}</p>}
           </TemplateCard>
         ))}
       </div>
@@ -149,7 +151,7 @@ function PopularDishes({ items }: { items: RestaurantDisplayItem[] }) {
                 <h3 className="font-semibold">{item.name}</h3>
                 {item.description && <p className="mt-1 text-sm text-[var(--tpl-text-secondary)]">{item.description}</p>}
               </div>
-              {item.price && <p className="shrink-0 font-semibold text-[var(--tpl-primary)]">Rp {Number(item.price).toLocaleString('id-ID')}</p>}
+              {hasMenuPrice(item) && <p className="shrink-0 font-semibold text-[var(--tpl-primary)]">{formatMenuPrice(item)}</p>}
             </div>
           </TemplateCard>
         ))}

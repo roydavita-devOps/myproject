@@ -7,6 +7,7 @@ export type MenuPayload = {
   name: string;
   description?: string | null;
   price?: number;
+  priceCurrency?: 'IDR' | 'USD';
   imageUrl?: string | null;
   isFeatured?: boolean;
   sortOrder?: number;

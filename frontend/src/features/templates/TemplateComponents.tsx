@@ -3,6 +3,7 @@ import { clsx } from 'clsx';
 import { ArrowUpRight, Images, MapPin, Quote, Star } from 'lucide-react';
 import { GalleryItem, MenuItem, ReviewItem, Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
+import { formatMenuPrice, hasMenuPrice } from './priceFormat';
 import { normalizeTemplateAction, resolveContactActions, TemplateAction } from './templateActions';
 
 export function TemplateNavigation({ website }: { website: Website }) {
@@ -167,7 +168,7 @@ export function TemplateServiceList({ items }: { items: MenuItem[] }) {
                 <h3 className="tpl-h3 tenant-heading">{item.name}</h3>
                 {item.description && <p className="tpl-body mt-2 text-[var(--tpl-text-secondary)]">{item.description}</p>}
               </div>
-              {item.price && <p className="shrink-0 font-semibold text-[var(--tpl-primary)]">Rp {Number(item.price).toLocaleString('id-ID')}</p>}
+              {hasMenuPrice(item) && <p className="shrink-0 font-semibold text-[var(--tpl-primary)]">{formatMenuPrice(item)}</p>}
             </div>
           </TemplateCard>
         ))}
@@ -293,7 +294,7 @@ function initialsFor(name: string) {
 }
 
 export function TemplatePricingBlock({ items }: { items: MenuItem[] }) {
-  const pricedItems = items.filter((item) => item.price).slice(0, 3);
+  const pricedItems = items.filter(hasMenuPrice).slice(0, 3);
   if (pricedItems.length === 0) return null;
   return (
     <TemplateSection title="Popular offers" description="Highlight harga yang paling mudah dipahami pelanggan.">
@@ -304,7 +305,7 @@ export function TemplatePricingBlock({ items }: { items: MenuItem[] }) {
               <p className="tpl-h3 tenant-heading">{item.name}</p>
               {item.description && <p className="tpl-body mt-2 text-[var(--tpl-text-secondary)]">{item.description}</p>}
             </div>
-            <p className="mt-5 text-2xl font-semibold text-[var(--tpl-primary)]">Rp {Number(item.price).toLocaleString('id-ID')}</p>
+            <p className="mt-5 text-2xl font-semibold text-[var(--tpl-primary)]">{formatMenuPrice(item)}</p>
           </TemplateCard>
         ))}
       </div>

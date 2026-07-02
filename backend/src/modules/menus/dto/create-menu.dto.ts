@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsBoolean, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, Min } from 'class-validator';
+import { IsBoolean, IsIn, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, Min } from 'class-validator';
 
 export class CreateMenuDto {
   @IsUUID()
@@ -22,6 +22,10 @@ export class CreateMenuDto {
   @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0)
   price?: number;
+
+  @IsOptional()
+  @IsIn(['IDR', 'USD'])
+  priceCurrency?: 'IDR' | 'USD';
 
   @IsOptional()
   @IsString()

@@ -2,6 +2,7 @@ import { KeyboardEvent, MouseEvent, useEffect, useMemo, useRef, useState } from 
 import { Coffee, MessageCircle, Utensils, X } from 'lucide-react';
 import { MenuCategory, Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
+import { formatMenuPrice } from './priceFormat';
 import { resolveContactActions } from './templateActions';
 import { TemplateButton } from './TemplateComponents';
 
@@ -21,6 +22,7 @@ type PremiumFullMenuItem = {
   name: string;
   description?: string | null;
   price?: string | number | null;
+  priceCurrency?: string | null;
   imageUrl?: string | null;
   categoryId?: string | null;
   isFeatured?: boolean;
@@ -155,7 +157,7 @@ export function PremiumFullMenuModal({ website, items, isOpen, onClose, title, v
                         </div>
                         {item.description && <p className={isRestaurant ? 'mt-1 text-sm leading-5 text-white/76' : 'mt-1 text-sm leading-5 text-slate-600'}>{item.description}</p>}
                         <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-                          <p className={isRestaurant ? 'text-sm font-semibold text-[#f7c873]' : 'text-sm font-semibold text-slate-950'}>{item.price ? `Rp ${Number(item.price).toLocaleString('id-ID')}` : 'No price'}</p>
+                          <p className={isRestaurant ? 'text-sm font-semibold text-[#f7c873]' : 'text-sm font-semibold text-slate-950'}>{formatMenuPrice(item) || 'No price'}</p>
                           <p className={isRestaurant ? 'text-xs text-white/60' : 'text-xs text-slate-500'}>{categoryMap.get(item.categoryId ?? '') ?? 'No category'}</p>
                         </div>
                       </div>

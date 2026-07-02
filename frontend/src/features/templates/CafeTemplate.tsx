@@ -15,6 +15,7 @@ import {
 import { Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
 import { formatOpeningHours as formatTemplateOpeningHours } from './openingHours';
+import { formatMenuPrice, hasMenuPrice } from './priceFormat';
 import { normalizeTemplateAction, resolveContactActions, TemplateAction, validateTemplateActions } from './templateActions';
 import {
   TemplateButton,
@@ -32,6 +33,7 @@ type CafeMenuItem = {
   name: string;
   description?: string | null;
   price?: string | number | null;
+  priceCurrency?: string | null;
 };
 
 const defaultCafeMenu: CafeMenuItem[] = [
@@ -150,7 +152,7 @@ function FeaturedMenu({ items }: { items: CafeMenuItem[] }) {
               <h3 className="tpl-h3 tenant-heading">{item.name}</h3>
               {item.description && <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{item.description}</p>}
             </div>
-            {item.price && <p className="mt-5 text-xl font-semibold text-[var(--tpl-primary)]">Rp {Number(item.price).toLocaleString('id-ID')}</p>}
+            {hasMenuPrice(item) && <p className="mt-5 text-xl font-semibold text-[var(--tpl-primary)]">{formatMenuPrice(item)}</p>}
           </TemplateCard>
         ))}
       </div>
@@ -170,7 +172,7 @@ function SignatureDrinks({ items }: { items: CafeMenuItem[] }) {
             <CupSoda className="mb-4 size-6 text-[var(--tpl-secondary)]" />
             <h3 className="tpl-h3 tenant-heading">{item.name}</h3>
             {item.description && <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{item.description}</p>}
-            {item.price && <p className="mt-5 font-semibold text-[var(--tpl-primary)]">Rp {Number(item.price).toLocaleString('id-ID')}</p>}
+            {hasMenuPrice(item) && <p className="mt-5 font-semibold text-[var(--tpl-primary)]">{formatMenuPrice(item)}</p>}
           </TemplateCard>
         ))}
       </div>
