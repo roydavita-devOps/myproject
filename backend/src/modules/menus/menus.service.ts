@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ContentStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UploadsService } from '../uploads/uploads.service';
@@ -64,7 +64,7 @@ export class MenusService {
         categoryId: dto.categoryId,
         name: dto.name,
         description: dto.description,
-        price: dto.price === undefined ? undefined : new Prisma.Decimal(dto.price),
+        price: this.toDecimalPrice(dto.price),
         imageUrl: dto.imageUrl,
         isFeatured: dto.isFeatured ?? false,
         sortOrder: dto.sortOrder ?? 0,
@@ -82,7 +82,7 @@ export class MenusService {
         categoryId: dto.categoryId,
         name: dto.name,
         description: dto.description,
-        price: dto.price === undefined ? undefined : new Prisma.Decimal(dto.price),
+        price: this.toDecimalPrice(dto.price),
         imageUrl: dto.imageUrl,
         isFeatured: dto.isFeatured,
         sortOrder: dto.sortOrder,
@@ -143,5 +143,13 @@ export class MenusService {
       if (error instanceof NotFoundException) return;
       throw error;
     }
+  }
+
+  private toDecimalPrice(price?: number | null) {
+    if (price === undefined) return undefined;
+    if (price === null || !Number.isFinite(price) || price < 0) {
+      throw new BadRequestException('Menu price must be a valid positive number');
+    }
+    return new Prisma.Decimal(price);
   }
 }

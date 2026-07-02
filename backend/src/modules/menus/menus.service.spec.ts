@@ -1,5 +1,5 @@
 import { MenusService } from './menus.service';
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 describe('MenusService', () => {
   function createUploadsMock() {
@@ -66,5 +66,26 @@ describe('MenusService', () => {
       where: { id: 'menu-1' },
       data: { imageUrl: null },
     });
+  });
+
+  it('rejects invalid menu prices before writing to the database', async () => {
+    const prisma = {
+      website: {
+        findFirst: jest.fn().mockResolvedValue({ id: 'website-1', tenantId: 'tenant-1' }),
+      },
+      menu: {
+        create: jest.fn(),
+      },
+    };
+    const service = new MenusService(prisma as never, createUploadsMock() as never);
+
+    await expect(
+      service.createMenu('tenant-1', {
+        websiteId: 'website-1',
+        name: 'Invalid price menu',
+        price: Number.NaN,
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(prisma.menu.create).not.toHaveBeenCalled();
   });
 });

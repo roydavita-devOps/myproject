@@ -19,6 +19,7 @@ type MenuItemFormState = {
 };
 
 type UpdateMenuMutation = UseMutationResult<MenuItem, Error, { id: string; payload: UpdateMenuPayload }, unknown>;
+type PriceParseResult = { value?: number; error?: string };
 
 export function MenuManagementPage() {
   const queryClient = useQueryClient();
@@ -37,6 +38,7 @@ export function MenuManagementPage() {
   });
   const [categoryName, setCategoryName] = useState('');
   const [item, setItem] = useState<MenuItemFormState>(emptyMenuItemForm());
+  const [itemError, setItemError] = useState('');
 
   const categoryMutation = useMutation({
     mutationFn: () => menusApi.createCategory({ websiteId: selectedWebsiteId, name: categoryName.trim() }),
@@ -60,14 +62,18 @@ export function MenuManagementPage() {
         name: item.name.trim(),
         description: optionalValue(item.description),
         categoryId: optionalValue(item.categoryId),
-        price: optionalPrice(item.price),
+        price: parseOptionalPrice(item.price).value,
         imageUrl: item.imageUrl || undefined,
         isFeatured: item.isFeatured,
       }),
     onSuccess: () => {
+      setItemError('');
       setItem(emptyMenuItemForm());
       queryClient.invalidateQueries({ queryKey: ['menus', selectedWebsiteId] });
       queryClient.invalidateQueries({ queryKey: ['websites'] });
+    },
+    onError: () => {
+      setItemError('Tambah item gagal. Periksa nama, harga, dan koneksi lalu coba lagi.');
     },
   });
   const updateMutation = useMutation({
@@ -101,7 +107,17 @@ export function MenuManagementPage() {
 
   function submitItem(event: FormEvent) {
     event.preventDefault();
-    if (item.name.trim()) itemMutation.mutate();
+    setItemError('');
+    if (!item.name.trim()) {
+      setItemError('Nama item wajib diisi.');
+      return;
+    }
+    const price = parseOptionalPrice(item.price);
+    if (price.error) {
+      setItemError(price.error);
+      return;
+    }
+    itemMutation.mutate();
   }
 
   if (websitesLoading) return <LoadingState label="Loading menu workspace" />;
@@ -187,6 +203,7 @@ export function MenuManagementPage() {
               <Plus className="size-4" />
               {itemMutation.isPending ? 'Adding item' : 'Add item'}
             </Button>
+            {itemError && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{itemError}</p>}
           </form>
         </div>
         <div className="panel overflow-hidden">
@@ -237,20 +254,34 @@ function MenuItemEditor({
   isDeleting: boolean;
 }) {
   const [form, setForm] = useState<MenuItemFormState>(() => menuToForm(menu));
+  const [formError, setFormError] = useState('');
   const isSaving = updateMutation.isPending && updateMutation.variables?.id === menu.id;
 
   function submitItem(event: FormEvent) {
     event.preventDefault();
-    if (!form.name.trim()) return;
+    setFormError('');
+    if (!form.name.trim()) {
+      setFormError('Nama item wajib diisi.');
+      return;
+    }
+    const price = parseOptionalPrice(form.price);
+    if (price.error) {
+      setFormError(price.error);
+      return;
+    }
     updateMutation.mutate({
       id: menu.id,
       payload: {
         name: form.name.trim(),
         description: optionalValue(form.description),
         categoryId: optionalValue(form.categoryId) ?? null,
-        price: optionalPrice(form.price),
+        price: price.value,
         imageUrl: form.imageUrl,
         isFeatured: form.isFeatured,
+      },
+    }, {
+      onError: () => {
+        setFormError('Simpan item gagal. Periksa nama, harga, dan koneksi lalu coba lagi.');
       },
     });
   }
@@ -307,6 +338,7 @@ function MenuItemEditor({
             Delete
           </Button>
         </div>
+        {formError && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{formError}</p>}
       </div>
     </form>
   );
@@ -352,7 +384,43 @@ function optionalValue(value: string) {
   return trimmed === '' ? undefined : trimmed;
 }
 
-function optionalPrice(value: string) {
+function parseOptionalPrice(value: string): PriceParseResult {
   const trimmed = value.trim();
-  return trimmed === '' ? undefined : Number(trimmed);
+  if (trimmed === '') return {};
+
+  const normalized = normalizePriceInput(trimmed);
+  if (!/^\d+(\.\d{1,2})?$/.test(normalized)) {
+    return { error: 'Harga harus berupa angka, contoh: 18000 atau 25.000.' };
+  }
+
+  const parsed = Number(normalized);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    return { error: 'Harga harus berupa angka positif.' };
+  }
+
+  return { value: parsed };
+}
+
+function normalizePriceInput(value: string) {
+  const withoutCurrency = value.replace(/^rp\.?\s*/i, '').replace(/\s/g, '');
+  const hasDot = withoutCurrency.includes('.');
+  const hasComma = withoutCurrency.includes(',');
+
+  if (hasDot && hasComma) {
+    const lastDot = withoutCurrency.lastIndexOf('.');
+    const lastComma = withoutCurrency.lastIndexOf(',');
+    if (lastComma > lastDot) return withoutCurrency.replace(/\./g, '').replace(',', '.');
+    return withoutCurrency.replace(/,/g, '');
+  }
+
+  if (hasDot) return normalizeSingleSeparatorPrice(withoutCurrency, '.');
+  if (hasComma) return normalizeSingleSeparatorPrice(withoutCurrency, ',');
+  return withoutCurrency;
+}
+
+function normalizeSingleSeparatorPrice(value: string, separator: '.' | ',') {
+  const parts = value.split(separator);
+  const looksLikeThousands = parts.length > 1 && parts[0].length <= 3 && parts.slice(1).every((part) => part.length === 3);
+  if (looksLikeThousands) return parts.join('');
+  return separator === ',' ? value.replace(',', '.') : value;
 }
