@@ -48,11 +48,12 @@ Last updated: 2026-07-02
 - Stage 9.8D-R5 Image Delete and Legacy Local Upload Cleanup Remediation.
 - Stage 9.8D-R6 Restaurant Premium Color System Remediation.
 - Stage 9.8D-R7 Restaurant Premium Final Polish.
+- Stage 9.8D-R8 Restaurant Premium Button and Surface Depth Polish.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.8D-R7 Restaurant Premium Final Polish approval checkpoint.
+- Stage 9.8D-R8 Restaurant Premium Button and Surface Depth Polish approval checkpoint.
 
 ## Planned
 
@@ -193,6 +194,13 @@ Stage 9.8D-R7 completes Restaurant Premium final polish:
 - Gallery placeholder states must remain readable and intentional when tenant images are missing.
 - Signature Dishes copy is restaurant-facing and natural.
 - No backend, Prisma, database, marketplace, billing, subscription, entitlement, or new template change is included.
+
+Stage 9.8D-R8 adds Restaurant Premium button and surface depth polish:
+
+- Restaurant Premium CTAs use subtle gradient, warm border, controlled shadow, and hover lift instead of flat solid blocks.
+- Visit & Reservation actions keep a clear hierarchy: primary reservation, secondary call, tertiary directions.
+- Dark surfaces, footer, and full menu modal tabs use quiet layered depth without glossy, neon, or gimmick effects.
+- The polish is frontend token/CSS only and does not change backend, Prisma, database, marketplace, billing, subscription, entitlement, or template registry behavior.
 
 Potential categories:
 

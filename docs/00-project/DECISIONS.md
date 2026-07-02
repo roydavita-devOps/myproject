@@ -416,6 +416,24 @@ Reason:
 - Stable anchors make header navigation and CTA scroll behavior predictable.
 - Premium templates must look intentional even before every tenant has uploaded gallery content.
 
+## Restaurant Premium Button And Surface Depth
+
+Status: Approved for Stage 9.8D-R8 polish.
+
+Decision:
+
+- Restaurant Premium CTAs use subtle premium depth treatment instead of flat solid color blocks.
+- Premium button design should use subtle gradient, thin warm border, controlled shadow, and hover lift without becoming glossy or gimmicky.
+- Visit & Reservation actions must have clear visual hierarchy: primary reservation, secondary call, tertiary directions.
+- Dark Restaurant Premium surfaces, footer, and full menu modal tabs should use quiet layered depth while preserving readability.
+- Stage 9.8D-R8 does not introduce new templates, marketplace, billing, subscription enforcement, entitlement logic, backend changes, Prisma schema changes, or database migrations.
+
+Reason:
+
+- Restaurant Premium is a paid-template foundation and needs CTA polish that feels refined without changing layout or product scope.
+- Flat buttons and dark blocks can make a premium template feel generic even when the overall color direction is correct.
+- A tokenized depth layer keeps preset compatibility and prevents one-off hardcoded button styling.
+
 ## Template Selection And Assignment Audit
 
 Status: Completed for Stage 9.7A.

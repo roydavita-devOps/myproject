@@ -103,7 +103,7 @@ export function PremiumFullMenuModal({ website, items, isOpen, onClose, title, v
         aria-modal="true"
         aria-labelledby="premium-full-menu-title"
         className={isRestaurant
-          ? 'flex max-h-[100dvh] w-full max-w-5xl flex-col overflow-hidden rounded-t-xl border border-[var(--premium-modal-border)] bg-[var(--premium-modal-background)] text-[var(--premium-modal-text)] shadow-2xl md:max-h-[88vh] md:rounded-xl'
+          ? 'flex max-h-[100dvh] w-full max-w-5xl flex-col overflow-hidden rounded-t-xl border border-[var(--premium-modal-border)] bg-[linear-gradient(145deg,var(--premium-modal-background),var(--premium-surface-dark-gradient-to))] text-[var(--premium-modal-text)] shadow-[0_30px_90px_rgba(0,0,0,.42)] md:max-h-[88vh] md:rounded-xl'
           : 'flex max-h-[100dvh] w-full max-w-5xl flex-col overflow-hidden rounded-t-xl border border-white/20 bg-white shadow-2xl md:max-h-[88vh] md:rounded-xl'}
       >
         <header className={modalHeaderClass(variant)}>
@@ -115,7 +115,7 @@ export function PremiumFullMenuModal({ website, items, isOpen, onClose, title, v
           <button
             ref={closeButtonRef}
             type="button"
-            className="inline-flex size-11 shrink-0 items-center justify-center rounded-md bg-white/15 text-white transition hover:bg-white/25 focus:outline-none focus:ring-2 focus:ring-white"
+            className="inline-flex size-11 shrink-0 translate-y-0 items-center justify-center rounded-md border border-white/20 bg-white/[.12] text-white shadow-[0_12px_28px_rgba(0,0,0,.24),inset_0_1px_0_rgba(255,255,255,.14)] transition hover:-translate-y-0.5 hover:bg-white/[.22] focus:outline-none focus:ring-2 focus:ring-white"
             aria-label="Close full menu"
             onClick={onClose}
           >
@@ -123,7 +123,7 @@ export function PremiumFullMenuModal({ website, items, isOpen, onClose, title, v
           </button>
         </header>
 
-        <div className={isRestaurant ? 'border-b border-[var(--premium-modal-border)] bg-[var(--premium-modal-surface)] px-4 py-3 md:px-6' : 'border-b border-slate-200 bg-slate-50 px-4 py-3 md:px-6'}>
+        <div className={isRestaurant ? 'border-b border-[var(--premium-modal-border)] bg-[linear-gradient(180deg,var(--premium-modal-surface-gradient-from),var(--premium-modal-surface-gradient-to))] px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,.06)] md:px-6' : 'border-b border-slate-200 bg-slate-50 px-4 py-3 md:px-6'}>
           <div className="flex gap-2 overflow-x-auto pb-1" aria-label="Menu categories">
             {tabs.map((tab) => (
               <button
@@ -148,7 +148,7 @@ export function PremiumFullMenuModal({ website, items, isOpen, onClose, title, v
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {group.items.map((item, index) => (
-                    <article key={item.id} className={isRestaurant ? 'grid grid-cols-[5rem_1fr] gap-3 rounded-lg border border-[var(--premium-modal-border)] bg-[var(--premium-modal-surface)] p-3 shadow-[0_18px_60px_rgba(0,0,0,.28)]' : 'grid grid-cols-[5rem_1fr] gap-3 rounded-lg border border-slate-200 bg-white p-3 shadow-sm'}>
+                    <article key={item.id} className={isRestaurant ? 'grid grid-cols-[5rem_1fr] gap-3 rounded-lg border border-[var(--premium-modal-surface-border)] bg-[linear-gradient(145deg,var(--premium-modal-surface-gradient-from),var(--premium-modal-surface-gradient-to))] p-3 shadow-[0_18px_60px_rgba(0,0,0,.28),inset_0_1px_0_rgba(255,255,255,.05)]' : 'grid grid-cols-[5rem_1fr] gap-3 rounded-lg border border-slate-200 bg-white p-3 shadow-sm'}>
                       <MenuItemMedia item={item} index={index} variant={variant} />
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-start justify-between gap-2">
@@ -228,7 +228,7 @@ function MenuItemMedia({ item, index, variant }: { item: PremiumFullMenuItem; in
 
 function modalHeaderClass(variant: PremiumMenuVariant) {
   return variant === 'restaurant'
-    ? 'flex items-start justify-between gap-4 border-b border-[var(--premium-modal-border)] bg-[radial-gradient(circle_at_18%_12%,var(--premium-accent-soft),transparent_28%),linear-gradient(135deg,var(--premium-modal-surface),var(--premium-modal-background))] px-4 py-5 text-[var(--premium-modal-text)] md:px-6'
+    ? 'flex items-start justify-between gap-4 border-b border-[var(--premium-modal-border)] bg-[radial-gradient(circle_at_18%_12%,var(--premium-accent-soft),transparent_28%),linear-gradient(135deg,var(--premium-modal-surface-gradient-from),var(--premium-modal-background))] px-4 py-5 text-[var(--premium-modal-text)] shadow-[inset_0_1px_0_rgba(255,255,255,.06)] md:px-6'
     : 'flex items-start justify-between gap-4 bg-[#2f1f16] px-4 py-5 text-white md:px-6';
 }
 
@@ -240,8 +240,8 @@ function categoryTabClass(variant: PremiumMenuVariant, active: boolean) {
   }
 
   return active
-    ? 'shrink-0 rounded-full border border-[var(--premium-accent)] bg-[var(--premium-accent)] px-4 py-2 text-sm font-semibold text-[var(--premium-accent-contrast)]'
-    : 'shrink-0 rounded-full border border-[var(--premium-modal-border)] bg-white/5 px-4 py-2 text-sm font-semibold text-[var(--premium-modal-text)] hover:bg-white/10';
+    ? 'shrink-0 translate-y-0 rounded-full border border-[var(--premium-cta-border)] bg-[linear-gradient(180deg,var(--premium-cta-gradient-from),var(--premium-cta-gradient-to))] px-4 py-2 text-sm font-semibold text-[var(--premium-cta-text)] shadow-[var(--premium-cta-shadow)] transition hover:-translate-y-0.5'
+    : 'shrink-0 rounded-full border border-[var(--premium-modal-surface-border)] bg-white/[.07] px-4 py-2 text-sm font-semibold text-[var(--premium-modal-text)] shadow-[inset_0_1px_0_rgba(255,255,255,.08)] transition hover:bg-white/[.12]';
 }
 
 function featuredBadgeClass(variant: PremiumMenuVariant) {

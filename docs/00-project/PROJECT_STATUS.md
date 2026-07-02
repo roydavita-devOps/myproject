@@ -4,7 +4,7 @@ Last updated: 2026-07-02
 
 ## Current Stage
 
-Stage 9.8D-R7 - Restaurant Premium Final Polish.
+Stage 9.8D-R8 - Restaurant Premium Button and Surface Depth Polish.
 
 Status: implemented, locally validated, evidence captured, and ready for approval.
 
@@ -55,6 +55,7 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 | Stage 9.8D-R5 Image Delete and Legacy Local Upload Cleanup Remediation | Completed; awaiting approval. |
 | Stage 9.8D-R6 Restaurant Premium Color System Remediation | Completed; awaiting approval. |
 | Stage 9.8D-R7 Restaurant Premium Final Polish | Completed; awaiting approval. |
+| Stage 9.8D-R8 Restaurant Premium Button and Surface Depth Polish | Completed; awaiting approval. |
 
 ## Current Blockers
 
@@ -76,12 +77,13 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 | Image delete reliability | Resolved for Stage 9.8D-R5 | Logo, hero, gallery, and menu image delete flows clear database references, preserve parent business records, tolerate legacy local missing files, and continue user flow when Supabase cleanup partially fails. |
 | Restaurant Premium color safety | Resolved for Stage 9.8D-R6 | Restaurant Premium now uses Editorial Umber as default, semantic premium tokens for CTA/hero/modal/price/badges, and image-safe hero overlays for bright, dark, and busy tenant images. |
 | Restaurant Premium final polish | Resolved for Stage 9.8D-R7 | Opening hours now render as customer-facing text, Gallery placeholders use readable semantic tokens, Signature copy is natural, and Menu/Story/Gallery/Visit anchors are stable. |
+| Restaurant Premium button and surface flatness | Resolved for Stage 9.8D-R8 | Restaurant Premium CTAs, visit card, footer, and full menu modal tabs now use subtle depth tokens for gradient, border, shadow, and hover lift without changing layout. |
 | Luxury templates | Paused | No Luxury template implementation until separately approved. |
 | Template Catalog UI | Paused | No marketplace, comparison page, entitlement, or subscription access logic in Stage 9.7B. |
 
 ## Next Actions
 
-1. Review Stage 9.8D-R7 Restaurant Premium Final Polish evidence.
+1. Review Stage 9.8D-R8 Restaurant Premium Button and Surface Depth Polish evidence.
 2. Approve or request corrections.
 3. Keep Luxury, Catalog UI, marketplace, subscription, entitlement, preview-before-apply, and switch history paused until separately approved.
 4. After approval, proceed only to the next approved stage.
@@ -91,7 +93,7 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 
 | System | Current Status |
 | --- | --- |
-| Local Docker | Running and validated during Stage 9.8D-R7. |
+| Local Docker | Running and validated during Stage 9.8D-R8. |
 | GitHub | Latest code and documentation branch strategy uses `main`, `staging`, and `pilot`. |
 | Vercel | Production frontend active. |
 | Railway | Backend health endpoints active. |
@@ -124,5 +126,6 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 - Image delete remediation report: [../06-modern-template/reports/PHASE-9.8D-R5-Image-Delete-And-Legacy-Upload-Cleanup-Report.md](../06-modern-template/reports/PHASE-9.8D-R5-Image-Delete-And-Legacy-Upload-Cleanup-Report.md)
 - Restaurant Premium color system remediation report: [../06-modern-template/reports/PHASE-9.8D-R6-Restaurant-Premium-Color-System-Remediation-Report.md](../06-modern-template/reports/PHASE-9.8D-R6-Restaurant-Premium-Color-System-Remediation-Report.md)
 - Restaurant Premium final polish report: [../06-modern-template/reports/PHASE-9.8D-R7-Restaurant-Premium-Final-Polish-Report.md](../06-modern-template/reports/PHASE-9.8D-R7-Restaurant-Premium-Final-Polish-Report.md)
+- Restaurant Premium button and surface depth polish report: [../06-modern-template/reports/PHASE-9.8D-R8-Restaurant-Premium-Button-And-Surface-Depth-Polish-Report.md](../06-modern-template/reports/PHASE-9.8D-R8-Restaurant-Premium-Button-And-Surface-Depth-Polish-Report.md)
 - Template Catalog readiness audit: [../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md](../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md)
 - Template consistency audit: [../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md](../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md)

@@ -34,8 +34,19 @@ export type PremiumColorTokens = {
   cta?: string;
   ctaHover?: string;
   ctaText?: string;
+  ctaGradientFrom?: string;
+  ctaGradientTo?: string;
+  ctaHoverGradientFrom?: string;
+  ctaHoverGradientTo?: string;
+  ctaBorder?: string;
+  ctaShadow?: string;
+  ctaInnerHighlight?: string;
   secondaryCta?: string;
   secondaryCtaText?: string;
+  secondaryCtaGradientFrom?: string;
+  secondaryCtaGradientTo?: string;
+  secondaryCtaBorder?: string;
+  secondaryCtaShadow?: string;
   buttonPrimary: string;
   buttonPrimaryText: string;
   buttonSecondary: string;
@@ -46,8 +57,18 @@ export type PremiumColorTokens = {
   heroMutedText?: string;
   heroCardBackground?: string;
   heroCardText?: string;
+  surfaceDarkGradientFrom?: string;
+  surfaceDarkGradientTo?: string;
+  surfaceDarkBorder?: string;
+  surfaceDarkShadow?: string;
+  footerGradientFrom?: string;
+  footerGradientTo?: string;
+  footerTopBorder?: string;
   modalBackground?: string;
   modalSurface?: string;
+  modalSurfaceGradientFrom?: string;
+  modalSurfaceGradientTo?: string;
+  modalSurfaceBorder?: string;
   modalText?: string;
   modalMutedText?: string;
   modalBorder?: string;
@@ -262,6 +283,10 @@ export function resolvePremiumColorTokens(website: Website): PremiumColorTokens 
   const textSecondary = ensureContrastColor(preset.tokens.textSecondary ?? preset.tokens.mutedText, preset.tokens.surface, '#334155');
   const surfaceDark = preset.tokens.surfaceDark ?? (isLightColor(primary) ? '#171717' : primary);
   const accentContrast = getReadableTextColor(accent);
+  const ctaHover = darkenColor(safeCta, 0.2);
+  const surfaceDarkGradientFrom = preset.tokens.surfaceDarkGradientFrom ?? mixColor(surfaceDark, accent, 0.12);
+  const surfaceDarkGradientTo = preset.tokens.surfaceDarkGradientTo ?? darkenColor(surfaceDark, 0.14);
+  const modalSurface = preset.tokens.modalSurface ?? mixColor(surfaceDark, '#ffffff', 0.08);
 
   return {
     ...preset.tokens,
@@ -282,10 +307,21 @@ export function resolvePremiumColorTokens(website: Website): PremiumColorTokens 
     accentMuted: preset.tokens.accentMuted ?? mixColor(accent, preset.tokens.surface, 0.36),
     accentContrast,
     cta: safeCta,
-    ctaHover: darkenColor(safeCta, 0.2),
+    ctaHover,
     ctaText: safeCtaText,
+    ctaGradientFrom: preset.tokens.ctaGradientFrom ?? mixColor(safeCta, accent, 0.18),
+    ctaGradientTo: preset.tokens.ctaGradientTo ?? darkenColor(safeCta, 0.12),
+    ctaHoverGradientFrom: preset.tokens.ctaHoverGradientFrom ?? mixColor(safeCta, accent, 0.26),
+    ctaHoverGradientTo: preset.tokens.ctaHoverGradientTo ?? ctaHover,
+    ctaBorder: preset.tokens.ctaBorder ?? withAlpha(accent, 0.48),
+    ctaShadow: preset.tokens.ctaShadow ?? `0 16px 36px ${withAlpha(safeCta, 0.28)}, inset 0 1px 0 ${withAlpha('#ffffff', 0.16)}`,
+    ctaInnerHighlight: preset.tokens.ctaInnerHighlight ?? withAlpha('#ffffff', 0.18),
     secondaryCta: preset.tokens.secondaryCta ?? preset.tokens.surface,
     secondaryCtaText: preset.tokens.secondaryCtaText ?? getReadableTextColor(preset.tokens.surface),
+    secondaryCtaGradientFrom: preset.tokens.secondaryCtaGradientFrom ?? mixColor(preset.tokens.surface, accent, 0.08),
+    secondaryCtaGradientTo: preset.tokens.secondaryCtaGradientTo ?? mixColor(preset.tokens.surface, surfaceDark, 0.05),
+    secondaryCtaBorder: preset.tokens.secondaryCtaBorder ?? withAlpha(accent, 0.34),
+    secondaryCtaShadow: preset.tokens.secondaryCtaShadow ?? `0 12px 28px rgba(20,15,11,.12), inset 0 1px 0 ${withAlpha('#ffffff', 0.5)}`,
     buttonPrimary: safeCta,
     buttonPrimaryText: safeCtaText,
     buttonSecondary: preset.tokens.surface,
@@ -295,8 +331,18 @@ export function resolvePremiumColorTokens(website: Website): PremiumColorTokens 
     heroMutedText: preset.tokens.heroMutedText ?? 'rgba(255,248,234,.90)',
     heroCardBackground: preset.tokens.heroCardBackground ?? 'rgba(20,15,11,.88)',
     heroCardText: preset.tokens.heroCardText ?? preset.tokens.textOnDark ?? '#ffffff',
+    surfaceDarkGradientFrom,
+    surfaceDarkGradientTo,
+    surfaceDarkBorder: preset.tokens.surfaceDarkBorder ?? withAlpha(accent, 0.26),
+    surfaceDarkShadow: preset.tokens.surfaceDarkShadow ?? '0 28px 80px rgba(0,0,0,.32)',
+    footerGradientFrom: preset.tokens.footerGradientFrom ?? surfaceDarkGradientFrom,
+    footerGradientTo: preset.tokens.footerGradientTo ?? darkenColor(surfaceDark, 0.22),
+    footerTopBorder: preset.tokens.footerTopBorder ?? withAlpha(accent, 0.3),
     modalBackground: preset.tokens.modalBackground ?? surfaceDark,
-    modalSurface: preset.tokens.modalSurface ?? mixColor(surfaceDark, '#ffffff', 0.08),
+    modalSurface,
+    modalSurfaceGradientFrom: preset.tokens.modalSurfaceGradientFrom ?? mixColor(modalSurface, accent, 0.08),
+    modalSurfaceGradientTo: preset.tokens.modalSurfaceGradientTo ?? modalSurface,
+    modalSurfaceBorder: preset.tokens.modalSurfaceBorder ?? withAlpha(accent, 0.24),
     modalText: preset.tokens.modalText ?? preset.tokens.textOnDark ?? '#ffffff',
     modalMutedText: preset.tokens.modalMutedText ?? 'rgba(255,248,234,.74)',
     modalBorder: preset.tokens.modalBorder ?? withAlpha(accent, 0.28),
@@ -340,8 +386,19 @@ export function premiumTokenStyles(tokens: PremiumColorTokens): CSSProperties {
     '--premium-cta': tokens.cta,
     '--premium-cta-hover': tokens.ctaHover,
     '--premium-cta-text': tokens.ctaText,
+    '--premium-cta-gradient-from': tokens.ctaGradientFrom,
+    '--premium-cta-gradient-to': tokens.ctaGradientTo,
+    '--premium-cta-hover-gradient-from': tokens.ctaHoverGradientFrom,
+    '--premium-cta-hover-gradient-to': tokens.ctaHoverGradientTo,
+    '--premium-cta-border': tokens.ctaBorder,
+    '--premium-cta-shadow': tokens.ctaShadow,
+    '--premium-cta-inner-highlight': tokens.ctaInnerHighlight,
     '--premium-secondary-cta': tokens.secondaryCta,
     '--premium-secondary-cta-text': tokens.secondaryCtaText,
+    '--premium-secondary-cta-gradient-from': tokens.secondaryCtaGradientFrom,
+    '--premium-secondary-cta-gradient-to': tokens.secondaryCtaGradientTo,
+    '--premium-secondary-cta-border': tokens.secondaryCtaBorder,
+    '--premium-secondary-cta-shadow': tokens.secondaryCtaShadow,
     '--premium-button-primary': tokens.buttonPrimary,
     '--premium-button-primary-text': tokens.buttonPrimaryText,
     '--premium-button-secondary': tokens.buttonSecondary,
@@ -352,8 +409,18 @@ export function premiumTokenStyles(tokens: PremiumColorTokens): CSSProperties {
     '--premium-hero-muted-text': tokens.heroMutedText,
     '--premium-hero-card-background': tokens.heroCardBackground,
     '--premium-hero-card-text': tokens.heroCardText,
+    '--premium-surface-dark-gradient-from': tokens.surfaceDarkGradientFrom,
+    '--premium-surface-dark-gradient-to': tokens.surfaceDarkGradientTo,
+    '--premium-surface-dark-border': tokens.surfaceDarkBorder,
+    '--premium-surface-dark-shadow': tokens.surfaceDarkShadow,
+    '--premium-footer-gradient-from': tokens.footerGradientFrom,
+    '--premium-footer-gradient-to': tokens.footerGradientTo,
+    '--premium-footer-top-border': tokens.footerTopBorder,
     '--premium-modal-background': tokens.modalBackground,
     '--premium-modal-surface': tokens.modalSurface,
+    '--premium-modal-surface-gradient-from': tokens.modalSurfaceGradientFrom,
+    '--premium-modal-surface-gradient-to': tokens.modalSurfaceGradientTo,
+    '--premium-modal-surface-border': tokens.modalSurfaceBorder,
     '--premium-modal-text': tokens.modalText,
     '--premium-modal-muted-text': tokens.modalMutedText,
     '--premium-modal-border': tokens.modalBorder,
@@ -409,6 +476,8 @@ function enrichTokens(tokens: PremiumColorTokens): PremiumColorTokens {
   const cta = ensureCtaColor(tokens.buttonPrimary, tokens.buttonPrimary);
   const ctaText = tokens.buttonPrimaryText ?? getReadableTextColor(cta);
   const surfaceDark = tokens.surfaceDark ?? tokens.primary;
+  const ctaHover = tokens.ctaHover ?? darkenColor(cta, 0.2);
+  const modalSurface = tokens.modalSurface ?? mixColor(surfaceDark, '#ffffff', 0.08);
   return {
     ...tokens,
     backgroundAlt: tokens.backgroundAlt ?? tokens.background,
@@ -434,10 +503,21 @@ function enrichTokens(tokens: PremiumColorTokens): PremiumColorTokens {
     accentMuted: tokens.accentMuted ?? mixColor(tokens.accent, tokens.surface, 0.36),
     accentContrast: tokens.accentContrast ?? getReadableTextColor(tokens.accent),
     cta,
-    ctaHover: tokens.ctaHover ?? darkenColor(cta, 0.2),
+    ctaHover,
     ctaText,
+    ctaGradientFrom: tokens.ctaGradientFrom ?? mixColor(cta, tokens.accent, 0.18),
+    ctaGradientTo: tokens.ctaGradientTo ?? darkenColor(cta, 0.12),
+    ctaHoverGradientFrom: tokens.ctaHoverGradientFrom ?? mixColor(cta, tokens.accent, 0.26),
+    ctaHoverGradientTo: tokens.ctaHoverGradientTo ?? ctaHover,
+    ctaBorder: tokens.ctaBorder ?? withAlpha(tokens.accent, 0.48),
+    ctaShadow: tokens.ctaShadow ?? `0 16px 36px ${withAlpha(cta, 0.28)}, inset 0 1px 0 ${withAlpha('#ffffff', 0.16)}`,
+    ctaInnerHighlight: tokens.ctaInnerHighlight ?? withAlpha('#ffffff', 0.18),
     secondaryCta: tokens.secondaryCta ?? tokens.buttonSecondary,
     secondaryCtaText: tokens.secondaryCtaText ?? tokens.buttonSecondaryText,
+    secondaryCtaGradientFrom: tokens.secondaryCtaGradientFrom ?? mixColor(tokens.buttonSecondary, tokens.accent, 0.08),
+    secondaryCtaGradientTo: tokens.secondaryCtaGradientTo ?? mixColor(tokens.buttonSecondary, surfaceDark, 0.05),
+    secondaryCtaBorder: tokens.secondaryCtaBorder ?? withAlpha(tokens.accent, 0.34),
+    secondaryCtaShadow: tokens.secondaryCtaShadow ?? `0 12px 28px rgba(20,15,11,.12), inset 0 1px 0 ${withAlpha('#ffffff', 0.5)}`,
     buttonPrimary: cta,
     buttonPrimaryText: ctaText,
     heroScrim: tokens.heroScrim ?? 'linear-gradient(90deg,rgba(8,6,5,.84),rgba(8,6,5,.60),rgba(8,6,5,.34))',
@@ -445,8 +525,18 @@ function enrichTokens(tokens: PremiumColorTokens): PremiumColorTokens {
     heroMutedText: tokens.heroMutedText ?? 'rgba(255,248,234,.90)',
     heroCardBackground: tokens.heroCardBackground ?? 'rgba(20,15,11,.88)',
     heroCardText: tokens.heroCardText ?? tokens.textOnDark ?? '#ffffff',
+    surfaceDarkGradientFrom: tokens.surfaceDarkGradientFrom ?? mixColor(surfaceDark, tokens.accent, 0.12),
+    surfaceDarkGradientTo: tokens.surfaceDarkGradientTo ?? darkenColor(surfaceDark, 0.14),
+    surfaceDarkBorder: tokens.surfaceDarkBorder ?? withAlpha(tokens.accent, 0.26),
+    surfaceDarkShadow: tokens.surfaceDarkShadow ?? '0 28px 80px rgba(0,0,0,.32)',
+    footerGradientFrom: tokens.footerGradientFrom ?? mixColor(surfaceDark, tokens.accent, 0.12),
+    footerGradientTo: tokens.footerGradientTo ?? darkenColor(surfaceDark, 0.22),
+    footerTopBorder: tokens.footerTopBorder ?? withAlpha(tokens.accent, 0.3),
     modalBackground: tokens.modalBackground ?? surfaceDark,
-    modalSurface: tokens.modalSurface ?? mixColor(surfaceDark, '#ffffff', 0.08),
+    modalSurface,
+    modalSurfaceGradientFrom: tokens.modalSurfaceGradientFrom ?? mixColor(modalSurface, tokens.accent, 0.08),
+    modalSurfaceGradientTo: tokens.modalSurfaceGradientTo ?? modalSurface,
+    modalSurfaceBorder: tokens.modalSurfaceBorder ?? withAlpha(tokens.accent, 0.24),
     modalText: tokens.modalText ?? tokens.textOnDark ?? '#ffffff',
     modalMutedText: tokens.modalMutedText ?? 'rgba(255,248,234,.74)',
     modalBorder: tokens.modalBorder ?? withAlpha(tokens.accent, 0.28),
@@ -521,8 +611,19 @@ const fallbackPremiumTokens: PremiumColorTokens = {
   cta: '#6B3F24',
   ctaHover: '#4F2D19',
   ctaText: '#FFF8EF',
+  ctaGradientFrom: '#765034',
+  ctaGradientTo: '#5A321D',
+  ctaHoverGradientFrom: '#815A3A',
+  ctaHoverGradientTo: '#4F2D19',
+  ctaBorder: 'rgba(184,135,70,.48)',
+  ctaShadow: '0 16px 36px rgba(107,63,36,.28), inset 0 1px 0 rgba(255,255,255,.16)',
+  ctaInnerHighlight: 'rgba(255,255,255,.18)',
   secondaryCta: '#FFF9F0',
   secondaryCtaText: '#1E1712',
+  secondaryCtaGradientFrom: '#FFF9F0',
+  secondaryCtaGradientTo: '#F4E8D8',
+  secondaryCtaBorder: 'rgba(184,135,70,.34)',
+  secondaryCtaShadow: '0 12px 28px rgba(20,15,11,.12), inset 0 1px 0 rgba(255,255,255,.5)',
   buttonPrimary: '#6B3F24',
   buttonPrimaryText: '#FFF8EF',
   buttonSecondary: '#FFF9F0',
@@ -533,8 +634,18 @@ const fallbackPremiumTokens: PremiumColorTokens = {
   heroMutedText: 'rgba(255,248,234,.90)',
   heroCardBackground: 'rgba(20,15,11,.88)',
   heroCardText: '#FFF7EA',
+  surfaceDarkGradientFrom: '#35281E',
+  surfaceDarkGradientTo: '#18120E',
+  surfaceDarkBorder: 'rgba(184,135,70,.26)',
+  surfaceDarkShadow: '0 28px 80px rgba(0,0,0,.32)',
+  footerGradientFrom: '#35281E',
+  footerGradientTo: '#17110D',
+  footerTopBorder: 'rgba(184,135,70,.3)',
   modalBackground: '#211A14',
   modalSurface: '#35281F',
+  modalSurfaceGradientFrom: '#463526',
+  modalSurfaceGradientTo: '#35281F',
+  modalSurfaceBorder: 'rgba(184,135,70,.24)',
   modalText: '#FFF7EA',
   modalMutedText: 'rgba(255,248,234,.74)',
   modalBorder: 'rgba(184,135,70,.28)',

@@ -20,6 +20,9 @@ describe('premium template source readability rules', () => {
 
     expect(modalSource).toContain('var(--premium-modal-background)');
     expect(modalSource).toContain('var(--premium-modal-surface)');
+    expect(modalSource).toContain('var(--premium-modal-surface-gradient-from)');
+    expect(modalSource).toContain('var(--premium-modal-surface-border)');
+    expect(modalSource).toContain('var(--premium-cta-gradient-from)');
     expect(modalSource).toContain('var(--premium-modal-text)');
     expect(modalSource).toContain('var(--premium-price-text)');
     expect(modalSource).not.toContain('#f7c873');
@@ -62,6 +65,19 @@ describe('premium template source readability rules', () => {
     expect(heroActionResolver?.[0]).toContain('#visit-reservation');
     expect(heroActionResolver?.[0]).not.toContain('Reserve a Table');
     expect(heroActionResolver?.[0]).not.toContain('Reserve via WhatsApp');
+  });
+
+  it('uses Restaurant Premium depth tokens for buttons and dark surfaces', () => {
+    const source = readFileSync(resolve('src/features/templates/RestaurantPremiumTemplate.tsx'), 'utf8');
+
+    expect(source).toContain('RestaurantPremiumActionLink');
+    expect(source).toContain('var(--premium-cta-gradient-from)');
+    expect(source).toContain('var(--premium-cta-gradient-to)');
+    expect(source).toContain('var(--premium-cta-border)');
+    expect(source).toContain('var(--premium-secondary-cta-gradient-from)');
+    expect(source).toContain('var(--premium-surface-dark-gradient-from)');
+    expect(source).toContain('var(--premium-footer-gradient-from)');
+    expect(source).toContain('hover:-translate-y-0.5');
   });
 
   it('uses stable restaurant premium section anchors for navigation', () => {

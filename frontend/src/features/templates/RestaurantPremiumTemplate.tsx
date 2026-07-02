@@ -7,7 +7,6 @@ import { formatOpeningHours } from './openingHours';
 import { formatMenuPrice, hasMenuPrice } from './priceFormat';
 import { normalizeTemplateAction, resolveContactActions, TemplateAction, validateTemplateActions } from './templateActions';
 import {
-  TemplateButton,
   TemplateCard,
   PremiumReviewsSlider,
   TemplateSection,
@@ -114,7 +113,7 @@ function RestaurantPremiumNavigation({ website }: { website: Website }) {
             href={action.href}
             target={action.href.startsWith('http') ? '_blank' : undefined}
             rel={action.href.startsWith('http') ? 'noreferrer' : undefined}
-            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-md bg-[var(--premium-cta)] px-4 py-2.5 text-sm font-semibold text-[var(--premium-cta-text)] shadow-sm transition hover:bg-[var(--premium-cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2"
+            className="inline-flex min-h-11 shrink-0 translate-y-0 items-center justify-center gap-2 rounded-md border border-[var(--premium-cta-border)] bg-[linear-gradient(180deg,var(--premium-cta-gradient-from),var(--premium-cta-gradient-to))] px-4 py-2.5 text-sm font-semibold text-[var(--premium-cta-text)] shadow-[var(--premium-cta-shadow)] transition duration-200 hover:-translate-y-0.5 hover:bg-[linear-gradient(180deg,var(--premium-cta-hover-gradient-from),var(--premium-cta-hover-gradient-to))] hover:shadow-[0_20px_42px_rgba(20,15,11,.28)] focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2"
             style={{ color: 'var(--premium-cta-text)' }}
           >
             {action.icon}
@@ -138,7 +137,7 @@ function PremiumRestaurantHero({ website }: { website: Website }) {
       <div className="absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(180deg,transparent,var(--premium-surface-dark))]" />
       <div className="relative mx-auto grid min-h-[88vh] max-w-6xl content-end gap-7 px-4 pb-10 pt-24 md:grid-cols-[1fr_0.46fr] md:items-end md:pb-16">
         <div className="max-w-3xl text-[var(--premium-hero-text)]">
-          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--premium-border-strong)] bg-black/45 px-4 py-2 font-[var(--restaurant-eyebrow-font)] text-xs font-semibold uppercase text-[var(--premium-hero-text)] shadow-[0_18px_70px_rgba(0,0,0,.32)] backdrop-blur">
+          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--premium-border-strong)] bg-black/[.45] px-4 py-2 font-[var(--restaurant-eyebrow-font)] text-xs font-semibold uppercase text-[var(--premium-hero-text)] shadow-[0_18px_70px_rgba(0,0,0,.32)] backdrop-blur">
             <Crown className="size-4" />
             Restaurant reservations
           </p>
@@ -153,19 +152,19 @@ function PremiumRestaurantHero({ website }: { website: Website }) {
           </p>
           {actions.length > 0 && (
             <div className="mt-8 flex flex-wrap gap-3">
-              {actions.map((action) => <TemplateButton key={action.href} {...action} />)}
+              {actions.map((action) => <RestaurantPremiumActionLink key={action.href} action={action} context="hero" />)}
             </div>
           )}
           <div className="mt-10 grid max-w-2xl gap-3 text-sm text-[var(--premium-text-on-dark)] sm:grid-cols-3">
             {['Chef selected menu', 'Easy reservations', 'Comfortable dining'].map((item) => (
-              <p key={item} className="flex items-center gap-2 rounded-md border border-white/20 bg-black/38 px-3 py-2 backdrop-blur">
+              <p key={item} className="flex items-center gap-2 rounded-md border border-white/20 bg-black/[.38] px-3 py-2 backdrop-blur">
                 <Sparkles className="size-4 text-[var(--premium-accent)]" />
                 {item}
               </p>
             ))}
           </div>
         </div>
-        <div className="relative rounded-lg border border-[var(--premium-border-strong)] bg-[var(--premium-hero-card-background)] p-6 text-[var(--premium-hero-card-text)] shadow-[0_28px_90px_rgba(0,0,0,.45)] backdrop-blur-md">
+        <div className="relative rounded-lg border border-[var(--premium-surface-dark-border)] bg-[linear-gradient(145deg,var(--premium-surface-dark-gradient-from),var(--premium-surface-dark-gradient-to))] p-6 text-[var(--premium-hero-card-text)] shadow-[var(--premium-surface-dark-shadow)] backdrop-blur-md">
           <div className="absolute -top-5 right-6 rounded-full border border-[var(--premium-border-strong)] bg-[var(--premium-surface-dark)] px-4 py-2 text-sm font-semibold text-[var(--premium-hero-card-text)]">
             Open for guests
           </div>
@@ -324,7 +323,7 @@ function PremiumDishMedia({ dish, index }: { dish: PremiumDish; index: number })
   return (
     <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_35%_25%,color-mix(in_srgb,var(--premium-accent)_46%,transparent),transparent_30%),linear-gradient(135deg,var(--premium-surface-dark),var(--premium-modal-background))] text-[var(--premium-accent)]">
       <Utensils className="size-10" />
-      <span className="absolute left-4 top-4 rounded-full border border-white/25 bg-black/55 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
+      <span className="absolute left-4 top-4 rounded-full border border-white/25 bg-black/[.55] px-3 py-1 text-xs font-semibold text-white backdrop-blur">
         {labels[index % labels.length]}
       </span>
     </div>
@@ -409,13 +408,13 @@ function VisitReservationSection({ website }: { website: Website }) {
           <h3 className="tpl-h3 tenant-heading">Opening hours</h3>
           <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{formatOpeningHours(website.openingHours)}</p>
         </TemplateCard>
-        <article className="rounded-lg border border-[var(--premium-border-strong)] bg-[var(--premium-surface-dark)] p-5 text-[var(--premium-text-on-dark)] shadow-xl">
+        <article className="rounded-lg border border-[var(--premium-surface-dark-border)] bg-[linear-gradient(145deg,var(--premium-surface-dark-gradient-from),var(--premium-surface-dark-gradient-to))] p-5 text-[var(--premium-text-on-dark)] shadow-[var(--premium-surface-dark-shadow)]">
           <CalendarCheck className="mb-4 size-5 text-[var(--premium-accent)]" />
           <h3 className="font-[var(--restaurant-heading-font)] text-2xl font-semibold leading-tight tracking-normal text-[var(--premium-text-on-dark)]">Reserve your table tonight</h3>
           <p className="mt-3 text-sm leading-6 text-[var(--premium-hero-muted-text)]">Reserve a table or ask what is available today.</p>
           {actions.length > 0 && (
             <div className="mt-5 flex flex-wrap gap-3">
-              {actions.map((action) => <TemplateButton key={action.href} {...action} />)}
+              {actions.map((action) => <RestaurantPremiumActionLink key={action.href} action={action} context="visit" />)}
             </div>
           )}
         </article>
@@ -426,7 +425,7 @@ function VisitReservationSection({ website }: { website: Website }) {
 
 function RestaurantPremiumFooter({ website }: { website: Website }) {
   return (
-    <footer className="border-t border-[var(--premium-border-subtle)] bg-[var(--premium-surface-dark)] py-10 text-[var(--premium-text-on-dark)]">
+    <footer className="border-t border-[var(--premium-footer-top-border)] bg-[linear-gradient(145deg,var(--premium-footer-gradient-from),var(--premium-footer-gradient-to))] py-10 text-[var(--premium-text-on-dark)] shadow-[inset_0_1px_0_rgba(255,255,255,.06)]">
       <div className="mx-auto grid max-w-6xl gap-6 px-4 text-sm md:grid-cols-[1fr_auto] md:items-end">
         <div>
           <p className="font-[var(--restaurant-heading-font)] text-2xl font-semibold tracking-normal">{website.businessName}</p>
@@ -441,6 +440,47 @@ function RestaurantPremiumFooter({ website }: { website: Website }) {
       </div>
     </footer>
   );
+}
+
+function RestaurantPremiumActionLink({ action, context }: { action: TemplateAction; context: 'hero' | 'visit' }) {
+  const normalizedAction = normalizeTemplateAction(action);
+  if (!normalizedAction) return null;
+  const variant = normalizedAction.variant ?? 'primary';
+
+  return (
+    <a
+      data-template-cta={normalizedAction.action}
+      className={restaurantPremiumActionClass(variant, context)}
+      href={normalizedAction.href}
+      rel={normalizedAction.href.startsWith('http') ? 'noreferrer' : undefined}
+      style={restaurantPremiumActionStyle(variant, context)}
+      target={normalizedAction.href.startsWith('http') ? '_blank' : undefined}
+    >
+      {normalizedAction.icon}
+      <span>{normalizedAction.label}</span>
+    </a>
+  );
+}
+
+function restaurantPremiumActionClass(variant: TemplateAction['variant'], context: 'hero' | 'visit') {
+  const base = 'inline-flex min-h-11 translate-y-0 items-center justify-center gap-2 rounded-md border px-5 py-2.5 text-sm font-semibold transition duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2';
+  if (variant === 'primary') {
+    return `${base} border-[var(--premium-cta-border)] bg-[linear-gradient(180deg,var(--premium-cta-gradient-from),var(--premium-cta-gradient-to))] text-[var(--premium-cta-text)] shadow-[var(--premium-cta-shadow)] hover:bg-[linear-gradient(180deg,var(--premium-cta-hover-gradient-from),var(--premium-cta-hover-gradient-to))]`;
+  }
+  if (variant === 'tertiary') {
+    return `${base} border-white/35 bg-white/10 text-white shadow-[0_14px_34px_rgba(0,0,0,.18),inset_0_1px_0_rgba(255,255,255,.16)] backdrop-blur hover:bg-white/[.16]`;
+  }
+  if (context === 'visit') {
+    return `${base} border-[var(--premium-secondary-cta-border)] bg-[linear-gradient(180deg,var(--premium-secondary-cta-gradient-from),var(--premium-secondary-cta-gradient-to))] text-[var(--premium-secondary-cta-text)] shadow-[var(--premium-secondary-cta-shadow)] hover:brightness-[.98]`;
+  }
+  return `${base} border-[var(--premium-cta-border)] bg-black/[.35] text-[var(--premium-hero-text)] shadow-[0_14px_34px_rgba(0,0,0,.2),inset_0_1px_0_rgba(255,255,255,.12)] backdrop-blur hover:bg-black/[.45]`;
+}
+
+function restaurantPremiumActionStyle(variant: TemplateAction['variant'], context: 'hero' | 'visit') {
+  if (variant === 'primary') return { color: 'var(--premium-cta-text)' };
+  if (variant === 'tertiary') return { color: '#ffffff' };
+  if (context === 'visit') return { color: 'var(--premium-secondary-cta-text)' };
+  return { color: 'var(--premium-hero-text)' };
 }
 
 function resolveRestaurantNavigationAction(website: Website) {

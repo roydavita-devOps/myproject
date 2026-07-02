@@ -12,6 +12,8 @@ The Restaurant Premium editorial refinement also adds renderer-local typography 
 
 Stage 9.8D-R6 refines Restaurant Premium into the first Premium Experience Foundation reference for semantic color behavior.
 
+Stage 9.8D-R8 adds a Restaurant Premium depth token layer for subtle CTA, dark surface, footer, and modal tab polish.
+
 The system separates:
 
 - Template = layout and experience.
@@ -34,6 +36,7 @@ Included:
 - Contrast-safe semantic text, surface, border, hero, CTA, and card overlay variables.
 - Restaurant Premium renderer-local typography variables for heading, body, eyebrow, hero title, section title, line height, letter spacing, and font weights.
 - Restaurant Premium semantic color tokens for image-safe hero overlays, CTA contrast, modal alignment, price text, and badge treatment.
+- Restaurant Premium depth tokens for CTA gradients, button borders, button shadows, dark surface gradients, footer gradients, and modal surface gradients.
 
 Excluded:
 
@@ -77,8 +80,19 @@ Premium templates consume:
 - `--premium-cta`
 - `--premium-cta-hover`
 - `--premium-cta-text`
+- `--premium-cta-gradient-from`
+- `--premium-cta-gradient-to`
+- `--premium-cta-hover-gradient-from`
+- `--premium-cta-hover-gradient-to`
+- `--premium-cta-border`
+- `--premium-cta-shadow`
+- `--premium-cta-inner-highlight`
 - `--premium-secondary-cta`
 - `--premium-secondary-cta-text`
+- `--premium-secondary-cta-gradient-from`
+- `--premium-secondary-cta-gradient-to`
+- `--premium-secondary-cta-border`
+- `--premium-secondary-cta-shadow`
 - `--premium-hero-overlay`
 - `--premium-text-primary`
 - `--premium-text-secondary`
@@ -101,8 +115,18 @@ Premium templates consume:
 - `--premium-hero-muted-text`
 - `--premium-hero-card-background`
 - `--premium-hero-card-text`
+- `--premium-surface-dark-gradient-from`
+- `--premium-surface-dark-gradient-to`
+- `--premium-surface-dark-border`
+- `--premium-surface-dark-shadow`
+- `--premium-footer-gradient-from`
+- `--premium-footer-gradient-to`
+- `--premium-footer-top-border`
 - `--premium-modal-background`
 - `--premium-modal-surface`
+- `--premium-modal-surface-gradient-from`
+- `--premium-modal-surface-gradient-to`
+- `--premium-modal-surface-border`
 - `--premium-modal-text`
 - `--premium-modal-muted-text`
 - `--premium-modal-border`
@@ -160,6 +184,7 @@ Design rule:
 No Prisma migration is required for Stage 9.8C.
 No Prisma migration is required for Stage 9.8D editorial refinement.
 No Prisma migration is required for Stage 9.8D-R6 color system remediation.
+No Prisma migration is required for Stage 9.8D-R8 button and surface depth polish.
 
 Reason:
 

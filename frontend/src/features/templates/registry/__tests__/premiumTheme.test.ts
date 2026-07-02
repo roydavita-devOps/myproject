@@ -142,6 +142,11 @@ describe('premium theme tokens', () => {
     expect(style['--premium-hero-scrim' as keyof typeof style]).toBeTruthy();
     expect(style['--premium-modal-background' as keyof typeof style]).toBeTruthy();
     expect(style['--premium-price-text' as keyof typeof style]).toBeTruthy();
+    expect(style['--premium-cta-gradient-from' as keyof typeof style]).toBeTruthy();
+    expect(style['--premium-cta-border' as keyof typeof style]).toBeTruthy();
+    expect(style['--premium-surface-dark-gradient-from' as keyof typeof style]).toBeTruthy();
+    expect(style['--premium-footer-gradient-from' as keyof typeof style]).toBeTruthy();
+    expect(style['--premium-modal-surface-gradient-from' as keyof typeof style]).toBeTruthy();
   });
 
   it('does not apply premium-only CSS variables to standard templates', () => {
@@ -195,16 +200,37 @@ describe('premium theme tokens', () => {
       'cta',
       'ctaHover',
       'ctaText',
+      'ctaGradientFrom',
+      'ctaGradientTo',
+      'ctaHoverGradientFrom',
+      'ctaHoverGradientTo',
+      'ctaBorder',
+      'ctaShadow',
+      'ctaInnerHighlight',
       'secondaryCta',
       'secondaryCtaText',
+      'secondaryCtaGradientFrom',
+      'secondaryCtaGradientTo',
+      'secondaryCtaBorder',
+      'secondaryCtaShadow',
       'heroOverlay',
       'heroScrim',
       'heroText',
       'heroMutedText',
       'heroCardBackground',
       'heroCardText',
+      'surfaceDarkGradientFrom',
+      'surfaceDarkGradientTo',
+      'surfaceDarkBorder',
+      'surfaceDarkShadow',
+      'footerGradientFrom',
+      'footerGradientTo',
+      'footerTopBorder',
       'modalBackground',
       'modalSurface',
+      'modalSurfaceGradientFrom',
+      'modalSurfaceGradientTo',
+      'modalSurfaceBorder',
       'modalText',
       'modalMutedText',
       'modalBorder',
