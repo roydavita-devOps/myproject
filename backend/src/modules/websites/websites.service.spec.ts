@@ -124,6 +124,65 @@ describe('WebsitesService', () => {
     });
   });
 
+  it('persists hero media slideshow metadata through Prisma', async () => {
+    const prisma = createPrismaMock();
+    const service = new WebsitesService(prisma as never, createUploadsMock() as never, createTemplatesMock() as never);
+
+    const heroMedia = {
+      heroMediaType: 'slideshow',
+      heroImages: [
+        {
+          url: '/api/v1/uploads/tenant-1/hero/hero-1-large.webp',
+          thumbnailUrl: '/api/v1/uploads/tenant-1/hero/hero-1-thumb.webp',
+          largeUrl: '/api/v1/uploads/tenant-1/hero/hero-1-large.webp',
+          alt: 'Restaurant hero image',
+        },
+        { url: 'https://cdn.example.com/hero-2-large.webp' },
+      ],
+    };
+
+    await service.updateThemeAssets(tenantId, websiteId, { heroMedia });
+
+    expect(prisma.theme.updateMany).toHaveBeenCalledWith({
+      where: { id: 'theme-1', tenantId },
+      data: { heroMedia },
+    });
+  });
+
+  it('deletes removed owned hero slideshow uploads when hero media changes', async () => {
+    const prisma = createPrismaMock();
+    prisma.website.findFirst.mockResolvedValue({
+      id: websiteId,
+      tenantId,
+      themeId: 'theme-1',
+      templateId: 'template-old',
+      status: WebsiteStatus.DRAFT,
+      businessName: 'Original Business',
+      theme: {
+        heroImageUrl: '/api/v1/uploads/tenant-1/hero/protected-large.webp',
+        heroMedia: {
+          heroMediaType: 'slideshow',
+          heroImages: [
+            { url: '/api/v1/uploads/tenant-1/hero/remove-large.webp' },
+            { url: '/api/v1/uploads/tenant-1/hero/protected-large.webp' },
+          ],
+        },
+      },
+    });
+    const uploads = createUploadsMock();
+    const service = new WebsitesService(prisma as never, uploads as never, createTemplatesMock() as never);
+
+    await service.updateThemeAssets(tenantId, websiteId, {
+      heroMedia: {
+        heroMediaType: 'image',
+        heroImages: [{ url: '/api/v1/uploads/tenant-1/hero/protected-large.webp' }],
+      },
+    });
+
+    expect(uploads.deleteTenantAssetByUrl).toHaveBeenCalledWith(tenantId, '/api/v1/uploads/tenant-1/hero/remove-large.webp', 'hero');
+    expect(uploads.deleteTenantAssetByUrl).not.toHaveBeenCalledWith(tenantId, '/api/v1/uploads/tenant-1/hero/protected-large.webp', 'hero');
+  });
+
   it('rejects empty theme asset payloads instead of returning a no-op success', async () => {
     const prisma = createPrismaMock();
     const service = new WebsitesService(prisma as never, createUploadsMock() as never, createTemplatesMock() as never);

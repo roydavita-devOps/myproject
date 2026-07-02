@@ -50,11 +50,12 @@ Last updated: 2026-07-02
 - Stage 9.8D-R7 Restaurant Premium Final Polish.
 - Stage 9.8D-R8 Restaurant Premium Button and Surface Depth Polish.
 - Stage 9.8D-R9 Gallery Multiple Upload, Bulk Delete and Image Type Guard.
+- Stage 9.8D-R10 Premium Hero Slideshow for Restaurant Premium.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.8D-R9 Gallery Multiple Upload, Bulk Delete and Image Type Guard approval checkpoint.
+- Stage 9.8D-R10 Premium Hero Slideshow approval checkpoint.
 
 ## Planned
 
@@ -210,6 +211,15 @@ Stage 9.8D-R9 improves Gallery management:
 - Gallery supports single image delete plus selected bulk delete without removing unrelated website, menu, tenant, or business data.
 - MVP upload formats are JPG, JPEG, PNG, and WEBP only; HEIC, HEIF, GIF, SVG, BMP, TIFF, and AVIF remain out of scope.
 - The existing upload processing/storage pipeline remains unchanged.
+
+Stage 9.8D-R10 adds lightweight Premium Hero motion:
+
+- Restaurant Premium supports Static image and Rotating images display modes.
+- Rotating hero images use 2-5 uploaded JPG, JPEG, PNG, or WEBP images processed by the existing WebP upload pipeline.
+- The slideshow uses calm auto crossfade timing and image-safe overlays to preserve readability.
+- Reduced-motion browsers receive a static first-image fallback.
+- Short video hero, video upload, ffmpeg, transcoding, poster generation, and advanced media library features remain deferred.
+- Classic templates remain static-image-first; premium templates may support controlled rotating hero images when explicitly approved.
 
 Potential categories:
 

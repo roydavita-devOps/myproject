@@ -216,6 +216,7 @@ model Theme {
   typography     Json
   logoUrl        String?   @map("logo_url")
   heroImageUrl   String?   @map("hero_image_url")
+  heroMedia      Json?     @map("hero_media")
   tenant         Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   websites       Website[]
   createdAt      DateTime  @default(now()) @map("created_at")

@@ -129,6 +129,11 @@ html {
   will-change: transform;
 }
 
+.premium-hero-slide {
+  transition: opacity 1100ms ease-in-out;
+  will-change: opacity, transform;
+}
+
 .premium-review-slider {
   scroll-behavior: smooth;
   scrollbar-width: thin;
@@ -158,6 +163,11 @@ html {
   .premium-hero-motion {
     animation: none;
     transform: none;
+    will-change: auto;
+  }
+
+  .premium-hero-slide {
+    transition: none;
     will-change: auto;
   }
 

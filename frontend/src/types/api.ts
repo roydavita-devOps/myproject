@@ -56,7 +56,7 @@ export type Template = {
   id: string;
   name: string;
   businessType: string;
-  schema: { sections?: string[] };
+  schema: { sections?: string[]; templateKey?: string; rendererKey?: string };
 };
 
 export type TemplateCatalogItem = {
@@ -79,6 +79,22 @@ export type Theme = {
   typography?: { heading?: string; body?: string; premiumColorPreset?: string };
   logoUrl?: string | null;
   heroImageUrl?: string | null;
+  heroMedia?: HeroMedia | null;
+};
+
+export type HeroMediaType = 'image' | 'slideshow';
+
+export type HeroMediaImage = {
+  url: string;
+  thumbnailUrl?: string;
+  mediumUrl?: string;
+  largeUrl?: string;
+  alt?: string;
+};
+
+export type HeroMedia = {
+  heroMediaType: HeroMediaType;
+  heroImages: HeroMediaImage[];
 };
 
 export type Website = {

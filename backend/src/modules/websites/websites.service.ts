@@ -96,15 +96,27 @@ export class WebsitesService {
 
   async updateThemeAssets(tenantId: string, id: string, dto: UpdateThemeAssetsDto) {
     const website = await this.findOne(tenantId, id);
+    const heroMedia = dto.heroMedia !== undefined ? validateHeroMedia(dto.heroMedia) : undefined;
     const data = {
       ...(dto.logoUrl !== undefined ? { logoUrl: dto.logoUrl } : {}),
       ...(dto.heroImageUrl !== undefined ? { heroImageUrl: dto.heroImageUrl } : {}),
+      ...(dto.heroMedia !== undefined ? { heroMedia } : {}),
       ...(dto.primaryColor !== undefined ? { primaryColor: dto.primaryColor } : {}),
       ...(dto.secondaryColor !== undefined ? { secondaryColor: dto.secondaryColor } : {}),
       ...(dto.accentColor !== undefined ? { accentColor: dto.accentColor } : {}),
       ...(dto.premiumColorPreset !== undefined ? { typography: themeTypographyWithPreset(website.theme?.typography, dto.premiumColorPreset) } : {}),
     };
     if (Object.keys(data).length === 0) throw new BadRequestException('At least one theme asset is required');
+
+    if (dto.heroMedia !== undefined && website.theme) {
+      const protectedUrls = new Set([website.theme.heroImageUrl, dto.heroImageUrl].filter((url): url is string => typeof url === 'string' && url.length > 0));
+      const previousUrls = extractHeroMediaUrls(website.theme.heroMedia);
+      const nextUrls = extractHeroMediaUrls(heroMedia);
+      const removedUrls = previousUrls.filter((url) => !nextUrls.includes(url) && !protectedUrls.has(url));
+      for (const url of removedUrls) {
+        await this.deleteUploadIfPresent(tenantId, url, 'hero');
+      }
+    }
 
     if (website.themeId) {
       await this.prisma.theme.updateMany({
@@ -277,4 +289,72 @@ function themeTypographyWithPreset(current: unknown, premiumColorPreset: string)
     body: typeof base.body === 'string' ? base.body : 'Inter',
     premiumColorPreset,
   } as Prisma.InputJsonValue;
+}
+
+const assetUrlPattern = /^(\/api\/v1\/uploads\/|https?:\/\/).+/;
+const allowedHeroMediaTypes = new Set(['image', 'slideshow']);
+
+function validateHeroMedia(heroMedia: unknown): Prisma.InputJsonValue {
+  if (!heroMedia || typeof heroMedia !== 'object' || Array.isArray(heroMedia)) {
+    throw new BadRequestException('Hero media must be an object');
+  }
+
+  const candidate = heroMedia as Record<string, unknown>;
+  if (!allowedHeroMediaTypes.has(String(candidate.heroMediaType))) {
+    throw new BadRequestException('Hero media type must be image or slideshow');
+  }
+
+  const rawImages = candidate.heroImages;
+  if (!Array.isArray(rawImages)) {
+    throw new BadRequestException('Hero media images must be an array');
+  }
+  if (rawImages.length > 5) {
+    throw new BadRequestException('Hero slideshow supports up to 5 images');
+  }
+
+  const heroImages = rawImages.map((item) => {
+    if (!item || typeof item !== 'object' || Array.isArray(item)) {
+      throw new BadRequestException('Hero media image must be an object');
+    }
+    const image = item as Record<string, unknown>;
+    const url = requiredAssetUrl(image.url, 'Hero media image URL is invalid');
+    return stripUndefined({
+      url,
+      thumbnailUrl: optionalAssetUrl(image.thumbnailUrl, 'Hero media thumbnail URL is invalid'),
+      mediumUrl: optionalAssetUrl(image.mediumUrl, 'Hero media medium URL is invalid'),
+      largeUrl: optionalAssetUrl(image.largeUrl, 'Hero media large URL is invalid'),
+      alt: typeof image.alt === 'string' ? image.alt.slice(0, 160) : undefined,
+    });
+  });
+
+  return {
+    heroMediaType: String(candidate.heroMediaType),
+    heroImages,
+  } as Prisma.InputJsonValue;
+}
+
+function requiredAssetUrl(value: unknown, message: string) {
+  if (typeof value !== 'string' || !assetUrlPattern.test(value)) throw new BadRequestException(message);
+  return value;
+}
+
+function optionalAssetUrl(value: unknown, message: string) {
+  if (value === undefined || value === null || value === '') return undefined;
+  return requiredAssetUrl(value, message);
+}
+
+function extractHeroMediaUrls(heroMedia: unknown) {
+  if (!heroMedia || typeof heroMedia !== 'object' || Array.isArray(heroMedia)) return [];
+  const images = (heroMedia as Record<string, unknown>).heroImages;
+  if (!Array.isArray(images)) return [];
+  const urls = new Set<string>();
+  for (const item of images) {
+    if (!item || typeof item !== 'object' || Array.isArray(item)) continue;
+    const image = item as Record<string, unknown>;
+    for (const key of ['url', 'thumbnailUrl', 'mediumUrl', 'largeUrl']) {
+      const url = image[key];
+      if (typeof url === 'string' && assetUrlPattern.test(url)) urls.add(url);
+    }
+  }
+  return [...urls];
 }

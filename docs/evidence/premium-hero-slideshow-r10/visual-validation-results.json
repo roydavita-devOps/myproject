@@ -1,0 +1,56 @@
+{
+  "generatedAt": "2026-07-02T09:12:51.157Z",
+  "baseURL": "http://127.0.0.1",
+  "screenshots": {
+    "heroDisplaySettingsStatic": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-hero-slideshow-r10/hero-display-settings-static.png",
+    "heroDisplaySettingsSlideshow": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-hero-slideshow-r10/hero-display-settings-slideshow.png",
+    "heroSlideshowThumbnails": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-hero-slideshow-r10/hero-slideshow-thumbnails.png",
+    "restaurantPremiumHeroSlideshowDesktop": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-hero-slideshow-r10/restaurant-premium-hero-slideshow-desktop.png",
+    "restaurantPremiumHeroSlideshowMobile": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-hero-slideshow-r10/restaurant-premium-hero-slideshow-mobile.png",
+    "restaurantPremiumHeroStaticFallback": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-hero-slideshow-r10/restaurant-premium-hero-static-fallback.png",
+    "restaurantPremiumHeroReducedMotionFallback": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-hero-slideshow-r10/restaurant-premium-hero-reduced-motion-fallback.png",
+    "heroSlideshowDeleteImage": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-hero-slideshow-r10/hero-slideshow-delete-image.png"
+  },
+  "results": [
+    {
+      "target": "hero_display_settings_static",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_premium_static_hero_fallback",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "hero_display_settings_slideshow",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "hero_slideshow_thumbnails",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_premium_hero_slideshow",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_premium_hero_slideshow",
+      "viewport": "mobile",
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_premium_reduced_motion_fallback",
+      "viewport": "mobile",
+      "status": "passed"
+    },
+    {
+      "target": "hero_slideshow_delete_image",
+      "viewport": "desktop",
+      "status": "passed"
+    }
+  ]
+}

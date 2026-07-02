@@ -4,7 +4,7 @@ Last updated: 2026-07-02
 
 ## Current Stage
 
-Stage 9.8D-R9 - Gallery Multiple Upload, Bulk Delete and Image Type Guard.
+Stage 9.8D-R10 - Premium Hero Slideshow for Restaurant Premium.
 
 Status: implemented, locally validated, evidence captured, and ready for approval.
 
@@ -57,6 +57,7 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 | Stage 9.8D-R7 Restaurant Premium Final Polish | Completed; awaiting approval. |
 | Stage 9.8D-R8 Restaurant Premium Button and Surface Depth Polish | Completed; awaiting approval. |
 | Stage 9.8D-R9 Gallery Multiple Upload, Bulk Delete and Image Type Guard | Completed; awaiting approval. |
+| Stage 9.8D-R10 Premium Hero Slideshow for Restaurant Premium | Completed; awaiting approval. |
 
 ## Current Blockers
 
@@ -80,12 +81,13 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 | Restaurant Premium final polish | Resolved for Stage 9.8D-R7 | Opening hours now render as customer-facing text, Gallery placeholders use readable semantic tokens, Signature copy is natural, and Menu/Story/Gallery/Visit anchors are stable. |
 | Restaurant Premium button and surface flatness | Resolved for Stage 9.8D-R8 | Restaurant Premium CTAs, visit card, footer, and full menu modal tabs now use subtle depth tokens for gradient, border, shadow, and hover lift without changing layout. |
 | Gallery management efficiency | Resolved for Stage 9.8D-R9 | Gallery now supports multiple file picker upload, multiple drag-and-drop upload, per-file validation/status, single delete confirmation, and selected bulk delete. |
+| Premium hero motion | Resolved for Stage 9.8D-R10 implementation | Restaurant Premium supports Static image or Rotating images using 2-5 optimized hero images, reduced-motion fallback, and static hero backward compatibility. |
 | Luxury templates | Paused | No Luxury template implementation until separately approved. |
 | Template Catalog UI | Paused | No marketplace, comparison page, entitlement, or subscription access logic in Stage 9.7B. |
 
 ## Next Actions
 
-1. Review Stage 9.8D-R9 Gallery Multiple Upload, Bulk Delete and Image Type Guard evidence.
+1. Review Stage 9.8D-R10 Premium Hero Slideshow evidence.
 2. Approve or request corrections.
 3. Keep Luxury, Catalog UI, marketplace, subscription, entitlement, preview-before-apply, and switch history paused until separately approved.
 4. After approval, proceed only to the next approved stage.
@@ -95,7 +97,7 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 
 | System | Current Status |
 | --- | --- |
-| Local Docker | Running and validated during Stage 9.8D-R9. |
+| Local Docker | Running and validated during Stage 9.8D-R10. |
 | GitHub | Latest code and documentation branch strategy uses `main`, `staging`, and `pilot`. |
 | Vercel | Production frontend active. |
 | Railway | Backend health endpoints active. |
@@ -130,5 +132,6 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 - Restaurant Premium final polish report: [../06-modern-template/reports/PHASE-9.8D-R7-Restaurant-Premium-Final-Polish-Report.md](../06-modern-template/reports/PHASE-9.8D-R7-Restaurant-Premium-Final-Polish-Report.md)
 - Restaurant Premium button and surface depth polish report: [../06-modern-template/reports/PHASE-9.8D-R8-Restaurant-Premium-Button-And-Surface-Depth-Polish-Report.md](../06-modern-template/reports/PHASE-9.8D-R8-Restaurant-Premium-Button-And-Surface-Depth-Polish-Report.md)
 - Gallery multiple upload and bulk delete report: [../06-modern-template/reports/PHASE-9.8D-R9-Gallery-Multiple-Upload-And-Bulk-Delete-Report.md](../06-modern-template/reports/PHASE-9.8D-R9-Gallery-Multiple-Upload-And-Bulk-Delete-Report.md)
+- Premium hero slideshow report: [../06-modern-template/reports/PHASE-9.8D-R10-Premium-Hero-Slideshow-Report.md](../06-modern-template/reports/PHASE-9.8D-R10-Premium-Hero-Slideshow-Report.md)
 - Template Catalog readiness audit: [../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md](../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md)
 - Template consistency audit: [../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md](../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md)

@@ -96,6 +96,31 @@ Frontend persists primary processed WebP URL
 
 Stage 9.8D-R9 adds Gallery batch UX on top of the same single-upload pipeline. The frontend uploads selected gallery files one by one through the existing `/uploads/gallery` endpoint, then appends each successful returned URL to the existing Gallery records.
 
+Stage 9.8D-R10 adds Restaurant Premium hero slideshow UX on top of the same single-upload pipeline. The dashboard uploads each slideshow image through the existing `/uploads/hero` endpoint and stores image references in nullable `Theme.heroMedia`.
+
+Hero slideshow persistence:
+
+```json
+{
+  "heroMediaType": "slideshow",
+  "heroImages": [
+    {
+      "url": ".../large.webp",
+      "thumbnailUrl": ".../thumb.webp",
+      "mediumUrl": ".../medium.webp",
+      "largeUrl": ".../large.webp",
+      "alt": "Restaurant hero image"
+    }
+  ]
+}
+```
+
+Backward compatibility rule:
+
+```text
+Theme.heroImageUrl remains the static hero fallback and is not removed.
+```
+
 Batch upload rule:
 
 ```text
@@ -155,6 +180,7 @@ Current image removal behavior:
 | --- | --- |
 | logo | Clears `Theme.logoUrl`. |
 | hero | Clears `Theme.heroImageUrl`. |
+| hero slideshow image | Removes the image reference from `Theme.heroMedia` and attempts `hero` variant cleanup when the URL belongs to the tenant. |
 | menu image | Clears `Menu.imageUrl`; keeps the menu item active. |
 | gallery image | Archives the gallery record; keeps website and other gallery data intact. |
 
@@ -208,4 +234,4 @@ Vercel frontend must not set `SUPABASE_SERVICE_ROLE_KEY`.
 1. Set `STORAGE_DRIVER=local` for local-only rollback.
 2. Keep Supabase URLs in database records; they remain public URLs.
 3. If rolling back production from Supabase to local, first backfill Supabase objects to local storage or affected images may disappear.
-4. No Prisma migration rollback is required because the stage does not change schema.
+4. Stage 9.8D-R10 adds nullable `Theme.heroMedia`; rollback can set `hero_media` to `NULL` and keep `heroImageUrl` as the static fallback.

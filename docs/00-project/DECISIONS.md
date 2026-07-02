@@ -453,6 +453,27 @@ Reason:
 - Strict format policy prevents unsupported browser/device formats from becoming broken public images.
 - Bulk delete must prioritize public gallery cleanup while preserving the parent website and other content.
 
+## Premium Hero Slideshow
+
+Status: Approved for Stage 9.8D-R10 implementation.
+
+Decision:
+
+- Premium templates may support lightweight image slideshow hero sections when explicitly approved.
+- Restaurant Premium is the first implementation target.
+- Existing `Theme.heroImageUrl` remains the backward-compatible static hero field.
+- Additive nullable `Theme.heroMedia` stores premium hero display mode and up to five slideshow image references.
+- Hero slideshow uses optimized existing image upload variants and preserves image-safe dark overlays for readability.
+- Reduced-motion users receive a static first-image fallback.
+- Short video hero is deferred until a dedicated video upload, validation, processing, and delivery pipeline exists.
+- Classic templates remain static-image-first unless separately approved.
+
+Reason:
+
+- Premium templates need commercially valuable motion without introducing heavy video complexity.
+- Additive nullable persistence avoids breaking existing tenants and keeps static hero behavior intact.
+- Image-only slideshow can reuse the existing JPG/PNG/WEBP validation, Sharp WebP conversion, Supabase/local storage adapter, and delete cleanup behavior.
+
 ## Template Selection And Assignment Audit
 
 Status: Completed for Stage 9.7A.

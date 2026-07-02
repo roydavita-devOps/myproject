@@ -1,4 +1,4 @@
-import { Website } from '../../types/api';
+import { HeroMedia, Website } from '../../types/api';
 import { http } from '../../lib/api/http';
 
 export type UpdateWebsitePayload = Partial<
@@ -12,6 +12,7 @@ export type UpdateThemeAssetsPayload = {
   secondaryColor?: string;
   accentColor?: string;
   premiumColorPreset?: string;
+  heroMedia?: HeroMedia;
 };
 
 export type ThemeAssetType = 'logo' | 'hero';

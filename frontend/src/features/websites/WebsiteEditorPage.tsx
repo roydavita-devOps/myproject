@@ -10,9 +10,10 @@ import { Field, TextArea, TextInput } from '../../components/ui/Field';
 import { ImageUpload } from '../../components/ui/ImageUpload';
 import { LoadingState } from '../../components/ui/State';
 import { resolveAssetUrl } from '../../lib/api/assets';
-import { GalleryItem, Website } from '../../types/api';
+import { GalleryItem, HeroMedia, Website } from '../../types/api';
 import { uploadsApi } from '../uploads/uploads.api';
 import { validateUploadImageFile } from '../uploads/imageValidation';
+import { activeHeroImageUrl, createHeroMedia, heroImageMaxSizeMb, maxHeroSlideshowImages, minHeroSlideshowImages, normalizeHeroMedia } from '../uploads/heroMedia';
 
 type OpeningHoursForm = {
   mode: OpeningHoursMode;
@@ -132,7 +133,7 @@ export function WebsiteEditorPage() {
     },
   });
   const themeAssetsMutation = useMutation({
-    mutationFn: (payload: { logoUrl?: string; heroImageUrl?: string }) => websitesApi.updateThemeAssets(websiteId, payload),
+    mutationFn: (payload: { logoUrl?: string; heroImageUrl?: string; heroMedia?: HeroMedia }) => websitesApi.updateThemeAssets(websiteId, payload),
     onSuccess: (updatedWebsite) => {
       syncWebsiteQueries(updatedWebsite);
     },
@@ -357,6 +358,17 @@ export function WebsiteEditorPage() {
             await deleteThemeAssetMutation.mutateAsync('hero');
           }}
         />
+        {isRestaurantPremiumTemplate(website) && (
+          <HeroSlideshowManager
+            websiteId={website.id}
+            businessName={website.businessName}
+            heroMedia={website.theme?.heroMedia}
+            onSave={async (heroMedia) => {
+              await themeAssetsMutation.mutateAsync({ heroMedia });
+            }}
+            isSaving={themeAssetsMutation.isPending}
+          />
+        )}
       </section>
 
       <section className="panel grid gap-5 p-5">
@@ -389,6 +401,206 @@ export function WebsiteEditorPage() {
         Simpan informasi, upload logo, tambah menu, lalu publish untuk mengaktifkan panel share.
       </section>
     </section>
+  );
+}
+
+function HeroSlideshowManager({
+  websiteId,
+  businessName,
+  heroMedia,
+  onSave,
+  isSaving,
+}: {
+  websiteId: string;
+  businessName: string;
+  heroMedia?: HeroMedia | null;
+  onSave: (heroMedia: HeroMedia) => Promise<void>;
+  isSaving: boolean;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const normalized = normalizeHeroMedia(heroMedia);
+  const [draftMode, setDraftMode] = useState(normalized.heroMediaType);
+  const [queue, setQueue] = useState<GalleryUploadQueueItem[]>([]);
+  const [message, setMessage] = useState('');
+  const isSlideshowReady = normalized.heroImages.length >= minHeroSlideshowImages;
+
+  useEffect(() => {
+    setDraftMode(normalized.heroMediaType);
+  }, [normalized.heroMediaType]);
+
+  async function saveMode(nextMode = draftMode, images = normalized.heroImages) {
+    setMessage('');
+    await onSave(createHeroMedia(nextMode, images));
+    setMessage(nextMode === 'slideshow' && images.length < minHeroSlideshowImages
+      ? 'Upload at least 2 images to enable rotating hero images.'
+      : 'Hero display saved.');
+  }
+
+  async function handleFiles(fileList: FileList | File[]) {
+    const files = Array.from(fileList);
+    const remainingSlots = Math.max(0, maxHeroSlideshowImages - normalized.heroImages.length);
+    const filesToUpload = files.slice(0, remainingSlots);
+    const rejectedByLimit = files.slice(remainingSlots);
+    const initialQueue = [
+      ...filesToUpload.map((file) => queueItem(file.name, 'Ready')),
+      ...rejectedByLimit.map((file) => queueItem(file.name, 'Failed', 'Maximum 5 hero slideshow images.')),
+    ];
+    let nextImages = [...normalized.heroImages];
+    setQueue(initialQueue);
+    setMessage('');
+
+    for (let index = 0; index < filesToUpload.length; index += 1) {
+      const file = filesToUpload[index];
+      const queueId = initialQueue[index].id;
+      const validation = await validateUploadImageFile(file, heroImageMaxSizeMb);
+      if (!validation.valid) {
+        updateQueueItem(queueId, { status: 'Failed', error: validation.error ?? 'Only JPG, PNG, or WEBP images are supported.' });
+        continue;
+      }
+
+      updateQueueItem(queueId, { status: 'Uploading', progress: 1 });
+      try {
+        const uploaded = await uploadsApi.upload('hero', file, (progress) => {
+          updateQueueItem(queueId, { progress: Math.max(1, Math.min(progress, 95)) });
+        }, websiteId);
+        updateQueueItem(queueId, { status: 'Processing', progress: 96 });
+        nextImages = [
+          ...nextImages,
+          {
+            url: uploaded.url,
+            thumbnailUrl: uploaded.thumbnailUrl,
+            mediumUrl: uploaded.mediumUrl,
+            largeUrl: uploaded.largeUrl,
+            alt: `${businessName} hero image`,
+          },
+        ].slice(0, maxHeroSlideshowImages);
+        await onSave(createHeroMedia('slideshow', nextImages));
+        setDraftMode('slideshow');
+        updateQueueItem(queueId, { status: 'Uploaded', progress: 100 });
+      } catch {
+        updateQueueItem(queueId, { status: 'Failed', error: 'The uploaded image could not be processed.' });
+      }
+    }
+
+    if (nextImages.length < minHeroSlideshowImages) {
+      setMessage('Upload at least 2 images to enable rotating hero images.');
+    }
+  }
+
+  function updateQueueItem(id: string, patch: Partial<GalleryUploadQueueItem>) {
+    setQueue((current) => current.map((item) => (item.id === id ? { ...item, ...patch } : item)));
+  }
+
+  function handleDrop(event: DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    if (event.dataTransfer.files.length > 0) void handleFiles(event.dataTransfer.files);
+  }
+
+  function handleSelect(event: ChangeEvent<HTMLInputElement>) {
+    const files = event.target.files;
+    if (files?.length) void handleFiles(files);
+    event.target.value = '';
+  }
+
+  async function removeHeroImage(imageUrl: string) {
+    const nextImages = normalized.heroImages.filter((image) => image.url !== imageUrl);
+    await onSave(createHeroMedia(draftMode, nextImages));
+    setMessage(nextImages.length < minHeroSlideshowImages ? 'Upload at least 2 images to enable rotating hero images.' : 'Hero image removed.');
+  }
+
+  return (
+    <div className="grid gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
+      <div>
+        <p className="font-semibold text-slate-950">Hero Display</p>
+        <p className="mt-1 text-sm text-slate-500">Premium Restaurant can use one static hero image or 2-5 rotating hero images.</p>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          className={`rounded-md border px-4 py-2 text-sm font-semibold ${draftMode === 'image' ? 'border-teal-700 bg-teal-50 text-teal-900' : 'border-slate-200 bg-white text-slate-700'}`}
+          onClick={() => setDraftMode('image')}
+        >
+          Static image
+        </button>
+        <button
+          type="button"
+          className={`rounded-md border px-4 py-2 text-sm font-semibold ${draftMode === 'slideshow' ? 'border-teal-700 bg-teal-50 text-teal-900' : 'border-slate-200 bg-white text-slate-700'}`}
+          onClick={() => setDraftMode('slideshow')}
+        >
+          Rotating images
+        </button>
+        <Button variant="secondary" onClick={() => void saveMode()} disabled={isSaving}>
+          <Save className="size-4" />
+          {isSaving ? 'Saving' : 'Save hero display'}
+        </Button>
+      </div>
+      {draftMode === 'slideshow' && !isSlideshowReady && (
+        <p className="rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-800">Upload at least 2 images to enable rotating hero images.</p>
+      )}
+      <div
+        className="grid gap-4 rounded-md border border-dashed border-slate-300 bg-white p-4"
+        onDragOver={(event) => event.preventDefault()}
+        onDrop={handleDrop}
+      >
+        <div className="flex flex-wrap items-center gap-3">
+          <Button variant="secondary" onClick={() => inputRef.current?.click()} disabled={isSaving || normalized.heroImages.length >= maxHeroSlideshowImages}>
+            <UploadCloud className="size-4" />
+            Choose hero images
+          </Button>
+          <input
+            ref={inputRef}
+            className="hidden"
+            type="file"
+            accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+            multiple
+            onChange={handleSelect}
+          />
+          <span className="text-sm text-slate-500">JPG, PNG, WEBP up to 4MB each. Max 5 images.</span>
+        </div>
+        {queue.length > 0 && (
+          <div className="grid gap-2">
+            {queue.map((item) => (
+              <div key={item.id} className="grid gap-1 rounded-md bg-slate-50 px-3 py-2 text-sm text-slate-700">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="min-w-0 truncate">{item.fileName}</span>
+                  <span className={item.status === 'Failed' ? 'text-red-600' : item.status === 'Uploaded' ? 'text-emerald-700' : 'text-slate-500'}>{item.status}</span>
+                </div>
+                {item.status === 'Uploading' && (
+                  <div className="h-1.5 overflow-hidden rounded-full bg-slate-200">
+                    <div className="h-full rounded-full bg-teal-700 transition-all" style={{ width: `${item.progress}%` }} />
+                  </div>
+                )}
+                {item.error && <p className="text-xs text-red-600">{item.error}</p>}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      {normalized.heroImages.length > 0 && (
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {normalized.heroImages.map((image, index) => (
+            <figure key={image.url} className="overflow-hidden rounded-md border border-slate-200 bg-white">
+              <img
+                className="aspect-video w-full object-cover"
+                src={resolveAssetUrl(image.thumbnailUrl ?? activeHeroImageUrl(image)) ?? ''}
+                alt={image.alt ?? `${businessName} hero image ${index + 1}`}
+                onError={(event) => {
+                  event.currentTarget.style.display = 'none';
+                }}
+              />
+              <figcaption className="flex items-center justify-between gap-2 p-2">
+                <span className="text-xs font-medium text-slate-500">Hero {index + 1}</span>
+                <Button variant="danger" className="min-h-8 px-2 py-1 text-xs" onClick={() => void removeHeroImage(image.url)} disabled={isSaving}>
+                  <Trash2 className="size-3.5" />
+                  Remove
+                </Button>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
+      {message && <p className="text-sm text-slate-600">{message}</p>}
+    </div>
   );
 }
 
@@ -631,6 +843,12 @@ function GalleryManager({
 
 function queueItem(fileName: string, status: GalleryUploadStatus, error?: string): GalleryUploadQueueItem {
   return { id: `${fileName}-${crypto.randomUUID()}`, fileName, status, progress: 0, error };
+}
+
+function isRestaurantPremiumTemplate(website: Website) {
+  return website.template?.name === 'restaurant_premium'
+    || website.template?.schema?.templateKey === 'restaurant_premium'
+    || website.template?.schema?.rendererKey === 'restaurant_premium';
 }
 
 function sanitizeWebsiteForm(form: {

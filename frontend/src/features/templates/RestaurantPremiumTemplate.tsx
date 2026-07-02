@@ -1,7 +1,8 @@
-import { CSSProperties, useState } from 'react';
+import { CSSProperties, useEffect, useState } from 'react';
 import { Award, CalendarCheck, ChefHat, Clock, Crown, MapPin, MessageCircle, Phone, Sparkles, Utensils, Wine } from 'lucide-react';
 import { Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
+import { activeHeroImageUrl, minHeroSlideshowImages, normalizeHeroMedia } from '../uploads/heroMedia';
 import { PremiumFullMenuModal } from './PremiumFullMenuModal';
 import { formatOpeningHours } from './openingHours';
 import { formatMenuPrice, hasMenuPrice } from './priceFormat';
@@ -127,11 +128,24 @@ function RestaurantPremiumNavigation({ website }: { website: Website }) {
 
 function PremiumRestaurantHero({ website }: { website: Website }) {
   const heroImage = resolveAssetUrl(website.theme?.heroImageUrl) ?? 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1600&q=80';
+  const heroMedia = normalizeHeroMedia(website.theme?.heroMedia);
+  const slideshowImages = heroMedia.heroMediaType === 'slideshow'
+    ? heroMedia.heroImages
+      .map((image) => ({
+        src: resolveAssetUrl(activeHeroImageUrl(image)),
+        alt: image.alt ?? `${website.businessName} dining atmosphere`,
+      }))
+      .filter((image): image is { src: string; alt: string } => Boolean(image.src))
+    : [];
   const actions = resolvePremiumRestaurantActions(website);
 
   return (
     <section id="home" className="relative min-h-[88vh] overflow-hidden bg-[var(--premium-surface-dark)]">
-      <img className="premium-hero-motion absolute inset-0 size-full object-cover opacity-68" src={heroImage} alt={`${website.businessName} dining room`} />
+      <PremiumHeroMedia
+        fallbackImage={heroImage}
+        fallbackAlt={`${website.businessName} dining room`}
+        slideshowImages={slideshowImages}
+      />
       <div className="absolute inset-0 bg-[var(--premium-hero-overlay)]" />
       <div className="absolute inset-0 bg-[var(--premium-hero-scrim)]" />
       <div className="absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(180deg,transparent,var(--premium-surface-dark))]" />
@@ -186,6 +200,70 @@ function PremiumRestaurantHero({ website }: { website: Website }) {
       </div>
     </section>
   );
+}
+
+function PremiumHeroMedia({
+  fallbackImage,
+  fallbackAlt,
+  slideshowImages,
+}: {
+  fallbackImage: string;
+  fallbackAlt: string;
+  slideshowImages: Array<{ src: string; alt: string }>;
+}) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const canRenderSlideshow = slideshowImages.length >= minHeroSlideshowImages;
+  const canAnimateSlideshow = canRenderSlideshow && !prefersReducedMotion;
+
+  useEffect(() => {
+    if (!canAnimateSlideshow) {
+      setActiveIndex(0);
+      return;
+    }
+
+    const interval = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % slideshowImages.length);
+    }, 5000);
+
+    return () => window.clearInterval(interval);
+  }, [canAnimateSlideshow, slideshowImages.length]);
+
+  if (!canRenderSlideshow || prefersReducedMotion) {
+    const staticImage = slideshowImages[0]?.src ?? fallbackImage;
+    const staticAlt = slideshowImages[0]?.alt ?? fallbackAlt;
+    return <img className="premium-hero-motion absolute inset-0 size-full object-cover opacity-68" src={staticImage} alt={staticAlt} />;
+  }
+
+  return (
+    <>
+      {slideshowImages.map((image, index) => (
+        <img
+          key={image.src}
+          className="premium-hero-motion premium-hero-slide absolute inset-0 size-full object-cover"
+          src={image.src}
+          alt={image.alt}
+          loading={index === 0 ? 'eager' : 'lazy'}
+          style={{ opacity: index === activeIndex ? 0.68 : 0 }}
+        />
+      ))}
+    </>
+  );
+}
+
+function usePrefersReducedMotion() {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    if (!window.matchMedia) return;
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(query.matches);
+    const handleChange = () => setPrefersReducedMotion(query.matches);
+    query.addEventListener('change', handleChange);
+    return () => query.removeEventListener('change', handleChange);
+  }, []);
+
+  return prefersReducedMotion;
 }
 
 function ChefStory({ website }: { website: Website }) {

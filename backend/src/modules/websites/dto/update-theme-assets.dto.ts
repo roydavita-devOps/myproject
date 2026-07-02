@@ -1,4 +1,4 @@
-import { IsHexColor, IsOptional, IsString, Matches } from 'class-validator';
+import { Allow, IsHexColor, IsOptional, IsString, Matches } from 'class-validator';
 
 const assetUrlPattern = /^(\/api\/v1\/uploads\/|https?:\/\/).+/;
 
@@ -28,4 +28,8 @@ export class UpdateThemeAssetsDto {
   @IsOptional()
   @IsString()
   premiumColorPreset?: string;
+
+  @IsOptional()
+  @Allow()
+  heroMedia?: unknown;
 }
