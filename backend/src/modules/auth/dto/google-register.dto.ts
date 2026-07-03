@@ -1,5 +1,5 @@
 import { BusinessType } from '@prisma/client';
-import { IsEnum, IsNotEmpty, IsString, Matches } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString, Matches } from 'class-validator';
 
 export class GoogleRegisterDto {
   @IsString()
@@ -11,8 +11,9 @@ export class GoogleRegisterDto {
   businessName: string;
 
   @IsString()
+  @IsOptional()
   @Matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
-  slug: string;
+  slug?: string;
 
   @IsEnum(BusinessType)
   businessType: BusinessType;

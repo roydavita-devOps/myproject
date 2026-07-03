@@ -1,0 +1,47 @@
+{
+  "generatedAt": "2026-07-03T09:30:22.888Z",
+  "baseURL": "http://127.0.0.1",
+  "registerPayload": {
+    "businessName": "R12 Ramen House",
+    "adminName": "Stage R12 Admin",
+    "email": "stage-98d-r12-1783071018424@example.com",
+    "password": "[redacted]",
+    "businessType": "RESTAURANT"
+  },
+  "screenshots": {
+    "registerFormWithoutSlug": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\register-slug-removal-r12/register-form-without-slug.png",
+    "businessInformationSlugEditor": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\register-slug-removal-r12/business-information-slug-editor.png",
+    "slugUpdateSuccess": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\register-slug-removal-r12/slug-update-success.png",
+    "publicSiteAfterSlugUpdate": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\register-slug-removal-r12/public-site-after-slug-update.png"
+  },
+  "results": [
+    {
+      "target": "register_form_without_slug",
+      "status": "passed"
+    },
+    {
+      "target": "register_payload_without_slug",
+      "status": "passed"
+    },
+    {
+      "target": "business_information_slug_editor",
+      "status": "passed"
+    },
+    {
+      "target": "slug_update_success",
+      "status": "passed"
+    },
+    {
+      "target": "current_tenant_slug_update_still_valid",
+      "status": "passed"
+    },
+    {
+      "target": "duplicate_slug_validation_still_active",
+      "status": "passed"
+    },
+    {
+      "target": "public_site_after_slug_update",
+      "status": "passed"
+    }
+  ]
+}

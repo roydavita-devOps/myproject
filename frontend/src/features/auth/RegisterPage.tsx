@@ -21,7 +21,6 @@ export function RegisterPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     businessName: '',
-    slug: '',
     adminName: '',
     email: '',
     password: '',
@@ -56,7 +55,7 @@ export function RegisterPage() {
       setSession(session);
       navigate(resolvePostAuthPath(session));
     } catch {
-      setError('Registrasi gagal. Periksa slug, email, dan password.');
+      setError('Registrasi gagal. Periksa nama bisnis, email, dan password.');
     } finally {
       setSubmitting(false);
     }
@@ -75,9 +74,6 @@ export function RegisterPage() {
       <form className="grid gap-4" onSubmit={handleSubmit}>
         <Field label="Business name">
           <TextInput value={form.businessName} onChange={(event) => setForm({ ...form, businessName: event.target.value })} required />
-        </Field>
-        <Field label="Slug">
-          <TextInput value={form.slug} onChange={(event) => setForm({ ...form, slug: event.target.value })} placeholder="warteg-moncer" required />
         </Field>
         <Field label="Business type">
           <select className="field-input" value={form.businessType} onChange={(event) => setForm({ ...form, businessType: event.target.value })}>

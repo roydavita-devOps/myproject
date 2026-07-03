@@ -53,11 +53,12 @@ Last updated: 2026-07-03
 - Stage 9.8D-R10 Premium Hero Slideshow for Restaurant Premium.
 - Stage 9.8D-R11 Premium Full Menu Modal Item Detail and Price Readability.
 - Stage 9.8D-R11A Premium Full Menu Modal Warm Accent Alignment.
+- Stage 9.8D-R12 Register Slug Removal and Business Information Ownership.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.8D-R11A Premium Full Menu Modal Warm Accent Alignment approval checkpoint.
+- Stage 9.8D-R12 Register Slug Removal approval checkpoint.
 
 ## Planned
 
@@ -238,6 +239,16 @@ Stage 9.8D-R11A aligns the Restaurant Premium Full Menu modal with warm premium 
 - Default blue-looking accent states are removed from the Restaurant Premium Full Menu modal.
 - Focus states remain visible and accessible while matching the premium restaurant direction.
 - The menu modal remains browsing-focused and still does not add Chat WhatsApp, reservation, ordering, payment, marketplace, billing, subscription, entitlement, backend, Prisma, database, upload, gallery, or hero changes.
+
+Stage 9.8D-R12 simplifies registration and moves slug ownership to Business Information:
+
+- Initial account/tenant registration asks for business name, business type, admin name, email, and password only.
+- The public Register form does not render or submit a slug.
+- Backend registration remains compatible by generating a temporary unique slug when none is supplied.
+- Existing explicit slug flows continue to work for internal/API compatibility.
+- Business Information remains the owner-facing place to edit, validate, save, and preview the public URL slug.
+- Future publish readiness should require a user-confirmed website address/slug before launch; this stage documents that requirement without implementing a new publish gate.
+- No Restaurant Premium design, Full Menu Modal, hero, gallery, menu, upload, payment, subscription, marketplace, hosting renewal, template registry, Cafe Premium, or advanced onboarding work is included.
 
 Potential categories:
 

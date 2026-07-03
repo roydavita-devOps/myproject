@@ -4,7 +4,7 @@ Last updated: 2026-07-03
 
 ## Current Stage
 
-Stage 9.8D-R11A - Premium Full Menu Modal Warm Accent Alignment.
+Stage 9.8D-R12 - Remove Slug From Register Form and Move Slug Ownership to Business Information.
 
 Status: implemented, locally validated, evidence captured, and ready for approval.
 
@@ -60,6 +60,7 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 | Stage 9.8D-R10 Premium Hero Slideshow for Restaurant Premium | Completed; awaiting approval. |
 | Stage 9.8D-R11 Premium Full Menu Modal Item Detail and Price Readability | Completed; awaiting approval. |
 | Stage 9.8D-R11A Premium Full Menu Modal Warm Accent Alignment | Completed; awaiting approval. |
+| Stage 9.8D-R12 Register Slug Removal and Business Information Ownership | Completed; awaiting approval. |
 
 ## Current Blockers
 
@@ -86,12 +87,13 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 | Premium hero motion | Resolved for Stage 9.8D-R10 implementation | Restaurant Premium supports Static image or Rotating images using 2-5 optimized hero images, reduced-motion fallback, and static hero backward compatibility. |
 | Premium full menu readability | Resolved for Stage 9.8D-R11 implementation | Restaurant Premium Full Menu modal now uses readable price chips, clickable menu cards, card descriptions, category labels, featured badges, and item detail browsing without reintroducing WhatsApp CTA. |
 | Premium full menu accent consistency | Resolved for Stage 9.8D-R11A implementation | Restaurant Premium Full Menu modal now uses warm copper, gold, champagne, and espresso accents for price chips, View detail, focus rings, description labels, and placeholders instead of default blue-looking accents. |
+| Registration slug ownership | Resolved for Stage 9.8D-R12 implementation | Register no longer asks for slug or sends slug from the public form. Backend generates a temporary unique slug when missing, while Business Information remains the owner-facing place to edit and validate the public URL slug. |
 | Luxury templates | Paused | No Luxury template implementation until separately approved. |
 | Template Catalog UI | Paused | No marketplace, comparison page, entitlement, or subscription access logic in Stage 9.7B. |
 
 ## Next Actions
 
-1. Review Stage 9.8D-R11A Premium Full Menu Modal Warm Accent Alignment evidence.
+1. Review Stage 9.8D-R12 Register Slug Removal evidence.
 2. Approve or request corrections.
 3. Keep Luxury, Catalog UI, marketplace, subscription, entitlement, preview-before-apply, and switch history paused until separately approved.
 4. After approval, proceed only to the next approved stage.
@@ -101,7 +103,7 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 
 | System | Current Status |
 | --- | --- |
-| Local Docker | Running and validated during Stage 9.8D-R11A. |
+| Local Docker | Running and validated during Stage 9.8D-R12. |
 | GitHub | Latest code and documentation branch strategy uses `main`, `staging`, and `pilot`. |
 | Vercel | Production frontend active. |
 | Railway | Backend health endpoints active. |
@@ -139,5 +141,6 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 - Premium hero slideshow report: [../06-modern-template/reports/PHASE-9.8D-R10-Premium-Hero-Slideshow-Report.md](../06-modern-template/reports/PHASE-9.8D-R10-Premium-Hero-Slideshow-Report.md)
 - Premium full menu item detail report: [../06-modern-template/reports/PHASE-9.8D-R11-Premium-Full-Menu-Modal-Item-Detail-Report.md](../06-modern-template/reports/PHASE-9.8D-R11-Premium-Full-Menu-Modal-Item-Detail-Report.md)
 - Premium full menu warm accent polish report: [../06-modern-template/reports/PHASE-9.8D-R11A-Premium-Full-Menu-Modal-Warm-Accent-Polish-Report.md](../06-modern-template/reports/PHASE-9.8D-R11A-Premium-Full-Menu-Modal-Warm-Accent-Polish-Report.md)
+- Register slug removal report: [../06-modern-template/reports/PHASE-9.8D-R12-Register-Slug-Removal-Report.md](../06-modern-template/reports/PHASE-9.8D-R12-Register-Slug-Removal-Report.md)
 - Template Catalog readiness audit: [../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md](../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md)
 - Template consistency audit: [../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md](../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md)

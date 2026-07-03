@@ -510,6 +510,27 @@ Reason:
 - Blue-looking price chips and links weakened the warm editorial restaurant identity.
 - Keeping the fix in modal visual treatment preserves the Stage 9.8D-R11 behavior while improving premium perception.
 
+## Registration Slug Ownership
+
+Status: Approved for Stage 9.8D-R12 implementation pending product sign-off.
+
+Decision:
+
+- Initial registration must not ask for tenant slug.
+- Tenant slug is owned by Business Information / Website Address after login.
+- The public Register form creates the account and tenant using business name, business type, admin name, email, and password.
+- Backend registration may generate a temporary unique slug during tenant creation for technical compatibility.
+- Existing explicit slug API flows remain compatible and still enforce slug uniqueness.
+- Dashboard Business Information remains responsible for user-facing slug editing, validation, save feedback, and public URL preview.
+- Public publishing should require a valid user-confirmed slug before launch in a future publish-readiness stage.
+- Stage 9.8D-R12 does not include Restaurant Premium design, Full Menu Modal, hero, gallery, menu, upload, payment, subscription, marketplace, hosting renewal, template registry, Cafe Premium redesign, publish gate implementation, advanced onboarding, new templates, video hero, or media library scope.
+
+Reason:
+
+- New users should not be forced to choose a public website address before they understand the product and dashboard.
+- Slug is website identity/public URL setup, not an initial account creation concern.
+- Temporary generated slugs preserve database and route compatibility while keeping the user-facing decision in Business Information.
+
 ## Template Selection And Assignment Audit
 
 Status: Completed for Stage 9.7A.

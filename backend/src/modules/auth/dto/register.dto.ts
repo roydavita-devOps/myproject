@@ -1,5 +1,5 @@
 import { BusinessType } from '@prisma/client';
-import { IsEmail, IsEnum, IsNotEmpty, IsString, Matches, MinLength } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, Matches, MinLength } from 'class-validator';
 
 export class RegisterDto {
   @IsString()
@@ -7,8 +7,9 @@ export class RegisterDto {
   businessName: string;
 
   @IsString()
+  @IsOptional()
   @Matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
-  slug: string;
+  slug?: string;
 
   @IsString()
   @IsNotEmpty()

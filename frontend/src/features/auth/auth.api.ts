@@ -3,7 +3,7 @@ import { http } from '../../lib/api/http';
 
 export type RegisterPayload = {
   businessName: string;
-  slug: string;
+  slug?: string;
   adminName: string;
   email: string;
   password: string;
@@ -19,7 +19,7 @@ export type LoginPayload = {
 export type GoogleRegisterPayload = {
   idToken: string;
   businessName: string;
-  slug: string;
+  slug?: string;
   businessType: string;
 };
 

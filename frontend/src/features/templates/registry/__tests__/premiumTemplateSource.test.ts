@@ -113,10 +113,16 @@ describe('premium template source readability rules', () => {
 
   it('keeps login free from tenant slug and moves slug editing into business information', () => {
     const loginSource = readFileSync(resolve('src/features/auth/LoginPage.tsx'), 'utf8');
+    const registerSource = readFileSync(resolve('src/features/auth/RegisterPage.tsx'), 'utf8');
+    const authApiSource = readFileSync(resolve('src/features/auth/auth.api.ts'), 'utf8');
     const editorSource = readFileSync(resolve('src/features/websites/WebsiteEditorPage.tsx'), 'utf8');
 
     expect(loginSource).not.toContain('Tenant slug');
     expect(loginSource).not.toContain('setTenantSlug');
+    expect(registerSource).not.toContain('<Field label="Slug">');
+    expect(registerSource).not.toContain('placeholder="warteg-moncer"');
+    expect(registerSource).not.toContain('Periksa slug');
+    expect(authApiSource).toContain('slug?: string;');
     expect(editorSource).toContain('Business slug');
     expect(editorSource).toContain('Changing the slug may change your public website URL.');
   });

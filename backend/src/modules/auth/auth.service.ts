@@ -42,6 +42,15 @@ type TokenDelivery = {
   token?: string;
 };
 
+type TenantWorkspaceInput = {
+  businessName: string;
+  slug?: string;
+  businessType: BusinessType;
+  templateName?: string;
+  themePreference?: string;
+  colorPreset?: string;
+};
+
 @Injectable()
 export class AuthService {
   private readonly googleClient = new OAuth2Client();
@@ -457,14 +466,15 @@ export class AuthService {
     return { success: true, delivery: result.reason ?? 'provider-error' };
   }
 
-  private async createTenantWorkspace(tx: Prisma.TransactionClient, dto: CompleteOnboardingDto) {
-    const existingTenant = await tx.tenant.findUnique({ where: { slug: dto.slug } });
+  private async createTenantWorkspace(tx: Prisma.TransactionClient, dto: TenantWorkspaceInput) {
+    const slug = await this.resolveUniqueTenantSlug(tx, dto);
+    const existingTenant = await tx.tenant.findUnique({ where: { slug } });
     if (existingTenant) throw new BadRequestException('Tenant slug is already used');
 
     const rootDomain = this.config.get<string>('ROOT_DOMAIN', 'localhost');
     const template = await this.findOrCreateTemplate(tx, dto.businessType);
     const tenant = await tx.tenant.create({
-      data: { name: dto.businessName, slug: dto.slug, status: TenantStatus.TRIAL },
+      data: { name: dto.businessName, slug, status: TenantStatus.TRIAL },
     });
     await tx.subscription.create({
       data: {
@@ -496,7 +506,7 @@ export class AuthService {
     await tx.domain.create({
       data: {
         tenantId: tenant.id,
-        domain: `${dto.slug}.${rootDomain}`,
+        domain: `${slug}.${rootDomain}`,
         type: DomainType.SUBDOMAIN,
         status: DomainStatus.VERIFIED,
         verifiedAt: new Date(),
@@ -504,6 +514,32 @@ export class AuthService {
     });
 
     return tenant;
+  }
+
+  private async resolveUniqueTenantSlug(tx: Prisma.TransactionClient, dto: TenantWorkspaceInput) {
+    const explicitSlug = dto.slug?.trim().toLowerCase();
+    if (explicitSlug) return explicitSlug;
+
+    const baseSlug = this.slugifyBusinessName(dto.businessName) || 'tenant';
+    for (let attempt = 0; attempt < 8; attempt += 1) {
+      const candidate = `${baseSlug}-${randomBytes(2).toString('hex')}`;
+      const existing = await tx.tenant.findUnique({ where: { slug: candidate } });
+      if (!existing) return candidate;
+    }
+
+    throw new BadRequestException('Unable to generate a unique tenant slug');
+  }
+
+  private slugifyBusinessName(value: string) {
+    return value
+      .toLowerCase()
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .replace(/-{2,}/g, '-')
+      .slice(0, 48)
+      .replace(/-+$/g, '');
   }
 
   private resolveColorPreset(colorPreset?: string) {
