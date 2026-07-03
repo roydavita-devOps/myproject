@@ -1,6 +1,6 @@
 # Roadmap
 
-Last updated: 2026-07-02
+Last updated: 2026-07-03
 
 ## Completed
 
@@ -52,11 +52,12 @@ Last updated: 2026-07-02
 - Stage 9.8D-R9 Gallery Multiple Upload, Bulk Delete and Image Type Guard.
 - Stage 9.8D-R10 Premium Hero Slideshow for Restaurant Premium.
 - Stage 9.8D-R11 Premium Full Menu Modal Item Detail and Price Readability.
+- Stage 9.8D-R11A Premium Full Menu Modal Warm Accent Alignment.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.8D-R11 Premium Full Menu Modal Item Detail approval checkpoint.
+- Stage 9.8D-R11A Premium Full Menu Modal Warm Accent Alignment approval checkpoint.
 
 ## Planned
 
@@ -230,6 +231,13 @@ Stage 9.8D-R11 improves Restaurant Premium Full Menu browsing:
 - Clicking a card opens an item detail view with larger media/placeholder, full description, formatted price, category, and Back control.
 - The Full Menu modal remains browsing-focused and does not add WhatsApp/reservation CTA back into Restaurant Premium menu detail.
 - Category tabs, All tab, modal close, scrolling, and mobile behavior remain intact.
+
+Stage 9.8D-R11A aligns the Restaurant Premium Full Menu modal with warm premium accents:
+
+- Price chips, View detail links, focus rings, detail labels, and placeholder icons use copper, gold, champagne, amber, and espresso visual treatment.
+- Default blue-looking accent states are removed from the Restaurant Premium Full Menu modal.
+- Focus states remain visible and accessible while matching the premium restaurant direction.
+- The menu modal remains browsing-focused and still does not add Chat WhatsApp, reservation, ordering, payment, marketplace, billing, subscription, entitlement, backend, Prisma, database, upload, gallery, or hero changes.
 
 Potential categories:
 

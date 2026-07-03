@@ -24,7 +24,7 @@ describe('premium template source readability rules', () => {
     expect(modalSource).toContain('var(--premium-modal-surface-border)');
     expect(modalSource).toContain('var(--premium-cta-gradient-from)');
     expect(modalSource).toContain('var(--premium-modal-text)');
-    expect(modalSource).toContain('var(--premium-price-text)');
+    expect(modalSource).toContain('#F0D399');
     expect(modalSource).not.toContain('#f7c873');
     expect(modalSource).not.toContain('#120f0b');
   });

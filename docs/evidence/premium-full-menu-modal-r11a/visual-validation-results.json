@@ -1,0 +1,38 @@
+{
+  "generatedAt": "2026-07-03T04:40:23.349Z",
+  "baseURL": "http://127.0.0.1",
+  "screenshots": {
+    "fullMenuWarmPriceChip": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-full-menu-modal-r11a/full-menu-warm-price-chip.png",
+    "fullMenuWarmViewDetail": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-full-menu-modal-r11a/full-menu-warm-view-detail.png",
+    "fullMenuWarmFocusState": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-full-menu-modal-r11a/full-menu-warm-focus-state.png",
+    "fullMenuDetailWarmDescriptionLabel": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-full-menu-modal-r11a/full-menu-detail-warm-description-label.png",
+    "fullMenuDetailMobileWarmAccent": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-full-menu-modal-r11a/full-menu-detail-mobile-warm-accent.png"
+  },
+  "results": [
+    {
+      "target": "warm_price_chip",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "warm_view_detail",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "warm_focus_state",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "warm_description_label",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "warm_mobile_detail",
+      "viewport": "mobile",
+      "status": "passed"
+    }
+  ]
+}

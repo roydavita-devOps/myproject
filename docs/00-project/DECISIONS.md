@@ -492,6 +492,24 @@ Reason:
 - Low-contrast prices and passive cards weaken commercial perceived value.
 - Existing menu data is sufficient for a useful detail view; no database migration or backend change is required.
 
+## Premium Full Menu Warm Accent Alignment
+
+Status: Approved for Stage 9.8D-R11A implementation pending product sign-off.
+
+Decision:
+
+- Restaurant Premium Full Menu modal accents must use warm premium colors instead of default blue-looking accents.
+- Price chips, View detail links, focus rings, description labels, and placeholder icons use copper, gold, champagne, amber, and espresso treatment.
+- Warm focus states must remain visible and keyboard-accessible.
+- The modal remains a browsing surface and must not reintroduce Chat WhatsApp, reservation, ordering, payment, or marketplace actions.
+- Stage 9.8D-R11A does not introduce backend changes, Prisma schema changes, database migrations, upload changes, gallery changes, hero changes, billing, subscription, entitlement, or marketplace scope.
+
+Reason:
+
+- Restaurant Premium is a paid-template foundation and the Full Menu modal must not visually fall back to generic/default accent behavior.
+- Blue-looking price chips and links weakened the warm editorial restaurant identity.
+- Keeping the fix in modal visual treatment preserves the Stage 9.8D-R11 behavior while improving premium perception.
+
 ## Template Selection And Assignment Audit
 
 Status: Completed for Stage 9.7A.

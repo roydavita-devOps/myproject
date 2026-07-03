@@ -211,7 +211,7 @@ function MenuItemCard({
     <button
       type="button"
       className={isRestaurant
-        ? 'group grid cursor-pointer grid-cols-[5rem_1fr] gap-3 rounded-lg border border-[var(--premium-modal-surface-border)] bg-[linear-gradient(145deg,var(--premium-modal-surface-gradient-from),var(--premium-modal-surface-gradient-to))] p-3 text-left shadow-[0_18px_60px_rgba(0,0,0,.28),inset_0_1px_0_rgba(255,255,255,.05)] transition duration-200 hover:-translate-y-0.5 hover:border-[var(--premium-accent)]/60 hover:shadow-[0_22px_70px_rgba(0,0,0,.36),inset_0_1px_0_rgba(255,255,255,.08)] focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2 focus:ring-offset-[var(--premium-modal-background)]'
+        ? 'group grid cursor-pointer grid-cols-[5rem_1fr] gap-3 rounded-lg border border-[var(--premium-modal-surface-border)] bg-[linear-gradient(145deg,var(--premium-modal-surface-gradient-from),var(--premium-modal-surface-gradient-to))] p-3 text-left shadow-[0_18px_60px_rgba(0,0,0,.28),inset_0_1px_0_rgba(255,255,255,.05)] transition duration-200 hover:-translate-y-0.5 hover:border-[#C98B4F]/70 hover:shadow-[0_22px_70px_rgba(0,0,0,.36),0_0_0_1px_rgba(201,139,79,.24),inset_0_1px_0_rgba(255,255,255,.08)] focus:outline-none focus:ring-2 focus:ring-[#D8A75B] focus:ring-offset-2 focus:ring-offset-[var(--premium-modal-background)]'
         : 'group grid cursor-pointer grid-cols-[5rem_1fr] gap-3 rounded-lg border border-slate-200 bg-white p-3 text-left shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2'}
       onClick={onOpen}
     >
@@ -225,7 +225,7 @@ function MenuItemCard({
         {description && <p className={isRestaurant ? 'mt-2 line-clamp-2 text-sm leading-5 text-[var(--premium-modal-muted-text)]' : 'mt-2 line-clamp-2 text-sm leading-5 text-slate-600'}>{description}</p>}
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
           <p className={categoryLabelClass(variant)}>{categoryLabel}</p>
-          <span className={isRestaurant ? 'text-xs font-semibold text-[var(--premium-accent)] opacity-90 group-hover:opacity-100' : 'text-xs font-semibold text-slate-500 group-hover:text-slate-900'}>View detail</span>
+          <span className={isRestaurant ? 'text-xs font-semibold text-[#D8A75B] opacity-90 transition group-hover:text-[#F0D399] group-hover:opacity-100' : 'text-xs font-semibold text-slate-500 group-hover:text-slate-900'}>View detail</span>
         </div>
       </div>
     </button>
@@ -271,7 +271,7 @@ function MenuItemDetailView({
             <button
               type="button"
               className={isRestaurant
-                ? 'inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-md border border-white/20 bg-white/[.1] px-3 py-2 text-sm font-semibold text-[var(--premium-modal-text)] transition hover:bg-white/[.16] focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)]'
+                ? 'inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-md border border-[#C98B4F]/35 bg-white/[.1] px-3 py-2 text-sm font-semibold text-[var(--premium-modal-text)] transition hover:border-[#D8A75B]/60 hover:bg-white/[.16] focus:outline-none focus:ring-2 focus:ring-[#D8A75B]'
                 : 'inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-950'}
               onClick={onBack}
               aria-label="Back to full menu"
@@ -282,7 +282,7 @@ function MenuItemDetailView({
           </div>
           {price && <p className={priceTextClass(variant, 'detail')}>{price}</p>}
           <div>
-            <p className={isRestaurant ? 'text-xs font-semibold uppercase tracking-wide text-[var(--premium-accent)]' : 'text-xs font-semibold uppercase tracking-wide text-slate-500'}>Description</p>
+            <p className={isRestaurant ? 'text-xs font-semibold uppercase tracking-wide text-[#D8A75B]' : 'text-xs font-semibold uppercase tracking-wide text-slate-500'}>Description</p>
             <p className={isRestaurant ? 'mt-2 text-base leading-7 text-[var(--premium-modal-text)]' : 'mt-2 text-base leading-7 text-slate-700'}>{description}</p>
           </div>
         </div>
@@ -347,7 +347,7 @@ function MenuItemDetailMedia({ item, variant }: { item: PremiumFullMenuItem; var
   const icon = variant === 'restaurant' ? <Utensils className="size-12" /> : <Coffee className="size-12" />;
   return (
     <div className={variant === 'restaurant'
-      ? 'absolute inset-0 flex items-center justify-center bg-[radial-gradient(circle_at_35%_25%,color-mix(in_srgb,var(--premium-accent)_38%,transparent),transparent_30%),linear-gradient(135deg,var(--premium-modal-surface),var(--premium-modal-background))] text-[var(--premium-accent)]'
+      ? 'absolute inset-0 flex items-center justify-center bg-[radial-gradient(circle_at_35%_25%,rgba(201,139,79,.32),transparent_30%),linear-gradient(135deg,var(--premium-modal-surface),var(--premium-modal-background))] text-[#D8A75B]'
       : 'absolute inset-0 flex items-center justify-center bg-[linear-gradient(135deg,#e8c99f,#7a4a24)] text-white'}
     >
       {icon}
@@ -387,8 +387,8 @@ function priceTextClass(variant: PremiumMenuVariant, context: 'card' | 'detail')
   }
 
   return context === 'detail'
-    ? 'inline-flex w-fit rounded-md border border-[var(--premium-accent)]/45 bg-black/[.34] px-4 py-2 text-2xl font-semibold text-[var(--premium-accent)] shadow-[inset_0_1px_0_rgba(255,255,255,.08),0_0_0_1px_color-mix(in_srgb,var(--premium-price-text)_24%,transparent)]'
-    : 'mt-2 inline-flex w-fit rounded-md border border-[var(--premium-accent)]/40 bg-black/[.3] px-2.5 py-1 text-base font-semibold text-[var(--premium-accent)] shadow-[0_0_0_1px_color-mix(in_srgb,var(--premium-price-text)_18%,transparent)]';
+    ? 'inline-flex w-fit rounded-md border border-[#C98B4F]/55 bg-[#1F160F]/85 px-4 py-2 text-2xl font-semibold text-[#F0D399] shadow-[inset_0_1px_0_rgba(255,255,255,.08),0_0_0_1px_rgba(216,167,91,.18)]'
+    : 'mt-2 inline-flex w-fit rounded-md border border-[#C98B4F]/50 bg-[#1F160F]/80 px-2.5 py-1 text-base font-semibold text-[#F0D399] shadow-[0_0_0_1px_rgba(216,167,91,.14)]';
 }
 
 function categoryLabelClass(variant: PremiumMenuVariant) {
@@ -399,6 +399,6 @@ function categoryLabelClass(variant: PremiumMenuVariant) {
 
 function fallbackMediaClass(variant: PremiumMenuVariant) {
   return variant === 'restaurant'
-    ? 'flex size-20 items-center justify-center rounded-md bg-[linear-gradient(135deg,var(--premium-modal-surface),var(--premium-modal-background))] text-[var(--premium-accent)]'
+    ? 'flex size-20 items-center justify-center rounded-md bg-[linear-gradient(135deg,var(--premium-modal-surface),var(--premium-modal-background))] text-[#D8A75B]'
     : 'flex size-20 items-center justify-center rounded-md bg-[linear-gradient(135deg,#e8c99f,#7a4a24)] text-white';
 }

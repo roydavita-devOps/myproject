@@ -44,4 +44,14 @@ describe('premium full menu modal item detail contract', () => {
     expect(priceSource).toContain("return `Rp ${value.toLocaleString('id-ID')}`");
     expect(priceSource).not.toContain('Rp $12.90');
   });
+
+  it('keeps Restaurant Premium modal polish free from default blue Tailwind accents', () => {
+    for (const token of ['text-blue-', 'border-blue-', 'ring-blue-', 'focus:ring-blue-', 'bg-blue-', 'hover:text-blue-']) {
+      expect(source).not.toContain(token);
+    }
+
+    expect(source).toContain('#F0D399');
+    expect(source).toContain('#D8A75B');
+    expect(source).toContain('#C98B4F');
+  });
 });
