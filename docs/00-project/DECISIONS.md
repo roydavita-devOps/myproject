@@ -531,6 +531,26 @@ Reason:
 - Slug is website identity/public URL setup, not an initial account creation concern.
 - Temporary generated slugs preserve database and route compatibility while keeping the user-facing decision in Business Information.
 
+## Restaurant Premium Mobile Hero Parity And Compactness
+
+Status: Approved for Stage 9.8D-R13 implementation pending product sign-off.
+
+Decision:
+
+- Restaurant Premium mobile hero must use the same hero media source as desktop.
+- Static hero, slideshow image list/order, and reduced-motion first-image fallback must remain consistent across desktop and mobile.
+- Mobile crop may differ from desktop due to aspect ratio, but it must preserve the same visual subject and mood through safe `object-cover` / `object-center` treatment.
+- Mobile hero should be compact, readable, premium, and should not consume excessive vertical space before the user reaches content.
+- Mobile-only responsive classes may reduce hero min-height, spacing, headline size, supporting copy height, CTA padding, feature chips, and card density.
+- Desktop Restaurant Premium hero remains the approved layout and should only be affected through shared-safe responsive classes.
+- Stage 9.8D-R13 does not introduce backend changes, database changes, Prisma migrations, upload pipeline changes, video processing, media library scope, Full Menu modal changes, Gallery changes, Register flow changes, Business Information changes, payment, subscription, marketplace, hosting renewal, Template Registry changes, Cafe Premium changes, or new templates.
+
+Reason:
+
+- Restaurant Premium is being used as the premium foundation, so mobile first impression must feel consistent with desktop.
+- Oversized mobile hero layout delays access to menu/content and weakens mobile conversion.
+- Responsive mobile-only polish preserves the approved desktop hero while improving mobile usability.
+
 ## Template Selection And Assignment Audit
 
 Status: Completed for Stage 9.7A.

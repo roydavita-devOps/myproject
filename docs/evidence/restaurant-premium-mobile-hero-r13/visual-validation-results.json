@@ -1,0 +1,40 @@
+{
+  "generatedAt": "2026-07-03T10:32:58.532Z",
+  "baseURL": "http://127.0.0.1",
+  "screenshots": {
+    "mobileHeroStaticCompact": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-mobile-hero-r13/mobile-hero-static-compact.png",
+    "mobileHeroSlideshowCompact": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-mobile-hero-r13/mobile-hero-slideshow-compact.png",
+    "mobileHeroImageParityDesktop": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-mobile-hero-r13/mobile-hero-image-parity-desktop.png",
+    "mobileHeroImageParityMobile": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-mobile-hero-r13/mobile-hero-image-parity-mobile.png",
+    "mobileHeroReducedMotionFallback": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-mobile-hero-r13/mobile-hero-reduced-motion-fallback.png",
+    "desktopHeroRegressionCheck": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-mobile-hero-r13/desktop-hero-regression-check.png",
+    "mobileNoHorizontalOverflow": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\restaurant-premium-mobile-hero-r13/mobile-no-horizontal-overflow.png"
+  },
+  "results": [
+    {
+      "target": "desktop_static_hero_regression",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "mobile_static_compact_same_source",
+      "viewport": "mobile",
+      "status": "passed"
+    },
+    {
+      "target": "mobile_no_horizontal_overflow",
+      "viewport": "mobile",
+      "status": "passed"
+    },
+    {
+      "target": "mobile_slideshow_compact_same_order",
+      "viewport": "mobile",
+      "status": "passed"
+    },
+    {
+      "target": "mobile_reduced_motion_first_image_fallback",
+      "viewport": "mobile",
+      "status": "passed"
+    }
+  ]
+}

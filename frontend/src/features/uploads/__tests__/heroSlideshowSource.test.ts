@@ -27,11 +27,25 @@ describe('premium hero slideshow source contract', () => {
   it('renders Restaurant Premium slideshow with static and reduced-motion fallback', () => {
     expect(templateSource).toContain('function PremiumHeroMedia');
     expect(templateSource).toContain('slideshowImages.length >= minHeroSlideshowImages');
+    expect(templateSource).toContain('resolveAssetUrl(activeHeroImageUrl(image))');
     expect(templateSource).toContain('window.setInterval');
     expect(templateSource).toContain('5000');
     expect(templateSource).toContain('usePrefersReducedMotion');
     expect(templateSource).toContain("window.matchMedia('(prefers-reduced-motion: reduce)')");
     expect(templateSource).toContain('fallbackImage');
+  });
+
+  it('keeps Restaurant Premium mobile hero compact while preserving desktop hero treatment', () => {
+    expect(templateSource).toContain('min-h-[560px]');
+    expect(templateSource).toContain('md:min-h-[88vh]');
+    expect(templateSource).toContain('text-[clamp(2.45rem,13vw,3.75rem)]');
+    expect(templateSource).toContain('md:text-[length:var(--restaurant-hero-title-size)]');
+    expect(templateSource).toContain('line-clamp-2');
+    expect(templateSource).toContain('mobileHidden');
+    expect(templateSource).toContain('object-cover object-center');
+    expect(templateSource).toContain('md:grid-cols-[1fr_0.46fr]');
+    expect(templateSource).not.toContain('video/mp4');
+    expect(templateSource).not.toContain('new Carousel');
   });
 
   it('keeps transitions lightweight and disables slideshow transitions for reduced motion', () => {

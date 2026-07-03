@@ -54,11 +54,12 @@ Last updated: 2026-07-03
 - Stage 9.8D-R11 Premium Full Menu Modal Item Detail and Price Readability.
 - Stage 9.8D-R11A Premium Full Menu Modal Warm Accent Alignment.
 - Stage 9.8D-R12 Register Slug Removal and Business Information Ownership.
+- Stage 9.8D-R13 Restaurant Premium Mobile Hero Image Parity and Compact Layout Polish.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.8D-R12 Register Slug Removal approval checkpoint.
+- Stage 9.8D-R13 Restaurant Premium Mobile Hero approval checkpoint.
 
 ## Planned
 
@@ -249,6 +250,15 @@ Stage 9.8D-R12 simplifies registration and moves slug ownership to Business Info
 - Business Information remains the owner-facing place to edit, validate, save, and preview the public URL slug.
 - Future publish readiness should require a user-confirmed website address/slug before launch; this stage documents that requirement without implementing a new publish gate.
 - No Restaurant Premium design, Full Menu Modal, hero, gallery, menu, upload, payment, subscription, marketplace, hosting renewal, template registry, Cafe Premium, or advanced onboarding work is included.
+
+Stage 9.8D-R13 polishes Restaurant Premium mobile hero behavior:
+
+- Mobile and desktop use the same Restaurant Premium hero media source and slideshow image order.
+- Static hero, rotating images, and reduced-motion fallback stay intact.
+- Mobile hero uses explicit `object-cover object-center` crop treatment to preserve the same visual subject and mood.
+- Mobile-only hero spacing, headline size, supporting copy, CTA padding, feature chips, and hero card density are compacted so the hero lands around 560-640px instead of feeling like an oversized full-screen block.
+- Desktop Restaurant Premium hero keeps the approved desktop layout through `md:` responsive classes.
+- No backend, database, Prisma, upload pipeline, video, media library, Full Menu modal, Gallery, Register, Business Information, marketplace, payment, subscription, hosting renewal, Template Registry, Cafe Premium, or new template work is included.
 
 Potential categories:
 

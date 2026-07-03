@@ -140,7 +140,7 @@ function PremiumRestaurantHero({ website }: { website: Website }) {
   const actions = resolvePremiumRestaurantActions(website);
 
   return (
-    <section id="home" className="relative min-h-[88vh] overflow-hidden bg-[var(--premium-surface-dark)]">
+    <section id="home" className="relative min-h-[560px] overflow-hidden bg-[var(--premium-surface-dark)] md:min-h-[88vh]">
       <PremiumHeroMedia
         fallbackImage={heroImage}
         fallbackAlt={`${website.businessName} dining room`}
@@ -149,50 +149,50 @@ function PremiumRestaurantHero({ website }: { website: Website }) {
       <div className="absolute inset-0 bg-[var(--premium-hero-overlay)]" />
       <div className="absolute inset-0 bg-[var(--premium-hero-scrim)]" />
       <div className="absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(180deg,transparent,var(--premium-surface-dark))]" />
-      <div className="relative mx-auto grid min-h-[88vh] max-w-6xl content-end gap-7 px-4 pb-10 pt-24 md:grid-cols-[1fr_0.46fr] md:items-end md:pb-16">
+      <div className="relative mx-auto grid min-h-[560px] max-w-6xl content-end gap-4 px-4 pb-5 pt-12 md:min-h-[88vh] md:grid-cols-[1fr_0.46fr] md:items-end md:gap-7 md:pb-16 md:pt-24">
         <div className="max-w-3xl text-[var(--premium-hero-text)]">
-          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--premium-border-strong)] bg-black/[.45] px-4 py-2 font-[var(--restaurant-eyebrow-font)] text-xs font-semibold uppercase text-[var(--premium-hero-text)] shadow-[0_18px_70px_rgba(0,0,0,.32)] backdrop-blur">
+          <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-[var(--premium-border-strong)] bg-black/[.45] px-3 py-1.5 font-[var(--restaurant-eyebrow-font)] text-[0.68rem] font-semibold uppercase text-[var(--premium-hero-text)] shadow-[0_18px_70px_rgba(0,0,0,.32)] backdrop-blur md:mb-5 md:px-4 md:py-2 md:text-xs">
             <Crown className="size-4" />
             Restaurant reservations
           </p>
-          <h1 className="font-[var(--restaurant-heading-font)] text-[length:var(--restaurant-hero-title-size)] font-[var(--restaurant-heading-weight)] leading-[.92] tracking-normal text-[var(--premium-text-on-dark)]">
+          <h1 className="font-[var(--restaurant-heading-font)] text-[clamp(2.45rem,13vw,3.75rem)] font-[var(--restaurant-heading-weight)] leading-[.94] tracking-normal text-[var(--premium-text-on-dark)] md:text-[length:var(--restaurant-hero-title-size)] md:leading-[.92]">
             {website.businessName}
           </h1>
-          <p className="mt-6 max-w-2xl text-xl leading-8 text-[var(--premium-hero-text)] md:text-2xl">
+          <p className="mt-4 max-w-2xl text-base leading-6 text-[var(--premium-hero-text)] md:mt-6 md:text-2xl md:leading-8">
             {website.tagline ?? 'An intimate dining room for signature plates, family dinners, and memorable evening tables.'}
           </p>
-          <p className="mt-5 max-w-2xl text-[length:var(--restaurant-body-text-size)] font-[var(--restaurant-body-weight)] leading-[var(--restaurant-line-height)] text-[var(--premium-hero-muted-text)]">
+          <p className="mt-3 line-clamp-2 max-w-2xl text-sm font-[var(--restaurant-body-weight)] leading-6 text-[var(--premium-hero-muted-text)] md:mt-5 md:line-clamp-none md:text-[length:var(--restaurant-body-text-size)] md:leading-[var(--restaurant-line-height)]">
             {website.description ?? "Explore house favorites, plan your visit, and reserve a table with a clear restaurant-first experience."}
           </p>
           {actions.length > 0 && (
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-5 flex flex-wrap gap-2.5 md:mt-8 md:gap-3">
               {actions.map((action) => <RestaurantPremiumActionLink key={action.href} action={action} context="hero" />)}
             </div>
           )}
-          <div className="mt-10 grid max-w-2xl gap-3 text-sm text-[var(--premium-text-on-dark)] sm:grid-cols-3">
+          <div className="mt-5 hidden max-w-2xl grid-cols-1 gap-2 text-xs text-[var(--premium-text-on-dark)] sm:grid sm:grid-cols-3 md:mt-10 md:gap-3 md:text-sm">
             {['Chef selected menu', 'Easy reservations', 'Comfortable dining'].map((item) => (
-              <p key={item} className="flex items-center gap-2 rounded-md border border-white/20 bg-black/[.38] px-3 py-2 backdrop-blur">
+              <p key={item} className="flex items-center gap-2 rounded-md border border-white/20 bg-black/[.38] px-2.5 py-1.5 backdrop-blur md:px-3 md:py-2">
                 <Sparkles className="size-4 text-[var(--premium-accent)]" />
                 {item}
               </p>
             ))}
           </div>
         </div>
-        <div className="relative rounded-lg border border-[var(--premium-surface-dark-border)] bg-[linear-gradient(145deg,var(--premium-surface-dark-gradient-from),var(--premium-surface-dark-gradient-to))] p-6 text-[var(--premium-hero-card-text)] shadow-[var(--premium-surface-dark-shadow)] backdrop-blur-md">
-          <div className="absolute -top-5 right-6 rounded-full border border-[var(--premium-border-strong)] bg-[var(--premium-surface-dark)] px-4 py-2 text-sm font-semibold text-[var(--premium-hero-card-text)]">
+        <div className="relative rounded-lg border border-[var(--premium-surface-dark-border)] bg-[linear-gradient(145deg,var(--premium-surface-dark-gradient-from),var(--premium-surface-dark-gradient-to))] p-4 text-[var(--premium-hero-card-text)] shadow-[var(--premium-surface-dark-shadow)] backdrop-blur-md md:p-6">
+          <div className="absolute -top-4 right-4 rounded-full border border-[var(--premium-border-strong)] bg-[var(--premium-surface-dark)] px-3 py-1.5 text-xs font-semibold text-[var(--premium-hero-card-text)] md:-top-5 md:right-6 md:px-4 md:py-2 md:text-sm">
             Open for guests
           </div>
           <p className="tpl-caption font-semibold uppercase text-[var(--premium-text-on-dark)]">Tonight’s visit</p>
-          <h2 className="tenant-heading mt-3 text-3xl font-semibold leading-tight">Settle in for a memorable meal.</h2>
-          <div className="mt-6 grid gap-4">
+          <h2 className="tenant-heading mt-2 text-[1.35rem] font-semibold leading-tight md:mt-3 md:text-3xl">Settle in for a memorable meal.</h2>
+          <div className="mt-4 grid gap-3 md:mt-6 md:gap-4">
             {[
-              ['Opening Hours', formatOpeningHours(website.openingHours)],
-              ['Best for', 'Dinner, family tables, and small celebrations'],
-              ['Easy next step', 'Reserve a table or explore signature dishes'],
-            ].map(([label, value]) => (
-              <div key={label} className="border-t border-white/15 pt-4">
-                <p className="text-xs font-semibold uppercase text-[var(--premium-text-on-dark)]">{label}</p>
-                <p className="mt-1 text-sm leading-6 text-[var(--premium-hero-muted-text)]">{value}</p>
+              { label: 'Opening Hours', value: formatOpeningHours(website.openingHours) },
+              { label: 'Best for', value: 'Dinner, family tables, and small celebrations', mobileHidden: true },
+              { label: 'Easy next step', value: 'Reserve a table or explore signature dishes' },
+            ].map((item) => (
+              <div key={item.label} className={`${item.mobileHidden ? 'hidden md:block' : ''} border-t border-white/15 pt-3 md:pt-4`}>
+                <p className="text-xs font-semibold uppercase text-[var(--premium-text-on-dark)]">{item.label}</p>
+                <p className="mt-1 text-xs leading-5 text-[var(--premium-hero-muted-text)] md:text-sm md:leading-6">{item.value}</p>
               </div>
             ))}
           </div>
@@ -232,7 +232,7 @@ function PremiumHeroMedia({
   if (!canRenderSlideshow || prefersReducedMotion) {
     const staticImage = slideshowImages[0]?.src ?? fallbackImage;
     const staticAlt = slideshowImages[0]?.alt ?? fallbackAlt;
-    return <img className="premium-hero-motion absolute inset-0 size-full object-cover opacity-68" src={staticImage} alt={staticAlt} />;
+    return <img className="premium-hero-motion absolute inset-0 size-full object-cover object-center opacity-68" src={staticImage} alt={staticAlt} />;
   }
 
   return (
@@ -240,7 +240,7 @@ function PremiumHeroMedia({
       {slideshowImages.map((image, index) => (
         <img
           key={image.src}
-          className="premium-hero-motion premium-hero-slide absolute inset-0 size-full object-cover"
+          className="premium-hero-motion premium-hero-slide absolute inset-0 size-full object-cover object-center"
           src={image.src}
           alt={image.alt}
           loading={index === 0 ? 'eager' : 'lazy'}
@@ -541,7 +541,9 @@ function RestaurantPremiumActionLink({ action, context }: { action: TemplateActi
 }
 
 function restaurantPremiumActionClass(variant: TemplateAction['variant'], context: 'hero' | 'visit') {
-  const base = 'inline-flex min-h-11 translate-y-0 items-center justify-center gap-2 rounded-md border px-5 py-2.5 text-sm font-semibold transition duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2';
+  const base = context === 'hero'
+    ? 'inline-flex min-h-11 translate-y-0 items-center justify-center gap-2 rounded-md border px-4 py-2 text-sm font-semibold transition duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2 md:px-5 md:py-2.5'
+    : 'inline-flex min-h-11 translate-y-0 items-center justify-center gap-2 rounded-md border px-5 py-2.5 text-sm font-semibold transition duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2';
   if (variant === 'primary') {
     return `${base} border-[var(--premium-cta-border)] bg-[linear-gradient(180deg,var(--premium-cta-gradient-from),var(--premium-cta-gradient-to))] text-[var(--premium-cta-text)] shadow-[var(--premium-cta-shadow)] hover:bg-[linear-gradient(180deg,var(--premium-cta-hover-gradient-from),var(--premium-cta-hover-gradient-to))]`;
   }
