@@ -1,0 +1,38 @@
+{
+  "generatedAt": "2026-07-03T02:42:00.587Z",
+  "baseURL": "http://127.0.0.1",
+  "screenshots": {
+    "fullMenuPriceReadable": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-full-menu-modal-r11/full-menu-price-readable.png",
+    "fullMenuItemCardDescription": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-full-menu-modal-r11/full-menu-item-card-description.png",
+    "fullMenuItemDetailDesktop": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-full-menu-modal-r11/full-menu-item-detail-desktop.png",
+    "fullMenuItemDetailMobile": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-full-menu-modal-r11/full-menu-item-detail-mobile.png",
+    "fullMenuCategoryFilterStillWorks": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\premium-full-menu-modal-r11/full-menu-category-filter-still-works.png"
+  },
+  "results": [
+    {
+      "target": "full_menu_price_readable",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "full_menu_item_card_description",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "full_menu_item_detail",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "full_menu_category_filter",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "full_menu_item_detail",
+      "viewport": "mobile",
+      "status": "passed"
+    }
+  ]
+}

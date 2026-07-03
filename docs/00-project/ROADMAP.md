@@ -51,11 +51,12 @@ Last updated: 2026-07-02
 - Stage 9.8D-R8 Restaurant Premium Button and Surface Depth Polish.
 - Stage 9.8D-R9 Gallery Multiple Upload, Bulk Delete and Image Type Guard.
 - Stage 9.8D-R10 Premium Hero Slideshow for Restaurant Premium.
+- Stage 9.8D-R11 Premium Full Menu Modal Item Detail and Price Readability.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.8D-R10 Premium Hero Slideshow approval checkpoint.
+- Stage 9.8D-R11 Premium Full Menu Modal Item Detail approval checkpoint.
 
 ## Planned
 
@@ -220,6 +221,15 @@ Stage 9.8D-R10 adds lightweight Premium Hero motion:
 - Reduced-motion browsers receive a static first-image fallback.
 - Short video hero, video upload, ffmpeg, transcoding, poster generation, and advanced media library features remain deferred.
 - Classic templates remain static-image-first; premium templates may support controlled rotating hero images when explicitly approved.
+
+Stage 9.8D-R11 improves Restaurant Premium Full Menu browsing:
+
+- Menu item prices render as readable premium chips inside the dark modal.
+- IDR and USD formatting continue through the shared formatter.
+- Menu item cards are clickable and show name, price, description, category, and Featured badge when present.
+- Clicking a card opens an item detail view with larger media/placeholder, full description, formatted price, category, and Back control.
+- The Full Menu modal remains browsing-focused and does not add WhatsApp/reservation CTA back into Restaurant Premium menu detail.
+- Category tabs, All tab, modal close, scrolling, and mobile behavior remain intact.
 
 Potential categories:
 

@@ -474,6 +474,24 @@ Reason:
 - Additive nullable persistence avoids breaking existing tenants and keeps static hero behavior intact.
 - Image-only slideshow can reuse the existing JPG/PNG/WEBP validation, Sharp WebP conversion, Supabase/local storage adapter, and delete cleanup behavior.
 
+## Premium Full Menu Item Detail
+
+Status: Approved for Stage 9.8D-R11 implementation.
+
+Decision:
+
+- Premium Full Menu modal must show readable prices in item cards and detail views.
+- Menu item detail browsing uses existing menu fields: name, description, price, price currency, image URL, category, and featured flag.
+- Restaurant Premium menu cards are clickable and open a detail view inside the existing modal.
+- Item detail view must not introduce repeated WhatsApp, reservation, payment, or ordering CTAs.
+- Category tabs and modal close behavior must remain compatible with the detail overlay.
+
+Reason:
+
+- Premium Restaurant users need clear menu browsing before deciding to reserve or visit.
+- Low-contrast prices and passive cards weaken commercial perceived value.
+- Existing menu data is sufficient for a useful detail view; no database migration or backend change is required.
+
 ## Template Selection And Assignment Audit
 
 Status: Completed for Stage 9.7A.
