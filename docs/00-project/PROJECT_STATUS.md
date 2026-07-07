@@ -4,9 +4,9 @@ Last updated: 2026-07-07
 
 ## Current Stage
 
-Stage 9.8E - Restaurant Premium Foundation Reference Lock.
+Stage 9.9 - Cafe Premium Redesign Using Restaurant Premium Foundation.
 
-Status: documentation lock completed locally. `restaurant_premium` is the first approved Premium Foundation Reference.
+Status: implemented, locally validated, evidence captured, and ready for approval. Railway deployment remains deferred while Railway trial is inactive/expired.
 
 ## Completed Stages
 
@@ -63,6 +63,7 @@ Status: documentation lock completed locally. `restaurant_premium` is the first 
 | Stage 9.8D-R12 Register Slug Removal and Business Information Ownership | Completed and approved. |
 | Stage 9.8D-R13 Restaurant Premium Mobile Hero Image Parity and Compact Layout Polish | Completed and approved. |
 | Stage 9.8E Restaurant Premium Foundation Reference Lock | Completed locally; Railway deployment intentionally deferred while Railway trial is inactive. |
+| Stage 9.9 Cafe Premium Redesign Using Restaurant Premium Foundation | Implemented and locally validated; awaiting approval. |
 
 ## Current Blockers
 
@@ -92,24 +93,24 @@ Status: documentation lock completed locally. `restaurant_premium` is the first 
 | Registration slug ownership | Resolved for Stage 9.8D-R12 implementation | Register no longer asks for slug or sends slug from the public form. Backend generates a temporary unique slug when missing, while Business Information remains the owner-facing place to edit and validate the public URL slug. |
 | Restaurant Premium mobile hero | Resolved for Stage 9.8D-R13 implementation | Mobile hero now uses the same hero media source/order as desktop, keeps static/slideshow/reduced-motion behavior intact, and uses compact mobile-only spacing, typography, CTA, chips, and card treatment. |
 | Restaurant Premium foundation lock | Resolved for Stage 9.8E | `restaurant_premium` is locked as the first Premium Foundation Reference. Future premium templates should reuse principles, tokens, and patterns where appropriate, not hardcode or inherit restaurant-specific layout/copy. |
+| Cafe Premium commercial quality | Resolved for Stage 9.9 implementation | `cafe_premium` now uses Cafe-specific premium hero, Signature Brews, Coffee & Bites preview, warm premium modal treatment, Cafe Story, ambience gallery, Visit the Cafe CTAs, compact mobile layout, and local evidence. |
 | Railway trial status | Deferred production validation | Railway trial is currently inactive/expired. Development and documentation lock continue locally; production backend redeploy resumes after Railway billing/reactivation. |
 | Luxury templates | Paused | No Luxury template implementation until separately approved. |
 | Template Catalog UI | Paused | No marketplace, comparison page, entitlement, or subscription access logic in Stage 9.7B. |
 
 ## Next Actions
 
-1. Review Stage 9.8E Restaurant Premium Foundation Lock report.
-2. Approve or request documentation corrections.
-3. Recommended next stage: Stage 9.9 - Cafe Premium Redesign Using Restaurant Premium Foundation.
-4. Keep Cafe Premium implementation, payment, subscription, marketplace, hosting renewal, publish gate, video hero, advanced media library, and new backend features paused until separately approved.
-5. When Railway is reactivated, redeploy the latest GitHub commit and revalidate production health, migrations, and Supabase-backed uploads.
-6. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
+1. Review Stage 9.9 Cafe Premium Redesign report and evidence.
+2. Approve or request corrections.
+3. Keep payment, subscription, marketplace, hosting renewal, publish gate, video hero, advanced media library, Clinic Premium, Corporate Premium, Laundry Premium redesign, and new backend features paused until separately approved.
+4. When Railway is reactivated, redeploy the latest GitHub commit and revalidate production health, migrations, and Supabase-backed uploads.
+5. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
 
 ## Operational Snapshot
 
 | System | Current Status |
 | --- | --- |
-| Local Docker | Validated during Stage 9.8D-R13. Stage 9.8E is documentation-only and validated through docs diff. |
+| Local Docker | Running and validated during Stage 9.9. |
 | GitHub | Latest code and documentation branch strategy uses `main`, `staging`, and `pilot`. |
 | Vercel | Production frontend active. |
 | Railway | Trial currently inactive/expired; production backend redeploy is deferred until Railway billing/reactivation. |
@@ -150,5 +151,6 @@ Status: documentation lock completed locally. `restaurant_premium` is the first 
 - Register slug removal report: [../06-modern-template/reports/PHASE-9.8D-R12-Register-Slug-Removal-Report.md](../06-modern-template/reports/PHASE-9.8D-R12-Register-Slug-Removal-Report.md)
 - Restaurant Premium mobile hero compact polish report: [../06-modern-template/reports/PHASE-9.8D-R13-Restaurant-Premium-Mobile-Hero-Compact-Polish-Report.md](../06-modern-template/reports/PHASE-9.8D-R13-Restaurant-Premium-Mobile-Hero-Compact-Polish-Report.md)
 - Restaurant Premium foundation lock report: [../06-modern-template/reports/PHASE-9.8E-Restaurant-Premium-Foundation-Lock-Report.md](../06-modern-template/reports/PHASE-9.8E-Restaurant-Premium-Foundation-Lock-Report.md)
+- Cafe Premium redesign report: [../06-modern-template/reports/PHASE-9.9-Cafe-Premium-Redesign-Using-Restaurant-Premium-Foundation-Report.md](../06-modern-template/reports/PHASE-9.9-Cafe-Premium-Redesign-Using-Restaurant-Premium-Foundation-Report.md)
 - Template Catalog readiness audit: [../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md](../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md)
 - Template consistency audit: [../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md](../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md)

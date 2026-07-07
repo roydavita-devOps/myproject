@@ -6,9 +6,12 @@ describe('premium full menu modal item detail contract', () => {
   const source = readFileSync(resolve('src/features/templates/PremiumFullMenuModal.tsx'), 'utf8');
   const priceSource = readFileSync(resolve('src/features/templates/priceFormat.ts'), 'utf8');
 
-  it('keeps restaurant full menu free from repeated WhatsApp CTA', () => {
-    expect(source).toContain("variant === 'restaurant' ? undefined");
-    expect(source).toContain('label="Chat WhatsApp"');
+  it('keeps premium full menu modals free from repeated WhatsApp CTA', () => {
+    expect(source).toContain('function modalLabels');
+    expect(source).toContain('Browse signature dishes, favorites, and menu selections.');
+    expect(source).toContain('Browse coffee, bites, seasonal favorites, and featured selections.');
+    expect(source).not.toContain('Chat WhatsApp');
+    expect(source).not.toContain('resolveContactActions');
   });
 
   it('renders clickable menu item cards with readable price and description hierarchy', () => {

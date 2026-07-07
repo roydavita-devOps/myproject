@@ -49,10 +49,49 @@ describe('premium template source readability rules', () => {
     expect(source).not.toContain('Chat WhatsApp');
     expect(source).not.toContain('Dishes Worth Reserving For');
     expect(source).not.toContain('A concise showcase of the plates that help guests decide quickly');
-    expect(modalSource).toContain("variant === 'restaurant' ? undefined");
+    expect(modalSource).toContain('Browse signature dishes, favorites, and menu selections.');
     expect(modalSource).toContain('Browse signature dishes, favorites, and menu selections.');
     expect(source).not.toContain('TemplateNavigation');
     expect(source).not.toContain('TemplateFooter');
+  });
+
+  it('keeps Cafe Premium cafe-specific and avoids restaurant-only copy', () => {
+    const source = readFileSync(resolve('src/features/templates/CafePremiumTemplate.tsx'), 'utf8');
+    const modalSource = readFileSync(resolve('src/features/templates/PremiumFullMenuModal.tsx'), 'utf8');
+
+    expect(source).toContain('Signature Brews');
+    expect(source).toContain('Coffee & Bites');
+    expect(source).toContain('Fresh From the Bar');
+    expect(source).toContain('Morning Favorites');
+    expect(source).toContain('Crafted for Slow Mornings');
+    expect(source).toContain('Ambience & Corners');
+    expect(source).toContain('Visit the Cafe');
+    expect(source).toContain('Explore Menu');
+    expect(source).toContain('Get Directions');
+    expect(source).toContain('Message Cafe');
+    expect(source).toContain('Call Cafe');
+    expect(source).toContain('normalizeHeroMedia');
+    expect(source).toContain('minHeroSlideshowImages');
+    expect(source).not.toContain('Reserve a Table');
+    expect(source).not.toContain('Signature Dishes');
+    expect(source).not.toContain('Full Restaurant Menu');
+    expect(source).not.toContain('Restaurant Story');
+    expect(source).not.toContain('Dishes Worth the Visit');
+    expect(source).not.toContain('Visit & Reservation');
+    expect(modalSource).toContain('Cafe Menu');
+    expect(modalSource).toContain('Browse coffee, bites, seasonal favorites, and featured selections.');
+    expect(modalSource).not.toContain('Order via WhatsApp');
+  });
+
+  it('keeps Cafe Premium hero CTA menu-first and avoids WhatsApp-first hero flow', () => {
+    const source = readFileSync(resolve('src/features/templates/CafePremiumTemplate.tsx'), 'utf8');
+    const heroActionResolver = source.match(/function resolvePremiumCafeHeroActions[\s\S]*?function resolvePremiumCafeContactActions/);
+
+    expect(heroActionResolver?.[0]).toContain('Explore Menu');
+    expect(heroActionResolver?.[0]).toContain('#signature-brews');
+    expect(heroActionResolver?.[0]).toContain('Get Directions');
+    expect(heroActionResolver?.[0]).not.toContain('Chat WhatsApp');
+    expect(heroActionResolver?.[0]).not.toContain('Message Cafe');
   });
 
   it('keeps restaurant premium hero free of repeated reservation CTA', () => {

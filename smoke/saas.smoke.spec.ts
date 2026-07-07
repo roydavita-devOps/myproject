@@ -424,27 +424,29 @@ test.describe('SaaS smoke test', () => {
         await page.goto(`${baseURL}/site/cafe-premium-demo`);
 
         await expect(page.locator('main')).toHaveAttribute('data-template-key', 'cafe_premium');
-        await expect(page.getByText('Specialty cafe experience')).toBeVisible();
-        await expect(page.getByRole('heading', { name: 'Brand Story' })).toBeVisible();
-        await expect(page.getByRole('heading', { name: 'Signature Menu' })).toBeVisible();
-        const services = page.locator('#services');
+        await expect(page.getByText('Specialty coffee corner')).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Crafted for Slow Mornings' })).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Fresh From the Bar' })).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Morning Favorites' })).toBeVisible();
+        const services = page.locator('#signature-brews');
         await expect(services.getByText('House Reserve Latte')).toBeVisible();
         await expect(services.getByText('Weekend Brunch Plate')).toBeVisible();
         await expect(services.getByText('Single Origin Pour Over')).toHaveCount(0);
-        await services.getByRole('button', { name: /view full menu/i }).click();
-        const dialog = page.getByRole('dialog', { name: /full cafe menu/i });
+        await services.getByRole('button', { name: /open cafe menu/i }).click();
+        const dialog = page.getByRole('dialog', { name: /coffee & bites/i });
         await expect(dialog).toBeVisible();
         await expect(dialog.getByRole('button', { name: /all/i })).toBeVisible();
         await expect(dialog.getByText('House Reserve Latte')).toBeVisible();
         await expect(dialog.getByText('Single Origin Pour Over')).toBeVisible();
+        await expect(dialog.getByText('Chat WhatsApp')).toHaveCount(0);
         await dialog.getByRole('button', { name: /close full menu/i }).click();
         await expect(dialog).toBeHidden();
-        await expect(page.getByRole('heading', { name: 'Lifestyle Gallery' })).toBeVisible();
-        await expect(page.getByText('Plan your next cafe visit')).toBeVisible();
+        await expect(page.getByRole('heading', { name: /Inside the Cafe|Slow Corners/ })).toBeVisible();
+        await expect(page.getByText('Plan your next coffee visit')).toBeVisible();
         const hero = page.locator('#home');
-        await expect(hero.getByRole('link', { name: /chat whatsapp/i })).toBeVisible();
-        await expect(hero.getByRole('link', { name: /view signature menu/i })).toBeVisible();
+        await expect(hero.getByRole('link', { name: /explore menu/i })).toBeVisible();
         await expect(hero.getByRole('link', { name: /get directions/i })).toBeVisible();
+        await expect(hero.getByRole('link', { name: /chat whatsapp|message cafe/i })).toHaveCount(0);
 
         await assertTemplateCtas(page);
       });
@@ -556,7 +558,8 @@ test.describe('SaaS smoke test', () => {
 
     await page.goto(`/site/${slug}`);
     await expect(page.locator('main')).toHaveAttribute('data-template-key', 'cafe_premium');
-    await expect(page.getByText('Specialty cafe experience')).toBeVisible();
+    await expect(page.getByText('Specialty coffee corner')).toBeVisible();
+    await expect(page.getByRole('link', { name: /explore menu/i })).toBeVisible();
 
     await api.dispose();
   });

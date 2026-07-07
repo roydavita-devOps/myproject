@@ -56,35 +56,14 @@ Last updated: 2026-07-07
 - Stage 9.8D-R12 Register Slug Removal and Business Information Ownership.
 - Stage 9.8D-R13 Restaurant Premium Mobile Hero Image Parity and Compact Layout Polish.
 - Stage 9.8E Restaurant Premium Foundation Reference Lock.
+- Stage 9.9 Cafe Premium Redesign Using Restaurant Premium Foundation.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Restaurant Premium Foundation is locked. Stage 9.9 Cafe Premium Redesign is the next recommended stage, but implementation has not started.
+- Cafe Premium Redesign is implemented and awaiting product approval.
 
 ## Planned
-
-### Stage 9.9
-
-Cafe Premium Redesign Using Restaurant Premium Foundation.
-
-Focus:
-
-- Premium cafe hero.
-- Coffee and product showcase.
-- Signature drinks.
-- Pastry and food support.
-- Ambience and gallery.
-- Visit and location flow.
-- Menu modal and item detail behavior.
-- Mobile compact design.
-- Warm, modern, cafe-friendly theme.
-
-Guidance:
-
-- Reuse Restaurant Premium foundation principles, semantic tokens, and proven premium patterns where appropriate.
-- Do not hardcode, inherit, or blindly copy Restaurant Premium layout, restaurant-specific copy, or reservation-first assumptions.
-- Cafe Premium must have cafe-specific language, mood, and content hierarchy.
 
 ### Stage 10
 
@@ -298,6 +277,17 @@ Stage 9.8E locks Restaurant Premium as the first Premium Foundation Reference:
 - Restaurant Premium must not become a hardcoded parent component for all premium templates.
 - Restaurant-specific language such as `Reserve a Table`, `Signature Dishes`, `Full Restaurant Menu`, `Restaurant Story`, `Dishes Worth the Visit`, and `Visit & Reservation` must not be copied blindly into Cafe Premium or other industries.
 - Railway trial is currently inactive/expired, so Stage 9.8E is a local documentation lock. Production redeploy resumes after Railway billing/reactivation.
+
+Stage 9.9 redesigns Cafe Premium using the Restaurant Premium Foundation:
+
+- Cafe Premium is the second premium template validation target after Restaurant Premium Foundation lock.
+- Cafe Premium uses Restaurant Premium foundation quality standards without hardcoded Restaurant Premium inheritance.
+- Cafe Premium now has cafe-specific language, sections, and visual mood: Signature Brews, Coffee & Bites, Fresh From the Bar, Morning Favorites, Cafe Story, Ambience & Corners, and Visit the Cafe.
+- Cafe Premium hero is menu-first, compact on mobile, image-safe, and compatible with existing premium hero slideshow data.
+- Premium Full Menu modal patterns are reused with business-specific labels and no Chat WhatsApp CTA inside the menu modal.
+- Cafe Premium uses cafe-friendly premium presets: `roasted_cream`, `espresso_linen`, `matcha_cream`, `caramel_noir`, and `terracotta_milk`.
+- No backend, database, Prisma, upload pipeline, payment, subscription, marketplace, hosting renewal, publish gate, video hero, or advanced media library change is included.
+- Railway trial is currently inactive/expired, so Stage 9.9 is validated locally. Production redeploy resumes after Railway billing/reactivation.
 
 Potential categories:
 

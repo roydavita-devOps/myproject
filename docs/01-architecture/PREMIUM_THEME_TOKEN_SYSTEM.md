@@ -16,6 +16,8 @@ Stage 9.8D-R8 adds a Restaurant Premium depth token layer for subtle CTA, dark s
 
 Stage 9.8E locks Restaurant Premium as the first approved Premium Foundation Reference. The token system, semantic contrast rules, depth treatment, hero scrim behavior, and reduced-motion expectations are reusable standards for future premium templates, but `RestaurantPremiumTemplate` is not a parent component that other premium templates should inherit blindly.
 
+Stage 9.9 applies the foundation to Cafe Premium with cafe-specific presets, warm modal treatment, CTA depth, compact mobile hero behavior, and business-specific menu modal labels.
+
 The system separates:
 
 - Template = layout and experience.
@@ -146,6 +148,14 @@ Restaurant Premium presets:
 - `burgundy_linen`
 - `espresso_copper`
 
+Cafe Premium presets:
+
+- `roasted_cream` (default)
+- `espresso_linen`
+- `matcha_cream`
+- `caramel_noir`
+- `terracotta_milk`
+
 Restaurant Premium also defines local renderer variables:
 
 - `--restaurant-heading-font`
@@ -188,6 +198,7 @@ No Prisma migration is required for Stage 9.8D editorial refinement.
 No Prisma migration is required for Stage 9.8D-R6 color system remediation.
 No Prisma migration is required for Stage 9.8D-R8 button and surface depth polish.
 No Prisma migration is required for Stage 9.8E foundation lock.
+No Prisma migration is required for Stage 9.9 Cafe Premium redesign.
 
 Reason:
 
@@ -214,3 +225,9 @@ Not reusable without adaptation:
 - Restaurant-specific ambience or gallery tone.
 
 Future premium templates must use this system as a quality reference while preserving their own business-specific experience.
+
+Stage 9.9 Cafe Premium usage:
+
+- Cafe Premium uses warm coffee, cream, caramel, soft matcha, terracotta, espresso, linen, and milk-foam directions.
+- Cafe Premium modal treatment reuses premium modal tokens with cafe-specific labels.
+- Cafe Premium does not use Restaurant Premium preset names, restaurant-specific copy, or reservation-first assumptions.

@@ -40,11 +40,11 @@ describe('premium theme tokens', () => {
       'espresso_copper',
     ]);
     expect(presetsForVariant('cafe').map((preset) => preset.key)).toEqual([
-      'cream_latte',
-      'coffee_brown',
-      'sage_green',
-      'soft_terracotta',
-      'minimal_black',
+      'roasted_cream',
+      'espresso_linen',
+      'matcha_cream',
+      'caramel_noir',
+      'terracotta_milk',
     ]);
     expect(premiumColorPresets).toHaveLength(10);
   });
@@ -63,13 +63,13 @@ describe('premium theme tokens', () => {
         primaryColor: '#123456',
         secondaryColor: '#f59e0b',
         accentColor: '#abcdef',
-        typography: { premiumColorPreset: 'sage_green' },
+        typography: { premiumColorPreset: 'matcha_cream' },
       }),
     );
 
     expect(tokens.primary).toBe('#123456');
     expect(tokens.accent).toBe('#abcdef');
-    expect(tokens.background).toBe('#f3f6ed');
+    expect(tokens.background).toBe('#F4F5E9');
     expect(tokens.buttonPrimary).toBe('#123456');
     expect(tokens.buttonPrimaryText).toBe('#ffffff');
     expect(tokens.textPrimary).not.toBe(tokens.accent);

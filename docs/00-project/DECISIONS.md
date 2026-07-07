@@ -153,7 +153,7 @@ Decision:
 - Safe additive database migration is allowed when it supports premium foundation data quality; no migration was needed for Stage 9.8D-R2 because `Website.openingHours` already supports JSON data.
 - Stage 9.8D-R1 through Stage 9.8D-R13 are approved as the Restaurant Premium foundation refinement track.
 - Further Restaurant Premium visual polish should stop unless a critical bug or regression is found.
-- Stage 9.9 Cafe Premium Redesign is the next recommended premium template stage and must use cafe-specific language, mood, and content hierarchy.
+- Stage 9.9 Cafe Premium Redesign applies the foundation to the second premium template and uses cafe-specific language, mood, and content hierarchy.
 
 Reason:
 
@@ -555,6 +555,27 @@ Reason:
 - Restaurant Premium is being used as the premium foundation, so mobile first impression must feel consistent with desktop.
 - Oversized mobile hero layout delays access to menu/content and weakens mobile conversion.
 - Responsive mobile-only polish preserves the approved desktop hero while improving mobile usability.
+
+## Cafe Premium Foundation Application
+
+Status: Implemented for Stage 9.9 pending product approval.
+
+Decision:
+
+- Cafe Premium uses Restaurant Premium Foundation quality standards without hardcoded Restaurant Premium inheritance.
+- Cafe Premium must use cafe-specific language, sections, and visual mood.
+- Premium menu modal patterns may be reused across premium templates when labels, copy, and accent treatment are business-specific.
+- Cafe Premium is the second premium template validation target after Restaurant Premium Foundation lock.
+- Cafe Premium keeps a menu-first hero CTA hierarchy: `Explore Menu` and optional `Get Directions`; WhatsApp is not the hero primary path.
+- Cafe Premium Full Menu modal must not show Chat WhatsApp, reservation, ordering, payment, billing, subscription, or marketplace CTA.
+- Cafe Premium is validated locally while Railway remains inactive/expired.
+- Stage 9.9 does not introduce backend changes, database changes, Prisma migrations, upload pipeline changes, payment, subscription, marketplace, hosting renewal, publish gate, video hero, advanced media library, or new template keys.
+
+Reason:
+
+- Cafe Premium needed to become commercially sellable without becoming a restaurant clone.
+- Restaurant Premium provides the quality bar, but cafe visitors expect coffee, pastry, ambience, and visit planning rather than dining/reservation language.
+- Reusing modal and token patterns keeps implementation controlled while preserving category-specific experience.
 
 ## Template Selection And Assignment Audit
 

@@ -1,0 +1,40 @@
+{
+  "generatedAt": "2026-07-07T05:22:55.235Z",
+  "baseURL": "http://127.0.0.1",
+  "screenshots": {
+    "cafePremiumHeroDesktop": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-redesign-9.9/cafe-premium-hero-desktop.png",
+    "cafePremiumHeroMobile": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-redesign-9.9/cafe-premium-hero-mobile.png",
+    "cafePremiumSignatureBrews": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-redesign-9.9/cafe-premium-signature-brews.png",
+    "cafePremiumMenuPreview": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-redesign-9.9/cafe-premium-menu-preview.png",
+    "cafePremiumFullMenuModal": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-redesign-9.9/cafe-premium-full-menu-modal.png",
+    "cafePremiumMenuItemDetail": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-redesign-9.9/cafe-premium-menu-item-detail.png",
+    "cafePremiumStorySection": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-redesign-9.9/cafe-premium-story-section.png",
+    "cafePremiumGallery": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-redesign-9.9/cafe-premium-gallery.png",
+    "cafePremiumVisitSection": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-redesign-9.9/cafe-premium-visit-section.png",
+    "cafePremiumFooter": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-redesign-9.9/cafe-premium-footer.png",
+    "cafePremiumMobileFullPage": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-redesign-9.9/cafe-premium-mobile-full-page.png",
+    "restaurantPremiumRegressionCheck": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-redesign-9.9/restaurant-premium-regression-check.png"
+  },
+  "results": [
+    {
+      "target": "cafe_premium_desktop_sections",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "cafe_premium_full_menu_and_detail",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "cafe_premium_mobile_no_overflow",
+      "viewport": "mobile",
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_premium_regression_check",
+      "viewport": "desktop",
+      "status": "passed"
+    }
+  ]
+}

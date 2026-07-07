@@ -1,17 +1,15 @@
-import { useState } from 'react';
-import { Armchair, CalendarDays, Coffee, CupSoda, HeartHandshake, MapPin, MessageCircle, Music, Phone, Sandwich, Sparkles, Star, Wifi } from 'lucide-react';
+import { CSSProperties, ReactNode, useEffect, useState } from 'react';
+import { Armchair, CalendarDays, Coffee, CupSoda, MapPin, MessageCircle, Phone, Sandwich, Sparkles, Star } from 'lucide-react';
 import { Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
+import { activeHeroImageUrl, minHeroSlideshowImages, normalizeHeroMedia } from '../uploads/heroMedia';
 import { PremiumFullMenuModal } from './PremiumFullMenuModal';
 import { formatOpeningHours as formatTemplateOpeningHours } from './openingHours';
 import { formatMenuPrice, hasMenuPrice } from './priceFormat';
-import { normalizeTemplateAction, resolveContactActions, validateTemplateActions } from './templateActions';
+import { resolveContactActions, TemplateAction, validateTemplateActions } from './templateActions';
 import {
-  TemplateButton,
-  TemplateCard,
-  TemplateFooter,
-  TemplateNavigation,
   PremiumReviewsSlider,
+  TemplateCard,
   TemplateSection,
 } from './TemplateComponents';
 
@@ -27,102 +25,152 @@ type PremiumCafeMenuItem = {
   sortOrder?: number;
 };
 
+type PremiumCafeGalleryItem = {
+  id: string;
+  imageUrl?: string | null;
+  altText?: string | null;
+};
+
 const defaultPremiumMenu: PremiumCafeMenuItem[] = [
-  { id: 'premium-cafe-1', name: 'Signature Selection', description: 'A featured customer favorite with polished presentation and clear value.', price: '42000' },
-  { id: 'premium-cafe-2', name: 'House Favorite', description: 'A recommended item for first-time customers browsing the menu.', price: '48000' },
-  { id: 'premium-cafe-3', name: 'Premium Set', description: 'A complete offer designed for easy ordering and confident choice.', price: '68000' },
-  { id: 'premium-cafe-4', name: 'Seasonal Highlight', description: 'A rotating feature that gives the menu a fresh premium feel.', price: '46000' },
+  { id: 'premium-cafe-1', name: 'House Cream Latte', description: 'Espresso, steamed milk, and soft caramel notes for slow mornings.', price: '42000', priceCurrency: 'IDR', isFeatured: true },
+  { id: 'premium-cafe-2', name: 'Manual Brew Ritual', description: 'Single-origin coffee brewed clean and bright for focused cafe moments.', price: '48000', priceCurrency: 'IDR', isFeatured: true },
+  { id: 'premium-cafe-3', name: 'Butter Croissant Pairing', description: 'Warm pastry pairing for coffee dates, work breaks, and brunch tables.', price: '36000', priceCurrency: 'IDR' },
+  { id: 'premium-cafe-4', name: 'Seasonal Cold Brew', description: 'A chilled house favorite with a smooth finish and rotating flavor notes.', price: '46000', priceCurrency: 'IDR' },
 ];
 
 const premiumCafeReviews = [
-  { id: 'cafe-premium-review-1', customerName: 'Pelanggan Utama', rating: 5, comment: 'Layanannya cepat, tampilannya rapi, dan informasinya mudah ditemukan.' },
-  { id: 'cafe-premium-review-2', customerName: 'Mitra Lokal', rating: 5, comment: 'Timnya responsif dan pengalaman pelanggannya terasa lebih profesional.' },
-  { id: 'cafe-premium-review-3', customerName: 'Pelanggan Setia', rating: 5, comment: 'Informasi produk dan layanan tersaji jelas, membuat kami lebih percaya.' },
+  { id: 'cafe-premium-review-1', customerName: 'Morning Regular', rating: 5, comment: 'Coffee-nya konsisten, tempatnya hangat, dan menu mudah dipilih dari website.' },
+  { id: 'cafe-premium-review-2', customerName: 'Weekend Guest', rating: 5, comment: 'Cocok untuk brunch santai. Informasi jam buka dan lokasi jelas sekali.' },
+  { id: 'cafe-premium-review-3', customerName: 'Remote Worker', rating: 5, comment: 'Ambience cafe terasa dari halaman pertama, jadi mudah ajak teman datang.' },
 ];
+
+const cafePremiumTypography = {
+  '--cafe-heading-font': '"Fraunces", Georgia, "Times New Roman", serif',
+  '--cafe-body-font': 'Inter, ui-sans-serif, system-ui, sans-serif',
+  '--cafe-hero-title-size': 'clamp(2.9rem, 7vw, 5.8rem)',
+  '--cafe-section-title-size': 'clamp(2rem, 4vw, 4rem)',
+  '--cafe-letter-spacing': '0',
+} as CSSProperties;
 
 export function CafePremiumTemplate({ website }: { website: Website }) {
   const [isFullMenuOpen, setIsFullMenuOpen] = useState(false);
   const hasRealMenu = Boolean(website.menus?.length);
   const allMenu = (hasRealMenu ? website.menus : defaultPremiumMenu) as PremiumCafeMenuItem[];
-  const menu = resolveFeaturedCafeItems(allMenu, hasRealMenu, 4);
+  const featuredMenu = resolveFeaturedCafeItems(allMenu, hasRealMenu, 4);
   const reviews = website.reviews?.length ? website.reviews : premiumCafeReviews;
 
   return (
-    <>
-      <TemplateNavigation website={website} />
+    <div style={cafePremiumTypography} className="overflow-x-hidden bg-[var(--premium-background)] font-[var(--cafe-body-font)] tracking-normal text-[var(--premium-text-primary)]">
+      <CafePremiumNavigation website={website} />
       <PremiumCafeHero website={website} />
-      <BrandStory website={website} />
-      <SignatureMenu items={menu} onOpenFullMenu={() => setIsFullMenuOpen(true)} />
-      <FeaturedExperience />
+      <SignatureBrews items={featuredMenu} categories={website.categories ?? []} onOpenFullMenu={() => setIsFullMenuOpen(true)} />
+      <CoffeeAndBites items={allMenu.slice(0, 6)} categories={website.categories ?? []} onOpenFullMenu={() => setIsFullMenuOpen(true)} />
+      <CafeStory website={website} />
       <PremiumCafeGallery website={website} />
       <PremiumReviewsSlider
         reviews={reviews}
         sliderId="cafe-premium-reviews"
-        description="Guests can browse real impressions before choosing their next coffee stop."
+        description="Guests can preview the coffee, atmosphere, and service before choosing their next cafe stop."
       />
       <CafeVisitContact website={website} />
-      <TemplateFooter website={website} />
+      <CafePremiumFooter website={website} />
       <PremiumFullMenuModal
         website={website}
         items={allMenu}
         isOpen={isFullMenuOpen}
         onClose={() => setIsFullMenuOpen(false)}
-        title="Full Cafe Menu"
+        title="Coffee & Bites"
         variant="cafe"
       />
-    </>
+    </div>
+  );
+}
+
+function CafePremiumNavigation({ website }: { website: Website }) {
+  const logoUrl = resolveAssetUrl(website.theme?.logoUrl);
+  const action = resolveCafeNavigationAction(website);
+
+  return (
+    <header className="sticky top-0 z-40 border-b border-[var(--premium-border-subtle)] bg-[var(--premium-surface-elevated)]/95 shadow-sm backdrop-blur">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+        <a href="#home" className="flex min-w-0 items-center gap-3">
+          {logoUrl && <img src={logoUrl} alt={`${website.businessName} logo`} className="size-10 rounded-md object-cover" />}
+          <span className="truncate font-[var(--cafe-heading-font)] text-lg font-semibold text-[var(--premium-text-primary)]">{website.businessName}</span>
+        </a>
+        <nav className="hidden items-center gap-6 text-sm font-semibold text-[var(--premium-text-secondary)] md:flex">
+          <a className="transition hover:text-[var(--premium-primary)]" href="#signature-brews">Menu</a>
+          <a className="transition hover:text-[var(--premium-primary)]" href="#cafe-story">Story</a>
+          <a className="transition hover:text-[var(--premium-primary)]" href="#cafe-ambience">Gallery</a>
+          <a className="transition hover:text-[var(--premium-primary)]" href="#visit-cafe">Visit</a>
+        </nav>
+        {action && <CafePremiumActionLink action={action} />}
+      </div>
+    </header>
   );
 }
 
 function PremiumCafeHero({ website }: { website: Website }) {
-  const heroImage = resolveAssetUrl(website.theme?.heroImageUrl) ?? 'https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1600&q=80';
+  const fallbackImage = resolveAssetUrl(website.theme?.heroImageUrl) ?? 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1600&q=80';
+  const heroMedia = normalizeHeroMedia(website.theme?.heroMedia);
+  const slideshowImages = heroMedia.heroMediaType === 'slideshow'
+    ? heroMedia.heroImages
+      .map((image) => ({
+        src: resolveAssetUrl(activeHeroImageUrl(image)),
+        alt: image.alt ?? `${website.businessName} cafe ambience`,
+      }))
+      .filter((image): image is { src: string; alt: string } => Boolean(image.src))
+    : [];
   const actions = resolvePremiumCafeHeroActions(website);
 
   return (
-    <section id="home" className="relative overflow-hidden bg-[var(--premium-background)]">
-      <div className="absolute inset-x-0 top-0 h-72 bg-[var(--premium-hero-overlay)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,.88),rgba(255,255,255,.70),rgba(255,255,255,.92))]" />
-      <div className="mx-auto grid min-h-[86vh] max-w-6xl items-center gap-9 px-4 py-14 md:grid-cols-[0.9fr_1.1fr] md:py-18">
-        <div className="relative z-10 rounded-lg border border-[var(--premium-border-subtle)] bg-[var(--premium-surface-elevated)]/86 p-5 shadow-sm backdrop-blur md:bg-transparent md:p-0 md:shadow-none">
-          <p className="tpl-caption mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--premium-border)] bg-white/80 px-4 py-2 font-semibold uppercase text-[var(--premium-primary)] shadow-sm backdrop-blur">
-            <Coffee className="size-4" />
-            Specialty cafe experience
+    <section id="home" className="relative min-h-[560px] overflow-hidden bg-[var(--premium-surface-dark)] md:min-h-[86vh]">
+      <CafeHeroMedia fallbackImage={fallbackImage} fallbackAlt={`${website.businessName} cafe atmosphere`} slideshowImages={slideshowImages} />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(42,26,17,.88),rgba(72,44,26,.62),rgba(72,44,26,.24))]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(219,165,95,.34),transparent_28%),linear-gradient(180deg,rgba(23,14,10,.22),rgba(23,14,10,.76))]" />
+      <div className="absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(180deg,transparent,var(--premium-background))]" />
+      <div className="relative mx-auto grid min-h-[560px] max-w-6xl content-end gap-4 px-4 pb-6 pt-14 md:min-h-[86vh] md:grid-cols-[1fr_.48fr] md:items-end md:gap-7 md:pb-16 md:pt-24">
+        <div className="max-w-3xl text-[var(--premium-text-on-dark)]">
+          <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/[.34] px-3 py-1.5 text-[0.68rem] font-semibold uppercase text-[var(--premium-text-on-dark)] shadow-[0_18px_70px_rgba(0,0,0,.24)] backdrop-blur md:mb-5 md:px-4 md:py-2 md:text-xs">
+            <Coffee className="size-4 text-[var(--premium-accent)]" />
+            Specialty coffee corner
           </p>
-          <h1 className="tenant-heading text-[clamp(3rem,9vw,6.25rem)] font-semibold leading-[.94] text-[var(--premium-text-primary)]">{website.businessName}</h1>
-          <p className="mt-6 max-w-2xl text-xl leading-8 text-[var(--premium-text-primary)] md:text-2xl">
-            {website.tagline ?? 'A warm place for specialty coffee, brunch, and unhurried everyday visits.'}
+          <h1 className="font-[var(--cafe-heading-font)] text-[clamp(2.45rem,12vw,3.8rem)] font-semibold leading-[.95] text-[var(--premium-text-on-dark)] md:text-[length:var(--cafe-hero-title-size)] md:leading-[.94]">
+            {website.businessName}
+          </h1>
+          <p className="mt-4 max-w-2xl text-base leading-6 text-[var(--premium-hero-text)] md:mt-6 md:text-2xl md:leading-8">
+            {website.tagline ?? 'Fresh brews, warm bites, and calm corners for everyday coffee rituals.'}
           </p>
-          <p className="tpl-body mt-5 max-w-2xl text-[var(--premium-text-secondary)]">
-            {website.description ?? 'Find the featured menu, check the atmosphere, and plan your next visit with clear contact options.'}
+          <p className="mt-3 line-clamp-2 max-w-2xl text-sm leading-6 text-[var(--premium-hero-muted-text)] md:mt-5 md:line-clamp-none md:text-base md:leading-7">
+            {website.description ?? 'Explore signature brews, pastry pairings, cafe ambience, opening hours, and directions before your next visit.'}
           </p>
           {actions.length > 0 && (
-            <div className="mt-8 flex flex-wrap gap-3">
-              {actions.map((action) => <TemplateButton key={action.href} {...action} />)}
+            <div className="mt-5 flex flex-wrap gap-2.5 md:mt-8 md:gap-3">
+              {actions.map((action) => <CafePremiumActionLink key={action.href} action={action} context="hero" />)}
             </div>
           )}
-          <div className="mt-10 flex flex-wrap gap-3 text-sm text-[var(--premium-text-primary)]">
-            {['Signature drinks', 'Fresh brunch', 'Open today'].map((item) => (
-            <span key={item} className="rounded-full border border-[var(--premium-border-subtle)] bg-[var(--premium-surface-elevated)] px-4 py-2 font-semibold shadow-sm">{item}</span>
+          <div className="mt-5 hidden max-w-2xl grid-cols-3 gap-2 text-xs text-[var(--premium-text-on-dark)] sm:grid md:mt-10 md:gap-3 md:text-sm">
+            {['Signature brews', 'Pastry pairings', 'Slow corners'].map((item) => (
+              <p key={item} className="flex items-center gap-2 rounded-md border border-white/18 bg-black/[.30] px-2.5 py-1.5 backdrop-blur md:px-3 md:py-2">
+                <Sparkles className="size-4 text-[var(--premium-accent)]" />
+                {item}
+              </p>
             ))}
           </div>
         </div>
-        <div className="relative">
-          <div className="absolute -left-4 top-8 z-10 max-w-48 rounded-lg border border-[var(--premium-border-subtle)] bg-[var(--premium-surface-elevated)] p-4 shadow-xl backdrop-blur md:-left-8">
-            <p className="text-xs font-semibold uppercase text-[var(--premium-text-primary)]">Featured menu</p>
-            <p className="mt-2 text-lg font-semibold leading-snug text-[var(--premium-text-primary)]">Signature Selection</p>
-            <p className="mt-2 text-sm leading-5 text-[var(--premium-text-secondary)]">A favorite worth noticing first.</p>
-          </div>
-          <div className="overflow-hidden rounded-lg border border-white/70 bg-white shadow-[0_28px_80px_rgba(88,54,28,.22)]">
-            <img className="premium-hero-motion aspect-[4/3] w-full object-cover" src={heroImage} alt={`${website.businessName} premium atmosphere`} />
-            <div className="grid gap-3 bg-[var(--premium-surface)] p-5 text-sm text-[var(--premium-text-secondary)] sm:grid-cols-3">
-              <p className="flex items-center gap-2"><CupSoda className="size-4 text-[var(--premium-primary)]" />Signature</p>
-              <p className="flex items-center gap-2"><Music className="size-4 text-[var(--premium-accent)]" />Atmosphere</p>
-              <p className="flex items-center gap-2"><Wifi className="size-4 text-[var(--premium-primary)]" />Stay awhile</p>
-            </div>
-          </div>
-          <div className="absolute -bottom-5 right-4 rounded-lg bg-[var(--premium-surface-dark)] px-5 py-4 text-[var(--premium-text-on-dark)] shadow-xl">
-            <p className="text-xs font-semibold uppercase text-[var(--premium-text-on-dark)]">Open today</p>
-            <p className="mt-1 text-sm">{formatOpeningHours(website.openingHours)}</p>
+        <div className="rounded-lg border border-white/18 bg-[linear-gradient(145deg,rgba(255,250,242,.18),rgba(48,31,22,.72))] p-4 text-[var(--premium-text-on-dark)] shadow-[0_28px_80px_rgba(0,0,0,.30)] backdrop-blur-md md:p-6">
+          <p className="text-xs font-semibold uppercase text-[var(--premium-text-on-dark)]">Today's pour</p>
+          <h2 className="mt-2 font-[var(--cafe-heading-font)] text-[1.35rem] font-semibold leading-tight md:mt-3 md:text-3xl">A warm corner for coffee, bites, and conversation.</h2>
+          <div className="mt-4 grid gap-3 md:mt-6 md:gap-4">
+            {[
+              { label: 'Opening Hours', value: formatOpeningHours(website.openingHours) },
+              { label: 'Best for', value: 'Morning coffee, pastry breaks, and casual meetings', mobileHidden: true },
+              { label: 'Next step', value: 'Explore the cafe menu or get directions' },
+            ].map((item) => (
+              <div key={item.label} className={`${item.mobileHidden ? 'hidden md:block' : ''} border-t border-white/16 pt-3 md:pt-4`}>
+                <p className="text-xs font-semibold uppercase text-[var(--premium-text-on-dark)]">{item.label}</p>
+                <p className="mt-1 text-xs leading-5 text-[var(--premium-hero-muted-text)] md:text-sm md:leading-6">{item.value}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -130,24 +178,149 @@ function PremiumCafeHero({ website }: { website: Website }) {
   );
 }
 
-function BrandStory({ website }: { website: Website }) {
+function CafeHeroMedia({
+  fallbackImage,
+  fallbackAlt,
+  slideshowImages,
+}: {
+  fallbackImage: string;
+  fallbackAlt: string;
+  slideshowImages: Array<{ src: string; alt: string }>;
+}) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const canRenderSlideshow = slideshowImages.length >= minHeroSlideshowImages;
+  const canAnimateSlideshow = canRenderSlideshow && !prefersReducedMotion;
+
+  useEffect(() => {
+    if (!canAnimateSlideshow) {
+      setActiveIndex(0);
+      return;
+    }
+
+    const timer = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % slideshowImages.length);
+    }, 5600);
+
+    return () => window.clearInterval(timer);
+  }, [canAnimateSlideshow, slideshowImages.length]);
+
+  if (!canRenderSlideshow) {
+    return <img className="absolute inset-0 size-full object-cover object-center" src={fallbackImage} alt={fallbackAlt} />;
+  }
+
+  return (
+    <div className="absolute inset-0" aria-label={fallbackAlt}>
+      {slideshowImages.map((image, index) => (
+        <img
+          key={`${image.src}-${index}`}
+          className={`absolute inset-0 size-full object-cover object-center transition-opacity duration-1000 ${index === activeIndex ? 'opacity-100' : 'opacity-0'} ${prefersReducedMotion && index !== 0 ? 'hidden' : ''}`}
+          src={image.src}
+          alt={index === activeIndex ? image.alt : ''}
+          aria-hidden={index !== activeIndex}
+        />
+      ))}
+    </div>
+  );
+}
+
+function SignatureBrews({
+  items,
+  categories,
+  onOpenFullMenu,
+}: {
+  items: PremiumCafeMenuItem[];
+  categories: Website['categories'];
+  onOpenFullMenu: () => void;
+}) {
+  const signatureItems = items.slice(0, 4);
+  if (signatureItems.length === 0) return null;
+
+  return (
+    <TemplateSection id="signature-brews" muted eyebrow="Signature Brews" title="Fresh From the Bar" description="A curated look at the drinks and bites guests should notice first.">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <p className="max-w-xl text-sm leading-6 text-[var(--premium-text-secondary)]">Feature coffee, non-coffee, pastry, and seasonal favorites with clear price and category context.</p>
+        <CafePremiumActionButton onClick={onOpenFullMenu} label="Open Cafe Menu" icon={<Coffee className="size-4" />} />
+      </div>
+      <div className={signatureItems.length <= 2 ? 'grid gap-4 md:grid-cols-2' : 'grid gap-4 md:grid-cols-2'}>
+        {signatureItems.map((item, index) => (
+          <article key={item.id} className="grid overflow-hidden rounded-lg border border-[var(--premium-border-subtle)] bg-[var(--premium-surface)] shadow-[0_22px_60px_rgba(93,56,30,.14)] md:grid-cols-[.82fr_1fr]">
+            <PremiumCafeMenuMedia item={item} index={index} />
+            <div className="flex min-w-0 flex-col justify-between p-5">
+              <div>
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+                  <span className="rounded-full border border-[var(--premium-border-subtle)] bg-[var(--premium-accent-soft)] px-3 py-1 text-xs font-semibold text-[var(--premium-text-primary)]">
+                    {categoryLabel(item, categories, index)}
+                  </span>
+                  {item.isFeatured && <span className="inline-flex items-center gap-1 rounded-full bg-[var(--premium-badge-background)] px-3 py-1 text-xs font-semibold text-[var(--premium-badge-text)]"><Star className="size-3.5" /> Featured</span>}
+                </div>
+                <h3 className="font-[var(--cafe-heading-font)] text-2xl font-semibold leading-tight text-[var(--premium-text-primary)]">{item.name}</h3>
+                {item.description && <p className="mt-3 line-clamp-3 text-sm leading-6 text-[var(--premium-text-secondary)]">{item.description}</p>}
+              </div>
+              {hasMenuPrice(item) && <p className="mt-5 text-xl font-semibold text-[var(--premium-price-text)]">{formatMenuPrice(item)}</p>}
+            </div>
+          </article>
+        ))}
+      </div>
+    </TemplateSection>
+  );
+}
+
+function CoffeeAndBites({
+  items,
+  categories,
+  onOpenFullMenu,
+}: {
+  items: PremiumCafeMenuItem[];
+  categories: Website['categories'];
+  onOpenFullMenu: () => void;
+}) {
+  if (items.length === 0) return null;
+
+  return (
+    <TemplateSection id="coffee-bites" eyebrow="Coffee & Bites" title="Morning Favorites" description="A compact preview for guests who want to compare choices before visiting.">
+      <div className="grid gap-3 md:grid-cols-3">
+        {items.slice(0, 6).map((item, index) => (
+          <TemplateCard key={item.id} className="flex min-h-48 flex-col justify-between border-[var(--premium-border-subtle)] bg-[var(--premium-surface-elevated)] shadow-[0_14px_34px_rgba(93,56,30,.10)]">
+            <div>
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <div className="flex size-10 items-center justify-center rounded-md bg-[var(--premium-accent-soft)] text-[var(--premium-primary)]">
+                  {index % 2 === 0 ? <CupSoda className="size-5" /> : <Sandwich className="size-5" />}
+                </div>
+                <span className="truncate text-xs font-semibold uppercase text-[var(--premium-text-muted)]">{categoryLabel(item, categories, index)}</span>
+              </div>
+              <h3 className="font-[var(--cafe-heading-font)] text-xl font-semibold text-[var(--premium-text-primary)]">{item.name}</h3>
+              {item.description && <p className="mt-2 line-clamp-2 text-sm leading-6 text-[var(--premium-text-secondary)]">{item.description}</p>}
+            </div>
+            {hasMenuPrice(item) && <p className="mt-5 font-semibold text-[var(--premium-price-text)]">{formatMenuPrice(item)}</p>}
+          </TemplateCard>
+        ))}
+      </div>
+      <div className="mt-7">
+        <CafePremiumActionButton onClick={onOpenFullMenu} label="View Coffee & Bites" icon={<Coffee className="size-4" />} />
+      </div>
+    </TemplateSection>
+  );
+}
+
+function CafeStory({ website }: { website: Website }) {
   return (
     <TemplateSection
-      id="about"
-      eyebrow="Brand story"
-      title="Brand Story"
-      description={website.description ?? 'A clear story helps guests imagine the drink, the table, and the pace of their visit.'}
+      id="cafe-story"
+      eyebrow="Cafe Story"
+      title="Crafted for Slow Mornings"
+      description={website.description ?? 'A cafe page should help guests feel the warmth of the bar, the comfort of the seating, and the care behind every cup.'}
     >
       <div className="grid gap-5 md:grid-cols-[1.15fr_.85fr_.85fr]">
         {[
-          ['Specialty mindset', 'Position coffee, brunch, and service as thoughtful instead of generic.'],
-          ['Atmosphere first', 'Support customers who choose a cafe based on space, mood, and comfort.'],
-          ['Visit planning', 'Menu, contact, maps, and hours are arranged for quick decisions.'],
+          ['Coffee craft', 'Tell a clearer story around espresso, manual brew, non-coffee, and seasonal favorites.'],
+          ['Pastry pairings', 'Frame light bites as part of the visit, not just add-ons beside the drink.'],
+          ['Neighborhood rhythm', 'Support guests looking for a calm place to meet, work, read, or relax.'],
         ].map(([title, description], index) => (
-          <TemplateCard key={title} className={index === 0 ? 'bg-[var(--premium-surface-dark)] p-7 text-[var(--premium-text-on-dark)] shadow-xl' : 'bg-[var(--premium-surface)] shadow-md'}>
+          <TemplateCard key={title} className={index === 0 ? 'bg-[linear-gradient(145deg,var(--premium-surface-dark-gradient-from),var(--premium-surface-dark-gradient-to))] p-7 text-[var(--premium-text-on-dark)] shadow-[var(--premium-surface-dark-shadow)]' : 'border-[var(--premium-border-subtle)] bg-[var(--premium-surface)] shadow-md'}>
             <Sparkles className={index === 0 ? 'mb-4 size-6 text-[var(--premium-accent)]' : 'mb-4 size-5 text-[var(--premium-primary)]'} />
-            <h3 className="tpl-h3 tenant-heading">{title}</h3>
-            <p className={index === 0 ? 'tpl-body mt-3 text-white/90' : 'tpl-body mt-3 text-[var(--tpl-text-secondary)]'}>{description}</p>
+            <h3 className="font-[var(--cafe-heading-font)] text-2xl font-semibold">{title}</h3>
+            <p className={index === 0 ? 'mt-3 leading-7 text-white/88' : 'mt-3 leading-7 text-[var(--premium-text-secondary)]'}>{description}</p>
           </TemplateCard>
         ))}
       </div>
@@ -155,49 +328,136 @@ function BrandStory({ website }: { website: Website }) {
   );
 }
 
-function SignatureMenu({ items, onOpenFullMenu }: { items: PremiumCafeMenuItem[]; onOpenFullMenu: () => void }) {
-  const signatureItems = items.slice(0, 4);
-  if (signatureItems.length === 0) return null;
-  const layoutClass = signatureItems.length === 1
-    ? 'grid gap-4'
-    : signatureItems.length === 2
-      ? 'grid gap-4 md:grid-cols-2'
-      : 'grid gap-4 md:grid-cols-2';
+function PremiumCafeGallery({ website }: { website: Website }) {
+  const galleries = (website.galleries ?? []) as PremiumCafeGalleryItem[];
+  if (galleries.length > 0) {
+    const visible = galleries.slice(0, 6);
+    return (
+      <TemplateSection id="cafe-ambience" muted eyebrow="Ambience & Corners" title="Inside the Cafe" description="Let guests preview the counter, seating, menu moments, and calm corners before they arrive.">
+        <div className={visible.length === 1 ? 'grid' : visible.length === 2 ? 'grid gap-5 md:grid-cols-2' : 'grid gap-5 md:grid-cols-[.85fr_1.15fr_.85fr]'}>
+          {visible.map((item, index) => (
+            <CafeGalleryFigure key={item.id} item={item} index={index} businessName={website.businessName} featured={index === 1 && visible.length >= 3} />
+          ))}
+        </div>
+      </TemplateSection>
+    );
+  }
 
   return (
-    <TemplateSection id="services" muted eyebrow="Signature menu" title="Signature Menu" description="Explore the drinks and plates guests come back for.">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-[var(--tpl-text-secondary)]">Open the full menu when you want more choices.</p>
-        <button
-          type="button"
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[var(--premium-button-primary)] px-5 py-2.5 text-sm font-semibold text-[var(--premium-button-primary-text)] transition hover:brightness-95 focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2"
-          onClick={onOpenFullMenu}
-        >
-          <Coffee className="size-4" />
-          View Full Menu
-        </button>
-      </div>
-      <div className={layoutClass}>
-        {signatureItems.map((item, index) => (
-          <TemplateCard key={item.id} className={signatureItems.length === 1 ? 'grid overflow-hidden bg-[var(--premium-surface)] p-0 shadow-lg md:grid-cols-[1fr_1fr]' : 'flex min-h-80 flex-col justify-between overflow-hidden bg-[var(--premium-surface)] p-0 shadow-lg'}>
-            <PremiumCafeMenuMedia item={item} index={index} />
-            <div>
-              <div className="mb-5 flex items-center justify-between px-6 pt-6">
-                <div className="flex size-12 items-center justify-center rounded-md bg-[var(--premium-primary)] text-[var(--premium-button-primary-text)]">
-                  <Sandwich className="size-5" />
-                </div>
-                <span className="rounded-full border border-[var(--premium-border-subtle)] bg-[var(--premium-accent-soft)] px-3 py-1 text-xs font-semibold text-[var(--premium-text-primary)]">Signature {index + 1}</span>
-              </div>
-              <div className="px-6">
-                <h3 className="tpl-h3 tenant-heading">{item.name}</h3>
-                {item.description && <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{item.description}</p>}
-              </div>
+    <TemplateSection id="cafe-ambience" muted eyebrow="Ambience & Corners" title="Slow Corners" description="Use this area for counter details, seating corners, coffee cups, pastries, and the moments guests want to share.">
+      <div className="grid gap-5 md:grid-cols-[.85fr_1.15fr_.85fr]">
+        {[
+          { title: 'Coffee bar', description: 'Espresso, manual brew, and the rhythm behind the counter.', Icon: Coffee },
+          { title: 'Pastry table', description: 'Fresh bites that make the cafe visit feel complete.', Icon: Sandwich },
+          { title: 'Cozy corner', description: 'Seats, light, and ambience for slow conversations.', Icon: Armchair },
+        ].map(({ title, description, Icon }) => (
+          <TemplateCard key={title} className="overflow-hidden border-[var(--premium-border-subtle)] bg-[var(--premium-surface)] p-0 shadow-lg">
+            <div className="flex aspect-[4/3] items-center justify-center bg-[radial-gradient(circle_at_35%_25%,rgba(255,255,255,.54),transparent_30%),linear-gradient(135deg,var(--premium-accent),var(--premium-primary))] text-white">
+              <Icon className="size-10" />
             </div>
-            {hasMenuPrice(item) && <p className="px-6 pb-6 pt-6 text-2xl font-semibold text-[var(--premium-text-primary)]">{formatMenuPrice(item)}</p>}
+            <div className="p-5">
+              <h3 className="font-[var(--cafe-heading-font)] text-2xl font-semibold text-[var(--premium-text-primary)]">{title}</h3>
+              <p className="mt-2 text-sm leading-6 text-[var(--premium-text-secondary)]">{description}</p>
+            </div>
           </TemplateCard>
         ))}
       </div>
     </TemplateSection>
+  );
+}
+
+function CafeGalleryFigure({ item, index, businessName, featured }: { item: PremiumCafeGalleryItem; index: number; businessName: string; featured: boolean }) {
+  const [hasImageError, setHasImageError] = useState(false);
+  const imageUrl = resolveAssetUrl(item.imageUrl);
+  const canRenderImage = imageUrl && !hasImageError;
+
+  return (
+    <figure className={`${featured ? 'md:row-span-2' : ''} overflow-hidden rounded-lg border border-[var(--premium-border-subtle)] bg-[var(--premium-surface)] shadow-[0_18px_44px_rgba(93,56,30,.12)]`}>
+      {canRenderImage ? (
+        <img
+          className={featured ? 'aspect-[4/5] w-full object-cover md:h-full' : index === 0 ? 'aspect-[16/10] w-full object-cover' : 'aspect-[4/3] w-full object-cover'}
+          src={imageUrl}
+          alt={item.altText ?? `${businessName} cafe ambience`}
+          loading="lazy"
+          onError={() => setHasImageError(true)}
+        />
+      ) : (
+        <div className={featured ? 'flex aspect-[4/5] items-center justify-center bg-[linear-gradient(135deg,var(--premium-accent),var(--premium-primary))] text-white md:h-full' : 'flex aspect-[4/3] items-center justify-center bg-[linear-gradient(135deg,var(--premium-accent),var(--premium-primary))] text-white'}>
+          <Coffee className="size-10" />
+        </div>
+      )}
+    </figure>
+  );
+}
+
+function CafeVisitContact({ website }: { website: Website }) {
+  const actions = resolvePremiumCafeContactActions(website);
+  return (
+    <TemplateSection id="visit-cafe" title="Visit the Cafe" description="Opening hours, directions, and contact options stay clear without showing unavailable actions.">
+      <div className="grid gap-4 md:grid-cols-[1fr_1fr_.92fr]">
+        <TemplateCard className="border-[var(--premium-border-subtle)] bg-[var(--premium-surface)] shadow-md">
+          <MapPin className="mb-4 size-5 text-[var(--premium-primary)]" />
+          <h3 className="font-[var(--cafe-heading-font)] text-2xl font-semibold">Find Your Table</h3>
+          <p className="mt-3 leading-7 text-[var(--premium-text-secondary)]">{website.address ?? 'Cafe address can be displayed here when the owner is ready to publish.'}</p>
+        </TemplateCard>
+        <TemplateCard className="border-[var(--premium-border-subtle)] bg-[var(--premium-surface)] shadow-md">
+          <CalendarDays className="mb-4 size-5 text-[var(--premium-primary)]" />
+          <h3 className="font-[var(--cafe-heading-font)] text-2xl font-semibold">Opening Hours</h3>
+          <p className="mt-3 leading-7 text-[var(--premium-text-secondary)]">{formatOpeningHours(website.openingHours)}</p>
+        </TemplateCard>
+        <TemplateCard className="bg-[linear-gradient(145deg,var(--premium-surface-dark-gradient-from),var(--premium-surface-dark-gradient-to))] text-[var(--premium-text-on-dark)] shadow-[var(--premium-surface-dark-shadow)]">
+          <Star className="mb-4 size-5 text-[var(--premium-accent)]" />
+          <h3 className="font-[var(--cafe-heading-font)] text-2xl font-semibold">Plan your next coffee visit</h3>
+          <p className="mt-3 leading-7 text-white/88">Get directions, call the cafe, or message when WhatsApp is available.</p>
+          {actions.length > 0 && (
+            <div className="mt-5 flex flex-wrap gap-3">
+              {actions.map((action) => <CafePremiumActionLink key={action.href} action={action} />)}
+            </div>
+          )}
+        </TemplateCard>
+      </div>
+    </TemplateSection>
+  );
+}
+
+function CafePremiumFooter({ website }: { website: Website }) {
+  const directions = resolveContactActions(website).find((action) => action.action === 'directions');
+  return (
+    <footer className="border-t border-[var(--premium-footer-top-border)] bg-[linear-gradient(135deg,var(--premium-footer-gradient-from),var(--premium-footer-gradient-to))] py-8 text-[var(--premium-text-on-dark)]">
+      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 text-sm md:flex-row md:items-center md:justify-between">
+        <div>
+          <p className="font-[var(--cafe-heading-font)] text-xl font-semibold">{website.businessName}</p>
+          <p className="mt-1 text-white/72">Coffee, bites, ambience, and visit details in one premium cafe page.</p>
+        </div>
+        {directions && <CafePremiumActionLink action={{ ...directions, label: 'Get Directions', icon: <MapPin className="size-4" />, variant: 'secondary' }} />}
+      </div>
+    </footer>
+  );
+}
+
+function PremiumCafeMenuMedia({ item, index }: { item: PremiumCafeMenuItem; index: number }) {
+  const [hasImageError, setHasImageError] = useState(false);
+  const imageUrl = resolveAssetUrl(item.imageUrl);
+  if (imageUrl && !hasImageError) {
+    return (
+      <img
+        className="min-h-56 w-full object-cover md:h-full"
+        src={imageUrl}
+        alt={`${item.name} cafe menu photo`}
+        loading="lazy"
+        onError={() => setHasImageError(true)}
+      />
+    );
+  }
+
+  const labels = ['Today\'s Pour', 'Morning Favorite', 'Pastry Pairing', 'Seasonal'];
+  return (
+    <div className="relative flex min-h-56 items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_38%_28%,rgba(255,255,255,.58),transparent_30%),linear-gradient(135deg,var(--premium-accent),var(--premium-primary))] text-white md:h-full">
+      <Coffee className="size-10" />
+      <span className="absolute left-4 top-4 rounded-full bg-black/45 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
+        {labels[index % labels.length]}
+      </span>
+    </div>
   );
 }
 
@@ -207,145 +467,92 @@ function resolveFeaturedCafeItems(items: PremiumCafeMenuItem[], hasRealMenu: boo
   return (featured.length > 0 ? featured : items).slice(0, limit);
 }
 
-function PremiumCafeMenuMedia({ item, index }: { item: PremiumCafeMenuItem; index: number }) {
-  const imageUrl = resolveAssetUrl(item.imageUrl);
-  if (imageUrl) {
-    return (
-      <img
-        className="aspect-[16/10] w-full object-cover"
-        src={imageUrl}
-        alt={`${item.name} menu photo`}
-        loading="lazy"
-      />
-    );
-  }
-
-  const labels = ['House Favorite', 'Popular', 'Signature', 'Seasonal'];
-  return (
-    <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_38%_28%,rgba(255,255,255,.58),transparent_30%),linear-gradient(135deg,var(--premium-accent),var(--premium-primary))] text-white">
-      <Coffee className="size-10" />
-      <span className="absolute left-4 top-4 rounded-full bg-black/55 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
-        {labels[index % labels.length]}
-      </span>
-    </div>
-  );
-}
-
-function FeaturedExperience() {
-  return (
-    <TemplateSection title="Lifestyle Experience" description="Designed for work breaks, weekend plans, and coffee dates that last longer.">
-      <div className="grid gap-4 md:grid-cols-3">
-        {[
-          ['Work friendly', 'Comfort, Wi-Fi, and seating cues for everyday visitors.'],
-          ['Community ready', 'Useful for events, casual meetings, and weekend visits.'],
-          ['Specialty driven', 'Signature drinks and brunch items are easier to promote.'],
-        ].map(([title, description]) => (
-          <TemplateCard key={title} className="border-[var(--premium-border-subtle)] bg-[var(--premium-surface-elevated)] shadow-md">
-            <HeartHandshake className="mb-4 size-5 text-[var(--premium-primary)]" />
-            <h3 className="tpl-h3 tenant-heading">{title}</h3>
-            <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{description}</p>
-          </TemplateCard>
-        ))}
-      </div>
-    </TemplateSection>
-  );
-}
-
-function PremiumCafeGallery({ website }: { website: Website }) {
-  const cta = resolveContactActions(website)[0];
-  if (website.galleries?.length) {
-    const galleries = website.galleries;
-    const layoutClass = galleries.length === 1 ? 'grid' : galleries.length === 2 ? 'grid gap-5 md:grid-cols-2' : 'grid gap-5 md:grid-cols-[.9fr_1.1fr_.9fr]';
-    return (
-      <TemplateSection id="gallery" muted eyebrow="Cafe visuals" title="Lifestyle Gallery" description="Show the bar, the seating, and the moments guests can expect.">
-        <div className={layoutClass}>
-          {galleries.map((item, index) => (
-            <figure key={item.id} className={index === 1 && galleries.length >= 3 ? 'overflow-hidden rounded-lg border border-[var(--premium-border)] bg-[var(--premium-surface)] md:row-span-2' : 'overflow-hidden rounded-lg border border-[var(--premium-border)] bg-[var(--premium-surface)]'}>
-              <img className={galleries.length === 1 ? 'aspect-[16/7] w-full object-cover' : 'aspect-[4/3] w-full object-cover'} src={resolveAssetUrl(item.imageUrl) ?? ''} alt={item.altText ?? website.businessName} />
-            </figure>
-          ))}
-        </div>
-        {cta && <div className="mt-8"><TemplateButton {...cta} /></div>}
-      </TemplateSection>
-    );
-  }
-
-  const action = normalizeTemplateAction(cta);
-  return (
-    <TemplateSection id="gallery" muted eyebrow="Cafe visuals" title="Lifestyle Gallery" description="A quick look at the atmosphere before guests decide to visit.">
-      <div className="grid gap-5 md:grid-cols-[.9fr_1.1fr_.9fr]">
-        {['Coffee bar', 'Brunch table', 'Cozy seating'].map((title) => (
-          <TemplateCard key={title} className="overflow-hidden bg-[var(--premium-surface)] p-0 shadow-lg">
-            <div className="flex aspect-[4/3] items-center justify-center bg-[radial-gradient(circle_at_35%_25%,rgba(255,255,255,.5),transparent_28%),linear-gradient(135deg,var(--premium-accent),var(--premium-primary))] text-white">
-              {title === 'Cozy seating' ? <Armchair className="size-10" /> : <Coffee className="size-10" />}
-            </div>
-            <div className="p-5">
-              <h3 className="tpl-h3 tenant-heading">{title}</h3>
-              <p className="tpl-body mt-2 text-[var(--tpl-text-secondary)]">Share the corner, the counter, and the table guests will remember.</p>
-            </div>
-          </TemplateCard>
-        ))}
-      </div>
-      {action && <div className="mt-8"><TemplateButton {...action} /></div>}
-    </TemplateSection>
-  );
-}
-
-function CafeVisitContact({ website }: { website: Website }) {
-  const actions = resolvePremiumCafeContactActions(website);
-  return (
-    <TemplateSection title="Visit & Contact" description="Check the location, opening hours, and contact options in one compact section.">
-      <div className="grid gap-4 md:grid-cols-[1fr_1fr_.9fr]">
-        <TemplateCard>
-          <MapPin className="mb-4 size-5 text-[var(--premium-primary)]" />
-          <h3 className="tpl-h3 tenant-heading">Location</h3>
-          <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{website.address ?? 'Cafe address can be displayed here.'}</p>
-        </TemplateCard>
-        <TemplateCard className="bg-[var(--premium-surface)]">
-          <CalendarDays className="mb-4 size-5 text-[var(--premium-primary)]" />
-          <h3 className="tpl-h3 tenant-heading">Opening hours</h3>
-          <p className="tpl-body mt-3 text-[var(--tpl-text-secondary)]">{formatOpeningHours(website.openingHours)}</p>
-        </TemplateCard>
-        <TemplateCard className="bg-[var(--premium-surface-dark)] text-[var(--premium-text-on-dark)]">
-          <Star className="mb-4 size-5 text-[var(--premium-accent)]" />
-          <h3 className="tpl-h3 tenant-heading">Plan your next cafe visit</h3>
-          <p className="tpl-body mt-3 text-white/90">Ask about today's menu or call before you arrive.</p>
-          {actions.length > 0 && (
-            <div className="mt-5 flex flex-wrap gap-3">
-              {actions.map((action) => <TemplateButton key={action.href} {...action} />)}
-            </div>
-          )}
-        </TemplateCard>
-      </div>
-    </TemplateSection>
-  );
+function resolveCafeNavigationAction(website: Website) {
+  const directions = resolveContactActions(website).find((item) => item.action === 'directions');
+  return directions ? { ...directions, label: 'Visit the Cafe', icon: <MapPin className="size-4" />, variant: 'primary' as const } : null;
 }
 
 function resolvePremiumCafeHeroActions(website: Website) {
-  const contactActions = resolveContactActions(website);
-  const whatsapp = contactActions.find((item) => item.action === 'whatsapp');
-  const directions = contactActions.find((item) => item.action === 'directions');
+  const directions = resolveContactActions(website).find((item) => item.action === 'directions');
 
   return validateTemplateActions([
-    whatsapp ? { ...whatsapp, label: 'Chat WhatsApp', icon: <MessageCircle className="size-4" />, variant: 'primary' } : null,
-    { action: 'menu', label: 'View Signature Menu', href: '#services', icon: <Coffee className="size-4" />, variant: 'secondary' },
-    directions ? { ...directions, label: 'Get Directions', icon: <MapPin className="size-4" />, variant: 'tertiary' } : null,
+    { action: 'menu', label: 'Explore Menu', href: '#signature-brews', icon: <Coffee className="size-4" />, variant: 'primary' },
+    directions ? { ...directions, label: 'Get Directions', icon: <MapPin className="size-4" />, variant: 'secondary' } : null,
   ]);
 }
 
 function resolvePremiumCafeContactActions(website: Website) {
   const contactActions = resolveContactActions(website);
-  const whatsapp = contactActions.find((item) => item.action === 'whatsapp');
   const phone = contactActions.find((item) => item.action === 'phone');
+  const whatsapp = contactActions.find((item) => item.action === 'whatsapp');
   const directions = contactActions.find((item) => item.action === 'directions');
 
   return validateTemplateActions([
-    whatsapp ? { ...whatsapp, label: 'Chat WhatsApp', icon: <MessageCircle className="size-4" />, variant: 'primary' } : null,
-    phone ? { ...phone, label: 'Call Business', icon: <Phone className="size-4" />, variant: 'secondary' } : null,
-    directions ? { ...directions, label: 'Get Directions', icon: <MapPin className="size-4" />, variant: 'tertiary' } : null,
+    directions ? { ...directions, label: 'Get Directions', icon: <MapPin className="size-4" />, variant: 'primary' } : null,
+    phone ? { ...phone, label: 'Call Cafe', icon: <Phone className="size-4" />, variant: 'secondary' } : null,
+    whatsapp ? { ...whatsapp, label: 'Message Cafe', icon: <MessageCircle className="size-4" />, variant: 'secondary' } : null,
   ]);
 }
 
+function CafePremiumActionLink({ action, context }: { action: TemplateAction; context?: 'hero' }) {
+  const variant = action.variant ?? 'primary';
+  const isHero = context === 'hero';
+  return (
+    <a
+      data-template-cta={action.action}
+      href={action.href}
+      target={action.href.startsWith('http') ? '_blank' : undefined}
+      rel={action.href.startsWith('http') ? 'noreferrer' : undefined}
+      className={
+        variant === 'primary'
+          ? 'inline-flex min-h-11 translate-y-0 items-center justify-center gap-2 rounded-md border border-[var(--premium-cta-border)] bg-[linear-gradient(180deg,var(--premium-cta-gradient-from),var(--premium-cta-gradient-to))] px-5 py-2.5 text-sm font-semibold text-[var(--premium-cta-text)] shadow-[var(--premium-cta-shadow)] transition duration-200 hover:-translate-y-0.5 hover:bg-[linear-gradient(180deg,var(--premium-cta-hover-gradient-from),var(--premium-cta-hover-gradient-to))] focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2'
+          : isHero
+            ? 'inline-flex min-h-11 translate-y-0 items-center justify-center gap-2 rounded-md border border-white/22 bg-white/[.12] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(0,0,0,.20)] transition duration-200 hover:-translate-y-0.5 hover:bg-white/[.18] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2'
+            : 'inline-flex min-h-11 translate-y-0 items-center justify-center gap-2 rounded-md border border-[var(--premium-secondary-cta-border)] bg-[linear-gradient(180deg,var(--premium-secondary-cta-gradient-from),var(--premium-secondary-cta-gradient-to))] px-5 py-2.5 text-sm font-semibold text-[var(--premium-secondary-cta-text)] shadow-[var(--premium-secondary-cta-shadow)] transition duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2'
+      }
+      style={{ color: variant === 'primary' ? 'var(--premium-cta-text)' : isHero ? '#ffffff' : 'var(--premium-secondary-cta-text)' }}
+    >
+      {action.icon}
+      <span>{action.label}</span>
+    </a>
+  );
+}
+
+function CafePremiumActionButton({ onClick, label, icon }: { onClick: () => void; label: string; icon: ReactNode }) {
+  return (
+    <button
+      type="button"
+      className="inline-flex min-h-11 translate-y-0 items-center justify-center gap-2 rounded-md border border-[var(--premium-cta-border)] bg-[linear-gradient(180deg,var(--premium-cta-gradient-from),var(--premium-cta-gradient-to))] px-5 py-2.5 text-sm font-semibold text-[var(--premium-cta-text)] shadow-[var(--premium-cta-shadow)] transition duration-200 hover:-translate-y-0.5 hover:bg-[linear-gradient(180deg,var(--premium-cta-hover-gradient-from),var(--premium-cta-hover-gradient-to))] focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2"
+      onClick={onClick}
+      style={{ color: 'var(--premium-cta-text)' }}
+    >
+      {icon}
+      <span>{label}</span>
+    </button>
+  );
+}
+
+function categoryLabel(item: PremiumCafeMenuItem, categories: Website['categories'], index: number) {
+  const category = categories?.find((candidate) => candidate.id === item.categoryId);
+  if (category?.name) return category.name;
+  const fallbacks = ['Coffee', 'Non-Coffee', 'Pastry', 'Seasonal', 'Food', 'Dessert'];
+  return fallbacks[index % fallbacks.length];
+}
+
 function formatOpeningHours(openingHours?: Record<string, unknown> | null) {
-  return formatTemplateOpeningHours(openingHours, 'Daily, 08.00 - 23.00');
+  return formatTemplateOpeningHours(openingHours, 'Daily, 08.00 - 22.00');
+}
+
+function usePrefersReducedMotion() {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setPrefersReducedMotion(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+
+  return prefersReducedMotion;
 }

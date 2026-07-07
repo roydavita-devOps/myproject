@@ -1,10 +1,8 @@
 import { KeyboardEvent, MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowLeft, Coffee, MessageCircle, Star, Utensils, X } from 'lucide-react';
+import { ArrowLeft, Coffee, Star, Utensils, X } from 'lucide-react';
 import { MenuCategory, Website } from '../../types/api';
 import { resolveAssetUrl } from '../../lib/api/assets';
 import { formatMenuPrice } from './priceFormat';
-import { resolveContactActions } from './templateActions';
-import { TemplateButton } from './TemplateComponents';
 
 type PremiumMenuVariant = 'restaurant' | 'cafe';
 
@@ -45,8 +43,8 @@ export function PremiumFullMenuModal({ website, items, isOpen, onClose, title, v
     () => groupMenuItems(items, website.categories ?? [], activeCategoryId),
     [activeCategoryId, items, website.categories],
   );
-  const whatsappAction = variant === 'restaurant' ? undefined : resolveContactActions(website).find((action) => action.action === 'whatsapp');
   const isRestaurant = variant === 'restaurant';
+  const labels = modalLabels(variant);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -112,13 +110,13 @@ export function PremiumFullMenuModal({ website, items, isOpen, onClose, title, v
         aria-labelledby="premium-full-menu-title"
         className={isRestaurant
           ? 'relative flex max-h-[100dvh] w-full max-w-5xl flex-col overflow-hidden rounded-t-xl border border-[var(--premium-modal-border)] bg-[linear-gradient(145deg,var(--premium-modal-background),var(--premium-surface-dark-gradient-to))] text-[var(--premium-modal-text)] shadow-[0_30px_90px_rgba(0,0,0,.42)] md:max-h-[88vh] md:rounded-xl'
-          : 'relative flex max-h-[100dvh] w-full max-w-5xl flex-col overflow-hidden rounded-t-xl border border-white/20 bg-white shadow-2xl md:max-h-[88vh] md:rounded-xl'}
+          : 'relative flex max-h-[100dvh] w-full max-w-5xl flex-col overflow-hidden rounded-t-xl border border-[var(--premium-modal-border)] bg-[linear-gradient(145deg,var(--premium-modal-background),var(--premium-surface-dark-gradient-to))] text-[var(--premium-modal-text)] shadow-[0_30px_90px_rgba(63,39,23,.36)] md:max-h-[88vh] md:rounded-xl'}
       >
         <header className={modalHeaderClass(variant)}>
           <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-wide opacity-80">Full menu</p>
+            <p className="text-xs font-semibold uppercase tracking-wide opacity-80">{labels.eyebrow}</p>
             <h2 id="premium-full-menu-title" className="tenant-heading mt-1 text-2xl font-semibold md:text-3xl">{title}</h2>
-            <p className="mt-2 text-sm opacity-80">{isRestaurant ? 'Browse signature dishes, favorites, and menu selections.' : 'Browse all menu items, including regular and featured selections.'}</p>
+            <p className="mt-2 text-sm opacity-80">{labels.description}</p>
           </div>
           <button
             ref={closeButtonRef}
@@ -131,7 +129,7 @@ export function PremiumFullMenuModal({ website, items, isOpen, onClose, title, v
           </button>
         </header>
 
-        <div className={isRestaurant ? 'border-b border-[var(--premium-modal-border)] bg-[linear-gradient(180deg,var(--premium-modal-surface-gradient-from),var(--premium-modal-surface-gradient-to))] px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,.06)] md:px-6' : 'border-b border-slate-200 bg-slate-50 px-4 py-3 md:px-6'}>
+        <div className="border-b border-[var(--premium-modal-border)] bg-[linear-gradient(180deg,var(--premium-modal-surface-gradient-from),var(--premium-modal-surface-gradient-to))] px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,.06)] md:px-6">
           <div className="flex gap-2 overflow-x-auto pb-1" aria-label="Menu categories">
             {tabs.map((tab) => (
               <button
@@ -149,13 +147,13 @@ export function PremiumFullMenuModal({ website, items, isOpen, onClose, title, v
           </div>
         </div>
 
-        <div className={isRestaurant ? 'min-h-0 flex-1 overflow-y-auto bg-[var(--premium-modal-background)] px-4 py-5 md:px-6' : 'min-h-0 flex-1 overflow-y-auto px-4 py-5 md:px-6'}>
+        <div className="min-h-0 flex-1 overflow-y-auto bg-[var(--premium-modal-background)] px-4 py-5 md:px-6">
           <div className="grid gap-6">
             {visibleGroups.map((group) => (
               <section key={group.id} className="grid gap-3">
                 <div>
-                  <h3 className={isRestaurant ? 'tenant-heading font-[Georgia,serif] text-xl font-semibold text-[var(--premium-modal-text)]' : 'tenant-heading text-xl font-semibold text-slate-950'}>{group.label}</h3>
-                  <p className={isRestaurant ? 'mt-1 text-sm text-[var(--premium-modal-muted-text)]' : 'mt-1 text-sm text-slate-500'}>{group.items.length} item tersedia.</p>
+                  <h3 className={isRestaurant ? 'tenant-heading font-[Georgia,serif] text-xl font-semibold text-[var(--premium-modal-text)]' : 'tenant-heading text-xl font-semibold text-[var(--premium-modal-text)]'}>{group.label}</h3>
+                  <p className="mt-1 text-sm text-[var(--premium-modal-muted-text)]">{group.items.length} item tersedia.</p>
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {group.items.map((item) => (
@@ -182,11 +180,6 @@ export function PremiumFullMenuModal({ website, items, isOpen, onClose, title, v
           />
         )}
 
-        {whatsappAction && (
-          <footer className="border-t border-slate-200 bg-slate-50 px-4 py-4 md:px-6">
-            <TemplateButton {...whatsappAction} label="Chat WhatsApp" icon={<MessageCircle className="size-4" />} />
-          </footer>
-        )}
       </div>
     </div>
   );
@@ -212,20 +205,20 @@ function MenuItemCard({
       type="button"
       className={isRestaurant
         ? 'group grid cursor-pointer grid-cols-[5rem_1fr] gap-3 rounded-lg border border-[var(--premium-modal-surface-border)] bg-[linear-gradient(145deg,var(--premium-modal-surface-gradient-from),var(--premium-modal-surface-gradient-to))] p-3 text-left shadow-[0_18px_60px_rgba(0,0,0,.28),inset_0_1px_0_rgba(255,255,255,.05)] transition duration-200 hover:-translate-y-0.5 hover:border-[#C98B4F]/70 hover:shadow-[0_22px_70px_rgba(0,0,0,.36),0_0_0_1px_rgba(201,139,79,.24),inset_0_1px_0_rgba(255,255,255,.08)] focus:outline-none focus:ring-2 focus:ring-[#D8A75B] focus:ring-offset-2 focus:ring-offset-[var(--premium-modal-background)]'
-        : 'group grid cursor-pointer grid-cols-[5rem_1fr] gap-3 rounded-lg border border-slate-200 bg-white p-3 text-left shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2'}
+        : 'group grid cursor-pointer grid-cols-[5rem_1fr] gap-3 rounded-lg border border-[var(--premium-modal-surface-border)] bg-[linear-gradient(145deg,var(--premium-modal-surface-gradient-from),var(--premium-modal-surface-gradient-to))] p-3 text-left shadow-[0_16px_42px_rgba(50,31,18,.20),inset_0_1px_0_rgba(255,255,255,.06)] transition duration-200 hover:-translate-y-0.5 hover:border-[var(--premium-cta-border)] hover:shadow-[0_20px_52px_rgba(50,31,18,.26)] focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2 focus:ring-offset-[var(--premium-modal-background)]'}
       onClick={onOpen}
     >
       <MenuItemMedia item={item} variant={variant} />
       <div className="min-w-0">
         <div className="flex flex-wrap items-start justify-between gap-2">
-          <h4 className={isRestaurant ? 'font-[Georgia,serif] text-lg font-semibold leading-tight text-[var(--premium-modal-text)]' : 'font-semibold text-slate-950'}>{item.name}</h4>
+          <h4 className={isRestaurant ? 'font-[Georgia,serif] text-lg font-semibold leading-tight text-[var(--premium-modal-text)]' : 'tenant-heading text-lg font-semibold leading-tight text-[var(--premium-modal-text)]'}>{item.name}</h4>
           {item.isFeatured && <span className={featuredBadgeClass(variant)}>Featured</span>}
         </div>
         {price && <p className={priceTextClass(variant, 'card')}>{price}</p>}
-        {description && <p className={isRestaurant ? 'mt-2 line-clamp-2 text-sm leading-5 text-[var(--premium-modal-muted-text)]' : 'mt-2 line-clamp-2 text-sm leading-5 text-slate-600'}>{description}</p>}
+        {description && <p className="mt-2 line-clamp-2 text-sm leading-5 text-[var(--premium-modal-muted-text)]">{description}</p>}
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
           <p className={categoryLabelClass(variant)}>{categoryLabel}</p>
-          <span className={isRestaurant ? 'text-xs font-semibold text-[#D8A75B] opacity-90 transition group-hover:text-[#F0D399] group-hover:opacity-100' : 'text-xs font-semibold text-slate-500 group-hover:text-slate-900'}>View detail</span>
+          <span className={isRestaurant ? 'text-xs font-semibold text-[#D8A75B] opacity-90 transition group-hover:text-[#F0D399] group-hover:opacity-100' : 'text-xs font-semibold text-[var(--premium-accent)] opacity-90 transition group-hover:text-[var(--premium-modal-text)]'}>View detail</span>
         </div>
       </div>
     </button>
@@ -251,7 +244,7 @@ function MenuItemDetailView({
     <div className={isRestaurant ? 'absolute inset-0 z-20 flex items-end bg-slate-950/55 backdrop-blur-sm md:items-center md:justify-center md:p-6' : 'absolute inset-0 z-20 flex items-end bg-slate-950/45 backdrop-blur-sm md:items-center md:justify-center md:p-6'}>
       <article className={isRestaurant
         ? 'grid max-h-[100%] w-full overflow-y-auto rounded-t-xl border border-[var(--premium-modal-surface-border)] bg-[linear-gradient(145deg,var(--premium-modal-surface-gradient-from),var(--premium-modal-background))] text-[var(--premium-modal-text)] shadow-[0_28px_80px_rgba(0,0,0,.42)] md:max-h-[82vh] md:max-w-3xl md:grid-cols-[minmax(16rem,.82fr)_1fr] md:rounded-xl'
-        : 'grid max-h-[100%] w-full overflow-y-auto rounded-t-xl border border-slate-200 bg-white text-slate-950 shadow-2xl md:max-h-[82vh] md:max-w-3xl md:grid-cols-[minmax(16rem,.82fr)_1fr] md:rounded-xl'}
+        : 'grid max-h-[100%] w-full overflow-y-auto rounded-t-xl border border-[var(--premium-modal-surface-border)] bg-[linear-gradient(145deg,var(--premium-modal-surface-gradient-from),var(--premium-modal-background))] text-[var(--premium-modal-text)] shadow-[0_28px_80px_rgba(50,31,18,.36)] md:max-h-[82vh] md:max-w-3xl md:grid-cols-[minmax(16rem,.82fr)_1fr] md:rounded-xl'}
       >
         <div className="relative min-h-72 overflow-hidden md:min-h-full">
           <MenuItemDetailMedia item={item} variant={variant} />
@@ -266,13 +259,13 @@ function MenuItemDetailView({
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <p className={categoryLabelClass(variant)}>{categoryLabel}</p>
-              <h3 className={isRestaurant ? 'mt-3 font-[Georgia,serif] text-3xl font-semibold leading-tight text-[var(--premium-modal-text)]' : 'mt-3 text-3xl font-semibold leading-tight text-slate-950'}>{item.name}</h3>
+              <h3 className={isRestaurant ? 'mt-3 font-[Georgia,serif] text-3xl font-semibold leading-tight text-[var(--premium-modal-text)]' : 'tenant-heading mt-3 text-3xl font-semibold leading-tight text-[var(--premium-modal-text)]'}>{item.name}</h3>
             </div>
             <button
               type="button"
               className={isRestaurant
                 ? 'inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-md border border-[#C98B4F]/35 bg-white/[.1] px-3 py-2 text-sm font-semibold text-[var(--premium-modal-text)] transition hover:border-[#D8A75B]/60 hover:bg-white/[.16] focus:outline-none focus:ring-2 focus:ring-[#D8A75B]'
-                : 'inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-950'}
+                : 'inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-md border border-[var(--premium-modal-surface-border)] bg-white/[.10] px-3 py-2 text-sm font-semibold text-[var(--premium-modal-text)] transition hover:bg-white/[.16] focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)]'}
               onClick={onBack}
               aria-label="Back to full menu"
             >
@@ -282,8 +275,8 @@ function MenuItemDetailView({
           </div>
           {price && <p className={priceTextClass(variant, 'detail')}>{price}</p>}
           <div>
-            <p className={isRestaurant ? 'text-xs font-semibold uppercase tracking-wide text-[#D8A75B]' : 'text-xs font-semibold uppercase tracking-wide text-slate-500'}>Description</p>
-            <p className={isRestaurant ? 'mt-2 text-base leading-7 text-[var(--premium-modal-text)]' : 'mt-2 text-base leading-7 text-slate-700'}>{description}</p>
+            <p className={isRestaurant ? 'text-xs font-semibold uppercase tracking-wide text-[#D8A75B]' : 'text-xs font-semibold uppercase tracking-wide text-[var(--premium-accent)]'}>Description</p>
+            <p className="mt-2 text-base leading-7 text-[var(--premium-modal-text)]">{description}</p>
           </div>
         </div>
       </article>
@@ -322,6 +315,20 @@ function groupMenuItems(items: PremiumFullMenuItem[], categories: MenuCategory[]
   return [{ id: activeCategoryId, label: category?.name ?? 'Menu', items: items.filter((item) => item.categoryId === activeCategoryId) }];
 }
 
+function modalLabels(variant: PremiumMenuVariant) {
+  if (variant === 'restaurant') {
+    return {
+      eyebrow: 'Full menu',
+      description: 'Browse signature dishes, favorites, and menu selections.',
+    };
+  }
+
+  return {
+    eyebrow: 'Cafe Menu',
+    description: 'Browse coffee, bites, seasonal favorites, and featured selections.',
+  };
+}
+
 function MenuItemMedia({ item, variant }: { item: PremiumFullMenuItem; variant: PremiumMenuVariant }) {
   const [hasImageError, setHasImageError] = useState(false);
   const imageUrl = resolveAssetUrl(item.imageUrl);
@@ -348,7 +355,7 @@ function MenuItemDetailMedia({ item, variant }: { item: PremiumFullMenuItem; var
   return (
     <div className={variant === 'restaurant'
       ? 'absolute inset-0 flex items-center justify-center bg-[radial-gradient(circle_at_35%_25%,rgba(201,139,79,.32),transparent_30%),linear-gradient(135deg,var(--premium-modal-surface),var(--premium-modal-background))] text-[#D8A75B]'
-      : 'absolute inset-0 flex items-center justify-center bg-[linear-gradient(135deg,#e8c99f,#7a4a24)] text-white'}
+      : 'absolute inset-0 flex items-center justify-center bg-[radial-gradient(circle_at_35%_25%,rgba(255,255,255,.24),transparent_30%),linear-gradient(135deg,var(--premium-accent),var(--premium-primary))] text-white'}
     >
       {icon}
     </div>
@@ -358,14 +365,14 @@ function MenuItemDetailMedia({ item, variant }: { item: PremiumFullMenuItem; var
 function modalHeaderClass(variant: PremiumMenuVariant) {
   return variant === 'restaurant'
     ? 'flex items-start justify-between gap-4 border-b border-[var(--premium-modal-border)] bg-[radial-gradient(circle_at_18%_12%,var(--premium-accent-soft),transparent_28%),linear-gradient(135deg,var(--premium-modal-surface-gradient-from),var(--premium-modal-background))] px-4 py-5 text-[var(--premium-modal-text)] shadow-[inset_0_1px_0_rgba(255,255,255,.06)] md:px-6'
-    : 'flex items-start justify-between gap-4 bg-[#2f1f16] px-4 py-5 text-white md:px-6';
+    : 'flex items-start justify-between gap-4 border-b border-[var(--premium-modal-border)] bg-[radial-gradient(circle_at_18%_12%,var(--premium-accent-soft),transparent_28%),linear-gradient(135deg,var(--premium-modal-surface-gradient-from),var(--premium-modal-background))] px-4 py-5 text-[var(--premium-modal-text)] shadow-[inset_0_1px_0_rgba(255,255,255,.06)] md:px-6';
 }
 
 function categoryTabClass(variant: PremiumMenuVariant, active: boolean) {
   if (variant !== 'restaurant') {
     return active
-      ? 'shrink-0 rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white'
-      : 'shrink-0 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100';
+      ? 'shrink-0 translate-y-0 rounded-full border border-[var(--premium-cta-border)] bg-[linear-gradient(180deg,var(--premium-cta-gradient-from),var(--premium-cta-gradient-to))] px-4 py-2 text-sm font-semibold text-[var(--premium-cta-text)] shadow-[var(--premium-cta-shadow)] transition hover:-translate-y-0.5'
+      : 'shrink-0 rounded-full border border-[var(--premium-modal-surface-border)] bg-white/[.08] px-4 py-2 text-sm font-semibold text-[var(--premium-modal-text)] shadow-[inset_0_1px_0_rgba(255,255,255,.08)] transition hover:bg-white/[.13]';
   }
 
   return active
@@ -376,14 +383,14 @@ function categoryTabClass(variant: PremiumMenuVariant, active: boolean) {
 function featuredBadgeClass(variant: PremiumMenuVariant) {
   return variant === 'restaurant'
     ? 'rounded-full bg-[var(--premium-badge-background)] px-2 py-1 text-xs font-semibold text-[var(--premium-badge-text)]'
-    : 'rounded-full bg-[#ead3b5] px-2 py-1 text-xs font-semibold text-[#5a3822]';
+    : 'rounded-full bg-[var(--premium-badge-background)] px-2 py-1 text-xs font-semibold text-[var(--premium-badge-text)]';
 }
 
 function priceTextClass(variant: PremiumMenuVariant, context: 'card' | 'detail') {
   if (variant !== 'restaurant') {
     return context === 'detail'
-      ? 'text-2xl font-semibold text-slate-950'
-      : 'mt-2 text-base font-semibold text-slate-950';
+      ? 'inline-flex w-fit rounded-md border border-[var(--premium-cta-border)] bg-black/[.18] px-4 py-2 text-2xl font-semibold text-[var(--premium-accent)] shadow-[inset_0_1px_0_rgba(255,255,255,.08)]'
+      : 'mt-2 inline-flex w-fit rounded-md border border-[var(--premium-cta-border)] bg-black/[.14] px-2.5 py-1 text-base font-semibold text-[var(--premium-accent)]';
   }
 
   return context === 'detail'
@@ -394,11 +401,11 @@ function priceTextClass(variant: PremiumMenuVariant, context: 'card' | 'detail')
 function categoryLabelClass(variant: PremiumMenuVariant) {
   return variant === 'restaurant'
     ? 'text-xs font-semibold uppercase tracking-wide text-[var(--premium-modal-muted-text)]'
-    : 'text-xs font-semibold uppercase tracking-wide text-slate-500';
+    : 'text-xs font-semibold uppercase tracking-wide text-[var(--premium-modal-muted-text)]';
 }
 
 function fallbackMediaClass(variant: PremiumMenuVariant) {
   return variant === 'restaurant'
     ? 'flex size-20 items-center justify-center rounded-md bg-[linear-gradient(135deg,var(--premium-modal-surface),var(--premium-modal-background))] text-[#D8A75B]'
-    : 'flex size-20 items-center justify-center rounded-md bg-[linear-gradient(135deg,#e8c99f,#7a4a24)] text-white';
+    : 'flex size-20 items-center justify-center rounded-md bg-[radial-gradient(circle_at_35%_25%,rgba(255,255,255,.24),transparent_30%),linear-gradient(135deg,var(--premium-accent),var(--premium-primary))] text-white';
 }

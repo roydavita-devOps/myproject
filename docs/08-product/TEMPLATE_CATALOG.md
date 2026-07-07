@@ -30,6 +30,7 @@ Decision:
 | Menu item image management | Implemented through Stage 9.8A for dashboard upload/change/remove and premium public rendering. |
 | Featured menu and full menu modal | Implemented through Stage 9.8B for featured Signature sections and full menu modal browsing. |
 | Restaurant Premium Foundation Reference | Locked through Stage 9.8E as the first approved premium quality baseline. |
+| Cafe Premium redesign | Implemented through Stage 9.9 using Restaurant Premium Foundation quality standards without restaurant-specific inheritance. |
 
 ## Metadata Standard
 
@@ -255,7 +256,17 @@ Future templates must not blindly copy:
 | Tier | Premium |
 | Recommended business types | `CAFE` |
 
-Stage 9.9 is the recommended next stage for Cafe Premium Redesign Using Restaurant Premium Foundation. Cafe Premium should use the locked foundation principles while introducing cafe-specific language, mood, content hierarchy, coffee/product showcase, pastry support, ambience, visit planning, and compact mobile treatment. Implementation has not started in Stage 9.8E.
+Stage 9.9 implements Cafe Premium Redesign Using Restaurant Premium Foundation. Cafe Premium uses the locked foundation principles while introducing cafe-specific language, mood, content hierarchy, coffee/product showcase, pastry support, ambience, visit planning, and compact mobile treatment.
+
+Stage 9.9 Cafe Premium direction:
+
+- Premium cafe hero with image-safe overlay and existing hero slideshow compatibility.
+- Signature Brews and Coffee & Bites sections.
+- Cafe Story section with coffee craft, pastry pairing, and neighborhood rhythm.
+- Ambience & Corners gallery treatment.
+- Visit the Cafe contact section with valid directions, phone, and WhatsApp actions only when data exists.
+- Premium Full Menu modal with Cafe Menu / Coffee & Bites language and no Chat WhatsApp CTA inside the modal.
+- Cafe-friendly presets: `roasted_cream`, `espresso_linen`, `matcha_cream`, `caramel_noir`, and `terracotta_milk`.
 
 ### Cafe Modern vs Cafe Premium
 
@@ -264,8 +275,8 @@ Stage 9.9 is the recommended next stage for Cafe Premium Redesign Using Restaura
 | Primary intent | Lifestyle-focused cafe presentation. | Stronger brand story, signature menu, and premium visit planning. |
 | Story depth | Experience-focused cafe presence. | Brand Story with specialty and atmosphere positioning. |
 | Visual style | Modern cafe website. | Warm cream, coffee, and espresso lifestyle experience with layered hero cards and visit planning cues. |
-| Menu presentation | Featured menu and signature drinks. | Signature Menu with premium product framing and cafe-pick badges. |
-| CTA focus | Chat Cafe, View Menu, Get Directions. | Chat Cafe, View Signature Menu, Get Directions. |
+| Menu presentation | Featured menu and signature drinks. | Signature Brews and Coffee & Bites with premium product framing, category labels, featured badges, and full menu detail browsing. |
+| CTA focus | Chat Cafe, View Menu, Get Directions. | Explore Menu, Get Directions, Call Cafe, and Message Cafe only when data exists. |
 | Tier | Premium metadata. | Premium metadata. |
 
 ## Stage 9.7C Premium Differentiation Notes
