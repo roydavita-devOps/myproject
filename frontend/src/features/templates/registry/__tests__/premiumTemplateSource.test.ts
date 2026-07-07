@@ -61,6 +61,7 @@ describe('premium template source readability rules', () => {
 
     expect(source).toContain('Signature Brews');
     expect(source).toContain('Coffee & Bites');
+    expect(source).toContain('title="Coffee & Bites"');
     expect(source).toContain('Fresh From the Bar');
     expect(source).toContain('Morning Favorites');
     expect(source).toContain('Crafted for Slow Mornings');
@@ -81,6 +82,24 @@ describe('premium template source readability rules', () => {
     expect(modalSource).toContain('Cafe Menu');
     expect(modalSource).toContain('Browse coffee, bites, seasonal favorites, and featured selections.');
     expect(modalSource).not.toContain('Order via WhatsApp');
+  });
+
+  it('keeps Cafe Premium placeholders warm and not blue or clipped', () => {
+    const source = readFileSync(resolve('src/features/templates/CafePremiumTemplate.tsx'), 'utf8');
+
+    for (const token of ['text-blue-', 'border-blue-', 'ring-blue-', 'focus:ring-blue-', 'bg-blue-', 'from-blue-', 'to-blue-', 'hover:text-blue-']) {
+      expect(source).not.toContain(token);
+    }
+
+    expect(source).toContain('#F1C892');
+    expect(source).toContain('#6E4328');
+    expect(source).toContain('#FFF6E8');
+    expect(source).toContain('#FFE7B8');
+    expect(source).toContain('Cafe visual');
+    expect(source).toContain('Cafe ambience');
+    expect(source).toContain('inset-x-5 bottom-5');
+    expect(source).not.toContain('-translate-x');
+    expect(source).not.toContain('whitespace-nowrap');
   });
 
   it('keeps Cafe Premium hero CTA menu-first and avoids WhatsApp-first hero flow', () => {

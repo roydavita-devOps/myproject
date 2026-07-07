@@ -18,6 +18,8 @@ Stage 9.8E locks Restaurant Premium as the first approved Premium Foundation Ref
 
 Stage 9.9 applies the foundation to Cafe Premium with cafe-specific presets, warm modal treatment, CTA depth, compact mobile hero behavior, and business-specific menu modal labels.
 
+Stage 9.9A refines Cafe Premium warm accent usage for placeholders, modal detail states, price chips, focus rings, and gallery fallback visuals without changing the shared token API or Restaurant Premium branch behavior.
+
 The system separates:
 
 - Template = layout and experience.
@@ -41,6 +43,7 @@ Included:
 - Restaurant Premium renderer-local typography variables for heading, body, eyebrow, hero title, section title, line height, letter spacing, and font weights.
 - Restaurant Premium semantic color tokens for image-safe hero overlays, CTA contrast, modal alignment, price text, and badge treatment.
 - Restaurant Premium depth tokens for CTA gradients, button borders, button shadows, dark surface gradients, footer gradients, and modal surface gradients.
+- Cafe Premium warm placeholder and modal accent usage for missing image states, cafe-specific price chips, focus rings, detail labels, and gallery fallback visuals.
 
 Excluded:
 
@@ -199,6 +202,7 @@ No Prisma migration is required for Stage 9.8D-R6 color system remediation.
 No Prisma migration is required for Stage 9.8D-R8 button and surface depth polish.
 No Prisma migration is required for Stage 9.8E foundation lock.
 No Prisma migration is required for Stage 9.9 Cafe Premium redesign.
+No Prisma migration is required for Stage 9.9A Cafe Premium warm accent and placeholder polish.
 
 Reason:
 

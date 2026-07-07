@@ -1,0 +1,36 @@
+{
+  "generatedAt": "2026-07-07T10:24:35.248Z",
+  "baseURL": "http://127.0.0.1",
+  "screenshots": {
+    "cafePremiumWarmMenuPlaceholders": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-warm-accent-9.9a/cafe-premium-warm-menu-placeholders.png",
+    "cafePremiumWarmMenuPreview": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-warm-accent-9.9a/cafe-premium-warm-menu-preview.png",
+    "cafePremiumWarmFullMenuModal": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-warm-accent-9.9a/cafe-premium-warm-full-menu-modal.png",
+    "cafePremiumWarmMenuItemDetail": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-warm-accent-9.9a/cafe-premium-warm-menu-item-detail.png",
+    "cafePremiumGalleryPlaceholderFixed": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-warm-accent-9.9a/cafe-premium-gallery-placeholder-fixed.png",
+    "cafePremiumStoryWarmIcons": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-warm-accent-9.9a/cafe-premium-story-warm-icons.png",
+    "cafePremiumMobileWarmPolish": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-warm-accent-9.9a/cafe-premium-mobile-warm-polish.png",
+    "restaurantPremiumModalRegressionCheck": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-warm-accent-9.9a/restaurant-premium-modal-regression-check.png"
+  },
+  "results": [
+    {
+      "target": "cafe_premium_warm_placeholders",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "cafe_premium_warm_modal_and_detail",
+      "viewport": "desktop",
+      "status": "passed"
+    },
+    {
+      "target": "cafe_premium_mobile_warm_polish",
+      "viewport": "mobile",
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_premium_modal_regression",
+      "viewport": "desktop",
+      "status": "passed"
+    }
+  ]
+}

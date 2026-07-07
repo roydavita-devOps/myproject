@@ -49,12 +49,23 @@ describe('premium full menu modal item detail contract', () => {
   });
 
   it('keeps Restaurant Premium modal polish free from default blue Tailwind accents', () => {
-    for (const token of ['text-blue-', 'border-blue-', 'ring-blue-', 'focus:ring-blue-', 'bg-blue-', 'hover:text-blue-']) {
+    for (const token of ['text-blue-', 'border-blue-', 'ring-blue-', 'focus:ring-blue-', 'bg-blue-', 'from-blue-', 'to-blue-', 'hover:text-blue-']) {
       expect(source).not.toContain(token);
     }
 
     expect(source).toContain('#F0D399');
     expect(source).toContain('#D8A75B');
     expect(source).toContain('#C98B4F');
+  });
+
+  it('keeps Cafe Premium modal accents warm and cafe-specific', () => {
+    expect(source).toContain('#FFE1A8');
+    expect(source).toContain('#E7B873');
+    expect(source).toContain('#E0A766');
+    expect(source).toContain('#B97845');
+    expect(source).toContain('#2A1B13');
+    expect(source).toContain('Browse coffee, bites, seasonal favorites, and featured selections.');
+    expect(source).toContain('Cafe Menu');
+    expect(source).not.toContain('Order via WhatsApp');
   });
 });

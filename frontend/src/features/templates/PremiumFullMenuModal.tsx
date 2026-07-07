@@ -205,7 +205,7 @@ function MenuItemCard({
       type="button"
       className={isRestaurant
         ? 'group grid cursor-pointer grid-cols-[5rem_1fr] gap-3 rounded-lg border border-[var(--premium-modal-surface-border)] bg-[linear-gradient(145deg,var(--premium-modal-surface-gradient-from),var(--premium-modal-surface-gradient-to))] p-3 text-left shadow-[0_18px_60px_rgba(0,0,0,.28),inset_0_1px_0_rgba(255,255,255,.05)] transition duration-200 hover:-translate-y-0.5 hover:border-[#C98B4F]/70 hover:shadow-[0_22px_70px_rgba(0,0,0,.36),0_0_0_1px_rgba(201,139,79,.24),inset_0_1px_0_rgba(255,255,255,.08)] focus:outline-none focus:ring-2 focus:ring-[#D8A75B] focus:ring-offset-2 focus:ring-offset-[var(--premium-modal-background)]'
-        : 'group grid cursor-pointer grid-cols-[5rem_1fr] gap-3 rounded-lg border border-[var(--premium-modal-surface-border)] bg-[linear-gradient(145deg,var(--premium-modal-surface-gradient-from),var(--premium-modal-surface-gradient-to))] p-3 text-left shadow-[0_16px_42px_rgba(50,31,18,.20),inset_0_1px_0_rgba(255,255,255,.06)] transition duration-200 hover:-translate-y-0.5 hover:border-[var(--premium-cta-border)] hover:shadow-[0_20px_52px_rgba(50,31,18,.26)] focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)] focus:ring-offset-2 focus:ring-offset-[var(--premium-modal-background)]'}
+        : 'group grid cursor-pointer grid-cols-[5rem_1fr] gap-3 rounded-lg border border-[#B97845]/32 bg-[linear-gradient(145deg,var(--premium-modal-surface-gradient-from),var(--premium-modal-surface-gradient-to))] p-3 text-left shadow-[0_16px_42px_rgba(50,31,18,.20),inset_0_1px_0_rgba(255,255,255,.06)] transition duration-200 hover:-translate-y-0.5 hover:border-[#E0A766]/70 hover:shadow-[0_20px_52px_rgba(50,31,18,.28),0_0_0_1px_rgba(224,167,102,.20)] focus:outline-none focus:ring-2 focus:ring-[#E0A766] focus:ring-offset-2 focus:ring-offset-[var(--premium-modal-background)]'}
       onClick={onOpen}
     >
       <MenuItemMedia item={item} variant={variant} />
@@ -218,7 +218,7 @@ function MenuItemCard({
         {description && <p className="mt-2 line-clamp-2 text-sm leading-5 text-[var(--premium-modal-muted-text)]">{description}</p>}
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
           <p className={categoryLabelClass(variant)}>{categoryLabel}</p>
-          <span className={isRestaurant ? 'text-xs font-semibold text-[#D8A75B] opacity-90 transition group-hover:text-[#F0D399] group-hover:opacity-100' : 'text-xs font-semibold text-[var(--premium-accent)] opacity-90 transition group-hover:text-[var(--premium-modal-text)]'}>View detail</span>
+          <span className={isRestaurant ? 'text-xs font-semibold text-[#D8A75B] opacity-90 transition group-hover:text-[#F0D399] group-hover:opacity-100' : 'text-xs font-semibold text-[#E7B873] opacity-90 transition group-hover:text-[#FFE7B8] group-hover:opacity-100'}>View detail</span>
         </div>
       </div>
     </button>
@@ -265,7 +265,7 @@ function MenuItemDetailView({
               type="button"
               className={isRestaurant
                 ? 'inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-md border border-[#C98B4F]/35 bg-white/[.1] px-3 py-2 text-sm font-semibold text-[var(--premium-modal-text)] transition hover:border-[#D8A75B]/60 hover:bg-white/[.16] focus:outline-none focus:ring-2 focus:ring-[#D8A75B]'
-                : 'inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-md border border-[var(--premium-modal-surface-border)] bg-white/[.10] px-3 py-2 text-sm font-semibold text-[var(--premium-modal-text)] transition hover:bg-white/[.16] focus:outline-none focus:ring-2 focus:ring-[var(--premium-accent)]'}
+                : 'inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-md border border-[#B97845]/35 bg-white/[.10] px-3 py-2 text-sm font-semibold text-[var(--premium-modal-text)] transition hover:border-[#E0A766]/65 hover:bg-white/[.16] focus:outline-none focus:ring-2 focus:ring-[#E0A766]'}
               onClick={onBack}
               aria-label="Back to full menu"
             >
@@ -275,7 +275,7 @@ function MenuItemDetailView({
           </div>
           {price && <p className={priceTextClass(variant, 'detail')}>{price}</p>}
           <div>
-            <p className={isRestaurant ? 'text-xs font-semibold uppercase tracking-wide text-[#D8A75B]' : 'text-xs font-semibold uppercase tracking-wide text-[var(--premium-accent)]'}>Description</p>
+            <p className={isRestaurant ? 'text-xs font-semibold uppercase tracking-wide text-[#D8A75B]' : 'text-xs font-semibold uppercase tracking-wide text-[#E0A766]'}>Description</p>
             <p className="mt-2 text-base leading-7 text-[var(--premium-modal-text)]">{description}</p>
           </div>
         </div>
@@ -355,7 +355,7 @@ function MenuItemDetailMedia({ item, variant }: { item: PremiumFullMenuItem; var
   return (
     <div className={variant === 'restaurant'
       ? 'absolute inset-0 flex items-center justify-center bg-[radial-gradient(circle_at_35%_25%,rgba(201,139,79,.32),transparent_30%),linear-gradient(135deg,var(--premium-modal-surface),var(--premium-modal-background))] text-[#D8A75B]'
-      : 'absolute inset-0 flex items-center justify-center bg-[radial-gradient(circle_at_35%_25%,rgba(255,255,255,.24),transparent_30%),linear-gradient(135deg,var(--premium-accent),var(--premium-primary))] text-white'}
+      : 'absolute inset-0 flex items-center justify-center bg-[radial-gradient(circle_at_35%_25%,rgba(255,246,232,.32),transparent_30%),linear-gradient(135deg,#E2AD70,#4A2D1C)] text-[#FFE7B8]'}
     >
       {icon}
     </div>
@@ -383,14 +383,14 @@ function categoryTabClass(variant: PremiumMenuVariant, active: boolean) {
 function featuredBadgeClass(variant: PremiumMenuVariant) {
   return variant === 'restaurant'
     ? 'rounded-full bg-[var(--premium-badge-background)] px-2 py-1 text-xs font-semibold text-[var(--premium-badge-text)]'
-    : 'rounded-full bg-[var(--premium-badge-background)] px-2 py-1 text-xs font-semibold text-[var(--premium-badge-text)]';
+    : 'rounded-full border border-[#E0A766]/35 bg-[#FFE7B8]/88 px-2 py-1 text-xs font-semibold text-[#3B2417]';
 }
 
 function priceTextClass(variant: PremiumMenuVariant, context: 'card' | 'detail') {
   if (variant !== 'restaurant') {
     return context === 'detail'
-      ? 'inline-flex w-fit rounded-md border border-[var(--premium-cta-border)] bg-black/[.18] px-4 py-2 text-2xl font-semibold text-[var(--premium-accent)] shadow-[inset_0_1px_0_rgba(255,255,255,.08)]'
-      : 'mt-2 inline-flex w-fit rounded-md border border-[var(--premium-cta-border)] bg-black/[.14] px-2.5 py-1 text-base font-semibold text-[var(--premium-accent)]';
+      ? 'inline-flex w-fit rounded-md border border-[#B97845]/55 bg-[#2A1B13]/88 px-4 py-2 text-2xl font-semibold text-[#FFE1A8] shadow-[inset_0_1px_0_rgba(255,255,255,.08),0_0_0_1px_rgba(224,167,102,.18)]'
+      : 'mt-2 inline-flex w-fit rounded-md border border-[#B97845]/50 bg-[#2A1B13]/82 px-2.5 py-1 text-base font-semibold text-[#FFE1A8] shadow-[0_0_0_1px_rgba(224,167,102,.14)]';
   }
 
   return context === 'detail'
@@ -407,5 +407,5 @@ function categoryLabelClass(variant: PremiumMenuVariant) {
 function fallbackMediaClass(variant: PremiumMenuVariant) {
   return variant === 'restaurant'
     ? 'flex size-20 items-center justify-center rounded-md bg-[linear-gradient(135deg,var(--premium-modal-surface),var(--premium-modal-background))] text-[#D8A75B]'
-    : 'flex size-20 items-center justify-center rounded-md bg-[radial-gradient(circle_at_35%_25%,rgba(255,255,255,.24),transparent_30%),linear-gradient(135deg,var(--premium-accent),var(--premium-primary))] text-white';
+    : 'flex size-20 items-center justify-center rounded-md border border-[#B97845]/35 bg-[radial-gradient(circle_at_35%_25%,rgba(255,246,232,.30),transparent_30%),linear-gradient(135deg,#E2AD70,#4A2D1C)] text-[#FFE7B8] shadow-[inset_0_1px_0_rgba(255,255,255,.12)]';
 }

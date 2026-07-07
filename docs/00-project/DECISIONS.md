@@ -162,6 +162,24 @@ Reason:
 - User-correctable business identity and structured hours reduce support friction and inconsistent public rendering.
 - Future premium templates need reusable quality standards without being forced into restaurant-specific layout or copy.
 
+## Cafe Premium Warm Accent And Placeholder Polish
+
+Status: Implemented for Stage 9.9A; pending product approval.
+
+Decision:
+
+- Cafe Premium must use cafe-specific warm accents for empty states, modal states, price chips, and detail browsing instead of falling back to default blue or generic digital styling.
+- Missing menu and gallery images should render as intentional cafe placeholders with warm cream, caramel, espresso, and gold tones.
+- The shared `PremiumFullMenuModal` may contain variant-specific styling, but Restaurant Premium styling and behavior must remain unchanged.
+- Placeholder labels must stay inside their visual containers and avoid clipped or oversized text.
+- Stage 9.9A does not introduce backend, database, Prisma, upload pipeline, marketplace, billing, subscription, entitlement, template registry, or new feature changes.
+
+Reason:
+
+- Premium templates must remain commercially sellable even when tenant imagery is incomplete.
+- Cafe Premium should feel like a warm cafe experience, not a restaurant clone or generic template.
+- Variant-specific modal styling lets Cafe Premium improve without regressing Restaurant Premium.
+
 ## Upload Image Processing Baseline
 
 Status: Approved.

@@ -57,11 +57,12 @@ Last updated: 2026-07-07
 - Stage 9.8D-R13 Restaurant Premium Mobile Hero Image Parity and Compact Layout Polish.
 - Stage 9.8E Restaurant Premium Foundation Reference Lock.
 - Stage 9.9 Cafe Premium Redesign Using Restaurant Premium Foundation.
+- Stage 9.9A Cafe Premium Warm Accent & Placeholder Polish.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Cafe Premium Redesign is implemented and awaiting product approval.
+- Cafe Premium Warm Accent & Placeholder Polish is implemented and awaiting product approval.
 
 ## Planned
 
@@ -288,6 +289,15 @@ Stage 9.9 redesigns Cafe Premium using the Restaurant Premium Foundation:
 - Cafe Premium uses cafe-friendly premium presets: `roasted_cream`, `espresso_linen`, `matcha_cream`, `caramel_noir`, and `terracotta_milk`.
 - No backend, database, Prisma, upload pipeline, payment, subscription, marketplace, hosting renewal, publish gate, video hero, or advanced media library change is included.
 - Railway trial is currently inactive/expired, so Stage 9.9 is validated locally. Production redeploy resumes after Railway billing/reactivation.
+
+Stage 9.9A polishes Cafe Premium warm accents and placeholder quality:
+
+- Cafe Premium missing menu-image states now render as intentional warm cafe visuals, not default placeholder blocks.
+- Cafe Premium gallery placeholders use safe contained labels and cafe ambience treatment without clipped text.
+- The shared Premium Full Menu modal keeps Restaurant Premium behavior intact while applying cafe-specific caramel, espresso, cream, and warm-gold accents to Cafe Premium card states, price chips, detail labels, focus rings, and placeholders.
+- Restaurant Premium is regression-checked because the modal is shared.
+- No backend, database, Prisma, upload pipeline, payment, subscription, marketplace, entitlement, template registry, or new feature scope is included.
+- Railway trial is currently inactive/expired, so Stage 9.9A is validated locally. Production redeploy resumes after Railway billing/reactivation.
 
 Potential categories:
 

@@ -352,8 +352,13 @@ function PremiumCafeGallery({ website }: { website: Website }) {
           { title: 'Cozy corner', description: 'Seats, light, and ambience for slow conversations.', Icon: Armchair },
         ].map(({ title, description, Icon }) => (
           <TemplateCard key={title} className="overflow-hidden border-[var(--premium-border-subtle)] bg-[var(--premium-surface)] p-0 shadow-lg">
-            <div className="flex aspect-[4/3] items-center justify-center bg-[radial-gradient(circle_at_35%_25%,rgba(255,255,255,.54),transparent_30%),linear-gradient(135deg,var(--premium-accent),var(--premium-primary))] text-white">
-              <Icon className="size-10" />
+            <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_30%_22%,rgba(255,248,235,.72),transparent_28%),linear-gradient(135deg,#F4D7B2,#8C5630)] text-[#3B2417]">
+              <div className="absolute inset-x-5 bottom-5 rounded-full border border-white/35 bg-[#FFF6E8]/85 px-4 py-2 text-center text-sm font-semibold text-[#4A2D1C] shadow-[0_14px_30px_rgba(72,43,25,.18)] backdrop-blur">
+                {title}
+              </div>
+              <div className="flex size-16 items-center justify-center rounded-full border border-white/45 bg-[#3B2417]/86 text-[#F5D7A2] shadow-[0_18px_42px_rgba(42,24,14,.28)]">
+                <Icon className="size-8" />
+              </div>
             </div>
             <div className="p-5">
               <h3 className="font-[var(--cafe-heading-font)] text-2xl font-semibold text-[var(--premium-text-primary)]">{title}</h3>
@@ -382,8 +387,11 @@ function CafeGalleryFigure({ item, index, businessName, featured }: { item: Prem
           onError={() => setHasImageError(true)}
         />
       ) : (
-        <div className={featured ? 'flex aspect-[4/5] items-center justify-center bg-[linear-gradient(135deg,var(--premium-accent),var(--premium-primary))] text-white md:h-full' : 'flex aspect-[4/3] items-center justify-center bg-[linear-gradient(135deg,var(--premium-accent),var(--premium-primary))] text-white'}>
+        <div className={featured ? 'relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_32%_24%,rgba(255,248,235,.68),transparent_30%),linear-gradient(135deg,#E8BE87,#5B3824)] text-[#F7D9A4] md:h-full' : 'relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_32%_24%,rgba(255,248,235,.68),transparent_30%),linear-gradient(135deg,#E8BE87,#5B3824)] text-[#F7D9A4]'}>
           <Coffee className="size-10" />
+          <span className="absolute inset-x-4 bottom-4 rounded-full border border-white/30 bg-[#2A1B13]/72 px-3 py-2 text-center text-xs font-semibold text-[#FFE7B8] shadow-[0_12px_26px_rgba(32,19,11,.22)] backdrop-blur">
+            Cafe ambience
+          </span>
         </div>
       )}
     </figure>
@@ -452,10 +460,15 @@ function PremiumCafeMenuMedia({ item, index }: { item: PremiumCafeMenuItem; inde
 
   const labels = ['Today\'s Pour', 'Morning Favorite', 'Pastry Pairing', 'Seasonal'];
   return (
-    <div className="relative flex min-h-56 items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_38%_28%,rgba(255,255,255,.58),transparent_30%),linear-gradient(135deg,var(--premium-accent),var(--premium-primary))] text-white md:h-full">
-      <Coffee className="size-10" />
-      <span className="absolute left-4 top-4 rounded-full bg-black/45 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
+    <div className="relative flex min-h-56 items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_38%_26%,rgba(255,248,235,.72),transparent_30%),linear-gradient(135deg,#F1C892,#6E4328)] text-[#3B2417] md:h-full">
+      <div className="flex size-20 items-center justify-center rounded-full border border-white/45 bg-[#2A1B13]/86 text-[#F5D7A2] shadow-[0_18px_42px_rgba(42,24,14,.28)]">
+        <Coffee className="size-10" />
+      </div>
+      <span className="absolute left-4 top-4 rounded-full border border-white/30 bg-[#FFF6E8]/82 px-3 py-1 text-xs font-semibold text-[#4A2D1C] shadow-[0_10px_24px_rgba(42,24,14,.18)] backdrop-blur">
         {labels[index % labels.length]}
+      </span>
+      <span className="absolute bottom-4 right-4 rounded-full border border-[#E7B873]/45 bg-[#3B2417]/78 px-3 py-1 text-xs font-semibold text-[#FFE7B8] backdrop-blur">
+        Cafe visual
       </span>
     </div>
   );
