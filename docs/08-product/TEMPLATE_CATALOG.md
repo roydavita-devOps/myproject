@@ -29,6 +29,7 @@ Decision:
 | Premium visual differentiation | Implemented through Stage 9.7C for Restaurant Premium, Cafe Premium, and safe Corporate Executive renderer enhancement. |
 | Menu item image management | Implemented through Stage 9.8A for dashboard upload/change/remove and premium public rendering. |
 | Featured menu and full menu modal | Implemented through Stage 9.8B for featured Signature sections and full menu modal browsing. |
+| Restaurant Premium Foundation Reference | Locked through Stage 9.8E as the first approved premium quality baseline. |
 
 ## Metadata Standard
 
@@ -204,6 +205,41 @@ Architecture audit:
 | CTA focus | Chat WhatsApp, View Menu, Get Directions. | Reserve a Table, Explore Signature Dishes, Get Directions. |
 | Tier | Standard. | Premium metadata only. |
 
+### Restaurant Premium Foundation Lock
+
+Stage 9.8E locks `restaurant_premium` as the first Premium Foundation Reference.
+
+It defines the current quality bar for:
+
+- premium layout quality,
+- semantic premium color system,
+- purposeful CTA treatment,
+- editorial typography,
+- image-safe hero behavior,
+- premium hero slideshow,
+- gallery UX,
+- full menu modal browsing,
+- menu item detail readability,
+- price and currency formatting,
+- opening hours display,
+- mobile compactness,
+- public customer-facing copy.
+
+This is a reference standard, not a forced inheritance model. Future premium templates should reuse principles, tokens, utilities, and patterns where appropriate, while keeping their own industry-specific experience.
+
+Future templates must not blindly copy:
+
+- restaurant-specific copy,
+- reservation-first language,
+- `Reserve a Table`,
+- `Signature Dishes`,
+- `Full Restaurant Menu`,
+- `Restaurant Story`,
+- `Dishes Worth the Visit`,
+- `Visit & Reservation`,
+- restaurant menu assumptions,
+- restaurant ambience/gallery tone.
+
 ## Cafe Premium Catalog Entry
 
 | Field | Value |
@@ -218,6 +254,8 @@ Architecture audit:
 | Preview image | `cafe-premium.jpg` |
 | Tier | Premium |
 | Recommended business types | `CAFE` |
+
+Stage 9.9 is the recommended next stage for Cafe Premium Redesign Using Restaurant Premium Foundation. Cafe Premium should use the locked foundation principles while introducing cafe-specific language, mood, content hierarchy, coffee/product showcase, pastry support, ambience, visit planning, and compact mobile treatment. Implementation has not started in Stage 9.8E.
 
 ### Cafe Modern vs Cafe Premium
 

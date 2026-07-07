@@ -139,27 +139,32 @@ Reason:
 
 ## Restaurant Premium Foundation Reference
 
-Status: Approved for implementation pending product sign-off.
+Status: Approved and locked through Stage 9.8E.
 
 Decision:
 
 - Restaurant Premium is the first Premium Experience Foundation reference.
 - Premium templates should share foundation principles and reusable patterns, not inherit directly from `RestaurantPremiumTemplate`.
+- Restaurant Premium must not become a hardcoded parent component for all premium templates.
 - Restaurant Premium Full Menu modal must follow the premium restaurant theme and must not repeat a generic WhatsApp CTA inside the browsing modal.
 - Menu categories must be user-correctable with safe delete behavior that preserves menu items.
 - Tenant slug belongs to Business Information, not the initial Login form, when backend tenant resolution safely supports login without slug.
 - Opening hours should use structured picker controls, not free-text sentences.
 - Safe additive database migration is allowed when it supports premium foundation data quality; no migration was needed for Stage 9.8D-R2 because `Website.openingHours` already supports JSON data.
+- Stage 9.8D-R1 through Stage 9.8D-R13 are approved as the Restaurant Premium foundation refinement track.
+- Further Restaurant Premium visual polish should stop unless a critical bug or regression is found.
+- Stage 9.9 Cafe Premium Redesign is the next recommended premium template stage and must use cafe-specific language, mood, and content hierarchy.
 
 Reason:
 
-- Restaurant Premium is becoming the benchmark for future premium templates.
+- Restaurant Premium is now the benchmark for future premium templates.
 - The foundation must improve product quality without creating marketplace, subscription, entitlement, or new template scope.
 - User-correctable business identity and structured hours reduce support friction and inconsistent public rendering.
+- Future premium templates need reusable quality standards without being forced into restaurant-specific layout or copy.
 
 ## Upload Image Processing Baseline
 
-Status: Approved for implementation pending product sign-off.
+Status: Approved.
 
 Decision:
 
@@ -178,7 +183,7 @@ Reason:
 
 ## Durable Upload Storage
 
-Status: Approved for implementation pending product sign-off.
+Status: Approved.
 
 Decision:
 
@@ -198,7 +203,7 @@ Reason:
 
 ## Image Delete and Legacy Cleanup
 
-Status: Approved for implementation pending product sign-off.
+Status: Approved.
 
 Decision:
 
@@ -494,7 +499,7 @@ Reason:
 
 ## Premium Full Menu Warm Accent Alignment
 
-Status: Approved for Stage 9.8D-R11A implementation pending product sign-off.
+Status: Approved.
 
 Decision:
 
@@ -512,7 +517,7 @@ Reason:
 
 ## Registration Slug Ownership
 
-Status: Approved for Stage 9.8D-R12 implementation pending product sign-off.
+Status: Approved.
 
 Decision:
 
@@ -533,7 +538,7 @@ Reason:
 
 ## Restaurant Premium Mobile Hero Parity And Compactness
 
-Status: Approved for Stage 9.8D-R13 implementation pending product sign-off.
+Status: Approved.
 
 Decision:
 

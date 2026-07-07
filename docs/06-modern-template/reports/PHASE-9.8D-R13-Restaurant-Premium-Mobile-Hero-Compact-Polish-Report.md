@@ -209,4 +209,4 @@ Evidence confirms:
 
 Go.
 
-Stage 9.8D-R13 is ready for approval.
+Stage 9.8D-R13 is approved as part of the Restaurant Premium Foundation track locked in Stage 9.8E.

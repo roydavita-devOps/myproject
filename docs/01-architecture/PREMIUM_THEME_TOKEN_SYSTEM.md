@@ -1,6 +1,6 @@
 # Premium Theme Token System
 
-Last updated: 2026-07-02
+Last updated: 2026-07-07
 
 ## Purpose
 
@@ -13,6 +13,8 @@ The Restaurant Premium editorial refinement also adds renderer-local typography 
 Stage 9.8D-R6 refines Restaurant Premium into the first Premium Experience Foundation reference for semantic color behavior.
 
 Stage 9.8D-R8 adds a Restaurant Premium depth token layer for subtle CTA, dark surface, footer, and modal tab polish.
+
+Stage 9.8E locks Restaurant Premium as the first approved Premium Foundation Reference. The token system, semantic contrast rules, depth treatment, hero scrim behavior, and reduced-motion expectations are reusable standards for future premium templates, but `RestaurantPremiumTemplate` is not a parent component that other premium templates should inherit blindly.
 
 The system separates:
 
@@ -185,9 +187,30 @@ No Prisma migration is required for Stage 9.8C.
 No Prisma migration is required for Stage 9.8D editorial refinement.
 No Prisma migration is required for Stage 9.8D-R6 color system remediation.
 No Prisma migration is required for Stage 9.8D-R8 button and surface depth polish.
+No Prisma migration is required for Stage 9.8E foundation lock.
 
 Reason:
 
 - Theme already has `primaryColor`, `secondaryColor`, and `accentColor`.
 - Theme already has a JSON `typography` field that can safely store `premiumColorPreset`.
 - The feature does not require a new table, enum, relation, entitlement, or billing object.
+
+## Stage 9.8E Foundation Token Guidance
+
+Reusable for future premium templates:
+
+- Semantic premium color tokens for readable headings, body copy, cards, modal text, price chips, badges, and CTAs.
+- Warm accent systems when they match the business category.
+- CTA depth treatment using subtle gradients, border, controlled shadow, and hover lift.
+- Footer and dark surface depth treatment.
+- Image-safe hero overlay and scrim behavior.
+- Reduced-motion fallback when premium templates use controlled motion.
+- Premium placeholder behavior when tenant images are missing.
+
+Not reusable without adaptation:
+
+- Restaurant-specific copy, reservation-first assumptions, Signature Dishes language, and restaurant menu hierarchy.
+- Restaurant Premium layout structure as a hardcoded parent for other premium templates.
+- Restaurant-specific ambience or gallery tone.
+
+Future premium templates must use this system as a quality reference while preserving their own business-specific experience.

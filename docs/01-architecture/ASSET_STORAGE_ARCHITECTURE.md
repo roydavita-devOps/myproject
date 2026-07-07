@@ -1,6 +1,6 @@
 # Asset Storage Architecture
 
-Date: 2026-06-30
+Date: 2026-07-07
 
 ## Purpose
 
@@ -228,6 +228,20 @@ SUPABASE_STORAGE_PUBLIC_BASE_URL=
 ```
 
 Vercel frontend must not set `SUPABASE_SERVICE_ROLE_KEY`.
+
+## Stage 9.8E Railway Status
+
+Stage 9.8E is a documentation and foundation-lock stage only.
+
+Railway trial is currently inactive/expired, so no Railway deployment is required for the Stage 9.8E lock. Development and validation continue locally. When Railway billing/reactivation is completed, redeploy the latest GitHub commit and revalidate:
+
+- backend health endpoints,
+- migration status,
+- Supabase storage environment variables,
+- durable upload behavior,
+- public image rendering.
+
+This local-only status does not change the production storage decision: durable user uploads still require `STORAGE_DRIVER=supabase` in production/staging.
 
 ## Rollback Strategy
 

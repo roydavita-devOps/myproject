@@ -227,4 +227,4 @@ Evidence confirms:
 
 Go.
 
-Stage 9.8D-R12 is ready for approval.
+Stage 9.8D-R12 is approved as part of the Restaurant Premium Foundation track locked in Stage 9.8E.

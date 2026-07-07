@@ -170,4 +170,4 @@ Validation JSON:
 
 Go.
 
-Stage 9.8D-R11A is ready for approval.
+Stage 9.8D-R11A is approved as part of the Restaurant Premium Foundation track locked in Stage 9.8E.

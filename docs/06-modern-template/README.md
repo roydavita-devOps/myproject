@@ -27,6 +27,16 @@ Current status:
 - Sprint 6 Cafe Modern Template completed.
 - Stage 9.6A Template Consistency Audit completed and tracked in architecture documentation.
 - Stage 9.6B Basic Template Standardization completed and awaiting approval.
+- Stage 9.8D-R1 through Stage 9.8D-R13 Restaurant Premium Foundation refinement track completed and approved.
+- Stage 9.8E Restaurant Premium Foundation Reference Lock completed locally.
+
+Restaurant Premium foundation status:
+
+- `restaurant_premium` is the first approved Premium Foundation Reference.
+- Future premium templates should reuse principles, semantic tokens, utilities, and patterns where appropriate.
+- Future premium templates must not hardcode, inherit, or blindly copy Restaurant Premium layout, restaurant-specific copy, or reservation-first assumptions.
+- Stage 9.9 Cafe Premium Redesign is the next recommended stage, but implementation has not started.
+- Railway trial is currently inactive/expired, so Stage 9.8E is validated locally and production redeploy is deferred until Railway billing/reactivation.
 
 Evidence:
 

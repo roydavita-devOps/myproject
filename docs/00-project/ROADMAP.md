@@ -1,6 +1,6 @@
 # Roadmap
 
-Last updated: 2026-07-03
+Last updated: 2026-07-07
 
 ## Completed
 
@@ -55,13 +55,36 @@ Last updated: 2026-07-03
 - Stage 9.8D-R11A Premium Full Menu Modal Warm Accent Alignment.
 - Stage 9.8D-R12 Register Slug Removal and Business Information Ownership.
 - Stage 9.8D-R13 Restaurant Premium Mobile Hero Image Parity and Compact Layout Polish.
+- Stage 9.8E Restaurant Premium Foundation Reference Lock.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.8D-R13 Restaurant Premium Mobile Hero approval checkpoint.
+- Restaurant Premium Foundation is locked. Stage 9.9 Cafe Premium Redesign is the next recommended stage, but implementation has not started.
 
 ## Planned
+
+### Stage 9.9
+
+Cafe Premium Redesign Using Restaurant Premium Foundation.
+
+Focus:
+
+- Premium cafe hero.
+- Coffee and product showcase.
+- Signature drinks.
+- Pastry and food support.
+- Ambience and gallery.
+- Visit and location flow.
+- Menu modal and item detail behavior.
+- Mobile compact design.
+- Warm, modern, cafe-friendly theme.
+
+Guidance:
+
+- Reuse Restaurant Premium foundation principles, semantic tokens, and proven premium patterns where appropriate.
+- Do not hardcode, inherit, or blindly copy Restaurant Premium layout, restaurant-specific copy, or reservation-first assumptions.
+- Cafe Premium must have cafe-specific language, mood, and content hierarchy.
 
 ### Stage 10
 
@@ -259,6 +282,22 @@ Stage 9.8D-R13 polishes Restaurant Premium mobile hero behavior:
 - Mobile-only hero spacing, headline size, supporting copy, CTA padding, feature chips, and hero card density are compacted so the hero lands around 560-640px instead of feeling like an oversized full-screen block.
 - Desktop Restaurant Premium hero keeps the approved desktop layout through `md:` responsive classes.
 - No backend, database, Prisma, upload pipeline, video, media library, Full Menu modal, Gallery, Register, Business Information, marketplace, payment, subscription, hosting renewal, Template Registry, Cafe Premium, or new template work is included.
+
+Stage 9.8E locks Restaurant Premium as the first Premium Foundation Reference:
+
+- `restaurant_premium` is now the approved quality baseline for premium layout quality, color system, CTA treatment, typography, image handling, hero behavior, menu browsing, modal behavior, gallery UX, mobile compactness, and public copy quality.
+- Template = layout and experience.
+- Brand = color, logo, content, and images.
+- Business Type = recommendation signal, not template lock.
+- Template = user choice.
+- Premium templates must feel commercially sellable, dense, elegant, readable, and mobile-friendly.
+- CTA behavior must be purposeful, not repetitive.
+- Public copy must be customer-facing, not developer/internal.
+- Reduced-motion behavior and mobile-first validation are part of the premium foundation standard.
+- Future premium templates must reuse principles, semantic tokens, utilities, and patterns where appropriate, but must keep their own business-specific experience.
+- Restaurant Premium must not become a hardcoded parent component for all premium templates.
+- Restaurant-specific language such as `Reserve a Table`, `Signature Dishes`, `Full Restaurant Menu`, `Restaurant Story`, `Dishes Worth the Visit`, and `Visit & Reservation` must not be copied blindly into Cafe Premium or other industries.
+- Railway trial is currently inactive/expired, so Stage 9.8E is a local documentation lock. Production redeploy resumes after Railway billing/reactivation.
 
 Potential categories:
 

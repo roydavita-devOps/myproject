@@ -1,12 +1,12 @@
 # Project Status
 
-Last updated: 2026-07-03
+Last updated: 2026-07-07
 
 ## Current Stage
 
-Stage 9.8D-R13 - Restaurant Premium Mobile Hero Image Parity and Compact Layout Polish.
+Stage 9.8E - Restaurant Premium Foundation Reference Lock.
 
-Status: implemented, locally validated, evidence captured, and ready for approval.
+Status: documentation lock completed locally. `restaurant_premium` is the first approved Premium Foundation Reference.
 
 ## Completed Stages
 
@@ -45,23 +45,24 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 | Stage 9.8A Menu Item Image Management | Completed. |
 | Stage 9.8A-R1 Public Premium Menu Item Count Fix | Completed. |
 | Stage 9.8B Featured Menu and Full Menu Modal | Completed. |
-| Stage 9.8C Premium Template Color Customization and Density Redesign | Completed; awaiting approval. |
-| Stage 9.8D Premium Contrast and Readability Remediation | Completed; awaiting approval. |
-| Stage 9.8D Restaurant Premium Editorial Redesign | Completed; awaiting approval. |
-| Stage 9.8D-R1 Restaurant Premium CTA, Readability & Opening Hours Remediation | Completed; awaiting approval. |
-| Stage 9.8D-R2 Restaurant Premium Foundation UX and Data Remediation | Completed; awaiting approval. |
-| Stage 9.8D-R3 Image Upload Optimization and WebP Processing Pipeline | Completed; awaiting approval. |
-| Stage 9.8D-R4 Supabase Storage Adapter for Durable User Uploads | Completed; awaiting approval. |
-| Stage 9.8D-R5 Image Delete and Legacy Local Upload Cleanup Remediation | Completed; awaiting approval. |
-| Stage 9.8D-R6 Restaurant Premium Color System Remediation | Completed; awaiting approval. |
-| Stage 9.8D-R7 Restaurant Premium Final Polish | Completed; awaiting approval. |
-| Stage 9.8D-R8 Restaurant Premium Button and Surface Depth Polish | Completed; awaiting approval. |
-| Stage 9.8D-R9 Gallery Multiple Upload, Bulk Delete and Image Type Guard | Completed; awaiting approval. |
-| Stage 9.8D-R10 Premium Hero Slideshow for Restaurant Premium | Completed; awaiting approval. |
-| Stage 9.8D-R11 Premium Full Menu Modal Item Detail and Price Readability | Completed; awaiting approval. |
-| Stage 9.8D-R11A Premium Full Menu Modal Warm Accent Alignment | Completed; awaiting approval. |
-| Stage 9.8D-R12 Register Slug Removal and Business Information Ownership | Completed; awaiting approval. |
-| Stage 9.8D-R13 Restaurant Premium Mobile Hero Image Parity and Compact Layout Polish | Completed; awaiting approval. |
+| Stage 9.8C Premium Template Color Customization and Density Redesign | Completed and approved as part of the Restaurant Premium foundation track. |
+| Stage 9.8D Premium Contrast and Readability Remediation | Completed and approved as part of the Restaurant Premium foundation track. |
+| Stage 9.8D Restaurant Premium Editorial Redesign | Completed and approved as part of the Restaurant Premium foundation track. |
+| Stage 9.8D-R1 Restaurant Premium CTA, Readability & Opening Hours Remediation | Completed and approved. |
+| Stage 9.8D-R2 Restaurant Premium Foundation UX and Data Remediation | Completed and approved. |
+| Stage 9.8D-R3 Image Upload Optimization and WebP Processing Pipeline | Completed and approved. |
+| Stage 9.8D-R4 Supabase Storage Adapter for Durable User Uploads | Completed and approved. |
+| Stage 9.8D-R5 Image Delete and Legacy Local Upload Cleanup Remediation | Completed and approved. |
+| Stage 9.8D-R6 Restaurant Premium Color System Remediation | Completed and approved. |
+| Stage 9.8D-R7 Restaurant Premium Final Polish | Completed and approved. |
+| Stage 9.8D-R8 Restaurant Premium Button and Surface Depth Polish | Completed and approved. |
+| Stage 9.8D-R9 Gallery Multiple Upload, Bulk Delete and Image Type Guard | Completed and approved. |
+| Stage 9.8D-R10 Premium Hero Slideshow for Restaurant Premium | Completed and approved. |
+| Stage 9.8D-R11 Premium Full Menu Modal Item Detail and Price Readability | Completed and approved. |
+| Stage 9.8D-R11A Premium Full Menu Modal Warm Accent Alignment | Completed and approved. |
+| Stage 9.8D-R12 Register Slug Removal and Business Information Ownership | Completed and approved. |
+| Stage 9.8D-R13 Restaurant Premium Mobile Hero Image Parity and Compact Layout Polish | Completed and approved. |
+| Stage 9.8E Restaurant Premium Foundation Reference Lock | Completed locally; Railway deployment intentionally deferred while Railway trial is inactive. |
 
 ## Current Blockers
 
@@ -90,25 +91,28 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 | Premium full menu accent consistency | Resolved for Stage 9.8D-R11A implementation | Restaurant Premium Full Menu modal now uses warm copper, gold, champagne, and espresso accents for price chips, View detail, focus rings, description labels, and placeholders instead of default blue-looking accents. |
 | Registration slug ownership | Resolved for Stage 9.8D-R12 implementation | Register no longer asks for slug or sends slug from the public form. Backend generates a temporary unique slug when missing, while Business Information remains the owner-facing place to edit and validate the public URL slug. |
 | Restaurant Premium mobile hero | Resolved for Stage 9.8D-R13 implementation | Mobile hero now uses the same hero media source/order as desktop, keeps static/slideshow/reduced-motion behavior intact, and uses compact mobile-only spacing, typography, CTA, chips, and card treatment. |
+| Restaurant Premium foundation lock | Resolved for Stage 9.8E | `restaurant_premium` is locked as the first Premium Foundation Reference. Future premium templates should reuse principles, tokens, and patterns where appropriate, not hardcode or inherit restaurant-specific layout/copy. |
+| Railway trial status | Deferred production validation | Railway trial is currently inactive/expired. Development and documentation lock continue locally; production backend redeploy resumes after Railway billing/reactivation. |
 | Luxury templates | Paused | No Luxury template implementation until separately approved. |
 | Template Catalog UI | Paused | No marketplace, comparison page, entitlement, or subscription access logic in Stage 9.7B. |
 
 ## Next Actions
 
-1. Review Stage 9.8D-R13 Restaurant Premium Mobile Hero evidence.
-2. Approve or request corrections.
-3. Keep Luxury, Catalog UI, marketplace, subscription, entitlement, preview-before-apply, and switch history paused until separately approved.
-4. After approval, proceed only to the next approved stage.
-5. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
+1. Review Stage 9.8E Restaurant Premium Foundation Lock report.
+2. Approve or request documentation corrections.
+3. Recommended next stage: Stage 9.9 - Cafe Premium Redesign Using Restaurant Premium Foundation.
+4. Keep Cafe Premium implementation, payment, subscription, marketplace, hosting renewal, publish gate, video hero, advanced media library, and new backend features paused until separately approved.
+5. When Railway is reactivated, redeploy the latest GitHub commit and revalidate production health, migrations, and Supabase-backed uploads.
+6. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
 
 ## Operational Snapshot
 
 | System | Current Status |
 | --- | --- |
-| Local Docker | Running and validated during Stage 9.8D-R13. |
+| Local Docker | Validated during Stage 9.8D-R13. Stage 9.8E is documentation-only and validated through docs diff. |
 | GitHub | Latest code and documentation branch strategy uses `main`, `staging`, and `pilot`. |
 | Vercel | Production frontend active. |
-| Railway | Backend health endpoints active. |
+| Railway | Trial currently inactive/expired; production backend redeploy is deferred until Railway billing/reactivation. |
 | Supabase | Production database integration confirmed externally by project owner; Storage adapter is implemented and requires production bucket/env configuration. |
 
 ## Canonical References
@@ -145,5 +149,6 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 - Premium full menu warm accent polish report: [../06-modern-template/reports/PHASE-9.8D-R11A-Premium-Full-Menu-Modal-Warm-Accent-Polish-Report.md](../06-modern-template/reports/PHASE-9.8D-R11A-Premium-Full-Menu-Modal-Warm-Accent-Polish-Report.md)
 - Register slug removal report: [../06-modern-template/reports/PHASE-9.8D-R12-Register-Slug-Removal-Report.md](../06-modern-template/reports/PHASE-9.8D-R12-Register-Slug-Removal-Report.md)
 - Restaurant Premium mobile hero compact polish report: [../06-modern-template/reports/PHASE-9.8D-R13-Restaurant-Premium-Mobile-Hero-Compact-Polish-Report.md](../06-modern-template/reports/PHASE-9.8D-R13-Restaurant-Premium-Mobile-Hero-Compact-Polish-Report.md)
+- Restaurant Premium foundation lock report: [../06-modern-template/reports/PHASE-9.8E-Restaurant-Premium-Foundation-Lock-Report.md](../06-modern-template/reports/PHASE-9.8E-Restaurant-Premium-Foundation-Lock-Report.md)
 - Template Catalog readiness audit: [../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md](../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md)
 - Template consistency audit: [../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md](../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md)
