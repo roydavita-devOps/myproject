@@ -30,7 +30,10 @@ Decision:
 | Menu item image management | Implemented through Stage 9.8A for dashboard upload/change/remove and premium public rendering. |
 | Featured menu and full menu modal | Implemented through Stage 9.8B for featured Signature sections and full menu modal browsing. |
 | Restaurant Premium Foundation Reference | Locked through Stage 9.8E as the first approved premium quality baseline. |
-| Cafe Premium redesign | Implemented through Stage 9.9 using Restaurant Premium Foundation quality standards without restaurant-specific inheritance. |
+| Cafe Premium redesign | Approved through Stage 9.9 using Restaurant Premium Foundation quality standards without restaurant-specific inheritance. |
+| Cafe Premium warm accent and placeholder polish | Approved through Stage 9.9A. |
+| Cafe Premium Hero Display controls | Approved through Stage 9.9B as a premium template capability. |
+| Cafe Premium Template Lock | Locked locally through Stage 9.9C as the second approved Premium Template. |
 
 ## Metadata Standard
 
@@ -257,6 +260,70 @@ Future templates must not blindly copy:
 | Recommended business types | `CAFE` |
 
 Stage 9.9 implements Cafe Premium Redesign Using Restaurant Premium Foundation. Cafe Premium uses the locked foundation principles while introducing cafe-specific language, mood, content hierarchy, coffee/product showcase, pastry support, ambience, visit planning, and compact mobile treatment.
+
+### Cafe Premium Template Lock
+
+Stage 9.9C locks `cafe_premium` as the second approved Premium Template after `restaurant_premium`.
+
+Cafe Premium approved principles:
+
+- Modern specialty cafe experience.
+- Warm, editorial, cozy, premium, and commercially sellable mood.
+- Menu-first flow, not WhatsApp-first.
+- Cafe-specific copy and no restaurant-only language.
+- Premium Hero Display support with Static image and Rotating images modes.
+- Clear coffee/product/menu showcase.
+- Gallery treated as ambience/corners, not a generic image grid.
+- Warm intentional placeholders for missing images.
+- Formatted opening hours and formatted price/currency display.
+- Unavailable CTAs hidden instead of rendered broken.
+- Compact mobile behavior.
+
+Approved Cafe Premium sections:
+
+1. Premium cafe hero.
+2. Signature Brews / Fresh From the Bar.
+3. Coffee & Bites / Morning Favorites.
+4. Cafe Story / Crafted for Slow Mornings.
+5. Ambience & Corners / Slow Corners.
+6. Visit the Cafe.
+7. Footer.
+8. Cafe Menu modal with item detail.
+
+Approved cafe language examples:
+
+- Specialty coffee corner.
+- Signature Brews.
+- Fresh From the Bar.
+- Coffee & Bites.
+- Morning Favorites.
+- Crafted for Slow Mornings.
+- Cafe Story.
+- Ambience & Corners.
+- Slow Corners.
+- Visit the Cafe.
+- Find Your Table.
+- Today's Pour.
+- Pastry Pairings.
+- Open Cafe Menu.
+- Explore Menu.
+- Get Directions.
+- Call Cafe.
+- Message Cafe.
+
+Do not use restaurant-only terms in Cafe Premium:
+
+- Reserve a Table.
+- Signature Dishes.
+- Full Restaurant Menu.
+- Restaurant Story.
+- Visit & Reservation.
+- Dishes Worth the Visit.
+- Chef.
+- Fine dining.
+- Reservation-first language.
+
+Future catalog and marketplace work should present Restaurant Premium and Cafe Premium as locked/approved premium templates while keeping Business Type as recommendation and Template as user choice.
 
 Stage 9.9 Cafe Premium direction:
 

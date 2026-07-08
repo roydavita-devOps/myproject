@@ -164,7 +164,7 @@ Reason:
 
 ## Cafe Premium Warm Accent And Placeholder Polish
 
-Status: Implemented for Stage 9.9A; pending product approval.
+Status: Approved locally and included in the Stage 9.9C Cafe Premium lock.
 
 Decision:
 
@@ -182,7 +182,7 @@ Reason:
 
 ## Premium Hero Display Capability
 
-Status: Implemented for Stage 9.9B; pending product approval.
+Status: Approved locally and included in the Stage 9.9C Cafe Premium lock.
 
 Decision:
 
@@ -197,6 +197,28 @@ Reason:
 - Cafe Premium is now a commercial premium template and should have the same premium hero media capability as Restaurant Premium.
 - Capability metadata avoids restaurant-only dashboard branching and keeps future premium template enablement controlled.
 - Reusing existing `Theme.heroMedia` avoids schema and migration risk.
+
+## Cafe Premium Template Lock
+
+Status: Locked locally through Stage 9.9C; pending product-owner approval of the lock report.
+
+Decision:
+
+- Cafe Premium is the second approved Premium Template after Restaurant Premium.
+- Restaurant Premium remains the first Premium Foundation Reference.
+- Cafe Premium uses Restaurant Premium Foundation quality standards without hardcoded Restaurant Premium inheritance.
+- Cafe Premium must remain a modern specialty cafe experience with cafe-specific copy, visual mood, section rhythm, product/menu showcase, ambience treatment, and visit/contact behavior.
+- Premium templates may share capabilities such as Hero Display, `Theme.heroMedia`, Premium Full Menu modal patterns, item detail browsing, premium placeholders, formatted price/opening hours, and contact CTA hierarchy when copy and visual treatment are business-specific.
+- Classic templates must not automatically receive premium-only capabilities such as Hero Display unless explicitly enabled by template capability metadata.
+- Future templates must avoid blindly copying Restaurant Premium or Cafe Premium language/layout.
+- During Railway inactive/trial-expired period, development and validation continue locally; production redeploy resumes after Railway is reactivated.
+- Stage 9.9C does not introduce payment, subscription, marketplace, hosting renewal, publish gate, video hero, advanced media library, new backend features, new templates, Prisma migration, upload pipeline changes, or template behavior changes.
+
+Reason:
+
+- Cafe Premium has completed redesign, warm accent polish, placeholder polish, Cafe modal polish, Hero Display enablement, Restaurant Premium regression checks, Classic Cafe guard validation, and local test/lint/build/Docker/health/smoke validation.
+- Locking Cafe Premium clarifies the premium template portfolio before catalog, marketplace, or entitlement work begins.
+- Future premium expansion needs reusable quality standards without forcing every industry into restaurant or cafe-specific language.
 
 ## Upload Image Processing Baseline
 

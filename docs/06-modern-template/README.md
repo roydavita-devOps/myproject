@@ -32,14 +32,17 @@ Current status:
 - Stage 9.9 Cafe Premium Redesign Using Restaurant Premium Foundation implemented and locally validated.
 - Stage 9.9A Cafe Premium Warm Accent & Placeholder Polish implemented and locally validated.
 - Stage 9.9B Cafe Premium Hero Display Controls implemented and locally validated.
+- Stage 9.9C Cafe Premium Template Lock implemented as a documentation lock.
 
 Restaurant Premium foundation status:
 
 - `restaurant_premium` is the first approved Premium Foundation Reference.
+- `cafe_premium` is the second approved Premium Template.
 - Future premium templates should reuse principles, semantic tokens, utilities, and patterns where appropriate.
 - Future premium templates must not hardcode, inherit, or blindly copy Restaurant Premium layout, restaurant-specific copy, or reservation-first assumptions.
-- Cafe Premium is now the second premium template validation target and uses the foundation standards with cafe-specific language, sections, modal copy, visual mood, warm placeholders, cafe-specific modal accents, and Premium Hero Display controls.
-- Railway trial is currently inactive/expired, so Stage 9.9B is validated locally and production redeploy is deferred until Railway billing/reactivation.
+- Future premium templates must also not blindly copy Cafe Premium coffee/pastry/corner language, cafe section names, cafe preset names, or cafe-specific visit/contact wording.
+- Cafe Premium is locked as a premium template that uses the foundation standards with cafe-specific language, sections, modal copy, visual mood, warm placeholders, cafe-specific modal accents, and Premium Hero Display controls.
+- Railway trial is currently inactive/expired, so Stage 9.9C is local/documentation-only and production redeploy is deferred until Railway billing/reactivation.
 
 Evidence:
 

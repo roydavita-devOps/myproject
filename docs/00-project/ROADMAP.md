@@ -1,6 +1,6 @@
 # Roadmap
 
-Last updated: 2026-07-07
+Last updated: 2026-07-08
 
 ## Completed
 
@@ -59,11 +59,12 @@ Last updated: 2026-07-07
 - Stage 9.9 Cafe Premium Redesign Using Restaurant Premium Foundation.
 - Stage 9.9A Cafe Premium Warm Accent & Placeholder Polish.
 - Stage 9.9B Cafe Premium Hero Display Controls.
+- Stage 9.9C Cafe Premium Template Lock documentation.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Cafe Premium Hero Display Controls is implemented and awaiting product approval.
+- Cafe Premium Template Lock is implemented as a documentation lock and awaiting product approval.
 
 ## Planned
 
@@ -308,6 +309,32 @@ Stage 9.9B exposes Premium Hero Display controls to Cafe Premium:
 - Cafe Premium public rendering already consumes existing `Theme.heroMedia`; the stage exposes the existing dashboard capability and validates slideshow rendering.
 - No backend, database, Prisma, upload pipeline, video hero, media library, marketplace, payment, billing, subscription, entitlement, hosting renewal, publish gate, or new template scope is included.
 - Railway trial is currently inactive/expired, so Stage 9.9B is validated locally. Production redeploy resumes after Railway billing/reactivation.
+
+Stage 9.9C locks Cafe Premium as the second approved Premium Template:
+
+- Restaurant Premium remains the first Premium Foundation Reference.
+- Cafe Premium is the second approved Premium Template and must not replace Restaurant Premium as the foundation.
+- Cafe Premium proves that premium foundation principles can be reused without cloning restaurant layout or restaurant language.
+- Cafe Premium approved principles include a modern specialty cafe feel, warm editorial mood, menu-first flow, cafe-specific copy, premium hero static/slideshow behavior, clear coffee/product showcase, ambience/corners gallery treatment, warm placeholders, formatted opening hours, hidden unavailable CTAs, and compact mobile behavior.
+- Future premium templates may reuse capabilities such as Hero Display, `Theme.heroMedia`, Premium Full Menu modal patterns, item detail browsing, premium placeholders, formatted price/opening hours, contact CTA hierarchy, and classic-template guards.
+- Future premium templates must not blindly copy Cafe Premium coffee/pastry/corner language, cafe color preset names, or cafe-specific visit/contact wording.
+- No backend, database, Prisma, upload pipeline, video hero, media library, marketplace, payment, billing, subscription, entitlement, hosting renewal, publish gate, or new template scope is included.
+- Railway trial is currently inactive/expired, so Stage 9.9C is local/documentation-only. Production redeploy resumes after Railway billing/reactivation.
+
+Recommended next stage after Stage 9.9C approval:
+
+- Stage 9.10 - Premium Template Catalog & Template Selection Readiness.
+
+Purpose:
+
+- Make Restaurant Premium and Cafe Premium visible as locked/approved premium templates.
+- Ensure template catalog clearly separates Classic vs Premium.
+- Ensure business type remains recommendation, not forced template lock.
+- Prepare the product for future payment/entitlement work without implementing payment yet.
+
+Alternative if product owner prioritizes more templates:
+
+- Stage 9.10A - Laundry Premium Redesign Using Premium Foundation.
 
 Potential categories:
 
