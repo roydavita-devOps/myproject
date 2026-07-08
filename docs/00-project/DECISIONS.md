@@ -180,6 +180,24 @@ Reason:
 - Cafe Premium should feel like a warm cafe experience, not a restaurant clone or generic template.
 - Variant-specific modal styling lets Cafe Premium improve without regressing Restaurant Premium.
 
+## Premium Hero Display Capability
+
+Status: Implemented for Stage 9.9B; pending product approval.
+
+Decision:
+
+- Hero Display / Rotating Images is a premium template capability, not a Restaurant Premium-only feature.
+- `restaurant_premium` and `cafe_premium` expose the dashboard Hero Display controls.
+- Classic templates do not receive premium Hero Display controls unless explicitly marked through template capability metadata.
+- Existing `Theme.heroMedia` and existing hero slideshow rendering are reused.
+- Stage 9.9B does not introduce backend, database, Prisma, upload pipeline, video hero, media library, marketplace, payment, billing, subscription, entitlement, hosting renewal, publish gate, or new template scope.
+
+Reason:
+
+- Cafe Premium is now a commercial premium template and should have the same premium hero media capability as Restaurant Premium.
+- Capability metadata avoids restaurant-only dashboard branching and keeps future premium template enablement controlled.
+- Reusing existing `Theme.heroMedia` avoids schema and migration risk.
+
 ## Upload Image Processing Baseline
 
 Status: Approved.

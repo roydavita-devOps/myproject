@@ -14,6 +14,7 @@ import { GalleryItem, HeroMedia, Website } from '../../types/api';
 import { uploadsApi } from '../uploads/uploads.api';
 import { validateUploadImageFile } from '../uploads/imageValidation';
 import { activeHeroImageUrl, createHeroMedia, heroImageMaxSizeMb, maxHeroSlideshowImages, minHeroSlideshowImages, normalizeHeroMedia } from '../uploads/heroMedia';
+import { isTemplateKey, legacyTemplateNameAliases, templateMetadata } from '../templates/registry/templateMetadata';
 
 type OpeningHoursForm = {
   mode: OpeningHoursMode;
@@ -358,7 +359,7 @@ export function WebsiteEditorPage() {
             await deleteThemeAssetMutation.mutateAsync('hero');
           }}
         />
-        {isRestaurantPremiumTemplate(website) && (
+        {supportsHeroSlideshow(website) && (
           <HeroSlideshowManager
             websiteId={website.id}
             businessName={website.businessName}
@@ -509,10 +510,10 @@ function HeroSlideshowManager({
   }
 
   return (
-    <div className="grid gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
+    <div data-testid="hero-display-controls" className="grid gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
       <div>
         <p className="font-semibold text-slate-950">Hero Display</p>
-        <p className="mt-1 text-sm text-slate-500">Premium Restaurant can use one static hero image or 2-5 rotating hero images.</p>
+        <p className="mt-1 text-sm text-slate-500">Premium templates can use one static hero image or 2-5 rotating hero images.</p>
       </div>
       <div className="flex flex-wrap gap-2">
         <button
@@ -845,10 +846,15 @@ function queueItem(fileName: string, status: GalleryUploadStatus, error?: string
   return { id: `${fileName}-${crypto.randomUUID()}`, fileName, status, progress: 0, error };
 }
 
-function isRestaurantPremiumTemplate(website: Website) {
-  return website.template?.name === 'restaurant_premium'
-    || website.template?.schema?.templateKey === 'restaurant_premium'
-    || website.template?.schema?.rendererKey === 'restaurant_premium';
+function supportsHeroSlideshow(website: Website) {
+  const candidates = [
+    website.template?.schema?.templateKey,
+    website.template?.schema?.rendererKey,
+    website.template?.name,
+    website.template?.name ? legacyTemplateNameAliases[website.template.name] : undefined,
+  ];
+
+  return candidates.some((candidate) => isTemplateKey(candidate) && templateMetadata[candidate].supportsHeroSlideshow === true);
 }
 
 function sanitizeWebsiteForm(form: {

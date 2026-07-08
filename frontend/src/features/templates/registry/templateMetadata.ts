@@ -26,6 +26,7 @@ export const templateMetadata: Record<TemplateKey, TemplateMetadata> = {
     tier: 'premium',
     recommendedBusinessTypes: ['RESTAURANT', 'WARTEG', 'CAFE'],
     status: 'active',
+    supportsHeroSlideshow: true,
   },
   restaurant_luxury: {
     key: 'restaurant_luxury',
@@ -86,6 +87,7 @@ export const templateMetadata: Record<TemplateKey, TemplateMetadata> = {
     tier: 'premium',
     recommendedBusinessTypes: ['CAFE'],
     status: 'active',
+    supportsHeroSlideshow: true,
   },
   clinic_professional: {
     key: 'clinic_professional',

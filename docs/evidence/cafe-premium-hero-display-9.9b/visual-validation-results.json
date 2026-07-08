@@ -1,0 +1,34 @@
+{
+  "generatedAt": "2026-07-08T02:39:52.014Z",
+  "baseURL": "http://127.0.0.1",
+  "screenshots": {
+    "cafePremiumHeroDisplayStatic": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-hero-display-9.9b/cafe-premium-hero-display-static.png",
+    "cafePremiumHeroDisplayRotatingImages": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-hero-display-9.9b/cafe-premium-hero-display-rotating-images.png",
+    "cafePremiumHeroSlideshowThumbnails": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-hero-display-9.9b/cafe-premium-hero-slideshow-thumbnails.png",
+    "cafePremiumPublicHeroSlideshow": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-hero-display-9.9b/cafe-premium-public-hero-slideshow.png",
+    "restaurantPremiumHeroDisplayRegression": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-hero-display-9.9b/restaurant-premium-hero-display-regression.png",
+    "classicCafeNoHeroDisplay": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\cafe-premium-hero-display-9.9b/classic-cafe-no-hero-display.png"
+  },
+  "results": [
+    {
+      "target": "cafe_premium_dashboard_static_controls",
+      "status": "passed"
+    },
+    {
+      "target": "cafe_premium_dashboard_rotating_controls_and_thumbnails",
+      "status": "passed"
+    },
+    {
+      "target": "cafe_premium_public_slideshow",
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_premium_dashboard_regression",
+      "status": "passed"
+    },
+    {
+      "target": "classic_cafe_no_hero_display_controls",
+      "status": "passed"
+    }
+  ]
+}

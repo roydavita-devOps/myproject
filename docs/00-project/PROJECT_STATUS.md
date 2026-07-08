@@ -4,7 +4,7 @@ Last updated: 2026-07-07
 
 ## Current Stage
 
-Stage 9.9A - Cafe Premium Warm Accent & Placeholder Polish.
+Stage 9.9B - Cafe Premium Hero Display Controls.
 
 Status: implemented, locally validated, evidence captured, and ready for approval. Railway deployment remains deferred while Railway trial is inactive/expired.
 
@@ -64,7 +64,8 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 | Stage 9.8D-R13 Restaurant Premium Mobile Hero Image Parity and Compact Layout Polish | Completed and approved. |
 | Stage 9.8E Restaurant Premium Foundation Reference Lock | Completed locally; Railway deployment intentionally deferred while Railway trial is inactive. |
 | Stage 9.9 Cafe Premium Redesign Using Restaurant Premium Foundation | Completed locally. |
-| Stage 9.9A Cafe Premium Warm Accent & Placeholder Polish | Implemented and locally validated; awaiting approval. |
+| Stage 9.9A Cafe Premium Warm Accent & Placeholder Polish | Completed locally. |
+| Stage 9.9B Cafe Premium Hero Display Controls | Implemented and locally validated; awaiting approval. |
 
 ## Current Blockers
 
@@ -96,13 +97,14 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 | Restaurant Premium foundation lock | Resolved for Stage 9.8E | `restaurant_premium` is locked as the first Premium Foundation Reference. Future premium templates should reuse principles, tokens, and patterns where appropriate, not hardcode or inherit restaurant-specific layout/copy. |
 | Cafe Premium commercial quality | Resolved for Stage 9.9 implementation | `cafe_premium` now uses Cafe-specific premium hero, Signature Brews, Coffee & Bites preview, warm premium modal treatment, Cafe Story, ambience gallery, Visit the Cafe CTAs, compact mobile layout, and local evidence. |
 | Cafe Premium warm accent polish | Resolved for Stage 9.9A implementation | Cafe Premium menu placeholders, gallery placeholders, modal detail states, price chips, focus/hover states, and story/icon warmth now align with the cafe mood without changing Restaurant Premium or backend/data contracts. |
+| Cafe Premium hero display controls | Resolved for Stage 9.9B implementation | Hero Display / Rotating Images is now a premium template capability exposed to Restaurant Premium and Cafe Premium, while classic templates remain guarded. |
 | Railway trial status | Deferred production validation | Railway trial is currently inactive/expired. Development and documentation lock continue locally; production backend redeploy resumes after Railway billing/reactivation. |
 | Luxury templates | Paused | No Luxury template implementation until separately approved. |
 | Template Catalog UI | Paused | No marketplace, comparison page, entitlement, or subscription access logic in Stage 9.7B. |
 
 ## Next Actions
 
-1. Review Stage 9.9A Cafe Premium Warm Accent & Placeholder Polish report and evidence.
+1. Review Stage 9.9B Cafe Premium Hero Display Controls report and evidence.
 2. Approve or request corrections.
 3. Keep payment, subscription, marketplace, hosting renewal, publish gate, video hero, advanced media library, Clinic Premium, Corporate Premium, Laundry Premium redesign, and new backend features paused until separately approved.
 4. When Railway is reactivated, redeploy the latest GitHub commit and revalidate production health, migrations, and Supabase-backed uploads.
@@ -112,7 +114,7 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 
 | System | Current Status |
 | --- | --- |
-| Local Docker | Running and validated during Stage 9.9A. |
+| Local Docker | Running and validated during Stage 9.9B. |
 | GitHub | Latest code and documentation branch strategy uses `main`, `staging`, and `pilot`. |
 | Vercel | Production frontend active. |
 | Railway | Trial currently inactive/expired; production backend redeploy is deferred until Railway billing/reactivation. |
@@ -155,5 +157,6 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 - Restaurant Premium foundation lock report: [../06-modern-template/reports/PHASE-9.8E-Restaurant-Premium-Foundation-Lock-Report.md](../06-modern-template/reports/PHASE-9.8E-Restaurant-Premium-Foundation-Lock-Report.md)
 - Cafe Premium redesign report: [../06-modern-template/reports/PHASE-9.9-Cafe-Premium-Redesign-Using-Restaurant-Premium-Foundation-Report.md](../06-modern-template/reports/PHASE-9.9-Cafe-Premium-Redesign-Using-Restaurant-Premium-Foundation-Report.md)
 - Cafe Premium warm accent polish report: [../06-modern-template/reports/PHASE-9.9A-Cafe-Premium-Warm-Accent-And-Placeholder-Polish-Report.md](../06-modern-template/reports/PHASE-9.9A-Cafe-Premium-Warm-Accent-And-Placeholder-Polish-Report.md)
+- Cafe Premium hero display controls report: [../06-modern-template/reports/PHASE-9.9B-Cafe-Premium-Hero-Display-Control-Report.md](../06-modern-template/reports/PHASE-9.9B-Cafe-Premium-Hero-Display-Control-Report.md)
 - Template Catalog readiness audit: [../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md](../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md)
 - Template consistency audit: [../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md](../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md)

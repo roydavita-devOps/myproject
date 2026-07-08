@@ -36,6 +36,7 @@ export type TemplateMetadata = {
   tier: TemplateTier;
   recommendedBusinessTypes: string[];
   status: 'active' | 'planned';
+  supportsHeroSlideshow?: boolean;
 };
 
 export type TemplateRenderer = ComponentType<{ website: Website }>;

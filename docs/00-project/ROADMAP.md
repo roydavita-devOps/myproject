@@ -58,11 +58,12 @@ Last updated: 2026-07-07
 - Stage 9.8E Restaurant Premium Foundation Reference Lock.
 - Stage 9.9 Cafe Premium Redesign Using Restaurant Premium Foundation.
 - Stage 9.9A Cafe Premium Warm Accent & Placeholder Polish.
+- Stage 9.9B Cafe Premium Hero Display Controls.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Cafe Premium Warm Accent & Placeholder Polish is implemented and awaiting product approval.
+- Cafe Premium Hero Display Controls is implemented and awaiting product approval.
 
 ## Planned
 
@@ -298,6 +299,15 @@ Stage 9.9A polishes Cafe Premium warm accents and placeholder quality:
 - Restaurant Premium is regression-checked because the modal is shared.
 - No backend, database, Prisma, upload pipeline, payment, subscription, marketplace, entitlement, template registry, or new feature scope is included.
 - Railway trial is currently inactive/expired, so Stage 9.9A is validated locally. Production redeploy resumes after Railway billing/reactivation.
+
+Stage 9.9B exposes Premium Hero Display controls to Cafe Premium:
+
+- Hero Display / Rotating Images is a premium template capability, not a Restaurant Premium-only feature.
+- `restaurant_premium` and `cafe_premium` support Static image and Rotating images dashboard controls.
+- Classic Cafe and Classic Restaurant templates remain guarded and do not receive premium hero controls.
+- Cafe Premium public rendering already consumes existing `Theme.heroMedia`; the stage exposes the existing dashboard capability and validates slideshow rendering.
+- No backend, database, Prisma, upload pipeline, video hero, media library, marketplace, payment, billing, subscription, entitlement, hosting renewal, publish gate, or new template scope is included.
+- Railway trial is currently inactive/expired, so Stage 9.9B is validated locally. Production redeploy resumes after Railway billing/reactivation.
 
 Potential categories:
 
