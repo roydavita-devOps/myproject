@@ -34,6 +34,7 @@ Decision:
 | Cafe Premium warm accent and placeholder polish | Approved through Stage 9.9A. |
 | Cafe Premium Hero Display controls | Approved through Stage 9.9B as a premium template capability. |
 | Cafe Premium Template Lock | Locked locally through Stage 9.9C as the second approved Premium Template. |
+| Premium Template Catalog & Selection Readiness | Implemented through Stage 9.10 with Recommended, Premium, Classic, and All template sections. |
 
 ## Metadata Standard
 
@@ -83,6 +84,45 @@ Current implementation note:
 Recommended categories are not restrictions.
 
 Users should be able to choose a template even if their business type differs from the recommendation.
+
+Stage 9.10 product rule:
+
+```text
+Business Type = recommendation signal
+Template = user choice
+```
+
+The catalog should show recommended templates first, but available templates remain selectable across categories.
+
+## Stage 9.10 Selection UX
+
+Implemented catalog sections:
+
+- Recommended for your business.
+- Premium Templates.
+- Classic Templates.
+- All Templates.
+
+Template card requirements now include:
+
+- Template name.
+- Tier badge: Classic or Premium.
+- Approved Premium badge for locked premium templates.
+- Business category.
+- Short description.
+- Preview highlights.
+- Recommended badge when matched to business type.
+- Current template badge.
+- Preview button.
+- Use template button.
+
+Template change behavior:
+
+- Previewing a template is non-persistent.
+- Applying a template requires confirmation.
+- Changing template preserves business data, menu, gallery, and contact information.
+- Premium templates are visible and selectable during pilot before payment enforcement.
+- No payment, checkout, subscription, billing, marketplace, entitlement enforcement, hosting renewal, or purchase action is implemented.
 
 ## Preview Strategy
 

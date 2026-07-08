@@ -220,6 +220,28 @@ Reason:
 - Locking Cafe Premium clarifies the premium template portfolio before catalog, marketplace, or entitlement work begins.
 - Future premium expansion needs reusable quality standards without forcing every industry into restaurant or cafe-specific language.
 
+## Premium Template Catalog And Selection Readiness
+
+Status: Implemented for Stage 9.10; pending product approval.
+
+Decision:
+
+- Template selection is user choice; business type only provides recommendations.
+- Restaurant Premium and Cafe Premium are locked/approved premium templates.
+- Premium templates are visible and selectable in the catalog before payment enforcement is implemented.
+- Premium entitlement/payment gating is deferred to a future approved stage.
+- Premium-only capabilities should be exposed through template capability metadata, not hardcoded template checks.
+- Classic templates must not automatically receive premium-only capabilities.
+- Template preview may use a non-persistent preview override so users can inspect another template before applying it.
+- Template changes require lightweight confirmation and must preserve business data, menu, gallery, and contact information.
+- During Railway inactive/trial-expired period, template catalog readiness is validated locally.
+
+Reason:
+
+- The product needs a clearer commercial template selection experience before payment, marketplace, or entitlement work begins.
+- Business Type should improve recommendations without locking users into a category-specific template.
+- Locked premium templates need to be visible as higher-value products while avoiding fake payment or broken upgrade buttons.
+
 ## Upload Image Processing Baseline
 
 Status: Approved.

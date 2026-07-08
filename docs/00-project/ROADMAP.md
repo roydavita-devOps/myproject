@@ -60,11 +60,12 @@ Last updated: 2026-07-08
 - Stage 9.9A Cafe Premium Warm Accent & Placeholder Polish.
 - Stage 9.9B Cafe Premium Hero Display Controls.
 - Stage 9.9C Cafe Premium Template Lock documentation.
+- Stage 9.10 Premium Template Catalog & Template Selection Readiness.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Cafe Premium Template Lock is implemented as a documentation lock and awaiting product approval.
+- Premium Template Catalog & Template Selection Readiness is implemented and awaiting product approval.
 
 ## Planned
 
@@ -335,6 +336,19 @@ Purpose:
 Alternative if product owner prioritizes more templates:
 
 - Stage 9.10A - Laundry Premium Redesign Using Premium Foundation.
+
+Stage 9.10 prepares the template catalog and selection UX:
+
+- Template selection follows `Business Type = recommendation signal` and `Template = user choice`.
+- Recommended templates appear first, but users can still browse and choose available non-recommended templates.
+- The dashboard separates Recommended, Premium, Classic, and All templates.
+- Restaurant Premium and Cafe Premium appear as approved premium templates.
+- Classic templates remain available and are not presented as locked premium products.
+- Template preview supports a non-persistent `templateKey` preview route so users can preview another template before applying.
+- Template change uses confirmation and preserves business data, menu, gallery, and contact information.
+- Premium templates remain selectable during pilot before payment/entitlement enforcement.
+- No payment, checkout, subscription, billing, marketplace, entitlement enforcement, hosting renewal, publish gate, backend API, Prisma migration, database change, or upload pipeline change is included.
+- Railway trial is currently inactive/expired, so Stage 9.10 is validated locally. Production redeploy resumes after Railway billing/reactivation.
 
 Potential categories:
 

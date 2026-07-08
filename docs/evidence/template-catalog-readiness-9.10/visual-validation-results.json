@@ -1,0 +1,36 @@
+{
+  "generatedAt": "2026-07-08T11:20:47.061Z",
+  "baseURL": "http://127.0.0.1",
+  "screenshots": {
+    "templateCatalogPremiumSection": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-readiness-9.10/template-catalog-premium-section.png",
+    "templateCatalogClassicSection": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-readiness-9.10/template-catalog-classic-section.png",
+    "templateCatalogRecommendedCafe": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-readiness-9.10/template-catalog-recommended-cafe.png",
+    "templateCatalogRecommendedRestaurant": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-readiness-9.10/template-catalog-recommended-restaurant.png",
+    "templateCardRestaurantPremium": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-readiness-9.10/template-card-restaurant-premium.png",
+    "templateCardCafePremium": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-readiness-9.10/template-card-cafe-premium.png",
+    "templateSelectionCurrentTemplate": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-readiness-9.10/template-selection-current-template.png",
+    "templateSelectionChangeConfirmation": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-readiness-9.10/template-selection-change-confirmation.png",
+    "templateSelectionCafePremiumSelected": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-readiness-9.10/template-selection-cafe-premium-selected.png",
+    "restaurantPremiumRenderAfterSelection": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-readiness-9.10/restaurant-premium-render-after-selection.png",
+    "cafePremiumRenderAfterSelection": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-readiness-9.10/cafe-premium-render-after-selection.png",
+    "classicTemplateNoPremiumHeroDisplay": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-readiness-9.10/classic-template-no-premium-hero-display.png"
+  },
+  "results": [
+    {
+      "target": "catalog_sections_and_cards",
+      "status": "passed"
+    },
+    {
+      "target": "cafe_premium_selection_persistence_and_rendering",
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_premium_recommendation_and_rendering",
+      "status": "passed"
+    },
+    {
+      "target": "classic_template_no_premium_hero_display",
+      "status": "passed"
+    }
+  ]
+}

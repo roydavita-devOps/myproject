@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router';
-import { ArrowLeft, CheckCircle2, Layers3, Palette, Save, Sparkles } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Eye, Layers3, Palette, Save, Sparkles } from 'lucide-react';
 import { templatesApi } from './templates.api';
 import { resolveTemplate } from './registry/templateResolver';
 import { presetsForVariant, resolvePremiumColorTokens, resolvePremiumVariant } from './premiumTheme';
@@ -9,7 +9,9 @@ import { websitesApi } from '../websites/websites.api';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { ErrorState, LoadingState } from '../../components/ui/State';
-import { TemplateCatalogItem, Website } from '../../types/api';
+import { Website } from '../../types/api';
+import { TemplateKey } from './registry/templateTypes';
+import { buildCatalogCards, CatalogCard, displayTierForTemplate, isRecommendedTemplate, isSelectableTemplate, sortTemplates } from './templateCatalog';
 
 export function TemplateSelectionPage() {
   const { websiteId = '' } = useParams();
@@ -20,6 +22,7 @@ export function TemplateSelectionPage() {
     enabled: Boolean(websiteId),
   });
   const templatesQuery = useQuery({ queryKey: ['templates'], queryFn: templatesApi.list });
+  const [pendingTemplate, setPendingTemplate] = useState<CatalogCard | null>(null);
   const applyMutation = useMutation({
     mutationFn: (templateKey: string) => websitesApi.assignTemplate(websiteId, { templateKey }),
     onSuccess: (updatedWebsite) => {
@@ -44,7 +47,11 @@ export function TemplateSelectionPage() {
 
   const website = websiteQuery.data;
   const currentTemplateKey = resolveTemplate(website).metadata.key;
-  const sortedTemplates = sortTemplates(templatesQuery.data ?? [], website.template?.businessType);
+  const catalogCards = buildCatalogCards(templatesQuery.data ?? []);
+  const sortedTemplates = sortTemplates(catalogCards, website.template?.businessType);
+  const recommendedTemplates = sortedTemplates.filter((template) => isRecommendedTemplate(template, website.template?.businessType) && isSelectableTemplate(template));
+  const premiumTemplates = sortedTemplates.filter((template) => displayTierForTemplate(template) === 'Premium' && isSelectableTemplate(template));
+  const classicTemplates = sortedTemplates.filter((template) => displayTierForTemplate(template) === 'Classic' && isSelectableTemplate(template));
   const premiumVariant = resolvePremiumVariant(website);
 
   return (
@@ -74,45 +81,228 @@ export function TemplateSelectionPage() {
         />
       )}
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {sortedTemplates.map((template) => {
-          const isCurrent = template.templateKey === currentTemplateKey;
-          const isRecommended = Boolean(website.template?.businessType && template.recommendedBusinessTypes.includes(website.template.businessType));
-          const isApplying = applyMutation.isPending && applyMutation.variables === template.templateKey;
+      <CatalogSection
+        title="Recommended for your business"
+        description="Business type helps us sort templates first. You can still choose any available template."
+        templates={recommendedTemplates}
+        website={website}
+        currentTemplateKey={currentTemplateKey}
+        isApplying={applyMutation.isPending}
+        applyingTemplateKey={applyMutation.variables}
+        onSelect={setPendingTemplate}
+      />
 
-          return (
-            <article key={template.templateKey} className="panel flex min-h-[26rem] flex-col overflow-hidden">
-              <img
-                src={`/template-previews/${template.previewImage}`}
-                alt={`${template.displayName} preview`}
-                className="aspect-[16/10] w-full border-b border-slate-200 bg-slate-100 object-cover"
-              />
-              <div className="flex grow flex-col gap-4 p-5">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Badge tone={template.tier === 'premium' ? 'amber' : 'slate'}>{template.tier.toUpperCase()}</Badge>
-                  {isRecommended && <Badge tone="green">RECOMMENDED</Badge>}
-                  {isCurrent && <Badge tone="green">CURRENT TEMPLATE</Badge>}
-                </div>
-                <div>
-                  <h2 className="text-lg font-semibold text-slate-950">{template.displayName}</h2>
-                  <p className="mt-1 text-sm text-slate-500">{template.category} · {template.industry}</p>
-                </div>
-                <p className="grow text-sm leading-6 text-slate-600">{template.description}</p>
-                <Button
-                  className="w-full"
-                  disabled={isCurrent || applyMutation.isPending}
-                  variant={isCurrent ? 'secondary' : 'primary'}
-                  onClick={() => applyMutation.mutate(template.templateKey)}
-                >
-                  {isCurrent ? <CheckCircle2 className="size-4" /> : template.tier === 'premium' ? <Sparkles className="size-4" /> : <Layers3 className="size-4" />}
-                  {isCurrent ? 'Current Template' : isApplying ? 'Applying' : 'Apply Template'}
-                </Button>
-              </div>
-            </article>
-          );
-        })}
+      <CatalogSection
+        title="Premium Templates"
+        description="Locked and approved premium templates with richer layouts, premium hero behavior, and stronger visual sections."
+        templates={premiumTemplates}
+        website={website}
+        currentTemplateKey={currentTemplateKey}
+        isApplying={applyMutation.isPending}
+        applyingTemplateKey={applyMutation.variables}
+        onSelect={setPendingTemplate}
+      />
+
+      <CatalogSection
+        title="Classic Templates"
+        description="Available classic templates for straightforward business websites."
+        templates={classicTemplates}
+        website={website}
+        currentTemplateKey={currentTemplateKey}
+        isApplying={applyMutation.isPending}
+        applyingTemplateKey={applyMutation.variables}
+        onSelect={setPendingTemplate}
+      />
+
+      <CatalogSection
+        title="All Templates"
+        description="Browse every template. Premium payment controls will be added in a future release; selection is open during pilot."
+        templates={sortedTemplates}
+        website={website}
+        currentTemplateKey={currentTemplateKey}
+        isApplying={applyMutation.isPending}
+        applyingTemplateKey={applyMutation.variables}
+        onSelect={setPendingTemplate}
+      />
+
+      {pendingTemplate && (
+        <TemplateChangeConfirmation
+          template={pendingTemplate}
+          isApplying={applyMutation.isPending}
+          onCancel={() => setPendingTemplate(null)}
+          onConfirm={() => {
+            applyMutation.mutate(pendingTemplate.templateKey, {
+              onSuccess: () => setPendingTemplate(null),
+            });
+          }}
+        />
+      )}
+    </section>
+  );
+}
+
+function CatalogSection({
+  title,
+  description,
+  templates,
+  website,
+  currentTemplateKey,
+  isApplying,
+  applyingTemplateKey,
+  onSelect,
+}: {
+  title: string;
+  description: string;
+  templates: CatalogCard[];
+  website: Website;
+  currentTemplateKey: TemplateKey;
+  isApplying: boolean;
+  applyingTemplateKey?: string;
+  onSelect: (template: CatalogCard) => void;
+}) {
+  if (templates.length === 0) return null;
+
+  return (
+    <section className="grid gap-4" data-testid={`template-section-${slugify(title)}`}>
+      <div>
+        <h2 className="text-lg font-semibold text-slate-950">{title}</h2>
+        <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-500">{description}</p>
+      </div>
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {templates.map((template) => (
+          <TemplateCard
+            key={`${title}-${template.templateKey}`}
+            template={template}
+            website={website}
+            isCurrent={template.templateKey === currentTemplateKey}
+            isRecommended={isRecommendedTemplate(template, website.template?.businessType)}
+            isApplying={isApplying && applyingTemplateKey === template.templateKey}
+            isDisabled={isApplying}
+            onSelect={() => onSelect(template)}
+          />
+        ))}
       </div>
     </section>
+  );
+}
+
+function TemplateCard({
+  template,
+  website,
+  isCurrent,
+  isRecommended,
+  isApplying,
+  isDisabled,
+  onSelect,
+}: {
+  template: CatalogCard;
+  website: Website;
+  isCurrent: boolean;
+  isRecommended: boolean;
+  isApplying: boolean;
+  isDisabled: boolean;
+  onSelect: () => void;
+}) {
+  const displayTier = displayTierForTemplate(template);
+  const catalogStatus = template.metadata.catalogStatus ?? (template.metadata.status === 'planned' ? 'coming_soon' : 'available');
+  const selectable = isSelectableTemplate(template);
+  const highlights = template.metadata.previewHighlights ?? [];
+
+  return (
+    <article className={`panel flex min-h-[31rem] flex-col overflow-hidden ${displayTier === 'Premium' ? 'border-amber-200 shadow-[0_20px_60px_rgba(120,68,20,.10)]' : ''}`}>
+      <img
+        src={`/template-previews/${template.previewImage}`}
+        alt={`${template.displayName} preview`}
+        className="aspect-[16/10] w-full border-b border-slate-200 bg-slate-100 object-cover"
+        onError={(event) => {
+          event.currentTarget.style.display = 'none';
+        }}
+      />
+      <div className="flex grow flex-col gap-4 p-5">
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge tone={displayTier === 'Premium' ? 'amber' : 'slate'}>{displayTier}</Badge>
+          {catalogStatus === 'locked' && <Badge tone="green">Approved Premium</Badge>}
+          {catalogStatus === 'coming_soon' && <Badge tone="slate">Coming soon</Badge>}
+          {isRecommended && <Badge tone="green">Recommended</Badge>}
+          {isCurrent && <Badge tone="green">Current template</Badge>}
+        </div>
+        <div>
+          <h3 className="text-lg font-semibold text-slate-950">{template.displayName}</h3>
+          <p className="mt-1 text-sm text-slate-500">{template.category} · {template.industry}</p>
+        </div>
+        <p className="text-sm leading-6 text-slate-600">{template.description}</p>
+        {highlights.length > 0 && (
+          <ul className="grid gap-2 text-sm text-slate-600">
+            {highlights.slice(0, 3).map((highlight) => (
+              <li key={highlight} className="flex gap-2">
+                <span className="mt-2 size-1.5 rounded-full bg-teal-700" />
+                <span>{highlight}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        <p className="mt-auto rounded-md bg-slate-50 px-3 py-2 text-xs leading-5 text-slate-500">
+          {displayTier === 'Premium'
+            ? 'Premium template available during pilot. Payment control will be added in a future release.'
+            : 'Classic template for straightforward website publishing.'}
+        </p>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {selectable ? (
+            <Link to={`/app/websites/${website.id}/preview?templateKey=${template.templateKey}`}>
+              <Button className="w-full" variant="secondary">
+                <Eye className="size-4" />
+                Preview
+              </Button>
+            </Link>
+          ) : (
+            <Button className="w-full" variant="secondary" disabled>
+              <Eye className="size-4" />
+              Preview
+            </Button>
+          )}
+          <Button
+            className="w-full"
+            disabled={isCurrent || isDisabled || !selectable}
+            variant={isCurrent ? 'secondary' : 'primary'}
+            onClick={onSelect}
+          >
+            {isCurrent ? <CheckCircle2 className="size-4" /> : displayTier === 'Premium' ? <Sparkles className="size-4" /> : <Layers3 className="size-4" />}
+            {isCurrent ? 'Current' : isApplying ? 'Applying' : selectable ? 'Use template' : 'Coming soon'}
+          </Button>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function TemplateChangeConfirmation({
+  template,
+  isApplying,
+  onCancel,
+  onConfirm,
+}: {
+  template: CatalogCard;
+  isApplying: boolean;
+  onCancel: () => void;
+  onConfirm: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/50 px-4" role="dialog" aria-modal="true" aria-labelledby="template-change-title">
+      <section className="w-full max-w-lg rounded-lg bg-white p-6 shadow-2xl">
+        <Badge tone={displayTierForTemplate(template) === 'Premium' ? 'amber' : 'slate'}>{displayTierForTemplate(template)}</Badge>
+        <h2 id="template-change-title" className="mt-4 text-xl font-semibold text-slate-950">Change template to {template.displayName}?</h2>
+        <p className="mt-3 text-sm leading-6 text-slate-600">
+          Changing template may change the layout of your public website, but your business data, menu, gallery, and contact information will remain.
+        </p>
+        <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <Button variant="secondary" onClick={onCancel} disabled={isApplying}>Cancel</Button>
+          <Button onClick={onConfirm} disabled={isApplying}>
+            <Layers3 className="size-4" />
+            {isApplying ? 'Applying' : 'Confirm change'}
+          </Button>
+        </div>
+      </section>
+    </div>
   );
 }
 
@@ -204,12 +394,6 @@ function textColorFor(hex: string) {
   return luminance > 0.58 ? '#111827' : '#ffffff';
 }
 
-function sortTemplates(templates: TemplateCatalogItem[], businessType?: string) {
-  return [...templates].sort((a, b) => {
-    const aRecommended = businessType && a.recommendedBusinessTypes.includes(businessType) ? 0 : 1;
-    const bRecommended = businessType && b.recommendedBusinessTypes.includes(businessType) ? 0 : 1;
-    if (aRecommended !== bRecommended) return aRecommended - bRecommended;
-    if (a.tier !== b.tier) return a.tier === 'standard' ? -1 : 1;
-    return a.displayName.localeCompare(b.displayName);
-  });
+function slugify(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }

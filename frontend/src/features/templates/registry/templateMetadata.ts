@@ -14,6 +14,9 @@ export const templateMetadata: Record<TemplateKey, TemplateMetadata> = {
     tier: 'standard',
     recommendedBusinessTypes: ['WARTEG', 'RESTAURANT'],
     status: 'active',
+    catalogStatus: 'available',
+    previewHighlights: ['Menu-first layout', 'WhatsApp and directions CTA', 'Classic restaurant sections'],
+    capabilities: { formattedOpeningHours: true },
   },
   restaurant_premium: {
     key: 'restaurant_premium',
@@ -26,6 +29,9 @@ export const templateMetadata: Record<TemplateKey, TemplateMetadata> = {
     tier: 'premium',
     recommendedBusinessTypes: ['RESTAURANT', 'WARTEG', 'CAFE'],
     status: 'active',
+    catalogStatus: 'locked',
+    previewHighlights: ['Premium hero and reservation flow', 'Signature menu sections', 'Full menu modal with item detail'],
+    capabilities: { heroSlideshow: true, premiumMenuModal: true, galleryBatchUpload: true, menuItemDetail: true, formattedOpeningHours: true },
     supportsHeroSlideshow: true,
   },
   restaurant_luxury: {
@@ -39,6 +45,8 @@ export const templateMetadata: Record<TemplateKey, TemplateMetadata> = {
     tier: 'luxury',
     recommendedBusinessTypes: ['RESTAURANT', 'CAFE'],
     status: 'planned',
+    catalogStatus: 'coming_soon',
+    previewHighlights: ['Luxury editorial direction', 'High-end dining copy', 'Future premium commerce track'],
   },
   laundry_clean: {
     key: 'laundry_clean',
@@ -51,6 +59,9 @@ export const templateMetadata: Record<TemplateKey, TemplateMetadata> = {
     tier: 'standard',
     recommendedBusinessTypes: ['LAUNDRY'],
     status: 'active',
+    catalogStatus: 'available',
+    previewHighlights: ['Service pricing layout', 'Pickup contact CTA', 'Laundry-focused proof sections'],
+    capabilities: { formattedOpeningHours: true },
   },
   cafe_minimal: {
     key: 'cafe_minimal',
@@ -63,6 +74,8 @@ export const templateMetadata: Record<TemplateKey, TemplateMetadata> = {
     tier: 'standard',
     recommendedBusinessTypes: ['CAFE'],
     status: 'planned',
+    catalogStatus: 'coming_soon',
+    previewHighlights: ['Simple cafe profile', 'Basic menu and visit details', 'Future classic cafe option'],
   },
   cafe_modern: {
     key: 'cafe_modern',
@@ -75,6 +88,9 @@ export const templateMetadata: Record<TemplateKey, TemplateMetadata> = {
     tier: 'premium',
     recommendedBusinessTypes: ['CAFE'],
     status: 'active',
+    catalogStatus: 'available',
+    previewHighlights: ['Modern cafe landing page', 'Lifestyle story sections', 'Classic public CTA structure'],
+    capabilities: { formattedOpeningHours: true },
   },
   cafe_premium: {
     key: 'cafe_premium',
@@ -87,6 +103,9 @@ export const templateMetadata: Record<TemplateKey, TemplateMetadata> = {
     tier: 'premium',
     recommendedBusinessTypes: ['CAFE'],
     status: 'active',
+    catalogStatus: 'locked',
+    previewHighlights: ['Premium cafe hero and menu-first flow', 'Coffee & Bites modal with item detail', 'Warm ambience and placeholder treatment'],
+    capabilities: { heroSlideshow: true, premiumMenuModal: true, galleryBatchUpload: true, menuItemDetail: true, formattedOpeningHours: true },
     supportsHeroSlideshow: true,
   },
   clinic_professional: {
@@ -100,6 +119,9 @@ export const templateMetadata: Record<TemplateKey, TemplateMetadata> = {
     tier: 'standard',
     recommendedBusinessTypes: ['CLINIC'],
     status: 'active',
+    catalogStatus: 'available',
+    previewHighlights: ['Clinic service structure', 'Trust and contact sections', 'Appointment-oriented layout'],
+    capabilities: { formattedOpeningHours: true },
   },
   corporate_executive: {
     key: 'corporate_executive',
@@ -112,6 +134,9 @@ export const templateMetadata: Record<TemplateKey, TemplateMetadata> = {
     tier: 'premium',
     recommendedBusinessTypes: ['CLINIC', 'LOCAL_SERVICE', 'RETAIL'],
     status: 'active',
+    catalogStatus: 'available',
+    previewHighlights: ['Executive business presentation', 'Trust-led service sections', 'Professional contact flow'],
+    capabilities: { formattedOpeningHours: true },
   },
   minimal_business: {
     key: 'minimal_business',
@@ -124,6 +149,9 @@ export const templateMetadata: Record<TemplateKey, TemplateMetadata> = {
     tier: 'standard',
     recommendedBusinessTypes: ['LAUNDRY', 'WORKSHOP', 'SALON', 'RETAIL', 'LOCAL_SERVICE'],
     status: 'active',
+    catalogStatus: 'available',
+    previewHighlights: ['Flexible business profile', 'Services and contact sections', 'Safe fallback layout'],
+    capabilities: { formattedOpeningHours: true },
   },
 };
 

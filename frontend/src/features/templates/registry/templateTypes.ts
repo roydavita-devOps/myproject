@@ -36,6 +36,15 @@ export type TemplateMetadata = {
   tier: TemplateTier;
   recommendedBusinessTypes: string[];
   status: 'active' | 'planned';
+  catalogStatus?: 'available' | 'locked' | 'coming_soon';
+  previewHighlights?: string[];
+  capabilities?: {
+    heroSlideshow?: boolean;
+    premiumMenuModal?: boolean;
+    galleryBatchUpload?: boolean;
+    menuItemDetail?: boolean;
+    formattedOpeningHours?: boolean;
+  };
   supportsHeroSlideshow?: boolean;
 };
 

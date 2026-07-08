@@ -24,6 +24,8 @@ Stage 9.9B confirms Premium Hero Display as a premium template capability for Re
 
 Stage 9.9C locks Cafe Premium as the second approved Premium Template. Cafe Premium proves foundation reuse without cloning Restaurant Premium layout or restaurant-specific language.
 
+Stage 9.10 uses template catalog metadata to expose premium-only capabilities in the selection experience while keeping payment/entitlement enforcement deferred.
+
 The system separates:
 
 - Template = layout and experience.
@@ -49,6 +51,7 @@ Included:
 - Restaurant Premium depth tokens for CTA gradients, button borders, button shadows, dark surface gradients, footer gradients, and modal surface gradients.
 - Cafe Premium warm placeholder and modal accent usage for missing image states, cafe-specific price chips, focus rings, detail labels, and gallery fallback visuals.
 - Premium Hero Display reuse for Restaurant Premium and Cafe Premium through existing `Theme.heroMedia`.
+- Template catalog capability metadata for premium-only UI readiness.
 
 Excluded:
 
@@ -210,6 +213,7 @@ No Prisma migration is required for Stage 9.9 Cafe Premium redesign.
 No Prisma migration is required for Stage 9.9A Cafe Premium warm accent and placeholder polish.
 No Prisma migration is required for Stage 9.9B Cafe Premium Hero Display controls.
 No Prisma migration is required for Stage 9.9C Cafe Premium template lock.
+No Prisma migration is required for Stage 9.10 Premium Template Catalog & Template Selection Readiness.
 
 Reason:
 
@@ -249,3 +253,9 @@ Stage 9.9C Cafe Premium lock guidance:
 - Cafe Premium-specific coffee, pastry, ambience/corner, morning ritual, and cafe visit language is not reusable without adaptation.
 - Future premium templates may reuse semantic tokens, Hero Display capability, Premium Full Menu modal patterns, item detail browsing, placeholder standards, formatted prices/opening hours, and CTA hierarchy.
 - Future premium templates must keep their own business-specific copy, mood, and section rhythm.
+
+Stage 9.10 catalog guidance:
+
+- Locked premium templates are visible as premium products before payment enforcement exists.
+- Premium-only capabilities should be metadata-driven and not copied into classic templates by default.
+- Business Type remains a recommendation signal; Template remains user choice.

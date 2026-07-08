@@ -507,13 +507,16 @@ test.describe('SaaS smoke test', () => {
 
     await page.goto(`/app/websites/${session.websiteId}/templates`);
 
-    await expect(page.getByRole('heading', { name: 'Templates' })).toBeVisible();
-    const restaurantClassic = page.locator('article').filter({ hasText: 'Restaurant Classic' });
-    await expect(restaurantClassic.getByRole('button', { name: /current template/i })).toBeVisible();
-    const restaurantPremium = page.locator('article').filter({ hasText: 'Restaurant Premium' });
-    await expect(restaurantPremium.getByText('PREMIUM', { exact: true })).toBeVisible();
-    await restaurantPremium.getByRole('button', { name: /apply template/i }).click();
-    await expect(restaurantPremium.getByRole('button', { name: /current template/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Templates', exact: true })).toBeVisible();
+    const restaurantClassic = page.getByTestId('template-section-classic-templates').locator('article').filter({ hasText: 'Restaurant Classic' });
+    await expect(restaurantClassic.getByRole('button', { name: /^current$/i })).toBeVisible();
+    const restaurantPremium = page.getByTestId('template-section-premium-templates').locator('article').filter({ hasText: 'Restaurant Premium' });
+    await expect(restaurantPremium.getByText('Premium', { exact: true })).toBeVisible();
+    await expect(restaurantPremium.getByText('Approved Premium', { exact: true })).toBeVisible();
+    await restaurantPremium.getByRole('button', { name: /use template/i }).click();
+    await expect(page.getByRole('dialog', { name: /change template to restaurant premium/i })).toBeVisible();
+    await page.getByRole('button', { name: /confirm change/i }).click();
+    await expect(restaurantPremium.getByRole('button', { name: /^current$/i })).toBeVisible();
 
     const publicSite = await api.get(`/api/v1/public/site/${slug}`);
     expect(publicSite.ok()).toBeTruthy();
@@ -543,13 +546,16 @@ test.describe('SaaS smoke test', () => {
     await seedSession(page, session);
     await page.goto(`/app/websites/${session.websiteId}/templates`);
 
-    await expect(page.getByRole('heading', { name: 'Templates' })).toBeVisible();
-    const cafeModern = page.locator('article').filter({ hasText: 'Cafe Modern' });
-    await expect(cafeModern.getByRole('button', { name: /current template/i })).toBeVisible();
-    const cafePremium = page.locator('article').filter({ hasText: 'Cafe Premium' });
-    await expect(cafePremium.getByText('PREMIUM', { exact: true })).toBeVisible();
-    await cafePremium.getByRole('button', { name: /apply template/i }).click();
-    await expect(cafePremium.getByRole('button', { name: /current template/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Templates', exact: true })).toBeVisible();
+    const cafeModern = page.getByTestId('template-section-classic-templates').locator('article').filter({ hasText: 'Cafe Modern' });
+    await expect(cafeModern.getByRole('button', { name: /^current$/i })).toBeVisible();
+    const cafePremium = page.getByTestId('template-section-premium-templates').locator('article').filter({ hasText: 'Cafe Premium' });
+    await expect(cafePremium.getByText('Premium', { exact: true })).toBeVisible();
+    await expect(cafePremium.getByText('Approved Premium', { exact: true })).toBeVisible();
+    await cafePremium.getByRole('button', { name: /use template/i }).click();
+    await expect(page.getByRole('dialog', { name: /change template to cafe premium/i })).toBeVisible();
+    await page.getByRole('button', { name: /confirm change/i }).click();
+    await expect(cafePremium.getByRole('button', { name: /^current$/i })).toBeVisible();
 
     const publicSite = await api.get(`/api/v1/public/site/${slug}`);
     expect(publicSite.ok()).toBeTruthy();
