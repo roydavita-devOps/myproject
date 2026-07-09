@@ -1,8 +1,9 @@
 import { ChangeEvent, DragEvent, FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router';
-import { CheckCircle2, Copy, Eye, ExternalLink, Images, Layers3, MessageCircle, Save, Send, Trash2, UploadCloud, XCircle } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Copy, Eye, ExternalLink, Images, Layers3, MessageCircle, Rocket, Save, Send, Trash2, UploadCloud, XCircle } from 'lucide-react';
 import { websitesApi } from './websites.api';
+import { evaluatePublishReadiness, ReadinessItem } from './publishReadiness';
 import { tenantsApi } from '../tenants/tenants.api';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
@@ -76,6 +77,7 @@ export function WebsiteEditorPage() {
   const [formError, setFormError] = useState('');
   const [slugMessage, setSlugMessage] = useState('');
   const [copied, setCopied] = useState(false);
+  const [publishConfirmOpen, setPublishConfirmOpen] = useState(false);
 
   useEffect(() => {
     if (!website) return;
@@ -100,6 +102,7 @@ export function WebsiteEditorPage() {
     if (!website?.tenant?.slug) return '';
     return `${window.location.origin}/site/${website.tenant.slug}`;
   }, [website?.tenant?.slug]);
+  const readiness = useMemo(() => website ? evaluatePublishReadiness(website) : null, [website]);
 
   const saveMutation = useMutation({
     mutationFn: () => websitesApi.update(websiteId, sanitizeWebsiteForm(form)),
@@ -124,6 +127,7 @@ export function WebsiteEditorPage() {
   const publishMutation = useMutation({
     mutationFn: () => websitesApi.publish(websiteId),
     onSuccess: (updatedWebsite) => {
+      setPublishConfirmOpen(false);
       syncWebsiteQueries(updatedWebsite);
     },
   });
@@ -193,7 +197,13 @@ export function WebsiteEditorPage() {
     window.setTimeout(() => setCopied(false), 1800);
   }
 
+  function requestPublish() {
+    if (!readiness?.readyToPublish) return;
+    setPublishConfirmOpen(true);
+  }
+
   if (isLoading || !website) return <LoadingState label="Loading website" />;
+  if (!readiness) return <LoadingState label="Loading publish readiness" />;
 
   return (
     <section className="grid gap-6 pb-20 lg:pb-0">
@@ -221,13 +231,97 @@ export function WebsiteEditorPage() {
               Unpublish
             </Button>
           ) : (
-            <Button className="w-full sm:w-auto" onClick={() => publishMutation.mutate()} disabled={publishMutation.isPending}>
+            <Button className="w-full sm:w-auto" onClick={requestPublish} disabled={publishMutation.isPending || !readiness.readyToPublish}>
               <Send className="size-4" />
               {publishMutation.isPending ? 'Publishing' : 'Publish'}
             </Button>
           )}
         </div>
       </div>
+
+      <section id="launch-readiness" className="panel grid gap-5 p-5" data-testid="publish-readiness-panel">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <Rocket className="size-5 text-teal-700" />
+              <h2 className="font-semibold text-slate-950">Website Launch Readiness</h2>
+              <Badge tone={readiness.readyToPublish ? 'green' : 'amber'}>{readiness.readyToPublish ? 'Ready to publish' : 'Incomplete'}</Badge>
+            </div>
+            <p className="mt-2 text-sm text-slate-500">
+              Complete required items before publishing. Recommended items improve trust but do not block launch.
+            </p>
+          </div>
+          <div className="grid gap-2 sm:flex sm:flex-wrap">
+            <Link to={`/app/websites/${website.id}/preview`}>
+              <Button className="w-full sm:w-auto" variant="secondary">
+                <Eye className="size-4" />
+                Review website
+              </Button>
+            </Link>
+            {website.status === 'PUBLISHED' ? (
+              <Button className="w-full sm:w-auto" variant="ghost" onClick={() => unpublishMutation.mutate()} disabled={unpublishMutation.isPending}>
+                <XCircle className="size-4" />
+                {unpublishMutation.isPending ? 'Unpublishing' : 'Unpublish'}
+              </Button>
+            ) : (
+              <Button className="w-full sm:w-auto" onClick={requestPublish} disabled={publishMutation.isPending || !readiness.readyToPublish}>
+                <Send className="size-4" />
+                {publishMutation.isPending ? 'Publishing' : 'Publish website'}
+              </Button>
+            )}
+          </div>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-3">
+          <LaunchMetric label="Required" value={`${readiness.summary.requiredPassed}/${readiness.summary.requiredTotal}`} tone={readiness.readyToPublish ? 'green' : 'amber'} />
+          <LaunchMetric label="Recommended" value={`${readiness.summary.recommendedPassed}/${readiness.summary.recommendedTotal}`} tone="blue" />
+          <LaunchMetric label="Overall readiness" value={`${readiness.summary.progressPercent}%`} tone={readiness.readyToPublish ? 'green' : 'amber'} />
+        </div>
+
+        <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+          <div className="h-full rounded-full bg-teal-700 transition-all" style={{ width: `${readiness.summary.progressPercent}%` }} />
+        </div>
+
+        <div className="grid gap-4 lg:grid-cols-2">
+          <ReadinessChecklist title="Required before publish" items={readiness.required} />
+          <ReadinessChecklist title="Recommended polish" items={readiness.recommended} />
+        </div>
+
+        {publicUrl && (
+          <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
+            <p className="text-sm font-medium text-slate-700">Public URL</p>
+            <p className="mt-1 break-all text-sm text-slate-500">{publicUrl}</p>
+          </div>
+        )}
+      </section>
+
+      {publishConfirmOpen && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/60 p-4" role="presentation">
+          <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow-xl" role="dialog" aria-modal="true" aria-labelledby="publish-confirmation-title">
+            <div className="flex items-start gap-3">
+              <div className="rounded-full bg-teal-50 p-2 text-teal-700">
+                <Rocket className="size-5" />
+              </div>
+              <div>
+                <h2 id="publish-confirmation-title" className="text-lg font-semibold text-slate-950">Publish this website?</h2>
+                <p className="mt-2 text-sm leading-6 text-slate-500">
+                  Required checks are complete. Publishing will make this website available at the public URL.
+                </p>
+              </div>
+            </div>
+            {publicUrl && <p className="mt-4 break-all rounded-md bg-slate-50 p-3 text-sm text-slate-600">{publicUrl}</p>}
+            <div className="mt-5 grid gap-2 sm:flex sm:justify-end">
+              <Button variant="secondary" onClick={() => setPublishConfirmOpen(false)} disabled={publishMutation.isPending}>
+                Cancel
+              </Button>
+              <Button onClick={() => publishMutation.mutate()} disabled={publishMutation.isPending}>
+                <Send className="size-4" />
+                {publishMutation.isPending ? 'Publishing' : 'Confirm publish'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {website.status === 'PUBLISHED' && publicUrl && (
         <section className="panel grid gap-4 p-5">
@@ -256,7 +350,7 @@ export function WebsiteEditorPage() {
         </section>
       )}
 
-      <form className="panel grid gap-5 p-5" onSubmit={handleSubmit}>
+      <form id="business-information" className="panel grid gap-5 p-5" onSubmit={handleSubmit}>
         <div>
           <h2 className="font-semibold text-slate-950">Business information</h2>
           <p className="mt-1 text-sm text-slate-500">Informasi ini tampil di website publik.</p>
@@ -302,7 +396,7 @@ export function WebsiteEditorPage() {
         </div>
       </form>
 
-      <form className="panel grid gap-4 p-5" onSubmit={handleSlugSubmit}>
+      <form id="website-address" className="panel grid gap-4 p-5" onSubmit={handleSlugSubmit}>
         <div>
           <h2 className="font-semibold text-slate-950">Business slug</h2>
           <p className="mt-1 text-sm text-slate-500">Changing the slug may change your public website URL.</p>
@@ -326,7 +420,7 @@ export function WebsiteEditorPage() {
         </div>
       </form>
 
-      <section className="panel grid gap-5 p-5">
+      <section id="branding-assets" className="panel grid gap-5 p-5">
         <div>
           <h2 className="font-semibold text-slate-950">Branding assets</h2>
           <p className="mt-1 text-sm text-slate-500">Upload gambar utama agar website siap dibagikan ke pelanggan.</p>
@@ -372,7 +466,7 @@ export function WebsiteEditorPage() {
         )}
       </section>
 
-      <section className="panel grid gap-5 p-5">
+      <section id="gallery" className="panel grid gap-5 p-5">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
             <h2 className="font-semibold text-slate-950">Gallery</h2>
@@ -402,6 +496,54 @@ export function WebsiteEditorPage() {
         Simpan informasi, upload logo, tambah menu, lalu publish untuk mengaktifkan panel share.
       </section>
     </section>
+  );
+}
+
+function LaunchMetric({ label, value, tone }: { label: string; value: string; tone: 'green' | 'amber' | 'blue' }) {
+  const toneClass = {
+    green: 'border-emerald-200 bg-emerald-50 text-emerald-800',
+    amber: 'border-amber-200 bg-amber-50 text-amber-800',
+    blue: 'border-sky-200 bg-sky-50 text-sky-800',
+  }[tone];
+
+  return (
+    <div className={`rounded-md border p-4 ${toneClass}`}>
+      <p className="text-xs font-semibold uppercase tracking-wide">{label}</p>
+      <p className="mt-2 text-2xl font-semibold">{value}</p>
+    </div>
+  );
+}
+
+function ReadinessChecklist({ title, items }: { title: string; items: ReadinessItem[] }) {
+  return (
+    <div className="grid gap-3 rounded-md border border-slate-200 bg-white p-4">
+      <h3 className="font-semibold text-slate-950">{title}</h3>
+      <div className="grid gap-2">
+        {items.map((item) => (
+          <div key={item.key} className="flex items-start gap-3 rounded-md border border-slate-100 bg-slate-50 p-3">
+            {item.status === 'passed' ? (
+              <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-700" />
+            ) : (
+              <AlertCircle className={`mt-0.5 size-4 shrink-0 ${item.severity === 'required' ? 'text-amber-700' : 'text-sky-700'}`} />
+            )}
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <p className="font-medium text-slate-950">{item.label}</p>
+                <Badge tone={item.status === 'passed' ? 'green' : item.severity === 'required' ? 'amber' : 'slate'}>
+                  {item.status === 'passed' ? 'Done' : item.severity === 'required' ? 'Required' : 'Recommended'}
+                </Badge>
+              </div>
+              <p className="mt-1 text-sm leading-5 text-slate-500">{item.description}</p>
+              {item.status !== 'passed' && item.actionHref && (
+                <Link className="mt-2 inline-flex text-sm font-medium text-teal-700 hover:text-teal-800" to={item.actionHref}>
+                  {item.actionLabel ?? 'Review'}
+                </Link>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 

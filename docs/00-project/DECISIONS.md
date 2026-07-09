@@ -729,3 +729,22 @@ Decision:
 Reason:
 
 - The project has enough documentation volume to require better onboarding, auditability, and executive readability.
+
+## Publish Readiness Gate
+
+Status: Implemented for Stage 9.11.
+
+Decision:
+
+- Website publishing must be gated by explicit launch readiness checks in the owner-facing editor.
+- Required checks block publish when core public-site data is missing: business name, business type, selected template, valid slug, at least one contact method, address, opening hours, public renderer availability, and food/cafe menu readiness.
+- Recommended checks do not block publish but should be visible: hero media, logo, description, gallery depth, menu depth, featured menu, menu images, menu descriptions, maps, and social links.
+- The gate reuses existing `Website.status`, publish/unpublish endpoints, preview route, and public site route.
+- Public route enforcement remains status-based: public slug routes return only `PUBLISHED` websites.
+- Premium templates remain publishable before payment; subscription, entitlement, marketplace, checkout, hosting renewal, and template access enforcement remain future work.
+
+Reason:
+
+- Owners need a clear launch checklist before sharing their website publicly.
+- Required/recommended separation prevents accidental incomplete launches without forcing every premium polish item.
+- Reusing existing publish state avoids a schema migration and keeps Stage 9.11 scoped to launch flow readiness rather than commercial gating.

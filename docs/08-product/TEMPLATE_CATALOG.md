@@ -451,3 +451,24 @@ Not implemented:
 - Entitlement restrictions.
 - Preview-before-apply.
 - Template switch history.
+
+## Stage 9.11 Publish Readiness Notes
+
+Stage 9.11 adds website launch readiness without changing template ownership, payment, or marketplace access.
+
+Implemented:
+
+- Website editor displays a publish readiness panel for the selected website.
+- Required checklist blocks publish until core public-site data is complete.
+- Recommended checklist shows launch polish opportunities without blocking publish.
+- Restaurant and Cafe templates require at least one valid menu item with visible name and formatted price before publish.
+- Restaurant Premium and Cafe Premium remain publishable before subscription/payment enforcement.
+- Preview-before-publish, publish confirmation, public URL display, and unpublish state use existing routes and status.
+
+Not implemented:
+
+- Template marketplace.
+- Billing, checkout, subscription, entitlement, or access restriction.
+- Hosting renewal or custom domain launch flow.
+- New template registry keys.
+- New backend schema or Prisma migration.

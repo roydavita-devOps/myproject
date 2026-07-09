@@ -1,10 +1,10 @@
 # Project Status
 
-Last updated: 2026-07-08
+Last updated: 2026-07-09
 
 ## Current Stage
 
-Stage 9.10 - Premium Template Catalog & Template Selection Readiness.
+Stage 9.11 - Publish Readiness Gate & Website Launch Flow.
 
 Status: implemented, locally validated, evidence captured, and ready for approval. Railway deployment remains deferred while Railway trial is inactive/expired.
 
@@ -67,7 +67,8 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 | Stage 9.9A Cafe Premium Warm Accent & Placeholder Polish | Approved locally. |
 | Stage 9.9B Cafe Premium Hero Display Controls | Approved locally. |
 | Stage 9.9C Cafe Premium Template Lock | Approved locally. |
-| Stage 9.10 Premium Template Catalog & Template Selection Readiness | Implemented and locally validated; awaiting approval. |
+| Stage 9.10 Premium Template Catalog & Template Selection Readiness | Implemented and locally validated. |
+| Stage 9.11 Publish Readiness Gate & Website Launch Flow | Implemented and locally validated; awaiting approval. |
 
 ## Current Blockers
 
@@ -102,16 +103,17 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 | Cafe Premium hero display controls | Resolved for Stage 9.9B implementation | Hero Display / Rotating Images is now a premium template capability exposed to Restaurant Premium and Cafe Premium, while classic templates remain guarded. |
 | Cafe Premium template lock | Resolved for Stage 9.9C documentation | `cafe_premium` is documented as the second approved Premium Template after `restaurant_premium`, with cafe-specific principles, reusable premium patterns, non-reusable cafe language, and Railway local-only caveat. |
 | Premium catalog readiness | Resolved for Stage 9.10 implementation | Template selection now separates Recommended, Premium, Classic, and All templates; Restaurant Premium and Cafe Premium show as approved premium; preview is non-persistent; template change uses confirmation; payment/entitlement remains deferred. |
+| Publish readiness gate | Resolved for Stage 9.11 implementation | Website editor now evaluates required and recommended launch checks before publishing, blocks incomplete publish from the UI, shows preview/public URL actions, and uses a confirmation dialog before publish. Backend published-site enforcement already returns only `PUBLISHED` sites on public routes. |
 | Railway trial status | Deferred production validation | Railway trial is currently inactive/expired. Development and documentation lock continue locally; production backend redeploy resumes after Railway billing/reactivation. |
 | Luxury templates | Paused | No Luxury template implementation until separately approved. |
 | Template Catalog UI | Paused | No marketplace, comparison page, entitlement, or subscription access logic in Stage 9.7B. |
 
 ## Next Actions
 
-1. Review Stage 9.10 Premium Template Catalog & Template Selection Readiness report and evidence.
+1. Review Stage 9.11 Publish Readiness Gate & Website Launch Flow report and evidence.
 2. Approve or request corrections.
 3. Recommended next path after approval: continue toward production/commercial readiness or explicitly approve the next premium template track.
-4. Keep payment, subscription, marketplace, hosting renewal, publish gate, video hero, advanced media library, Clinic Premium, Corporate Premium, Laundry Premium redesign, and new backend features paused until separately approved.
+4. Keep payment, subscription, marketplace, hosting renewal, video hero, advanced media library, Clinic Premium, Corporate Premium, Laundry Premium redesign, and unrelated backend features paused until separately approved.
 5. When Railway is reactivated, redeploy the latest GitHub commit and revalidate production health, migrations, frontend/backend alignment, Supabase-backed uploads, Hero Display, Restaurant Premium, and Cafe Premium.
 6. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
 
@@ -119,7 +121,7 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 
 | System | Current Status |
 | --- | --- |
-| Local Docker | Running and validated during Stage 9.10. |
+| Local Docker | Running and validated during Stage 9.11. |
 | GitHub | Latest code and documentation branch strategy uses `main`, `staging`, and `pilot`. |
 | Vercel | Production frontend active. |
 | Railway | Trial currently inactive/expired; production backend redeploy is deferred until Railway billing/reactivation. |
@@ -165,5 +167,6 @@ Status: implemented, locally validated, evidence captured, and ready for approva
 - Cafe Premium hero display controls report: [../06-modern-template/reports/PHASE-9.9B-Cafe-Premium-Hero-Display-Control-Report.md](../06-modern-template/reports/PHASE-9.9B-Cafe-Premium-Hero-Display-Control-Report.md)
 - Cafe Premium template lock report: [../06-modern-template/reports/PHASE-9.9C-Cafe-Premium-Template-Lock-Report.md](../06-modern-template/reports/PHASE-9.9C-Cafe-Premium-Template-Lock-Report.md)
 - Premium template catalog readiness report: [../06-modern-template/reports/PHASE-9.10-Premium-Template-Catalog-And-Selection-Readiness-Report.md](../06-modern-template/reports/PHASE-9.10-Premium-Template-Catalog-And-Selection-Readiness-Report.md)
+- Publish readiness gate report: [../06-modern-template/reports/PHASE-9.11-Publish-Readiness-Gate-And-Website-Launch-Flow-Report.md](../06-modern-template/reports/PHASE-9.11-Publish-Readiness-Gate-And-Website-Launch-Flow-Report.md)
 - Template Catalog readiness audit: [../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md](../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md)
 - Template consistency audit: [../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md](../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md)

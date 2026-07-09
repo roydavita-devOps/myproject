@@ -1,0 +1,32 @@
+{
+  "generatedAt": "2026-07-09T02:11:16.753Z",
+  "baseURL": "http://127.0.0.1",
+  "screenshots": {
+    "publishReadinessIncomplete": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\publish-readiness-9.11/publish-readiness-incomplete.png",
+    "publishReadinessRequiredItems": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\publish-readiness-9.11/publish-readiness-required-items.png",
+    "publishReadinessRecommendedItems": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\publish-readiness-9.11/publish-readiness-recommended-items.png",
+    "publishReadinessActionLinks": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\publish-readiness-9.11/publish-readiness-action-links.png",
+    "publishReadinessReadyToPublish": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\publish-readiness-9.11/publish-readiness-ready-to-publish.png",
+    "publishConfirmationDialog": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\publish-readiness-9.11/publish-confirmation-dialog.png",
+    "publishSuccessState": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\publish-readiness-9.11/publish-success-state.png",
+    "publicUrlAfterPublish": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\publish-readiness-9.11/public-url-after-publish.png",
+    "previewBeforePublish": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\publish-readiness-9.11/preview-before-publish.png",
+    "unpublishedPublicState": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\publish-readiness-9.11/unpublished-public-state.png",
+    "restaurantPremiumReadyCheck": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\publish-readiness-9.11/restaurant-premium-ready-check.png",
+    "cafePremiumReadyCheck": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\publish-readiness-9.11/cafe-premium-ready-check.png"
+  },
+  "results": [
+    {
+      "target": "incomplete_publish_blocked",
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_ready_publish_preview_public_unpublish",
+      "status": "passed"
+    },
+    {
+      "target": "cafe_premium_ready_check",
+      "status": "passed"
+    }
+  ]
+}

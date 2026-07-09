@@ -1,6 +1,6 @@
 # Roadmap
 
-Last updated: 2026-07-08
+Last updated: 2026-07-09
 
 ## Completed
 
@@ -61,11 +61,12 @@ Last updated: 2026-07-08
 - Stage 9.9B Cafe Premium Hero Display Controls.
 - Stage 9.9C Cafe Premium Template Lock documentation.
 - Stage 9.10 Premium Template Catalog & Template Selection Readiness.
+- Stage 9.11 Publish Readiness Gate & Website Launch Flow.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Premium Template Catalog & Template Selection Readiness is implemented and awaiting product approval.
+- Publish Readiness Gate & Website Launch Flow is implemented locally and awaiting product approval.
 
 ## Planned
 
@@ -218,6 +219,15 @@ Stage 9.8D-R9 improves Gallery management:
 
 - Gallery is treated as a batch-based content area, so users can select or drag multiple images at once.
 - Each selected file is validated independently and valid files continue uploading even when another file fails.
+
+Stage 9.11 establishes the minimum launch gate:
+
+- Publish is no longer treated as a blind status change in the editor UI.
+- Required checks must pass before the owner can publish from the website editor.
+- Required checks cover business identity, template selection, public slug, contact, address, opening hours, public template renderability, and food/cafe menu readiness.
+- Recommended checks cover hero media, logo, description, gallery depth, maps, social links, menu depth, featured menu, menu images, and menu descriptions.
+- Premium templates remain publishable before payment because subscription, entitlement, marketplace, and checkout enforcement are intentionally deferred.
+- Public routes continue using existing published-site enforcement, so unpublished websites are not returned by the public slug endpoint.
 - Gallery supports single image delete plus selected bulk delete without removing unrelated website, menu, tenant, or business data.
 - MVP upload formats are JPG, JPEG, PNG, and WEBP only; HEIC, HEIF, GIF, SVG, BMP, TIFF, and AVIF remain out of scope.
 - The existing upload processing/storage pipeline remains unchanged.
