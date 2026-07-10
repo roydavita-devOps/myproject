@@ -472,3 +472,28 @@ Not implemented:
 - Hosting renewal or custom domain launch flow.
 - New template registry keys.
 - New backend schema or Prisma migration.
+
+## Stage 9.11A Catalog Simplification Notes
+
+Stage 9.11A simplifies template selection into one primary recommendation and a smaller Free/Premium browsing model.
+
+Implemented:
+
+- Main template page shows Restaurant Premium as the only primary recommended card.
+- `View More Templates` opens the rest of the catalog in a modal.
+- Modal sections use only Free Templates and Premium Templates.
+- Cafe Premium remains available under Premium Templates.
+- Free templates remain available under Free Templates.
+- Luxury and planned/unfinished templates are hidden/deferred from the user-facing catalog.
+- Template preview, confirmation before change, persistence, public rendering, and Publish Readiness compatibility are preserved.
+
+Not implemented:
+
+- Payment.
+- Checkout.
+- Subscription.
+- Entitlement enforcement.
+- Marketplace.
+- Hosting renewal.
+- Luxury template work.
+- Backend or database changes.

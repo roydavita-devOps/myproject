@@ -62,11 +62,12 @@ Last updated: 2026-07-09
 - Stage 9.9C Cafe Premium Template Lock documentation.
 - Stage 9.10 Premium Template Catalog & Template Selection Readiness.
 - Stage 9.11 Publish Readiness Gate & Website Launch Flow.
+- Stage 9.11A Template Catalog Simplification & Free/Premium Focus.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Publish Readiness Gate & Website Launch Flow is implemented locally and awaiting product approval.
+- Template Catalog Simplification & Free/Premium Focus is implemented locally and awaiting product approval.
 
 ## Planned
 
@@ -228,6 +229,16 @@ Stage 9.11 establishes the minimum launch gate:
 - Recommended checks cover hero media, logo, description, gallery depth, maps, social links, menu depth, featured menu, menu images, and menu descriptions.
 - Premium templates remain publishable before payment because subscription, entitlement, marketplace, and checkout enforcement are intentionally deferred.
 - Public routes continue using existing published-site enforcement, so unpublished websites are not returned by the public slug endpoint.
+
+Stage 9.11A simplifies the user-facing catalog:
+
+- User-facing template tiers are reduced to Free and Premium.
+- Restaurant Premium is the only primary recommended template on the main template page.
+- Other Free and Premium templates are available through View More Templates.
+- Cafe Premium remains approved, premium, selectable, and previewable inside the modal.
+- Luxury and unfinished templates are hidden/deferred from the user-facing catalog.
+- Business Type remains a recommendation signal only and does not force selected template.
+- Payment, subscription, entitlement, marketplace, and hosting renewal remain deferred.
 - Gallery supports single image delete plus selected bulk delete without removing unrelated website, menu, tenant, or business data.
 - MVP upload formats are JPG, JPEG, PNG, and WEBP only; HEIC, HEIF, GIF, SVG, BMP, TIFF, and AVIF remain out of scope.
 - The existing upload processing/storage pipeline remains unchanged.

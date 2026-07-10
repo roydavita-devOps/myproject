@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router';
-import { ArrowLeft, CheckCircle2, Eye, Layers3, Palette, Save, Sparkles } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Eye, Layers3, Palette, Save, Sparkles, X } from 'lucide-react';
 import { templatesApi } from './templates.api';
 import { resolveTemplate } from './registry/templateResolver';
 import { presetsForVariant, resolvePremiumColorTokens, resolvePremiumVariant } from './premiumTheme';
@@ -11,7 +11,7 @@ import { Button } from '../../components/ui/Button';
 import { ErrorState, LoadingState } from '../../components/ui/State';
 import { Website } from '../../types/api';
 import { TemplateKey } from './registry/templateTypes';
-import { buildCatalogCards, CatalogCard, displayTierForTemplate, isRecommendedTemplate, isSelectableTemplate, sortTemplates } from './templateCatalog';
+import { buildCatalogCards, CatalogCard, displayTierForTemplate, isPrimaryRecommendedTemplate, isRecommendedTemplate, isSelectableTemplate, sortTemplates } from './templateCatalog';
 
 export function TemplateSelectionPage() {
   const { websiteId = '' } = useParams();
@@ -23,6 +23,7 @@ export function TemplateSelectionPage() {
   });
   const templatesQuery = useQuery({ queryKey: ['templates'], queryFn: templatesApi.list });
   const [pendingTemplate, setPendingTemplate] = useState<CatalogCard | null>(null);
+  const [isMoreTemplatesOpen, setMoreTemplatesOpen] = useState(false);
   const applyMutation = useMutation({
     mutationFn: (templateKey: string) => websitesApi.assignTemplate(websiteId, { templateKey }),
     onSuccess: (updatedWebsite) => {
@@ -49,9 +50,10 @@ export function TemplateSelectionPage() {
   const currentTemplateKey = resolveTemplate(website).metadata.key;
   const catalogCards = buildCatalogCards(templatesQuery.data ?? []);
   const sortedTemplates = sortTemplates(catalogCards, website.template?.businessType);
-  const recommendedTemplates = sortedTemplates.filter((template) => isRecommendedTemplate(template, website.template?.businessType) && isSelectableTemplate(template));
-  const premiumTemplates = sortedTemplates.filter((template) => displayTierForTemplate(template) === 'Premium' && isSelectableTemplate(template));
-  const classicTemplates = sortedTemplates.filter((template) => displayTierForTemplate(template) === 'Classic' && isSelectableTemplate(template));
+  const primaryTemplate = sortedTemplates.find(isPrimaryRecommendedTemplate);
+  const modalTemplates = sortedTemplates.filter((template) => !isPrimaryRecommendedTemplate(template) && isSelectableTemplate(template));
+  const freeTemplates = modalTemplates.filter((template) => displayTierForTemplate(template) === 'Free');
+  const premiumTemplates = modalTemplates.filter((template) => displayTierForTemplate(template) === 'Premium');
   const premiumVariant = resolvePremiumVariant(website);
 
   return (
@@ -61,7 +63,7 @@ export function TemplateSelectionPage() {
           <p className="text-sm font-medium text-slate-500">Website Design</p>
           <h1 className="mt-1 text-2xl font-semibold text-slate-950">Templates</h1>
           <p className="mt-1 max-w-2xl text-sm text-slate-500">
-            Pilih template aktif untuk {website.businessName}. Business type hanya rekomendasi; template tetap bisa dipilih lintas kategori.
+            Choose a template for {website.businessName}. We recommend starting with Restaurant Premium because it is our main approved premium foundation.
           </p>
         </div>
         <Link to={`/app/websites/${website.id}`}>
@@ -81,49 +83,49 @@ export function TemplateSelectionPage() {
         />
       )}
 
-      <CatalogSection
-        title="Recommended for your business"
-        description="Business type helps us sort templates first. You can still choose any available template."
-        templates={recommendedTemplates}
-        website={website}
-        currentTemplateKey={currentTemplateKey}
-        isApplying={applyMutation.isPending}
-        applyingTemplateKey={applyMutation.variables}
-        onSelect={setPendingTemplate}
-      />
+      <CurrentTemplateSummary website={website} currentTemplateKey={currentTemplateKey} />
 
-      <CatalogSection
-        title="Premium Templates"
-        description="Locked and approved premium templates with richer layouts, premium hero behavior, and stronger visual sections."
-        templates={premiumTemplates}
-        website={website}
-        currentTemplateKey={currentTemplateKey}
-        isApplying={applyMutation.isPending}
-        applyingTemplateKey={applyMutation.variables}
-        onSelect={setPendingTemplate}
-      />
+      {primaryTemplate && (
+        <section className="grid gap-4" data-testid="template-primary-recommendation">
+          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-slate-950">Recommended Template</h2>
+              <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-500">
+                Restaurant Premium is the primary premium reference for the current catalog. Other Free and Premium templates remain available.
+              </p>
+            </div>
+            <Button variant="secondary" onClick={() => setMoreTemplatesOpen(true)}>
+              <Layers3 className="size-4" />
+              View More Templates
+            </Button>
+          </div>
+          <div className="max-w-2xl">
+            <TemplateCard
+              template={primaryTemplate}
+              website={website}
+              isCurrent={primaryTemplate.templateKey === currentTemplateKey}
+              isRecommended
+              isPrimary
+              isApplying={applyMutation.isPending && applyMutation.variables === primaryTemplate.templateKey}
+              isDisabled={applyMutation.isPending}
+              onSelect={() => setPendingTemplate(primaryTemplate)}
+            />
+          </div>
+        </section>
+      )}
 
-      <CatalogSection
-        title="Classic Templates"
-        description="Available classic templates for straightforward business websites."
-        templates={classicTemplates}
-        website={website}
-        currentTemplateKey={currentTemplateKey}
-        isApplying={applyMutation.isPending}
-        applyingTemplateKey={applyMutation.variables}
-        onSelect={setPendingTemplate}
-      />
-
-      <CatalogSection
-        title="All Templates"
-        description="Browse every template. Premium payment controls will be added in a future release; selection is open during pilot."
-        templates={sortedTemplates}
-        website={website}
-        currentTemplateKey={currentTemplateKey}
-        isApplying={applyMutation.isPending}
-        applyingTemplateKey={applyMutation.variables}
-        onSelect={setPendingTemplate}
-      />
+      {isMoreTemplatesOpen && (
+        <TemplateCatalogModal
+          freeTemplates={freeTemplates}
+          premiumTemplates={premiumTemplates}
+          website={website}
+          currentTemplateKey={currentTemplateKey}
+          isApplying={applyMutation.isPending}
+          applyingTemplateKey={applyMutation.variables}
+          onClose={() => setMoreTemplatesOpen(false)}
+          onSelect={setPendingTemplate}
+        />
+      )}
 
       {pendingTemplate && (
         <TemplateChangeConfirmation
@@ -141,9 +143,95 @@ export function TemplateSelectionPage() {
   );
 }
 
-function CatalogSection({
+function CurrentTemplateSummary({ website, currentTemplateKey }: { website: Website; currentTemplateKey: TemplateKey }) {
+  const currentTemplate = resolveTemplate(website).metadata;
+
+  return (
+    <section className="panel grid gap-3 p-5" data-testid="template-current-selected">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div>
+          <p className="text-sm font-semibold uppercase text-slate-500">Current selected template</p>
+          <h2 className="mt-1 text-xl font-semibold text-slate-950">{currentTemplate.displayName}</h2>
+          <p className="mt-1 text-sm text-slate-500">{currentTemplate.description}</p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge tone={displayTierForTemplate({ metadata: currentTemplate }) === 'Premium' ? 'amber' : 'slate'}>
+            {displayTierForTemplate({ metadata: currentTemplate })}
+          </Badge>
+          <Badge tone="green">Selected</Badge>
+        </div>
+      </div>
+      <Link to={`/app/websites/${website.id}/preview?templateKey=${currentTemplateKey}`}>
+        <Button className="w-full sm:w-auto" variant="secondary">
+          <Eye className="size-4" />
+          Preview selected
+        </Button>
+      </Link>
+    </section>
+  );
+}
+
+function TemplateCatalogModal({
+  freeTemplates,
+  premiumTemplates,
+  website,
+  currentTemplateKey,
+  isApplying,
+  applyingTemplateKey,
+  onClose,
+  onSelect,
+}: {
+  freeTemplates: CatalogCard[];
+  premiumTemplates: CatalogCard[];
+  website: Website;
+  currentTemplateKey: TemplateKey;
+  isApplying: boolean;
+  applyingTemplateKey?: string;
+  onClose: () => void;
+  onSelect: (template: CatalogCard) => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/60 p-4" role="presentation">
+      <div className="max-h-[92vh] w-full max-w-6xl overflow-hidden rounded-lg bg-white shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="template-catalog-title">
+        <div className="flex items-start justify-between gap-4 border-b border-slate-200 p-5">
+          <div>
+            <h2 id="template-catalog-title" className="text-xl font-semibold text-slate-950">View More Templates</h2>
+            <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-500">
+              Browse available Free and Premium templates. Business type may show recommendation badges, but template choice stays under your control.
+            </p>
+          </div>
+          <Button variant="secondary" onClick={onClose}>
+            <X className="size-4" />
+            Close
+          </Button>
+        </div>
+        <div className="max-h-[calc(92vh-104px)] overflow-y-auto p-5">
+          <ModalTemplateSection
+            title="Free Templates"
+            templates={freeTemplates}
+            website={website}
+            currentTemplateKey={currentTemplateKey}
+            isApplying={isApplying}
+            applyingTemplateKey={applyingTemplateKey}
+            onSelect={onSelect}
+          />
+          <ModalTemplateSection
+            title="Premium Templates"
+            templates={premiumTemplates}
+            website={website}
+            currentTemplateKey={currentTemplateKey}
+            isApplying={isApplying}
+            applyingTemplateKey={applyingTemplateKey}
+            onSelect={onSelect}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ModalTemplateSection({
   title,
-  description,
   templates,
   website,
   currentTemplateKey,
@@ -152,7 +240,6 @@ function CatalogSection({
   onSelect,
 }: {
   title: string;
-  description: string;
   templates: CatalogCard[];
   website: Website;
   currentTemplateKey: TemplateKey;
@@ -163,10 +250,12 @@ function CatalogSection({
   if (templates.length === 0) return null;
 
   return (
-    <section className="grid gap-4" data-testid={`template-section-${slugify(title)}`}>
+    <section className="grid gap-4 py-4 first:pt-0" data-testid={`template-section-${slugify(title)}`}>
       <div>
-        <h2 className="text-lg font-semibold text-slate-950">{title}</h2>
-        <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-500">{description}</p>
+        <h3 className="text-lg font-semibold text-slate-950">{title}</h3>
+        <p className="mt-1 text-sm text-slate-500">
+          {title === 'Free Templates' ? 'Simple website layouts available without premium positioning.' : 'Approved premium templates with richer layout and premium capabilities.'}
+        </p>
       </div>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {templates.map((template) => (
@@ -191,6 +280,7 @@ function TemplateCard({
   website,
   isCurrent,
   isRecommended,
+  isPrimary = false,
   isApplying,
   isDisabled,
   onSelect,
@@ -199,6 +289,7 @@ function TemplateCard({
   website: Website;
   isCurrent: boolean;
   isRecommended: boolean;
+  isPrimary?: boolean;
   isApplying: boolean;
   isDisabled: boolean;
   onSelect: () => void;
@@ -207,6 +298,7 @@ function TemplateCard({
   const catalogStatus = template.metadata.catalogStatus ?? (template.metadata.status === 'planned' ? 'coming_soon' : 'available');
   const selectable = isSelectableTemplate(template);
   const highlights = template.metadata.previewHighlights ?? [];
+  const businessRecommendationLabel = `Recommended for ${businessTypeLabel(website.template?.businessType)}`;
 
   return (
     <article className={`panel flex min-h-[31rem] flex-col overflow-hidden ${displayTier === 'Premium' ? 'border-amber-200 shadow-[0_20px_60px_rgba(120,68,20,.10)]' : ''}`}>
@@ -222,9 +314,9 @@ function TemplateCard({
         <div className="flex flex-wrap items-center gap-2">
           <Badge tone={displayTier === 'Premium' ? 'amber' : 'slate'}>{displayTier}</Badge>
           {catalogStatus === 'locked' && <Badge tone="green">Approved Premium</Badge>}
-          {catalogStatus === 'coming_soon' && <Badge tone="slate">Coming soon</Badge>}
-          {isRecommended && <Badge tone="green">Recommended</Badge>}
-          {isCurrent && <Badge tone="green">Current template</Badge>}
+          {isPrimary && <Badge tone="green">Recommended</Badge>}
+          {!isPrimary && isRecommended && <Badge tone="green">{businessRecommendationLabel}</Badge>}
+          {isCurrent && <Badge tone="green">Selected</Badge>}
         </div>
         <div>
           <h3 className="text-lg font-semibold text-slate-950">{template.displayName}</h3>
@@ -243,8 +335,8 @@ function TemplateCard({
         )}
         <p className="mt-auto rounded-md bg-slate-50 px-3 py-2 text-xs leading-5 text-slate-500">
           {displayTier === 'Premium'
-            ? 'Premium template available during pilot. Payment control will be added in a future release.'
-            : 'Classic template for straightforward website publishing.'}
+            ? 'Approved premium template available for selection.'
+            : 'Free template for straightforward website publishing.'}
         </p>
         <div className="grid gap-2 sm:grid-cols-2">
           {selectable ? (
@@ -267,7 +359,7 @@ function TemplateCard({
             onClick={onSelect}
           >
             {isCurrent ? <CheckCircle2 className="size-4" /> : displayTier === 'Premium' ? <Sparkles className="size-4" /> : <Layers3 className="size-4" />}
-            {isCurrent ? 'Current' : isApplying ? 'Applying' : selectable ? 'Use template' : 'Coming soon'}
+            {isCurrent ? 'Selected' : isApplying ? 'Applying' : selectable ? 'Use Template' : 'Unavailable'}
           </Button>
         </div>
       </div>
@@ -392,6 +484,11 @@ function textColorFor(hex: string) {
   const b = parseInt(normalized.slice(4, 6), 16);
   const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
   return luminance > 0.58 ? '#111827' : '#ffffff';
+}
+
+function businessTypeLabel(value?: string | null) {
+  if (!value) return 'business';
+  return value.toLowerCase().replace(/_/g, ' ');
 }
 
 function slugify(value: string) {

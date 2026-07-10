@@ -748,3 +748,24 @@ Reason:
 - Owners need a clear launch checklist before sharing their website publicly.
 - Required/recommended separation prevents accidental incomplete launches without forcing every premium polish item.
 - Reusing existing publish state avoids a schema migration and keeps Stage 9.11 scoped to launch flow readiness rather than commercial gating.
+
+## Template Catalog Free/Premium Simplification
+
+Status: Implemented for Stage 9.11A.
+
+Decision:
+
+- User-facing template tiers are simplified to `Free` and `Premium`.
+- `Classic`, `Modern`, `Luxury`, `Experimental`, and internal tier labels are not shown as user-facing catalog tiers.
+- `restaurant_premium` is the only primary recommended template shown on the main template selection page.
+- `cafe_premium` remains approved, premium, selectable, and previewable, but appears inside `View More Templates`.
+- Other active Free and Premium templates are available through the `View More Templates` modal.
+- Luxury and unfinished/planned templates are hidden/deferred from the user-facing catalog for now.
+- Business type may influence modal recommendation badges but must not force template selection or replace the primary Restaurant Premium recommendation.
+- Payment, subscription, entitlement, marketplace, checkout, and hosting renewal remain deferred.
+
+Reason:
+
+- The previous multi-section catalog was too crowded for UMKM users.
+- Free/Premium is clearer than exposing implementation-era labels such as Classic, Modern, or Luxury.
+- Restaurant Premium is the first locked Premium Foundation Reference and remains the commercial baseline for the simplified recommendation surface.

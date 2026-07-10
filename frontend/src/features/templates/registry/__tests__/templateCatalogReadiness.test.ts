@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildCatalogCards,
   displayTierForTemplate,
+  isPrimaryRecommendedTemplate,
   isRecommendedTemplate,
   isSelectableTemplate,
   sortTemplates,
@@ -55,7 +56,7 @@ const apiTemplates: TemplateCatalogItem[] = [
 ];
 
 describe('template catalog readiness', () => {
-  it('marks only locked premium templates as Premium in the selection catalog', () => {
+  it('uses only Free and Premium as user-facing tiers in the selection catalog', () => {
     const cards = buildCatalogCards(apiTemplates);
     const restaurantPremium = cards.find((template) => template.templateKey === 'restaurant_premium');
     const cafePremium = cards.find((template) => template.templateKey === 'cafe_premium');
@@ -66,8 +67,8 @@ describe('template catalog readiness', () => {
     expect(cafePremium?.metadata.catalogStatus).toBe('locked');
     expect(restaurantPremium && displayTierForTemplate(restaurantPremium)).toBe('Premium');
     expect(cafePremium && displayTierForTemplate(cafePremium)).toBe('Premium');
-    expect(restaurantClassic && displayTierForTemplate(restaurantClassic)).toBe('Classic');
-    expect(cafeModern && displayTierForTemplate(cafeModern)).toBe('Classic');
+    expect(restaurantClassic && displayTierForTemplate(restaurantClassic)).toBe('Free');
+    expect(cafeModern && displayTierForTemplate(cafeModern)).toBe('Free');
   });
 
   it('uses business type as recommendation signal without locking user choice', () => {
@@ -84,6 +85,17 @@ describe('template catalog readiness', () => {
     expect(cafePremium && isSelectableTemplate(cafePremium)).toBe(true);
   });
 
+  it('keeps Restaurant Premium as the only primary recommendation and hides luxury from the catalog', () => {
+    const cards = buildCatalogCards(apiTemplates);
+    const primaryCards = cards.filter(isPrimaryRecommendedTemplate);
+
+    expect(primaryCards).toHaveLength(1);
+    expect(primaryCards[0].templateKey).toBe('restaurant_premium');
+    expect(cards.some((template) => template.templateKey === 'restaurant_luxury')).toBe(false);
+    expect(templateMetadata.restaurant_luxury.catalogVisibility).toBe('hidden');
+    expect(templateMetadata.restaurant_luxury.catalogStatus).toBe('coming_soon');
+  });
+
   it('keeps premium-only capabilities behind metadata flags', () => {
     expect(templateMetadata.restaurant_premium.capabilities?.heroSlideshow).toBe(true);
     expect(templateMetadata.cafe_premium.capabilities?.heroSlideshow).toBe(true);
@@ -94,10 +106,17 @@ describe('template catalog readiness', () => {
   it('keeps payment and checkout actions out of the template catalog UI', () => {
     const source = readFileSync(resolve('src/features/templates/TemplateSelectionPage.tsx'), 'utf8');
 
+    expect(source).toContain('Recommended Template');
+    expect(source).toContain('Restaurant Premium is the primary premium reference');
+    expect(source).toContain('View More Templates');
+    expect(source).toContain('TemplateCatalogModal');
+    expect(source).toContain('Free Templates');
     expect(source).toContain('Premium Templates');
-    expect(source).toContain('Classic Templates');
-    expect(source).toContain('Recommended for your business');
-    expect(source).toContain('Payment control will be added in a future release.');
+    expect(source).toContain('Approved premium template available for selection.');
+    expect(source).toContain('Free template for straightforward website publishing.');
+    expect(source).not.toContain('Classic Templates');
+    expect(source).not.toContain('Recommended for your business');
+    expect(source).not.toContain('Payment control will be added in a future release.');
     expect(source).not.toMatch(/Pay now|Checkout|Subscribe to unlock|Purchase template/i);
   });
 });

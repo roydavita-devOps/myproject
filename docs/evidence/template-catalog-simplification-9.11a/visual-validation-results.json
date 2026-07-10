@@ -1,0 +1,42 @@
+{
+  "generatedAt": "2026-07-10T04:53:27.664Z",
+  "baseURL": "http://127.0.0.1",
+  "screenshots": {
+    "templateMainPageRestaurantPremiumOnly": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-simplification-9.11a/template-main-page-restaurant-premium-only.png",
+    "templateMainPageCurrentSelected": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-simplification-9.11a/template-main-page-current-selected.png",
+    "templateViewMoreButton": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-simplification-9.11a/template-view-more-button.png",
+    "templateModalFreeSection": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-simplification-9.11a/template-modal-free-section.png",
+    "templateModalPremiumSection": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-simplification-9.11a/template-modal-premium-section.png",
+    "templateModalCafePremium": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-simplification-9.11a/template-modal-cafe-premium.png",
+    "templateModalFreeTemplate": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-simplification-9.11a/template-modal-free-template.png",
+    "templateChangeConfirmationFromModal": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-simplification-9.11a/template-change-confirmation-from-modal.png",
+    "templateSelectedAfterModalChange": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-simplification-9.11a/template-selected-after-modal-change.png",
+    "templateLuxuryHiddenCheck": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-simplification-9.11a/template-luxury-hidden-check.png",
+    "restaurantPremiumRenderAfterSelection": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-simplification-9.11a/restaurant-premium-render-after-selection.png",
+    "cafePremiumRenderAfterModalSelection": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-simplification-9.11a/cafe-premium-render-after-modal-selection.png",
+    "publishReadinessStillVisible": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-simplification-9.11a/publish-readiness-still-visible.png",
+    "classicFreeNoPremiumHeroDisplay": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\template-catalog-simplification-9.11a/classic-free-no-premium-hero-display.png"
+  },
+  "results": [
+    {
+      "target": "main_page_and_modal_visibility",
+      "status": "passed"
+    },
+    {
+      "target": "restaurant_premium_primary_selection_and_public_render",
+      "status": "passed"
+    },
+    {
+      "target": "cafe_premium_modal_selection_and_public_render",
+      "status": "passed"
+    },
+    {
+      "target": "publish_readiness_still_visible",
+      "status": "passed"
+    },
+    {
+      "target": "free_template_no_premium_hero_display",
+      "status": "passed"
+    }
+  ]
+}

@@ -13,6 +13,10 @@ export type CatalogCard = {
   metadata: TemplateMetadata;
 };
 
+export type UserFacingTemplateTier = 'Free' | 'Premium';
+
+export const primaryRecommendedTemplateKey: TemplateKey = 'restaurant_premium';
+
 export function buildCatalogCards(templates: TemplateCatalogItem[]): CatalogCard[] {
   const activeCards = templates
     .filter((template) => isTemplateKey(template.templateKey))
@@ -20,34 +24,30 @@ export function buildCatalogCards(templates: TemplateCatalogItem[]): CatalogCard
       ...template,
       templateKey: template.templateKey as TemplateKey,
       metadata: templateMetadata[template.templateKey as TemplateKey],
-    }));
-  const activeKeys = new Set(activeCards.map((template) => template.templateKey));
-  const comingSoonCards = Object.values(templateMetadata)
-    .filter((metadata) => metadata.catalogStatus === 'coming_soon' && !activeKeys.has(metadata.key))
-    .map((metadata) => ({
-      templateKey: metadata.key,
-      displayName: metadata.displayName,
-      description: metadata.description,
-      industry: metadata.industry,
-      category: metadata.category,
-      previewImage: metadata.previewImage,
-      recommendedBusinessTypes: metadata.recommendedBusinessTypes,
-      metadata,
-    }));
+    }))
+    .filter(isCatalogVisible);
 
-  return [...activeCards, ...comingSoonCards];
+  return activeCards;
 }
 
 export function isRecommendedTemplate(template: Pick<CatalogCard, 'recommendedBusinessTypes'>, businessType?: string | null) {
   return Boolean(businessType && template.recommendedBusinessTypes.includes(businessType));
 }
 
-export function displayTierForTemplate(template: Pick<CatalogCard, 'metadata'>) {
-  return template.metadata.tier === 'premium' && template.metadata.catalogStatus === 'locked' ? 'Premium' : 'Classic';
+export function displayTierForTemplate(template: Pick<CatalogCard, 'metadata'>): UserFacingTemplateTier {
+  return template.metadata.catalogStatus === 'locked' ? 'Premium' : 'Free';
 }
 
 export function isSelectableTemplate(template: Pick<CatalogCard, 'metadata'>) {
-  return template.metadata.status === 'active' && template.metadata.catalogStatus !== 'coming_soon';
+  return template.metadata.status === 'active' && isCatalogVisible(template);
+}
+
+export function isCatalogVisible(template: Pick<CatalogCard, 'metadata'>) {
+  return template.metadata.status === 'active' && template.metadata.catalogVisibility !== 'hidden' && template.metadata.catalogStatus !== 'coming_soon';
+}
+
+export function isPrimaryRecommendedTemplate(template: Pick<CatalogCard, 'templateKey'>) {
+  return template.templateKey === primaryRecommendedTemplateKey;
 }
 
 export function sortTemplates(templates: CatalogCard[], businessType?: string | null) {

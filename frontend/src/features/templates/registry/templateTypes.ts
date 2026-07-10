@@ -37,6 +37,7 @@ export type TemplateMetadata = {
   recommendedBusinessTypes: string[];
   status: 'active' | 'planned';
   catalogStatus?: 'available' | 'locked' | 'coming_soon';
+  catalogVisibility?: 'primary' | 'modal' | 'hidden';
   previewHighlights?: string[];
   capabilities?: {
     heroSlideshow?: boolean;
