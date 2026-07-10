@@ -111,7 +111,7 @@ describe('resolveTemplate', () => {
     const resolved = resolveTemplate(websiteWithTemplate({ schema: { templateKey: 'clinic_professional' } }));
 
     expect(resolved.metadata.key).toBe('clinic_professional');
-    expect(resolved.metadata.displayName).toBe('Clinic Professional');
+    expect(resolved.metadata.displayName).toBe('Clinic Free');
     expect(resolved.metadata.status).toBe('active');
     expect(resolved.metadata.rendererKey).toBe('clinic');
     expect(resolved.renderer).toBe(templateRegistry.getRenderer('clinic'));
@@ -140,7 +140,7 @@ describe('resolveTemplate', () => {
     const resolved = resolveTemplate(websiteWithTemplate({ schema: { templateKey: 'corporate_executive' } }));
 
     expect(resolved.metadata.key).toBe('corporate_executive');
-    expect(resolved.metadata.displayName).toBe('Corporate Executive');
+    expect(resolved.metadata.displayName).toBe('Corporate Free');
     expect(resolved.metadata.status).toBe('active');
     expect(resolved.metadata.rendererKey).toBe('corporate');
     expect(resolved.renderer).toBe(templateRegistry.getRenderer('corporate'));
@@ -169,7 +169,7 @@ describe('resolveTemplate', () => {
     const resolved = resolveTemplate(websiteWithTemplate({ schema: { templateKey: 'cafe_modern' } }));
 
     expect(resolved.metadata.key).toBe('cafe_modern');
-    expect(resolved.metadata.displayName).toBe('Cafe Modern');
+    expect(resolved.metadata.displayName).toBe('Cafe Free');
     expect(resolved.metadata.status).toBe('active');
     expect(resolved.metadata.rendererKey).toBe('cafe');
     expect(resolved.renderer).toBe(templateRegistry.getRenderer('cafe'));

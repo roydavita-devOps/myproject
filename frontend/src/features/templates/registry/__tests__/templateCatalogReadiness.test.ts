@@ -15,8 +15,8 @@ import { TemplateCatalogItem } from '../../../../types/api';
 const apiTemplates: TemplateCatalogItem[] = [
   {
     templateKey: 'restaurant_classic',
-    displayName: 'Restaurant Classic',
-    description: 'Classic restaurant.',
+    displayName: 'Restaurant Free',
+    description: 'Simple food layout.',
     industry: 'Food & Beverage',
     category: 'Restaurant',
     tier: 'standard',
@@ -35,8 +35,8 @@ const apiTemplates: TemplateCatalogItem[] = [
   },
   {
     templateKey: 'cafe_modern',
-    displayName: 'Cafe Modern',
-    description: 'Modern cafe.',
+    displayName: 'Cafe Free',
+    description: 'Simple cafe layout.',
     industry: 'Food & Beverage',
     category: 'Cafe',
     tier: 'premium',
@@ -96,6 +96,23 @@ describe('template catalog readiness', () => {
     expect(templateMetadata.restaurant_luxury.catalogStatus).toBe('coming_soon');
   });
 
+  it('keeps internal template keys stable while simplifying Free display names', () => {
+    expect(templateMetadata.restaurant_classic.displayName).toBe('Restaurant Free');
+    expect(templateMetadata.laundry_clean.displayName).toBe('Laundry Free');
+    expect(templateMetadata.cafe_modern.displayName).toBe('Cafe Free');
+    expect(templateMetadata.clinic_professional.displayName).toBe('Clinic Free');
+    expect(templateMetadata.corporate_executive.displayName).toBe('Corporate Free');
+    expect(templateMetadata.minimal_business.displayName).toBe('Business Free');
+    expect(templateMetadata.restaurant_premium.displayName).toBe('Restaurant Premium');
+    expect(templateMetadata.cafe_premium.displayName).toBe('Cafe Premium');
+    expect(templateMetadata.restaurant_classic.key).toBe('restaurant_classic');
+    expect(templateMetadata.laundry_clean.key).toBe('laundry_clean');
+    expect(templateMetadata.cafe_modern.key).toBe('cafe_modern');
+    expect(templateMetadata.clinic_professional.key).toBe('clinic_professional');
+    expect(templateMetadata.corporate_executive.key).toBe('corporate_executive');
+    expect(templateMetadata.minimal_business.key).toBe('minimal_business');
+  });
+
   it('keeps premium-only capabilities behind metadata flags', () => {
     expect(templateMetadata.restaurant_premium.capabilities?.heroSlideshow).toBe(true);
     expect(templateMetadata.cafe_premium.capabilities?.heroSlideshow).toBe(true);
@@ -114,6 +131,7 @@ describe('template catalog readiness', () => {
     expect(source).toContain('Premium Templates');
     expect(source).toContain('Approved premium template available for selection.');
     expect(source).toContain('Free template for straightforward website publishing.');
+    expect(source).not.toMatch(/restaurant_classic|laundry_clean|cafe_modern|clinic_professional|corporate_executive|minimal_business/);
     expect(source).not.toContain('Classic Templates');
     expect(source).not.toContain('Recommended for your business');
     expect(source).not.toContain('Payment control will be added in a future release.');

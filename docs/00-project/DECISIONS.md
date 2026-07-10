@@ -769,3 +769,28 @@ Reason:
 - The previous multi-section catalog was too crowded for UMKM users.
 - Free/Premium is clearer than exposing implementation-era labels such as Classic, Modern, or Luxury.
 - Restaurant Premium is the first locked Premium Foundation Reference and remains the commercial baseline for the simplified recommendation surface.
+
+## Free Template User-Facing Naming
+
+Status: Implemented for Stage 9.11B.
+
+Decision:
+
+- Internal template keys must remain stable and must not be renamed without a migration plan.
+- Free template display names are simplified to business-type Free names:
+  - `restaurant_classic` -> Restaurant Free
+  - `laundry_clean` -> Laundry Free
+  - `cafe_modern` -> Cafe Free
+  - `clinic_professional` -> Clinic Free
+  - `corporate_executive` -> Corporate Free
+  - `minimal_business` -> Business Free
+- Premium template display names remain Restaurant Premium and Cafe Premium.
+- Classic, Modern, Clean, Professional, Executive, and Minimal are historical/internal naming styles and should not dominate user-facing template names.
+- Free templates should be simple but clean.
+- Premium templates remain richer, more visual, and more commercial.
+- Luxury remains hidden/deferred from the user-facing catalog.
+
+Reason:
+
+- UMKM users need simple business-type template names rather than implementation-era naming.
+- Keeping internal keys stable protects persistence, preview, public rendering, assign-template API, tests, and existing tenant data.

@@ -18,16 +18,42 @@ export type UserFacingTemplateTier = 'Free' | 'Premium';
 export const primaryRecommendedTemplateKey: TemplateKey = 'restaurant_premium';
 
 export function buildCatalogCards(templates: TemplateCatalogItem[]): CatalogCard[] {
-  const activeCards = templates
-    .filter((template) => isTemplateKey(template.templateKey))
-    .map((template) => ({
-      ...template,
-      templateKey: template.templateKey as TemplateKey,
-      metadata: templateMetadata[template.templateKey as TemplateKey],
-    }))
-    .filter(isCatalogVisible);
+  const cardsByKey = new Map<TemplateKey, CatalogCard>();
 
-  return activeCards;
+  templates
+    .filter((template) => isTemplateKey(template.templateKey))
+    .map((template) => {
+      const metadata = templateMetadata[template.templateKey as TemplateKey];
+
+      return {
+        ...template,
+        templateKey: template.templateKey as TemplateKey,
+        displayName: metadata.displayName,
+        description: metadata.description,
+        metadata,
+      };
+    })
+    .filter(isCatalogVisible)
+    .forEach((template) => cardsByKey.set(template.templateKey, template));
+
+  Object.values(templateMetadata)
+    .filter((metadata) => isCatalogVisible({ metadata }))
+    .forEach((metadata) => {
+      if (cardsByKey.has(metadata.key)) return;
+
+      cardsByKey.set(metadata.key, {
+        templateKey: metadata.key,
+        displayName: metadata.displayName,
+        description: metadata.description,
+        industry: metadata.industry,
+        category: metadata.category,
+        previewImage: metadata.previewImage,
+        recommendedBusinessTypes: metadata.recommendedBusinessTypes,
+        metadata,
+      });
+    });
+
+  return [...cardsByKey.values()];
 }
 
 export function isRecommendedTemplate(template: Pick<CatalogCard, 'recommendedBusinessTypes'>, businessType?: string | null) {

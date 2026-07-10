@@ -497,3 +497,28 @@ Not implemented:
 - Hosting renewal.
 - Luxury template work.
 - Backend or database changes.
+
+## Stage 9.11B Free Template Naming Notes
+
+Stage 9.11B cleans up user-facing Free template names while preserving internal template keys.
+
+User-facing mapping:
+
+| Internal key | User-facing name |
+| --- | --- |
+| `restaurant_classic` | Restaurant Free |
+| `laundry_clean` | Laundry Free |
+| `cafe_modern` | Cafe Free |
+| `clinic_professional` | Clinic Free |
+| `corporate_executive` | Corporate Free |
+| `minimal_business` | Business Free |
+| `restaurant_premium` | Restaurant Premium |
+| `cafe_premium` | Cafe Premium |
+
+Rules:
+
+- Internal keys remain unchanged.
+- Free templates should feel simple but clean.
+- Premium templates remain richer, more visual, and more commercial.
+- Luxury remains hidden/deferred.
+- No payment, marketplace, entitlement, backend, Prisma, or database change is included.

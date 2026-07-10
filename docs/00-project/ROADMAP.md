@@ -1,6 +1,6 @@
 # Roadmap
 
-Last updated: 2026-07-09
+Last updated: 2026-07-10
 
 ## Completed
 
@@ -63,11 +63,12 @@ Last updated: 2026-07-09
 - Stage 9.10 Premium Template Catalog & Template Selection Readiness.
 - Stage 9.11 Publish Readiness Gate & Website Launch Flow.
 - Stage 9.11A Template Catalog Simplification & Free/Premium Focus.
+- Stage 9.11B Free Template Naming Cleanup & Baseline Quality Pass.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Template Catalog Simplification & Free/Premium Focus is implemented locally and awaiting product approval.
+- Stage 9.11B Free Template Naming Cleanup & Baseline Quality Pass is implemented, locally validated, and awaiting product approval.
 
 ## Planned
 
@@ -239,6 +240,15 @@ Stage 9.11A simplifies the user-facing catalog:
 - Luxury and unfinished templates are hidden/deferred from the user-facing catalog.
 - Business Type remains a recommendation signal only and does not force selected template.
 - Payment, subscription, entitlement, marketplace, and hosting renewal remain deferred.
+
+Stage 9.11B cleans up Free template naming:
+
+- Internal template keys remain stable and are not renamed.
+- User-facing Free names become Restaurant Free, Laundry Free, Cafe Free, Clinic Free, Corporate Free, and Business Free.
+- Premium names remain Restaurant Premium and Cafe Premium.
+- Historical naming styles such as Classic, Modern, Clean, Professional, Executive, and Minimal no longer dominate user-facing template card names.
+- Free templates remain simple but clean, while Premium templates remain richer and more commercial.
+- Luxury remains hidden/deferred from the user-facing catalog.
 - Gallery supports single image delete plus selected bulk delete without removing unrelated website, menu, tenant, or business data.
 - MVP upload formats are JPG, JPEG, PNG, and WEBP only; HEIC, HEIF, GIF, SVG, BMP, TIFF, and AVIF remain out of scope.
 - The existing upload processing/storage pipeline remains unchanged.

@@ -5,8 +5,8 @@ export const defaultTemplateKey: TemplateKey = 'minimal_business';
 export const templateMetadata: Record<TemplateKey, TemplateMetadata> = {
   restaurant_classic: {
     key: 'restaurant_classic',
-    displayName: 'Restaurant Classic',
-    description: 'Clean restaurant landing page optimized for food businesses.',
+    displayName: 'Restaurant Free',
+    description: 'A simple food-business layout for menus, contact details, and opening hours.',
     industry: 'Food & Beverage',
     category: 'Restaurant',
     rendererKey: 'restaurant',
@@ -53,8 +53,8 @@ export const templateMetadata: Record<TemplateKey, TemplateMetadata> = {
   },
   laundry_clean: {
     key: 'laundry_clean',
-    displayName: 'Laundry Clean',
-    description: 'Clean service landing page designed for laundry pickup, pricing, and contact flows.',
+    displayName: 'Laundry Free',
+    description: 'A clean service layout for laundry pricing, contact, and location details.',
     industry: 'Local Services',
     category: 'Laundry',
     rendererKey: 'laundry',
@@ -84,8 +84,8 @@ export const templateMetadata: Record<TemplateKey, TemplateMetadata> = {
   },
   cafe_modern: {
     key: 'cafe_modern',
-    displayName: 'Cafe Modern',
-    description: 'Modern cafe template for lifestyle-focused cafes and coffee shops.',
+    displayName: 'Cafe Free',
+    description: 'A simple cafe layout for drinks, menu items, and store information.',
     industry: 'Food & Beverage',
     category: 'Cafe',
     rendererKey: 'cafe',
@@ -117,8 +117,8 @@ export const templateMetadata: Record<TemplateKey, TemplateMetadata> = {
   },
   clinic_professional: {
     key: 'clinic_professional',
-    displayName: 'Clinic Professional',
-    description: 'Professional healthcare landing page designed for clinics and medical practices.',
+    displayName: 'Clinic Free',
+    description: 'A simple professional layout for clinic information, schedule, and contact details.',
     industry: 'Healthcare',
     category: 'Clinic',
     rendererKey: 'clinic',
@@ -133,8 +133,8 @@ export const templateMetadata: Record<TemplateKey, TemplateMetadata> = {
   },
   corporate_executive: {
     key: 'corporate_executive',
-    displayName: 'Corporate Executive',
-    description: 'Executive business template for corporate, professional service, and consulting websites.',
+    displayName: 'Corporate Free',
+    description: 'A simple company profile layout for services, credibility, and contact information.',
     industry: 'Business Services',
     category: 'Corporate',
     rendererKey: 'corporate',
@@ -149,8 +149,8 @@ export const templateMetadata: Record<TemplateKey, TemplateMetadata> = {
   },
   minimal_business: {
     key: 'minimal_business',
-    displayName: 'Minimal Business',
-    description: 'Fallback business template for local services that need clear profile, service, and contact sections.',
+    displayName: 'Business Free',
+    description: 'A flexible starter layout for general UMKM websites.',
     industry: 'Local Services',
     category: 'General Business',
     rendererKey: 'generic_business',
