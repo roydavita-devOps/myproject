@@ -7,6 +7,7 @@ import { Button } from '../../components/ui/Button';
 import { LoadingState } from '../../components/ui/State';
 import { isTemplateKey, templateMetadata } from '../templates/registry/templateMetadata';
 import { Website } from '../../types/api';
+import { consolidatedFreeTemplateForKey } from '../templates/templateCatalog';
 
 export function WebsitePreviewPage() {
   const { websiteId = '' } = useParams();
@@ -20,7 +21,9 @@ export function WebsitePreviewPage() {
   if (isLoading || !website) return <LoadingState label="Loading preview" />;
   const previewTemplateKey = searchParams.get('templateKey');
   const previewWebsite = templatePreviewWebsite(website, previewTemplateKey);
-  const previewTemplateName = isTemplateKey(previewTemplateKey) ? templateMetadata[previewTemplateKey].displayName : null;
+  const previewTemplateName = isTemplateKey(previewTemplateKey)
+    ? consolidatedFreeTemplateForKey(previewTemplateKey)?.displayName ?? templateMetadata[previewTemplateKey].displayName
+    : null;
 
   return (
     <div className="min-h-screen bg-slate-950">

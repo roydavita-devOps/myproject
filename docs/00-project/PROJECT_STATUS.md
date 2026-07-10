@@ -4,7 +4,7 @@ Last updated: 2026-07-10
 
 ## Current Stage
 
-Stage 9.11B - Free Template Naming Cleanup & Baseline Quality Pass.
+Stage 9.11C - Free Template Catalog Consolidation & Simplified Card UX.
 
 Status: implemented, locally validated, evidence captured, and awaiting approval. Railway deployment remains deferred while Railway trial is inactive/expired.
 
@@ -71,6 +71,7 @@ Status: implemented, locally validated, evidence captured, and awaiting approval
 | Stage 9.11 Publish Readiness Gate & Website Launch Flow | Implemented and locally validated. |
 | Stage 9.11A Template Catalog Simplification & Free/Premium Focus | Implemented and locally validated. |
 | Stage 9.11B Free Template Naming Cleanup & Baseline Quality Pass | Implemented and locally validated; awaiting approval. |
+| Stage 9.11C Free Template Catalog Consolidation & Simplified Card UX | Implemented and locally validated; awaiting approval. |
 
 ## Current Blockers
 
@@ -108,6 +109,7 @@ Status: implemented, locally validated, evidence captured, and awaiting approval
 | Publish readiness gate | Resolved for Stage 9.11 implementation | Website editor now evaluates required and recommended launch checks before publishing, blocks incomplete publish from the UI, shows preview/public URL actions, and uses a confirmation dialog before publish. Backend published-site enforcement already returns only `PUBLISHED` sites on public routes. |
 | Template catalog complexity | Resolved for Stage 9.11A implementation | The main template page now shows only Restaurant Premium as the primary recommendation, moves other Free/Premium choices into View More Templates, and hides Luxury/unfinished templates from user-facing catalog. |
 | Free template naming clarity | Resolved for Stage 9.11B implementation | Free templates now use business-type Free display names while internal template keys remain stable. Baseline preview and modal evidence is captured locally. |
+| Free catalog duplication | Resolved for Stage 9.11C implementation | Normal Free catalog now shows only Food & Beverage Free, Business Free, and Services Free. Related legacy keys remain renderable and selected-state aware. |
 | Railway trial status | Deferred production validation | Railway trial is currently inactive/expired. Development and documentation lock continue locally; production backend redeploy resumes after Railway billing/reactivation. |
 | Luxury templates | Paused | No Luxury template implementation until separately approved. |
 | Template Catalog UI | Paused | No marketplace, comparison page, entitlement, or subscription access logic in Stage 9.7B. |
@@ -115,11 +117,12 @@ Status: implemented, locally validated, evidence captured, and awaiting approval
 ## Next Actions
 
 1. Review Stage 9.11B Free Template Naming Cleanup & Baseline Quality Pass report and evidence.
-2. Approve or request corrections.
-3. Recommended next path after approval: continue toward production/commercial readiness or explicitly approve the next premium template track.
-4. Keep payment, subscription, marketplace, hosting renewal, video hero, advanced media library, Clinic Premium, Corporate Premium, Laundry Premium redesign, and unrelated backend features paused until separately approved.
-5. When Railway is reactivated, redeploy the latest GitHub commit and revalidate production health, migrations, frontend/backend alignment, Supabase-backed uploads, Hero Display, Restaurant Premium, and Cafe Premium.
-6. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
+2. Review Stage 9.11C Free Template Catalog Consolidation & Simplified Card UX report and evidence.
+3. Approve or request corrections.
+4. Recommended next path after approval: continue toward production/commercial readiness or explicitly approve the next premium template track.
+5. Keep payment, subscription, marketplace, hosting renewal, video hero, advanced media library, Clinic Premium, Corporate Premium, Laundry Premium redesign, and unrelated backend features paused until separately approved.
+6. When Railway is reactivated, redeploy the latest GitHub commit and revalidate production health, migrations, frontend/backend alignment, Supabase-backed uploads, Hero Display, Restaurant Premium, and Cafe Premium.
+7. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
 
 ## Operational Snapshot
 
@@ -174,5 +177,6 @@ Status: implemented, locally validated, evidence captured, and awaiting approval
 - Publish readiness gate report: [../06-modern-template/reports/PHASE-9.11-Publish-Readiness-Gate-And-Website-Launch-Flow-Report.md](../06-modern-template/reports/PHASE-9.11-Publish-Readiness-Gate-And-Website-Launch-Flow-Report.md)
 - Template catalog simplification report: [../06-modern-template/reports/PHASE-9.11A-Template-Catalog-Simplification-And-Free-Premium-Focus-Report.md](../06-modern-template/reports/PHASE-9.11A-Template-Catalog-Simplification-And-Free-Premium-Focus-Report.md)
 - Free template naming cleanup report: [../06-modern-template/reports/PHASE-9.11B-Free-Template-Naming-Cleanup-And-Baseline-Quality-Pass-Report.md](../06-modern-template/reports/PHASE-9.11B-Free-Template-Naming-Cleanup-And-Baseline-Quality-Pass-Report.md)
+- Free template catalog consolidation report: [../06-modern-template/reports/PHASE-9.11C-Free-Template-Catalog-Consolidation-And-Simplified-Card-UX-Report.md](../06-modern-template/reports/PHASE-9.11C-Free-Template-Catalog-Consolidation-And-Simplified-Card-UX-Report.md)
 - Template Catalog readiness audit: [../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md](../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md)
 - Template consistency audit: [../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md](../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md)

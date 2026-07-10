@@ -522,3 +522,34 @@ Rules:
 - Premium templates remain richer, more visual, and more commercial.
 - Luxury remains hidden/deferred.
 - No payment, marketplace, entitlement, backend, Prisma, or database change is included.
+
+## Stage 9.11C Free Template Catalog Consolidation Notes
+
+Stage 9.11C consolidates the normal user-facing Free catalog into three broad starter choices.
+
+Normal modal catalog:
+
+| Section | User-facing cards |
+| --- | --- |
+| Free Templates | Food & Beverage Free, Business Free, Services Free |
+| Premium Templates | Restaurant Premium, Cafe Premium |
+
+Consolidation mapping:
+
+| User-facing card | Primary selection key | Related legacy keys |
+| --- | --- | --- |
+| Food & Beverage Free | `restaurant_classic` | `restaurant_classic`, `cafe_modern` |
+| Business Free | `corporate_executive` | `corporate_executive`, `minimal_business` |
+| Services Free | `laundry_clean` | `laundry_clean`, `clinic_professional` |
+
+Notes:
+
+- `minimal_business` remains renderable as a related fallback key but is not used as the Business Free primary selection key because the existing backend assign-template catalog does not currently accept it.
+- Existing tenants using related legacy keys must continue to render.
+- Selected state is group-aware, so a tenant on `cafe_modern` shows Food & Beverage Free as selected, a tenant on `corporate_executive` or `minimal_business` shows Business Free as selected, and a tenant on `clinic_professional` shows Services Free as selected.
+- Group preview uses the primary selection key.
+- Group selection sends only the primary existing template key to the backend. No `groupKey` is sent to the assign-template API.
+- Restaurant Premium remains the only primary recommendation on the main template page.
+- Restaurant Premium and Cafe Premium remain visible in the modal Premium section.
+- Luxury and unfinished/planned templates remain hidden/deferred.
+- No backend, Prisma, database, payment, subscription, entitlement, marketplace, hosting renewal, or public template redesign is included.

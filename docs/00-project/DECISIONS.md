@@ -794,3 +794,36 @@ Reason:
 
 - UMKM users need simple business-type template names rather than implementation-era naming.
 - Keeping internal keys stable protects persistence, preview, public rendering, assign-template API, tests, and existing tenant data.
+
+## Free Template Catalog Consolidation
+
+Status: Implemented for Stage 9.11C.
+
+Decision:
+
+- The normal user-facing Free catalog is consolidated into three broad choices:
+  - Food & Beverage Free.
+  - Business Free.
+  - Services Free.
+- Industry-specific Free variants that are visually similar are hidden from the normal modal catalog and treated as related/legacy keys.
+- Internal template keys remain stable and must not be renamed without a migration plan.
+- Selecting a consolidated Free card assigns an existing primary template key, never a new group key:
+  - Food & Beverage Free -> `restaurant_classic`.
+  - Business Free -> `corporate_executive`.
+  - Services Free -> `laundry_clean`.
+- Business Free uses `corporate_executive` as the primary selection key because audit showed `minimal_business` is frontend-renderable but not currently accepted by the existing backend assign-template catalog. `minimal_business` remains a related legacy/fallback key and must continue to render.
+- Existing tenants using related legacy keys must continue to render and show selected state:
+  - `restaurant_classic` and `cafe_modern` -> Food & Beverage Free.
+  - `corporate_executive` and `minimal_business` -> Business Free.
+  - `laundry_clean` and `clinic_professional` -> Services Free.
+- Premium templates remain Restaurant Premium and Cafe Premium.
+- Restaurant Premium remains the only primary recommended template on the main page.
+- Restaurant Premium and Cafe Premium both remain visible in the modal Premium section.
+- Luxury remains hidden/deferred from the user-facing catalog.
+- Railway production validation remains deferred while Railway trial/billing is inactive; Stage 9.11C is validated locally.
+
+Reason:
+
+- The Stage 9.11B Free list still exposed too many near-duplicate choices for early users.
+- Broad Free starters are easier to understand than six narrowly named Free variants.
+- Preserving internal keys avoids data migration and protects existing public renderers, preview routes, tests, and tenant records.

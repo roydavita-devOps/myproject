@@ -509,14 +509,17 @@ test.describe('SaaS smoke test', () => {
     await page.goto(`/app/websites/${session.websiteId}/templates`);
 
     await expect(page.getByRole('heading', { name: 'Templates', exact: true })).toBeVisible();
-    await expect(page.getByTestId('template-current-selected').getByText('Restaurant Free')).toBeVisible();
+    await expect(page.getByTestId('template-current-selected').getByText('Food & Beverage Free')).toBeVisible();
     const restaurantPremium = page.getByTestId('template-primary-recommendation').locator('article').filter({ hasText: 'Restaurant Premium' });
     await expect(restaurantPremium.getByText('Premium', { exact: true })).toBeVisible();
     await expect(restaurantPremium.getByText('Approved Premium', { exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: /view more templates/i })).toBeVisible();
     await page.getByRole('button', { name: /view more templates/i }).click();
     const freeSection = page.getByTestId('template-section-free-templates');
-    await expect(freeSection.locator('article').filter({ hasText: 'Restaurant Free' }).getByText('Free', { exact: true })).toBeVisible();
+    await expect(freeSection.locator('article')).toHaveCount(3);
+    await expect(freeSection.locator('article').filter({ hasText: 'Food & Beverage Free' }).getByText('Free', { exact: true })).toBeVisible();
+    await expect(freeSection.locator('article').filter({ hasText: 'Business Free' }).getByText('Free', { exact: true })).toBeVisible();
+    await expect(freeSection.locator('article').filter({ hasText: 'Services Free' }).getByText('Free', { exact: true })).toBeVisible();
     await page.getByRole('button', { name: /close/i }).click();
     await restaurantPremium.getByRole('button', { name: /use template/i }).click();
     await expect(page.getByRole('dialog', { name: /change template to restaurant premium/i })).toBeVisible();
@@ -554,10 +557,10 @@ test.describe('SaaS smoke test', () => {
 
     await expect(page.getByRole('heading', { name: 'Templates', exact: true })).toBeVisible();
     await expect(page.getByTestId('template-primary-recommendation').locator('article').filter({ hasText: 'Restaurant Premium' })).toBeVisible();
-    await expect(page.getByTestId('template-current-selected').getByText('Cafe Free')).toBeVisible();
+    await expect(page.getByTestId('template-current-selected').getByText('Food & Beverage Free')).toBeVisible();
     await page.getByRole('button', { name: /view more templates/i }).click();
-    const cafeModern = page.getByTestId('template-section-free-templates').locator('article').filter({ hasText: 'Cafe Free' });
-    await expect(cafeModern.getByRole('button', { name: /^selected$/i })).toBeVisible();
+    const foodFree = page.getByTestId('template-section-free-templates').locator('article').filter({ hasText: 'Food & Beverage Free' });
+    await expect(foodFree.getByRole('button', { name: /^selected$/i })).toBeVisible();
     const cafePremium = page.getByTestId('template-section-premium-templates').locator('article').filter({ hasText: 'Cafe Premium' });
     await expect(cafePremium.getByText('Premium', { exact: true })).toBeVisible();
     await expect(cafePremium.getByText('Approved Premium', { exact: true })).toBeVisible();

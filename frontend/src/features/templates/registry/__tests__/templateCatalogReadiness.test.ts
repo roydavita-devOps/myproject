@@ -3,10 +3,13 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   buildCatalogCards,
+  consolidatedFreeTemplateForKey,
   displayTierForTemplate,
+  freeTemplateGroups,
   isPrimaryRecommendedTemplate,
   isRecommendedTemplate,
   isSelectableTemplate,
+  isTemplateCardSelected,
   sortTemplates,
 } from '../../templateCatalog';
 import { templateMetadata } from '../templateMetadata';
@@ -60,27 +63,29 @@ describe('template catalog readiness', () => {
     const cards = buildCatalogCards(apiTemplates);
     const restaurantPremium = cards.find((template) => template.templateKey === 'restaurant_premium');
     const cafePremium = cards.find((template) => template.templateKey === 'cafe_premium');
-    const restaurantClassic = cards.find((template) => template.templateKey === 'restaurant_classic');
-    const cafeModern = cards.find((template) => template.templateKey === 'cafe_modern');
+    const foodFree = cards.find((template) => template.displayName === 'Food & Beverage Free');
+    const businessFree = cards.find((template) => template.displayName === 'Business Free');
+    const servicesFree = cards.find((template) => template.displayName === 'Services Free');
 
     expect(restaurantPremium?.metadata.catalogStatus).toBe('locked');
     expect(cafePremium?.metadata.catalogStatus).toBe('locked');
     expect(restaurantPremium && displayTierForTemplate(restaurantPremium)).toBe('Premium');
     expect(cafePremium && displayTierForTemplate(cafePremium)).toBe('Premium');
-    expect(restaurantClassic && displayTierForTemplate(restaurantClassic)).toBe('Free');
-    expect(cafeModern && displayTierForTemplate(cafeModern)).toBe('Free');
+    expect(foodFree && displayTierForTemplate(foodFree)).toBe('Free');
+    expect(businessFree && displayTierForTemplate(businessFree)).toBe('Free');
+    expect(servicesFree && displayTierForTemplate(servicesFree)).toBe('Free');
   });
 
   it('uses business type as recommendation signal without locking user choice', () => {
     const cards = sortTemplates(buildCatalogCards(apiTemplates), 'CAFE');
     const cafePremium = cards.find((template) => template.templateKey === 'cafe_premium');
     const restaurantPremium = cards.find((template) => template.templateKey === 'restaurant_premium');
-    const restaurantClassic = cards.find((template) => template.templateKey === 'restaurant_classic');
+    const foodFree = cards.find((template) => template.displayName === 'Food & Beverage Free');
 
     expect(cards[0].recommendedBusinessTypes).toContain('CAFE');
     expect(cafePremium && isRecommendedTemplate(cafePremium, 'CAFE')).toBe(true);
     expect(restaurantPremium && isRecommendedTemplate(restaurantPremium, 'CAFE')).toBe(true);
-    expect(restaurantClassic && isRecommendedTemplate(restaurantClassic, 'CAFE')).toBe(false);
+    expect(foodFree && isRecommendedTemplate(foodFree, 'CAFE')).toBe(true);
     expect(restaurantPremium && isSelectableTemplate(restaurantPremium)).toBe(true);
     expect(cafePremium && isSelectableTemplate(cafePremium)).toBe(true);
   });
@@ -96,7 +101,52 @@ describe('template catalog readiness', () => {
     expect(templateMetadata.restaurant_luxury.catalogStatus).toBe('coming_soon');
   });
 
-  it('keeps internal template keys stable while simplifying Free display names', () => {
+  it('consolidates the normal Free catalog into three broad cards', () => {
+    const cards = buildCatalogCards(apiTemplates);
+    const freeCards = cards.filter((template) => displayTierForTemplate(template) === 'Free');
+    const premiumCards = cards.filter((template) => displayTierForTemplate(template) === 'Premium');
+
+    expect(freeCards.map((template) => template.displayName).sort()).toEqual(['Business Free', 'Food & Beverage Free', 'Services Free']);
+    expect(premiumCards.map((template) => template.displayName).sort()).toEqual(['Cafe Premium', 'Restaurant Premium']);
+    expect(cards.map((template) => template.displayName)).not.toContain('Restaurant Free');
+    expect(cards.map((template) => template.displayName)).not.toContain('Cafe Free');
+    expect(cards.map((template) => template.displayName)).not.toContain('Laundry Free');
+    expect(cards.map((template) => template.displayName)).not.toContain('Clinic Free');
+    expect(cards.map((template) => template.displayName)).not.toContain('Corporate Free');
+  });
+
+  it('uses grouped Free primary keys for preview and selection without sending group keys', () => {
+    expect(freeTemplateGroups).toEqual([
+      expect.objectContaining({ groupKey: 'food_beverage_free', primaryTemplateKey: 'restaurant_classic' }),
+      expect.objectContaining({ groupKey: 'business_free', primaryTemplateKey: 'corporate_executive' }),
+      expect.objectContaining({ groupKey: 'services_free', primaryTemplateKey: 'laundry_clean' }),
+    ]);
+
+    const cards = buildCatalogCards(apiTemplates);
+    expect(cards.find((template) => template.displayName === 'Food & Beverage Free')?.templateKey).toBe('restaurant_classic');
+    expect(cards.find((template) => template.displayName === 'Business Free')?.templateKey).toBe('corporate_executive');
+    expect(cards.find((template) => template.displayName === 'Services Free')?.templateKey).toBe('laundry_clean');
+    expect(cards.some((template) => 'groupKey' in template)).toBe(false);
+  });
+
+  it('marks consolidated Free groups as selected for legacy selected keys', () => {
+    const cards = buildCatalogCards(apiTemplates);
+    const foodFree = cards.find((template) => template.displayName === 'Food & Beverage Free');
+    const businessFree = cards.find((template) => template.displayName === 'Business Free');
+    const servicesFree = cards.find((template) => template.displayName === 'Services Free');
+
+    expect(foodFree && isTemplateCardSelected(foodFree, 'cafe_modern')).toBe(true);
+    expect(foodFree && isTemplateCardSelected(foodFree, 'restaurant_classic')).toBe(true);
+    expect(businessFree && isTemplateCardSelected(businessFree, 'corporate_executive')).toBe(true);
+    expect(businessFree && isTemplateCardSelected(businessFree, 'minimal_business')).toBe(true);
+    expect(servicesFree && isTemplateCardSelected(servicesFree, 'clinic_professional')).toBe(true);
+    expect(servicesFree && isTemplateCardSelected(servicesFree, 'laundry_clean')).toBe(true);
+    expect(consolidatedFreeTemplateForKey('cafe_modern')?.displayName).toBe('Food & Beverage Free');
+    expect(consolidatedFreeTemplateForKey('corporate_executive')?.displayName).toBe('Business Free');
+    expect(consolidatedFreeTemplateForKey('clinic_professional')?.displayName).toBe('Services Free');
+  });
+
+  it('keeps internal template keys stable while consolidating Free display names', () => {
     expect(templateMetadata.restaurant_classic.displayName).toBe('Restaurant Free');
     expect(templateMetadata.laundry_clean.displayName).toBe('Laundry Free');
     expect(templateMetadata.cafe_modern.displayName).toBe('Cafe Free');

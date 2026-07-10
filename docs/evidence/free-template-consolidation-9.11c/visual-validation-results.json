@@ -1,0 +1,44 @@
+{
+  "generatedAt": "2026-07-10T10:05:01.866Z",
+  "baseURL": "http://127.0.0.1",
+  "screenshots": {
+    "templateModal3FreeCards": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/template-modal-3-free-cards.png",
+    "foodBeverageFreeCard": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/food-beverage-free-card.png",
+    "businessFreeCard": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/business-free-card.png",
+    "servicesFreeCard": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/services-free-card.png",
+    "templateModalPremiumSection": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/template-modal-premium-section.png",
+    "restaurantPremiumPrimaryRegression": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/restaurant-premium-primary-regression.png",
+    "cafePremiumModalRegression": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/cafe-premium-modal-regression.png",
+    "foodBeverageFreePreview": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/food-beverage-free-preview.png",
+    "businessFreePreview": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/business-free-preview.png",
+    "servicesFreePreview": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/services-free-preview.png",
+    "foodBeverageFreeSelectedFromLegacyCafe": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/food-beverage-free-selected-from-legacy-cafe.png",
+    "businessFreeSelectedFromLegacyCorporate": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/business-free-selected-from-legacy-corporate.png",
+    "servicesFreeSelectedFromLegacyClinic": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/services-free-selected-from-legacy-clinic.png",
+    "templateChangeConfirmationGroupedFree": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/template-change-confirmation-grouped-free.png",
+    "selectedTemplateAfterFoodBeverageFree": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/selected-template-after-food-beverage-free.png",
+    "selectedTemplateAfterBusinessFree": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/selected-template-after-business-free.png",
+    "selectedTemplateAfterServicesFree": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/selected-template-after-services-free.png",
+    "publishReadinessRegression": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/publish-readiness-regression.png",
+    "luxuryHiddenRegression": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/luxury-hidden-regression.png",
+    "freeTemplateNoPremiumHeroDisplay": "X:\\PROJECT MANDIRI\\product_SaaS\\docs\\evidence\\free-template-consolidation-9.11c/free-template-no-premium-hero-display.png"
+  },
+  "results": [
+    {
+      "target": "modal_reduced_to_three_free_and_two_premium_cards",
+      "status": "passed"
+    },
+    {
+      "target": "grouped_free_previews_use_primary_template_keys",
+      "status": "passed"
+    },
+    {
+      "target": "legacy_selected_state_and_group_selection_persistence",
+      "status": "passed"
+    },
+    {
+      "target": "publish_readiness_and_premium_control_guard",
+      "status": "passed"
+    }
+  ]
+}

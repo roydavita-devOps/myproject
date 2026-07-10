@@ -64,11 +64,12 @@ Last updated: 2026-07-10
 - Stage 9.11 Publish Readiness Gate & Website Launch Flow.
 - Stage 9.11A Template Catalog Simplification & Free/Premium Focus.
 - Stage 9.11B Free Template Naming Cleanup & Baseline Quality Pass.
+- Stage 9.11C Free Template Catalog Consolidation & Simplified Card UX.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.11B Free Template Naming Cleanup & Baseline Quality Pass is implemented, locally validated, and awaiting product approval.
+- Stage 9.11C Free Template Catalog Consolidation & Simplified Card UX is implemented, locally validated, and awaiting product approval.
 
 ## Planned
 
@@ -252,6 +253,16 @@ Stage 9.11B cleans up Free template naming:
 - Gallery supports single image delete plus selected bulk delete without removing unrelated website, menu, tenant, or business data.
 - MVP upload formats are JPG, JPEG, PNG, and WEBP only; HEIC, HEIF, GIF, SVG, BMP, TIFF, and AVIF remain out of scope.
 - The existing upload processing/storage pipeline remains unchanged.
+
+Stage 9.11C consolidates the Free catalog:
+
+- The normal modal Free catalog now shows only Food & Beverage Free, Business Free, and Services Free.
+- Food & Beverage Free assigns `restaurant_classic` and covers `restaurant_classic` plus `cafe_modern` selected-state compatibility.
+- Business Free assigns `corporate_executive` and covers `corporate_executive` plus `minimal_business` selected-state compatibility because `minimal_business` is frontend-renderable but not currently accepted by the backend assign-template catalog.
+- Services Free assigns `laundry_clean` and covers `laundry_clean` plus `clinic_professional` selected-state compatibility.
+- Restaurant Premium remains the only primary recommended template on the main page.
+- Restaurant Premium and Cafe Premium remain visible in the modal Premium section.
+- No backend, Prisma, database, payment, subscription, marketplace, entitlement, hosting renewal, luxury, or public template redesign is included.
 
 Stage 9.8D-R10 adds lightweight Premium Hero motion:
 

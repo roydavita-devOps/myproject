@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">Services Free preview</title>
+  <desc id="desc">A simple neutral preview for local service starter websites.</desc>
+  <rect width="960" height="600" fill="#f8fafc"/>
+  <rect x="48" y="48" width="864" height="504" rx="28" fill="#ffffff" stroke="#dbe3ec" stroke-width="3"/>
+  <rect x="88" y="92" width="784" height="78" rx="18" fill="#0f766e"/>
+  <rect x="124" y="120" width="180" height="24" rx="12" fill="#ccfbf1"/>
+  <rect x="672" y="116" width="160" height="34" rx="17" fill="#ffffff"/>
+  <rect x="88" y="212" width="232" height="210" rx="22" fill="#f0fdfa" stroke="#99f6e4" stroke-width="3"/>
+  <rect x="364" y="212" width="232" height="210" rx="22" fill="#f8fafc" stroke="#dbe3ec" stroke-width="3"/>
+  <rect x="640" y="212" width="232" height="210" rx="22" fill="#f8fafc" stroke="#dbe3ec" stroke-width="3"/>
+  <circle cx="204" cy="276" r="34" fill="#14b8a6"/>
+  <rect x="132" y="334" width="144" height="20" rx="10" fill="#0f172a"/>
+  <rect x="132" y="374" width="124" height="16" rx="8" fill="#64748b"/>
+  <rect x="128" y="460" width="224" height="42" rx="21" fill="#0f766e"/>
+  <text x="480" y="526" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700" fill="#0f172a">Services Free</text>
+</svg>

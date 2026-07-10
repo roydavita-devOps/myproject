@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">Business Free preview</title>
+  <desc id="desc">A simple neutral preview for business starter websites.</desc>
+  <rect width="960" height="600" fill="#f8fafc"/>
+  <rect x="48" y="48" width="864" height="504" rx="28" fill="#ffffff" stroke="#dbe3ec" stroke-width="3"/>
+  <rect x="88" y="92" width="784" height="86" rx="18" fill="#1e293b"/>
+  <rect x="124" y="122" width="204" height="26" rx="13" fill="#e2e8f0"/>
+  <rect x="644" y="118" width="188" height="34" rx="17" fill="#38bdf8"/>
+  <rect x="88" y="222" width="312" height="198" rx="22" fill="#eef6ff" stroke="#bfdbfe" stroke-width="3"/>
+  <rect x="440" y="222" width="184" height="198" rx="22" fill="#f8fafc" stroke="#dbe3ec" stroke-width="3"/>
+  <rect x="656" y="222" width="184" height="198" rx="22" fill="#f8fafc" stroke="#dbe3ec" stroke-width="3"/>
+  <rect x="128" y="266" width="208" height="26" rx="13" fill="#0f172a"/>
+  <rect x="128" y="316" width="180" height="18" rx="9" fill="#64748b"/>
+  <rect x="128" y="354" width="230" height="18" rx="9" fill="#94a3b8"/>
+  <rect x="128" y="460" width="224" height="42" rx="21" fill="#1e293b"/>
+  <text x="480" y="526" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700" fill="#0f172a">Business Free</text>
+</svg>

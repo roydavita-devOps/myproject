@@ -11,7 +11,17 @@ import { Button } from '../../components/ui/Button';
 import { ErrorState, LoadingState } from '../../components/ui/State';
 import { Website } from '../../types/api';
 import { TemplateKey } from './registry/templateTypes';
-import { buildCatalogCards, CatalogCard, displayTierForTemplate, isPrimaryRecommendedTemplate, isRecommendedTemplate, isSelectableTemplate, sortTemplates } from './templateCatalog';
+import {
+  buildCatalogCards,
+  CatalogCard,
+  consolidatedFreeTemplateForKey,
+  displayTierForTemplate,
+  isPrimaryRecommendedTemplate,
+  isRecommendedTemplate,
+  isSelectableTemplate,
+  isTemplateCardSelected,
+  sortTemplates,
+} from './templateCatalog';
 
 export function TemplateSelectionPage() {
   const { websiteId = '' } = useParams();
@@ -51,7 +61,7 @@ export function TemplateSelectionPage() {
   const catalogCards = buildCatalogCards(templatesQuery.data ?? []);
   const sortedTemplates = sortTemplates(catalogCards, website.template?.businessType);
   const primaryTemplate = sortedTemplates.find(isPrimaryRecommendedTemplate);
-  const modalTemplates = sortedTemplates.filter((template) => !isPrimaryRecommendedTemplate(template) && isSelectableTemplate(template));
+  const modalTemplates = sortedTemplates.filter(isSelectableTemplate);
   const freeTemplates = modalTemplates.filter((template) => displayTierForTemplate(template) === 'Free');
   const premiumTemplates = modalTemplates.filter((template) => displayTierForTemplate(template) === 'Premium');
   const premiumVariant = resolvePremiumVariant(website);
@@ -103,7 +113,7 @@ export function TemplateSelectionPage() {
             <TemplateCard
               template={primaryTemplate}
               website={website}
-              isCurrent={primaryTemplate.templateKey === currentTemplateKey}
+              isCurrent={isTemplateCardSelected(primaryTemplate, currentTemplateKey)}
               isRecommended
               isPrimary
               isApplying={applyMutation.isPending && applyMutation.variables === primaryTemplate.templateKey}
@@ -145,14 +155,17 @@ export function TemplateSelectionPage() {
 
 function CurrentTemplateSummary({ website, currentTemplateKey }: { website: Website; currentTemplateKey: TemplateKey }) {
   const currentTemplate = resolveTemplate(website).metadata;
+  const consolidatedFreeTemplate = consolidatedFreeTemplateForKey(currentTemplateKey);
+  const displayName = consolidatedFreeTemplate?.displayName ?? currentTemplate.displayName;
+  const description = consolidatedFreeTemplate?.description ?? currentTemplate.description;
 
   return (
     <section className="panel grid gap-3 p-5" data-testid="template-current-selected">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <p className="text-sm font-semibold uppercase text-slate-500">Current selected template</p>
-          <h2 className="mt-1 text-xl font-semibold text-slate-950">{currentTemplate.displayName}</h2>
-          <p className="mt-1 text-sm text-slate-500">{currentTemplate.description}</p>
+          <h2 className="mt-1 text-xl font-semibold text-slate-950">{displayName}</h2>
+          <p className="mt-1 text-sm text-slate-500">{description}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Badge tone={displayTierForTemplate({ metadata: currentTemplate }) === 'Premium' ? 'amber' : 'slate'}>
@@ -263,7 +276,7 @@ function ModalTemplateSection({
             key={`${title}-${template.templateKey}`}
             template={template}
             website={website}
-            isCurrent={template.templateKey === currentTemplateKey}
+            isCurrent={isTemplateCardSelected(template, currentTemplateKey)}
             isRecommended={isRecommendedTemplate(template, website.template?.businessType)}
             isApplying={isApplying && applyingTemplateKey === template.templateKey}
             isDisabled={isApplying}
@@ -297,11 +310,11 @@ function TemplateCard({
   const displayTier = displayTierForTemplate(template);
   const catalogStatus = template.metadata.catalogStatus ?? (template.metadata.status === 'planned' ? 'coming_soon' : 'available');
   const selectable = isSelectableTemplate(template);
-  const highlights = template.metadata.previewHighlights ?? [];
+  const highlights = template.previewHighlights ?? template.metadata.previewHighlights ?? [];
   const businessRecommendationLabel = `Recommended for ${businessTypeLabel(website.template?.businessType)}`;
 
   return (
-    <article className={`panel flex min-h-[31rem] flex-col overflow-hidden ${displayTier === 'Premium' ? 'border-amber-200 shadow-[0_20px_60px_rgba(120,68,20,.10)]' : ''}`}>
+    <article className={`panel flex min-h-[30rem] flex-col overflow-hidden ${displayTier === 'Premium' ? 'border-amber-200 shadow-[0_20px_60px_rgba(120,68,20,.10)]' : ''}`}>
       <img
         src={`/template-previews/${template.previewImage}`}
         alt={`${template.displayName} preview`}
@@ -315,12 +328,12 @@ function TemplateCard({
           <Badge tone={displayTier === 'Premium' ? 'amber' : 'slate'}>{displayTier}</Badge>
           {catalogStatus === 'locked' && <Badge tone="green">Approved Premium</Badge>}
           {isPrimary && <Badge tone="green">Recommended</Badge>}
-          {!isPrimary && isRecommended && <Badge tone="green">{businessRecommendationLabel}</Badge>}
+          {displayTier === 'Premium' && !isPrimary && isRecommended && <Badge tone="green">{businessRecommendationLabel}</Badge>}
           {isCurrent && <Badge tone="green">Selected</Badge>}
         </div>
         <div>
           <h3 className="text-lg font-semibold text-slate-950">{template.displayName}</h3>
-          <p className="mt-1 text-sm text-slate-500">{template.category} · {template.industry}</p>
+          <p className="mt-1 text-sm text-slate-500">{template.catalogSubtitle ?? `${template.category} · ${template.industry}`}</p>
         </div>
         <p className="text-sm leading-6 text-slate-600">{template.description}</p>
         {highlights.length > 0 && (

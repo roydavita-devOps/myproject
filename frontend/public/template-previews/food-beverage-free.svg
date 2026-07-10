@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">Food &amp; Beverage Free preview</title>
+  <desc id="desc">A simple neutral preview for food and drink starter websites.</desc>
+  <rect width="960" height="600" fill="#f8fafc"/>
+  <rect x="48" y="48" width="864" height="504" rx="28" fill="#ffffff" stroke="#dbe3ec" stroke-width="3"/>
+  <rect x="88" y="92" width="784" height="72" rx="18" fill="#0f766e"/>
+  <circle cx="128" cy="128" r="18" fill="#ccfbf1"/>
+  <rect x="176" y="116" width="188" height="24" rx="12" fill="#ccfbf1"/>
+  <rect x="680" y="112" width="152" height="32" rx="16" fill="#fef3c7"/>
+  <rect x="88" y="204" width="368" height="220" rx="22" fill="#fff7ed" stroke="#fed7aa" stroke-width="3"/>
+  <rect x="504" y="204" width="152" height="96" rx="18" fill="#ecfeff" stroke="#99f6e4" stroke-width="3"/>
+  <rect x="688" y="204" width="152" height="96" rx="18" fill="#ecfeff" stroke="#99f6e4" stroke-width="3"/>
+  <rect x="504" y="328" width="336" height="96" rx="18" fill="#f8fafc" stroke="#dbe3ec" stroke-width="3"/>
+  <rect x="128" y="248" width="248" height="24" rx="12" fill="#9a3412"/>
+  <rect x="128" y="296" width="184" height="18" rx="9" fill="#fdba74"/>
+  <rect x="128" y="336" width="240" height="18" rx="9" fill="#fed7aa"/>
+  <rect x="128" y="460" width="224" height="42" rx="21" fill="#0f766e"/>
+  <text x="480" y="526" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700" fill="#0f172a">Food &amp; Beverage Free</text>
+</svg>

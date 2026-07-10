@@ -37,6 +37,7 @@ Current status:
 - Stage 9.11 Publish Readiness Gate & Website Launch Flow implemented and locally validated.
 - Stage 9.11A Template Catalog Simplification & Free/Premium Focus implemented and locally validated.
 - Stage 9.11B Free Template Naming Cleanup & Baseline Quality Pass implemented and locally validated.
+- Stage 9.11C Free Template Catalog Consolidation & Simplified Card UX implemented and locally validated.
 
 Restaurant Premium foundation status:
 
@@ -47,7 +48,7 @@ Restaurant Premium foundation status:
 - Future premium templates must also not blindly copy Cafe Premium coffee/pastry/corner language, cafe section names, cafe preset names, or cafe-specific visit/contact wording.
 - Cafe Premium is locked as a premium template that uses the foundation standards with cafe-specific language, sections, modal copy, visual mood, warm placeholders, cafe-specific modal accents, and Premium Hero Display controls.
 - Template selection now uses one primary Restaurant Premium recommendation and a View More Templates modal with only Free and Premium user-facing sections.
-- Free template names now use business-type Free names while preserving stable internal template keys.
+- Free template names now consolidate into Food & Beverage Free, Business Free, and Services Free while preserving stable internal template keys and related legacy rendering.
 - Publish readiness now gates launch from the website editor with required/recommended checks, preview-before-publish, confirmation dialog, public URL state, and existing unpublish behavior.
 - Railway trial is currently inactive/expired, so Stage 9.10 is validated locally and production redeploy is deferred until Railway billing/reactivation.
 
@@ -60,3 +61,4 @@ Evidence:
 - [../evidence/publish-readiness-9.11/](../evidence/publish-readiness-9.11/)
 - [../evidence/template-catalog-simplification-9.11a/](../evidence/template-catalog-simplification-9.11a/)
 - [../evidence/free-template-baseline-9.11b/](../evidence/free-template-baseline-9.11b/)
+- [../evidence/free-template-consolidation-9.11c/](../evidence/free-template-consolidation-9.11c/)
