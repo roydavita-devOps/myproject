@@ -20,3 +20,15 @@ Template = User Choice
 Active product constitution:
 
 - [../00-project/MASTER_PRODUCT_STRATEGY.md](../00-project/MASTER_PRODUCT_STRATEGY.md)
+
+Current template catalog references:
+
+- [TEMPLATE_CATALOG.md](./TEMPLATE_CATALOG.md)
+- [../06-modern-template/reports/README.md](../06-modern-template/reports/README.md)
+
+When to update:
+
+- Product or monetization strategy changes.
+- Template catalog positioning changes.
+- Free/Premium/Luxury access strategy changes.
+- Subscription or marketplace assumptions change.

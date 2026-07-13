@@ -827,3 +827,45 @@ Reason:
 - The Stage 9.11B Free list still exposed too many near-duplicate choices for early users.
 - Broad Free starters are easier to understand than six narrowly named Free variants.
 - Preserving internal keys avoids data migration and protects existing public renderers, preview routes, tests, and tenant records.
+
+## Production Relaunch Preparation Split
+
+Status: Implemented for Stage 9.12A.
+
+Decision:
+
+- Production relaunch is split into two stages:
+  - Stage 9.12A: preparation, audit, runbooks, checklists, risk register, and documentation only.
+  - Stage 9.12B: future execution after Railway is active and explicitly approved.
+- Stage 9.12A must not deploy, modify Railway/Vercel/Supabase/GitHub Actions/DNS, run production migrations, or change production secrets.
+- Production migrations must not run until backup and migration status are verified.
+- Secrets are documented only by variable name, purpose, and redacted examples.
+- Railway reactivation and actual backend redeploy are deferred to Stage 9.12B.
+- Post-reactivation validation must cover health, auth, Google login if configured, template selection, publish readiness, uploads/storage, Restaurant Premium, Cafe Premium, Free template groups, and public routes.
+- `RUN_MIGRATIONS` is risky because the Railway Docker entrypoint runs `prisma migrate deploy` when it is `true`; this must be handled only after production backup and migration status are confirmed.
+
+Reason:
+
+- Railway is currently inactive/expired, so production validation cannot be completed safely.
+- A detailed preparation package reduces confusion and lowers risk before reactivation.
+- Separating preparation from execution prevents accidental deployment or migration while production access is unavailable.
+
+## Documentation Cleanup Before Railway Reactivation
+
+Status: Implemented for Stage 9.12A.1.
+
+Decision:
+
+- Documentation cleanup before Railway reactivation should use index files and cross-links instead of moving large historical folders.
+- Existing evidence folders and historical reports must not be deleted.
+- Stage 9.x reports are indexed in `docs/06-modern-template/reports/README.md`.
+- Evidence folders are indexed in `docs/evidence/README.md`.
+- Production relaunch docs are cross-linked from `docs/01-architecture/README.md` and `docs/README.md`.
+- A manual production environment checklist is kept in `docs/01-architecture/PRODUCTION_ENV_MANUAL_CHECKLIST.md`.
+- No backend/frontend behavior changes, Prisma schema changes, deployment actions, git commits, or git pushes are part of Stage 9.12A.1.
+
+Reason:
+
+- The documentation tree has accumulated valuable history and evidence. Deleting or moving large folders now would increase risk.
+- Clear index files make the repository easier to navigate before Stage 9.12B without disrupting historical auditability.
+- Production relaunch requires a practical owner-facing checklist, but real secret values must remain out of documentation.

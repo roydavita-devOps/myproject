@@ -1,6 +1,6 @@
 # Roadmap
 
-Last updated: 2026-07-10
+Last updated: 2026-07-13
 
 ## Completed
 
@@ -65,11 +65,13 @@ Last updated: 2026-07-10
 - Stage 9.11A Template Catalog Simplification & Free/Premium Focus.
 - Stage 9.11B Free Template Naming Cleanup & Baseline Quality Pass.
 - Stage 9.11C Free Template Catalog Consolidation & Simplified Card UX.
+- Stage 9.12A Production Relaunch Preparation While Railway Is Inactive.
+- Stage 9.12A.1 Docs & Project Structure Cleanup Before Railway Reactivation.
 
 ## In Progress
 
 - Modern Template System as the active product quality track.
-- Stage 9.11C Free Template Catalog Consolidation & Simplified Card UX is implemented, locally validated, and awaiting product approval.
+- Stage 9.12A.1 Docs & Project Structure Cleanup Before Railway Reactivation is implemented locally and awaiting product approval.
 
 ## Planned
 
@@ -83,6 +85,31 @@ Focus:
 - Operational monitoring.
 - Production email activation if final domain is ready.
 - Release candidate validation.
+
+### Stage 9.12B
+
+Production Relaunch Execution after Railway reactivation.
+
+Focus:
+
+- Reactivate/confirm Railway project.
+- Verify production env values without exposing secrets.
+- Validate Supabase DB/storage readiness.
+- Verify migration status and backup before any migration deploy.
+- Redeploy backend only after approval.
+- Redeploy frontend only after backend health is confirmed.
+- Run production smoke test plan.
+
+Not included until separately approved:
+
+- Payment.
+- Subscription.
+- Marketplace.
+- Hosting renewal.
+- Template entitlement enforcement.
+- Custom domain setup.
+- Database redesign.
+- New template work.
 
 ### Stage 11
 
@@ -263,6 +290,31 @@ Stage 9.11C consolidates the Free catalog:
 - Restaurant Premium remains the only primary recommended template on the main page.
 - Restaurant Premium and Cafe Premium remain visible in the modal Premium section.
 - No backend, Prisma, database, payment, subscription, marketplace, entitlement, hosting renewal, luxury, or public template redesign is included.
+
+Stage 9.12A prepares production relaunch while Railway is inactive:
+
+- No production deployment is attempted.
+- No production env variable is changed.
+- No production migration is run.
+- Deployment architecture is documented.
+- Environment variable inventory is documented with redacted examples only.
+- Supabase readiness checklist is documented.
+- Prisma/migration readiness is documented.
+- Railway reactivation runbook is documented.
+- Vercel relaunch checklist is documented.
+- CORS/API alignment checklist is documented.
+- Production smoke test plan, rollback plan, and risk register are documented.
+- Stage 9.12B execution is deferred until Railway is active and product owner approval is explicit.
+
+Stage 9.12A.1 cleans up docs navigation before Railway reactivation:
+
+- Top-level docs index is refreshed.
+- Project, architecture, report, product, and evidence indexes are created or improved.
+- Stage 9.x reports are indexed in order.
+- Evidence folders are indexed without moving or deleting evidence.
+- Production relaunch docs are cross-linked.
+- Manual production env checklist is created.
+- No app code, production config, production deploy, git commit, or git push is included.
 
 Stage 9.8D-R10 adds lightweight Premium Hero motion:
 

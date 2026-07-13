@@ -1,12 +1,12 @@
 # Project Status
 
-Last updated: 2026-07-10
+Last updated: 2026-07-13
 
 ## Current Stage
 
-Stage 9.11C - Free Template Catalog Consolidation & Simplified Card UX.
+Stage 9.12A.1 - Docs & Project Structure Cleanup Before Railway Reactivation.
 
-Status: implemented, locally validated, evidence captured, and awaiting approval. Railway deployment remains deferred while Railway trial is inactive/expired.
+Status: documentation navigation cleanup implemented locally; no production deploy, production env change, production migration, git commit, or git push was performed. Railway reactivation and production redeploy are deferred to Stage 9.12B.
 
 ## Completed Stages
 
@@ -72,6 +72,8 @@ Status: implemented, locally validated, evidence captured, and awaiting approval
 | Stage 9.11A Template Catalog Simplification & Free/Premium Focus | Implemented and locally validated. |
 | Stage 9.11B Free Template Naming Cleanup & Baseline Quality Pass | Implemented and locally validated; awaiting approval. |
 | Stage 9.11C Free Template Catalog Consolidation & Simplified Card UX | Implemented and locally validated; awaiting approval. |
+| Stage 9.12A Production Relaunch Preparation While Railway Is Inactive | Preparation documentation implemented locally; awaiting approval. |
+| Stage 9.12A.1 Docs & Project Structure Cleanup Before Railway Reactivation | Documentation indexes and manual env checklist implemented locally; awaiting approval. |
 
 ## Current Blockers
 
@@ -110,25 +112,27 @@ Status: implemented, locally validated, evidence captured, and awaiting approval
 | Template catalog complexity | Resolved for Stage 9.11A implementation | The main template page now shows only Restaurant Premium as the primary recommendation, moves other Free/Premium choices into View More Templates, and hides Luxury/unfinished templates from user-facing catalog. |
 | Free template naming clarity | Resolved for Stage 9.11B implementation | Free templates now use business-type Free display names while internal template keys remain stable. Baseline preview and modal evidence is captured locally. |
 | Free catalog duplication | Resolved for Stage 9.11C implementation | Normal Free catalog now shows only Food & Beverage Free, Business Free, and Services Free. Related legacy keys remain renderable and selected-state aware. |
+| Production relaunch readiness | Prepared for Stage 9.12A | Deployment architecture, env inventory, Railway/Vercel/Supabase runbooks, smoke test plan, rollback plan, and risk register are documented. No production action was performed. |
+| Documentation navigation | Improved for Stage 9.12A.1 | Top-level docs, project, architecture, report, evidence, and product indexes were updated or created. No files were deleted. |
 | Railway trial status | Deferred production validation | Railway trial is currently inactive/expired. Development and documentation lock continue locally; production backend redeploy resumes after Railway billing/reactivation. |
 | Luxury templates | Paused | No Luxury template implementation until separately approved. |
 | Template Catalog UI | Paused | No marketplace, comparison page, entitlement, or subscription access logic in Stage 9.7B. |
 
 ## Next Actions
 
-1. Review Stage 9.11B Free Template Naming Cleanup & Baseline Quality Pass report and evidence.
-2. Review Stage 9.11C Free Template Catalog Consolidation & Simplified Card UX report and evidence.
-3. Approve or request corrections.
-4. Recommended next path after approval: continue toward production/commercial readiness or explicitly approve the next premium template track.
+1. Review Stage 9.12A.1 documentation cleanup report and indexes.
+2. Approve or request corrections.
+3. Decide whether to commit the 9.12A and 9.12A.1 documentation-only changes.
+4. Do not start Railway reactivation, Vercel production redeploy, or production migrations until Stage 9.12B is explicitly approved.
 5. Keep payment, subscription, marketplace, hosting renewal, video hero, advanced media library, Clinic Premium, Corporate Premium, Laundry Premium redesign, and unrelated backend features paused until separately approved.
-6. When Railway is reactivated, redeploy the latest GitHub commit and revalidate production health, migrations, frontend/backend alignment, Supabase-backed uploads, Hero Display, Restaurant Premium, and Cafe Premium.
+6. When Railway is reactivated in Stage 9.12B, follow the runbook and revalidate production health, migrations, frontend/backend alignment, Supabase-backed uploads, Hero Display, Restaurant Premium, Cafe Premium, Free template groups, publish readiness, and public routes.
 7. Keep `PROJECT_STATUS.md`, `ROADMAP.md`, and `DECISIONS.md` updated after each approved stage.
 
 ## Operational Snapshot
 
 | System | Current Status |
 | --- | --- |
-| Local Docker | Running and validated for Stage 9.11B. |
+| Local Docker | Available for validation; Stage 9.12A did not require production deploy. |
 | GitHub | Latest code and documentation branch strategy uses `main`, `staging`, and `pilot`. |
 | Vercel | Production frontend active. |
 | Railway | Trial currently inactive/expired; production backend redeploy is deferred until Railway billing/reactivation. |
@@ -178,5 +182,11 @@ Status: implemented, locally validated, evidence captured, and awaiting approval
 - Template catalog simplification report: [../06-modern-template/reports/PHASE-9.11A-Template-Catalog-Simplification-And-Free-Premium-Focus-Report.md](../06-modern-template/reports/PHASE-9.11A-Template-Catalog-Simplification-And-Free-Premium-Focus-Report.md)
 - Free template naming cleanup report: [../06-modern-template/reports/PHASE-9.11B-Free-Template-Naming-Cleanup-And-Baseline-Quality-Pass-Report.md](../06-modern-template/reports/PHASE-9.11B-Free-Template-Naming-Cleanup-And-Baseline-Quality-Pass-Report.md)
 - Free template catalog consolidation report: [../06-modern-template/reports/PHASE-9.11C-Free-Template-Catalog-Consolidation-And-Simplified-Card-UX-Report.md](../06-modern-template/reports/PHASE-9.11C-Free-Template-Catalog-Consolidation-And-Simplified-Card-UX-Report.md)
+- Production relaunch preparation: [../01-architecture/PRODUCTION_RELAUNCH_PREPARATION.md](../01-architecture/PRODUCTION_RELAUNCH_PREPARATION.md)
+- Deployment environment matrix: [../01-architecture/DEPLOYMENT_ENVIRONMENT_MATRIX.md](../01-architecture/DEPLOYMENT_ENVIRONMENT_MATRIX.md)
+- Production smoke test plan: [../01-architecture/PRODUCTION_SMOKE_TEST_PLAN.md](../01-architecture/PRODUCTION_SMOKE_TEST_PLAN.md)
+- Production rollback plan: [../01-architecture/PRODUCTION_ROLLBACK_PLAN.md](../01-architecture/PRODUCTION_ROLLBACK_PLAN.md)
+- Production relaunch preparation report: [../06-modern-template/reports/PHASE-9.12A-Production-Relaunch-Preparation-While-Railway-Inactive-Report.md](../06-modern-template/reports/PHASE-9.12A-Production-Relaunch-Preparation-While-Railway-Inactive-Report.md)
+- Docs cleanup report: [../06-modern-template/reports/PHASE-9.12A.1-Docs-And-Project-Structure-Cleanup-Report.md](../06-modern-template/reports/PHASE-9.12A.1-Docs-And-Project-Structure-Cleanup-Report.md)
 - Template Catalog readiness audit: [../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md](../01-architecture/PHASE-9.3B-Template-Catalog-Readiness-Audit-Report.md)
 - Template consistency audit: [../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md](../01-architecture/PHASE-9.6A-Template-Consistency-Audit-Report.md)

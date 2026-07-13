@@ -38,6 +38,8 @@ Current status:
 - Stage 9.11A Template Catalog Simplification & Free/Premium Focus implemented and locally validated.
 - Stage 9.11B Free Template Naming Cleanup & Baseline Quality Pass implemented and locally validated.
 - Stage 9.11C Free Template Catalog Consolidation & Simplified Card UX implemented and locally validated.
+- Stage 9.12A Production Relaunch Preparation While Railway Is Inactive implemented as documentation/runbook preparation only.
+- Stage 9.12A.1 Docs & Project Structure Cleanup implemented as documentation navigation cleanup only.
 
 Restaurant Premium foundation status:
 
@@ -50,7 +52,7 @@ Restaurant Premium foundation status:
 - Template selection now uses one primary Restaurant Premium recommendation and a View More Templates modal with only Free and Premium user-facing sections.
 - Free template names now consolidate into Food & Beverage Free, Business Free, and Services Free while preserving stable internal template keys and related legacy rendering.
 - Publish readiness now gates launch from the website editor with required/recommended checks, preview-before-publish, confirmation dialog, public URL state, and existing unpublish behavior.
-- Railway trial is currently inactive/expired, so Stage 9.10 is validated locally and production redeploy is deferred until Railway billing/reactivation.
+- Railway trial is currently inactive/expired. Stage 9.12A documents the future Railway/Vercel/Supabase relaunch runbook, but production redeploy is deferred until Stage 9.12B approval.
 
 Evidence:
 
@@ -62,3 +64,15 @@ Evidence:
 - [../evidence/template-catalog-simplification-9.11a/](../evidence/template-catalog-simplification-9.11a/)
 - [../evidence/free-template-baseline-9.11b/](../evidence/free-template-baseline-9.11b/)
 - [../evidence/free-template-consolidation-9.11c/](../evidence/free-template-consolidation-9.11c/)
+
+Production relaunch preparation:
+
+- [../01-architecture/PRODUCTION_RELAUNCH_PREPARATION.md](../01-architecture/PRODUCTION_RELAUNCH_PREPARATION.md)
+- [../01-architecture/DEPLOYMENT_ENVIRONMENT_MATRIX.md](../01-architecture/DEPLOYMENT_ENVIRONMENT_MATRIX.md)
+- [../01-architecture/PRODUCTION_SMOKE_TEST_PLAN.md](../01-architecture/PRODUCTION_SMOKE_TEST_PLAN.md)
+- [../01-architecture/PRODUCTION_ROLLBACK_PLAN.md](../01-architecture/PRODUCTION_ROLLBACK_PLAN.md)
+
+Indexes:
+
+- [reports/README.md](./reports/README.md)
+- [../evidence/README.md](../evidence/README.md)
